@@ -67,6 +67,7 @@ public final class BotFactory {
             cfg.setProxyPort(data.config().getProxyPort());
             cfg.setProxyType(data.config().getProxyType());
             cfg.setMaxThreads(data.config().getMaxThreads());
+            cfg.setBotPattern(data.config().getBotPattern());
             cfg.setGetUpdatesTimeout(data.config().getGetUpdatesTimeout());
             cfg.setGetUpdatesLimit(data.config().getGetUpdatesLimit());
         }

@@ -2,8 +2,8 @@ package io.lonmstalker.core.storage;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import io.lonmstalker.core.bot.BotConfig;
 import io.lonmstalker.core.bot.TelegramSender;
-import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.junit.jupiter.api.Test;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
@@ -12,7 +12,7 @@ public class BotRequestHolderTest {
     @Test
     void setAndGet() {
         Update u = new Update();
-        TelegramSender sender = new TelegramSender(new DefaultBotOptions(), "token") {
+        TelegramSender sender = new TelegramSender(new BotConfig(), "token") {
         };
         BotRequestHolder.setUpdate(u);
         BotRequestHolder.setSender(sender);

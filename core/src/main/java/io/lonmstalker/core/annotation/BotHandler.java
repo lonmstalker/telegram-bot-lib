@@ -16,7 +16,7 @@ public @interface BotHandler {
 
     @NonNull BotRequestType type() default BotRequestType.MESSAGE;
 
-    String bot() default "";
+    String botGroup() default "";
 
     Class<? extends BotHandlerConverter<?>> converter() default BotHandlerConverter.Identity.class;
 

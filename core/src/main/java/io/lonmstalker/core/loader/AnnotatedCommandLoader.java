@@ -1,12 +1,8 @@
 package io.lonmstalker.core.loader;
 
 import io.lonmstalker.core.BotCommand;
-import io.lonmstalker.core.BotRequest;
-import io.lonmstalker.core.BotRequestType;
-import io.lonmstalker.core.BotResponse;
 import io.lonmstalker.core.BotHandlerConverter;
 import io.lonmstalker.core.annotation.BotHandler;
-import io.lonmstalker.core.annotation.AlwaysMatch;
 import io.lonmstalker.core.annotation.CustomMatcher;
 import io.lonmstalker.core.annotation.MessageContainsMatch;
 import io.lonmstalker.core.annotation.MessageRegexMatch;
@@ -19,6 +15,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Objects;
 import java.util.Set;
 
 import lombok.experimental.UtilityClass;
@@ -32,8 +29,9 @@ import org.telegram.telegrambots.meta.api.interfaces.BotApiObject;
 @UtilityClass
 public final class AnnotatedCommandLoader {
 
-    @SuppressWarnings("unchecked")
-    public static void load(@NonNull BotCommandRegistry registry, @NonNull String... packages) {
+    @SuppressWarnings({"unchecked", "argument"})
+    public static void load(@NonNull BotCommandRegistry registry,
+                            @NonNull String... packages) {
         ConfigurationBuilder cb = new ConfigurationBuilder();
         cb.forPackages(packages);
         cb.addScanners(Scanners.MethodsAnnotated);
@@ -43,11 +41,11 @@ public final class AnnotatedCommandLoader {
             if (Modifier.isStatic(method.getModifiers())) {
                 throw new BotApiException("Handler methods must not be static: " + method);
             }
-            BotHandler ann = method.getAnnotation(BotHandler.class);
 
+            BotHandler ann = Objects.requireNonNull(method.getAnnotation(BotHandler.class));
             Object instance = createInstance(method.getDeclaringClass());
 
-            CommandMatch<BotApiObject> matcher = null;
+            CommandMatch<? extends BotApiObject> matcher = null;
             if (method.isAnnotationPresent(MessageContainsMatch.class)) {
                 MessageContainsMatch mc = method.getAnnotation(MessageContainsMatch.class);
                 matcher = new io.lonmstalker.core.matching.MessageContainsMatch(mc.value(), mc.ignoreCase());
@@ -74,44 +72,15 @@ public final class AnnotatedCommandLoader {
             BotHandlerConverter<?> converter = (BotHandlerConverter<?>) createInstance(ann.converter());
 
             method.setAccessible(true);
-            BotCommand<BotApiObject> cmd = new BotCommand<>() {
-                @Override
-                public BotResponse handle(@NonNull BotRequest<BotApiObject> request) {
-                    try {
-                        Object arg = converter.convert(request);
-                        Object res = method.invoke(instance, arg);
-                        if (res == null) {
-                            return null;
-                        }
-                        if (res instanceof BotResponse r) {
-                            return r;
-                        }
-                        throw new BotApiException("Handler must return BotResponse");
-                    } catch (IllegalAccessException | InvocationTargetException e) {
-                        throw new BotApiException("Handler invocation error", e);
-                    }
-                }
-
-                @Override
-                public @NonNull BotRequestType type() {
-                    return ann.type();
-                }
-
-                @Override
-                public @NonNull CommandMatch<BotApiObject> matcher() {
-                    return matcher;
-                }
-
-                @Override
-                public @NonNull String bot() {
-                    return ann.bot();
-                }
-
-                @Override
-                public int order() {
-                    return ann.order();
-                }
-            };
+            BotCommand<BotApiObject> cmd = InternalCommandAdapter.builder()
+                    .method(method)
+                    .type(ann.type())
+                    .order(ann.order())
+                    .instance(instance)
+                    .converter(converter)
+                    .commandMatch(matcher)
+                    .botGroup(ann.botGroup())
+                    .build();
             registry.add(cmd);
         }
     }

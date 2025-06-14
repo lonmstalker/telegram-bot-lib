@@ -7,7 +7,6 @@ import java.lang.reflect.Method;
 
 import java.lang.reflect.InvocationTargetException;
 import org.junit.jupiter.api.Test;
-import org.telegram.telegrambots.bots.DefaultBotOptions;
 
 public class TelegramSenderTest {
 
@@ -23,6 +22,6 @@ public class TelegramSenderTest {
     }
 
     static class TestSender extends TelegramSender {
-        TestSender() { super(new DefaultBotOptions(), "token"); }
+        TestSender() { super(new BotConfig(), "token"); }
     }
 }

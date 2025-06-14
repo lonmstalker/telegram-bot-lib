@@ -29,12 +29,8 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ScheduledExecutorService;
 
-// rate limit support
-import io.lonmstalker.core.bot.BotConfig;
-import io.lonmstalker.core.bot.RateLimiter;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.telegram.telegrambots.meta.generics.BackOff;
-import io.lonmstalker.core.bot.ExponentialBackOff;
 
 public class TelegramSender extends DefaultAbsSender implements AutoCloseable {
 
@@ -131,37 +127,37 @@ public class TelegramSender extends DefaultAbsSender implements AutoCloseable {
 
     @Override
     public CompletableFuture<Message> executeAsync(SendVoice sendVoice) throws BotApiException {
-        return CompletableFuture.supplyAsync(() -> execute(sendVoice));
+        return CompletableFuture.supplyAsync(() -> executeWithRetry(() -> execute(sendVoice)));
     }
 
     @Override
     public CompletableFuture<Message> executeAsync(SendAudio sendAudio) throws BotApiException {
-        return CompletableFuture.supplyAsync(() -> execute(sendAudio));
+        return CompletableFuture.supplyAsync(() -> executeWithRetry(() -> execute(sendAudio)));
     }
 
     @Override
     public CompletableFuture<Message> executeAsync(SendSticker sendSticker) throws BotApiException {
-        return CompletableFuture.supplyAsync(() -> execute(sendSticker));
+        return CompletableFuture.supplyAsync(() -> executeWithRetry(() -> execute(sendSticker)));
     }
 
     @Override
     public CompletableFuture<Message> executeAsync(SendVideoNote sendVideoNote) throws BotApiException {
-        return CompletableFuture.supplyAsync(() -> execute(sendVideoNote));
+        return CompletableFuture.supplyAsync(() -> executeWithRetry(() -> execute(sendVideoNote)));
     }
 
     @Override
     public CompletableFuture<Message> executeAsync(SendVideo sendVideo) throws BotApiException {
-        return CompletableFuture.supplyAsync(() -> execute(sendVideo));
+        return CompletableFuture.supplyAsync(() -> executeWithRetry(() -> execute(sendVideo)));
     }
 
     @Override
     public CompletableFuture<Message> executeAsync(SendPhoto sendPhoto) throws BotApiException {
-        return CompletableFuture.supplyAsync(() -> execute(sendPhoto));
+        return CompletableFuture.supplyAsync(() -> executeWithRetry(() -> execute(sendPhoto)));
     }
 
     @Override
     public CompletableFuture<Message> executeAsync(SendDocument sendDocument) throws BotApiException {
-        return CompletableFuture.supplyAsync(() -> execute(sendDocument));
+        return CompletableFuture.supplyAsync(() -> executeWithRetry(() -> execute(sendDocument)));
     }
 
     @Override

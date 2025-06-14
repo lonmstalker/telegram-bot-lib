@@ -32,6 +32,6 @@ class BotCommandRegistryImplTest {
         @Override public BotRequestType type() {return BotRequestType.MESSAGE;}
         @Override public CommandMatch<Message> matcher() {return data -> true;}
         @Override public int order() {return order;}
-        @Override public String bot() {return "";}
+        @Override public String botGroup() {return "";}
     }
 }

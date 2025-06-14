@@ -2,7 +2,6 @@ package io.lonmstalker.core.bot;
 
 import io.lonmstalker.core.exception.BotExceptionHandler;
 import io.lonmstalker.core.interceptor.BotInterceptor;
-import io.lonmstalker.core.bot.ExponentialBackOff;
 import io.lonmstalker.core.state.InMemoryStateStore;
 import io.lonmstalker.core.state.StateStore;
 import lombok.Getter;

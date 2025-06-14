@@ -90,7 +90,7 @@ public final class BotDataSourceFactory {
                 config.setMaxThreads(maxThreads);
                 config.setGetUpdatesTimeout(timeout);
                 config.setGetUpdatesLimit(limit);
-                config.setBotPattern(botPattern);
+                config.setBotPattern(Objects.requireNonNull(botPattern));
 
                 return new BotData(token, config);
             }

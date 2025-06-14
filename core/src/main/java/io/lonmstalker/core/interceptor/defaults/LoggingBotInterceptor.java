@@ -15,17 +15,17 @@ public class LoggingBotInterceptor implements BotInterceptor {
 
     @Override
     public void preHandle(@NonNull Update update) {
-        log.info("Pre handle update: {}", update);
+        log.debug("Pre handle update: {}", update);
     }
 
     @Override
     public void postHandle(@NonNull Update update) {
-        log.info("Post handle update: {}", update);
+        log.debug("Post handle update: {}", update);
     }
 
     @Override
     @SuppressWarnings("argument")
     public void afterCompletion(@NonNull Update update, @Nullable BotResponse response) {
-        log.info("After completion update: {}, response: {}", update, response);
+        log.debug("After completion update: {}, response: {}", update, response);
     }
 }

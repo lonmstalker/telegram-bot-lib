@@ -29,7 +29,7 @@ public class BotCommandRegistryImpl implements BotCommandRegistry {
         }
 
         return (BotCommand<T>) commands.stream()
-                .filter(command -> command.bot().isEmpty() || command.bot().equals(bot))
+                .filter(command -> command.botGroup().isEmpty() || command.botGroup().equals(bot))
                 .filter(command -> ((CommandMatch<T>) command.matcher()).match(data))
                 .findFirst()
                 .orElse(null);

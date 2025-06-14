@@ -1,9 +1,9 @@
 **features**
-1. Middleware-конвейер (filter / interceptor chain)
-2. Аннотационные хендлеры
-3. Rate limit + back-off / retry при ответах/запросах
-4. Встроенный state‑store с pluggable back‑end
-5. Автоматическое управление webhook / long‑polling
+1. Middleware-конвейер (filter / interceptor chain) [+]
+2. Аннотационные хендлеры [+]
+3. Rate limit + back-off / retry при ответах/запросах [+]
+4. Встроенный state‑store с pluggable back‑end [+]
+5. Автоматическое управление webhook / long‑polling [+]
 6. Инструменты тестирования и эмуляции
 7. Метрики, трассировка, логгирование out‑of‑the‑box
 8. Плагинная архитектура / события
@@ -19,8 +19,6 @@
 18. Токен бота хранится в зашифрованном виде (ключ для шифрования передаётся в `TokenCipher`)
 
 ## Пример использования
-
-Аннотация `@BotHandler` позволяет указать класс матчера и конвертер аргумента метода.
 
 ```java
 public class EchoCommands {

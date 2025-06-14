@@ -12,7 +12,6 @@ import org.telegram.telegrambots.bots.DefaultAbsSender;
 import org.telegram.telegrambots.meta.api.methods.GetMe;
 import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 import org.telegram.telegrambots.meta.api.objects.User;
-import org.telegram.telegrambots.util.WebhookUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +54,7 @@ public class BotImpl implements Bot {
         checkNotStarted();
         try {
             if (absSender instanceof LongPollingReceiver receiver) {
-                WebhookUtils.clearWebhook(absSender);
+                receiver.clearWebhook();
                 if (this.session == null) {
                     this.session = new BotSessionImpl();
                 }
@@ -67,12 +66,8 @@ public class BotImpl implements Bot {
                 receiver.setUsername(Objects.requireNonNull(this.user).getUserName());
             } else if (absSender instanceof WebHookReceiver receiver) {
                 if (this.setWebhook != null) {
-                    if (this.setWebhook.getUrl() == null) {
-                        throw new BotApiException("setWebhook url is null");
-                    }
                     setWebhook.validate();
-                    WebhookUtils.setWebhook(absSender, receiver, this.setWebhook);
-                    receiver.execute(this.setWebhook);
+                    receiver.setWebhook(setWebhook);
                 }
                 this.user = absSender.execute(new GetMe());
                 receiver.setUsername(Objects.requireNonNull(this.user).getUserName());
