@@ -3,8 +3,10 @@ package io.lonmstalker.core.bot;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import io.lonmstalker.core.exception.BotApiException;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -23,18 +25,19 @@ public final class BotDataSourceFactory {
     private static final String SELECT_QUERY =
             "SELECT token, proxy, max_threads, get_updates_timeout, get_updates_limit FROM bots WHERE id = ?";
 
-    private static final String DEFAULT_PROXY = "";
     private static final int DEFAULT_MAX_THREADS = 1;
     private static final int DEFAULT_UPDATES_TIMEOUT = 0;
     private static final int DEFAULT_UPDATES_LIMIT = 100;
 
     private static String stringOrDefault(@NonNull ResultSet rs,
                                           @NonNull String column,
-                                          @NonNull String def) throws SQLException {
+                                          @Nullable String def) throws SQLException {
         var value = rs.getString(column);
         if (value == null) {
-            log.warn("{} is null, using default: {}", column, def);
-            value = def;
+            if (def != null) {
+                value = def;
+                log.warn("{} is null, using default: {}", column, def);
+            }
         }
         return value;
     }
@@ -60,16 +63,21 @@ public final class BotDataSourceFactory {
                 }
 
                 String token = stringOrDefault(rs, "token", "");
-                String proxy = stringOrDefault(rs, "proxy", DEFAULT_PROXY);
+                String proxy = stringOrDefault(rs, "proxy", null);
                 int maxThreads = intOrDefault(rs, "max_threads", DEFAULT_MAX_THREADS);
                 int timeout = intOrDefault(rs, "get_updates_timeout", DEFAULT_UPDATES_TIMEOUT);
                 int limit = intOrDefault(rs, "get_updates_limit", DEFAULT_UPDATES_LIMIT);
+
+                if (StringUtils.isBlank(token)) {
+                    throw new BotApiException("Bot token is empty");
+                }
 
                 BotConfig config = new BotConfig();
                 config.setProxyHost(proxy);
                 config.setMaxThreads(maxThreads);
                 config.setGetUpdatesTimeout(timeout);
                 config.setGetUpdatesLimit(limit);
+
                 return new BotData(token, config);
             }
         } catch (SQLException ex) {
