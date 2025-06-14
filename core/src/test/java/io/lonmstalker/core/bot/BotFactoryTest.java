@@ -1,4 +1,5 @@
-import io.lonmstalker.core.bot.*;
+package io.lonmstalker.core.bot;
+
 import io.lonmstalker.core.utils.TokenCipherImpl;
 import org.h2.jdbcx.JdbcConnectionPool;
 import org.junit.jupiter.api.AfterEach;

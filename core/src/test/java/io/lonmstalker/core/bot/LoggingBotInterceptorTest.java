@@ -1,3 +1,5 @@
+package io.lonmstalker.core.bot;
+
 import io.lonmstalker.core.BotResponse;
 import io.lonmstalker.core.interceptor.defaults.LoggingBotInterceptor;
 import org.junit.jupiter.api.DisplayName;
@@ -8,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("LoggingBotInterceptor")
 class LoggingBotInterceptorTest {
+
     @Test
     @DisplayName("вызывает методы без исключений")
     void shouldRunWithoutExceptions() {

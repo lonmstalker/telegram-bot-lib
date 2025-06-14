@@ -11,6 +11,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import static org.junit.jupiter.api.Assertions.*;
 
 class BotCommandRegistryTest {
+
     @Test
     void addAndFindCommand() {
         BotCommandRegistry registry = new BotCommandRegistryImpl();

@@ -1,9 +1,9 @@
-import io.lonmstalker.core.bot.*;
+package io.lonmstalker.core.bot;
+
 import io.lonmstalker.core.exception.BotApiException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
-import org.telegram.telegrambots.meta.api.objects.User;
 
 import java.lang.reflect.Field;
 
@@ -35,15 +35,7 @@ class BotImplExtraTest {
                 .id(1)
                 .token("t")
                 .config(new BotConfig())
-                .absSender(new DummySender() {
-                    @Override
-                    public <T extends java.io.Serializable, Method extends org.telegram.telegrambots.meta.api.methods.BotApiMethod<T>> T sendApiMethod(Method method) {
-                        User u = new User();
-                        u.setId(2L);
-                        u.setUserName("u");
-                        return (T) u;
-                    }
-                })
+                .absSender(new DummySender())
                 .commandRegistry(new BotCommandRegistryImpl())
                 .build();
         bot.start();

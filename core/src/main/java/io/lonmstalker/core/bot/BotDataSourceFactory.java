@@ -6,9 +6,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import io.lonmstalker.core.exception.BotApiException;
-import io.lonmstalker.core.ProxyType;
 import io.lonmstalker.core.utils.TokenCipher;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.telegram.telegrambots.bots.DefaultBotOptions;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -71,7 +71,7 @@ public final class BotDataSourceFactory {
                 String token = cipher.decrypt(stringOrDefault(rs, "token", ""));
                 String proxyHost = stringOrDefault(rs, "proxy_host", null);
                 int proxyPort = intOrDefault(rs, "proxy_port", 0);
-                int proxyTypeValue = intOrDefault(rs, "proxy_type", ProxyType.HTTP.ordinal());
+                int proxyTypeValue = intOrDefault(rs, "proxy_type", DefaultBotOptions.ProxyType.NO_PROXY.ordinal());
                 int maxThreads = intOrDefault(rs, "max_threads", DEFAULT_MAX_THREADS);
                 int timeout = intOrDefault(rs, "updates_timeout", DEFAULT_UPDATES_TIMEOUT);
                 int limit = intOrDefault(rs, "updates_limit", DEFAULT_UPDATES_LIMIT);
@@ -83,7 +83,7 @@ public final class BotDataSourceFactory {
                 BotConfig config = new BotConfig();
                 config.setProxyHost(proxyHost);
                 config.setProxyPort(proxyPort);
-                config.setProxyType(ProxyType.values()[proxyTypeValue]);
+                config.setProxyType(DefaultBotOptions.ProxyType.values()[proxyTypeValue]);
                 config.setMaxThreads(maxThreads);
                 config.setGetUpdatesTimeout(timeout);
                 config.setGetUpdatesLimit(limit);

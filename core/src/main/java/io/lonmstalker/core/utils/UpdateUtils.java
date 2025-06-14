@@ -4,6 +4,7 @@ import io.lonmstalker.core.BotRequestType;
 import lombok.experimental.UtilityClass;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.User;
 
 @UtilityClass
 public class UpdateUtils {
@@ -72,7 +73,7 @@ public class UpdateUtils {
      *
      * @throws IllegalArgumentException when no user information can be resolved
      */
-    public static @NonNull org.telegram.telegrambots.meta.api.objects.User getUser(@NonNull Update update) {
+    public static @NonNull User getUser(@NonNull Update update) {
         if (update.getMessage() != null && update.getMessage().getFrom() != null) {
             return update.getMessage().getFrom();
         }
@@ -88,10 +89,10 @@ public class UpdateUtils {
         if (update.getCallbackQuery() != null && update.getCallbackQuery().getFrom() != null) {
             return update.getCallbackQuery().getFrom();
         }
-        if (update.getInlineQuery() != null && update.getInlineQuery().getFrom() != null) {
+        if (update.getInlineQuery() != null) {
             return update.getInlineQuery().getFrom();
         }
-        if (update.getChosenInlineQuery() != null && update.getChosenInlineQuery().getFrom() != null) {
+        if (update.getChosenInlineQuery() != null) {
             return update.getChosenInlineQuery().getFrom();
         }
         throw new IllegalArgumentException("User not found in update");

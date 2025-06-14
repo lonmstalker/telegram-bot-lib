@@ -1,4 +1,3 @@
-import io.lonmstalker.core.ProxyType;
 import io.lonmstalker.core.bot.BotConfig;
 import io.lonmstalker.core.bot.BotDataSourceFactory;
 import io.lonmstalker.core.utils.TokenCipher;

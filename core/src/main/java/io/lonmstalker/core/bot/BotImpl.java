@@ -62,13 +62,13 @@ public class BotImpl implements Bot {
     }
 
     @Override
-    public String username() {
+    public @NonNull String username() {
         checkStarted();
         return Objects.requireNonNull(user).getUserName();
     }
 
     @Override
-    public BotCommandRegistry registry() {
+    public @NonNull BotCommandRegistry registry() {
         return commandRegistry;
     }
 

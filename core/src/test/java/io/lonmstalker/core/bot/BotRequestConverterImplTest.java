@@ -1,8 +1,20 @@
+package io.lonmstalker.core.bot;
+
 import io.lonmstalker.core.BotRequestType;
 import io.lonmstalker.core.bot.BotRequestConverterImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.telegram.telegrambots.meta.api.objects.*;
+import org.telegram.telegrambots.meta.api.objects.boost.ChatBoostRemoved;
+import org.telegram.telegrambots.meta.api.objects.boost.ChatBoostUpdated;
+import org.telegram.telegrambots.meta.api.objects.inlinequery.ChosenInlineQuery;
+import org.telegram.telegrambots.meta.api.objects.inlinequery.InlineQuery;
+import org.telegram.telegrambots.meta.api.objects.payments.PreCheckoutQuery;
+import org.telegram.telegrambots.meta.api.objects.payments.ShippingQuery;
+import org.telegram.telegrambots.meta.api.objects.polls.Poll;
+import org.telegram.telegrambots.meta.api.objects.polls.PollAnswer;
+import org.telegram.telegrambots.meta.api.objects.reactions.MessageReactionCountUpdated;
+import org.telegram.telegrambots.meta.api.objects.reactions.MessageReactionUpdated;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -99,7 +111,7 @@ class BotRequestConverterImplTest {
         assertEquals(boost, conv.convert(u, BotRequestType.CHAT_BOOST));
 
         u = new Update();
-        ChatBoostUpdated removed = new ChatBoostUpdated();
+        ChatBoostRemoved removed = new ChatBoostRemoved();
         u.setRemovedChatBoost(removed);
         assertEquals(removed, conv.convert(u, BotRequestType.REMOVED_CHAT_BOOST));
     }

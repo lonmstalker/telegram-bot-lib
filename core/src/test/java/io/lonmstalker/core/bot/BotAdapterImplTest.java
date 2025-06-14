@@ -1,15 +1,13 @@
-import io.lonmstalker.core.BotCommand;
-import io.lonmstalker.core.BotRequest;
-import io.lonmstalker.core.BotRequestType;
-import io.lonmstalker.core.BotResponse;
+package io.lonmstalker.core.bot;
+
+import io.lonmstalker.core.*;
 import io.lonmstalker.core.interceptor.BotInterceptor;
-import io.lonmstalker.core.bot.*;
 import io.lonmstalker.core.storage.BotRequestHolder;
 import io.lonmstalker.core.user.BotUserInfo;
 import io.lonmstalker.core.user.BotUserProvider;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.telegram.telegrambots.meta.api.interfaces.BotApiObject;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
@@ -21,15 +19,16 @@ import static org.mockito.Mockito.*;
 
 @DisplayName("BotAdapterImpl")
 class BotAdapterImplTest {
+
     @Test
     @DisplayName("handle вызывает перехватчики и очищает хранилище")
-    void handleShouldInvokeInterceptorsAndClearHolder() {
+    void handleShouldInvokeInterceptorsAndClearHolder() throws Exception {
         BotInterceptor interceptor = mock(BotInterceptor.class);
         BotConfig config = new BotConfig();
         config.setGlobalInterceptors(List.of(interceptor));
 
         BotCommandRegistry registry = mock(BotCommandRegistry.class);
-        BotCommand<Message> command = mock(BotCommand.class);
+        BotCommand<BotApiObject> command = mock(BotCommand.class);
         when(registry.find(eq(BotRequestType.MESSAGE), any())).thenReturn(command);
 
         Bot bot = mock(Bot.class);

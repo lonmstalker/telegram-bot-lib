@@ -13,8 +13,10 @@ public interface Bot {
 
     void stop() throws BotApiException;
 
+    @NonNull
     String username() throws BotApiException;
 
+    @NonNull
     BotCommandRegistry registry();
 
     boolean isStarted();

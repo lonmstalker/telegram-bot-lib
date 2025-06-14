@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS bot_settings (
 
 COMMENT ON TABLE bot_settings IS 'Параметры работы бота и прокси';
 COMMENT ON COLUMN bot_settings.token IS 'Зашифрованный токен Telegram-бота';
-COMMENT ON COLUMN bot_settings.proxy_type IS 'Тип прокси: 0 - HTTP, 1 - SOCKS4, 2 - SOCKS5';
+COMMENT ON COLUMN bot_settings.proxy_type IS 'Тип прокси: 1 - HTTP, 2 - SOCKS4, 3 - SOCKS5';
 COMMENT ON COLUMN bot_settings.updates_timeout IS 'Таймаут ожидания обновлений, сек.';
 COMMENT ON COLUMN bot_settings.updates_limit IS 'Максимум обновлений за запрос';
 COMMENT ON COLUMN bot_settings.max_threads IS 'Максимальное число потоков';

@@ -1,4 +1,5 @@
-import io.lonmstalker.core.bot.TelegramSender;
+package io.lonmstalker.core.bot;
+
 import io.lonmstalker.core.storage.BotRequestHolder;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -8,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("BotRequestHolder")
 class BotRequestHolderTest {
+
     @Test
     @DisplayName("хранит и очищает значения")
     void holderStoresAndClearsValues() {

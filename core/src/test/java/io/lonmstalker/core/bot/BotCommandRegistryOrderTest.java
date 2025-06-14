@@ -1,9 +1,9 @@
+package io.lonmstalker.core.bot;
+
 import io.lonmstalker.core.BotCommand;
 import io.lonmstalker.core.BotRequest;
 import io.lonmstalker.core.BotRequestType;
 import io.lonmstalker.core.BotResponse;
-import io.lonmstalker.core.bot.BotCommandRegistry;
-import io.lonmstalker.core.bot.BotCommandRegistryImpl;
 import io.lonmstalker.core.matching.AlwaysMatch;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DisplayName("BotCommandRegistryImpl")
 class BotCommandRegistryOrderTest {
+
     @Test
     @DisplayName("возвращает команду с меньшим order")
     void shouldReturnCommandWithLowerOrderFirst() {

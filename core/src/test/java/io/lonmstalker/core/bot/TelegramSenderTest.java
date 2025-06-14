@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.meta.api.methods.GetMe;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
 import java.io.Serializable;
@@ -21,12 +20,12 @@ class TelegramSenderTest {
         }
 
         @Override
-        protected <T extends Serializable, Method extends BotApiMethod<T>> T sendApiMethod(Method method) throws TelegramApiException {
-            throw new TelegramApiRequestException("error");
+        public <T extends Serializable, Method extends BotApiMethod<T>> T execute(Method method) {
+            throw new BotApiException("error");
         }
 
         @Override
-        protected <T extends Serializable, Method extends BotApiMethod<T>> CompletableFuture<T> sendApiMethodAsync(Method method) throws TelegramApiException {
+        protected <T extends Serializable, Method extends BotApiMethod<T>> CompletableFuture<T> sendApiMethodAsync(Method method) {
             CompletableFuture<T> future = new CompletableFuture<>();
             future.completeExceptionally(new TelegramApiRequestException("error"));
             return future;

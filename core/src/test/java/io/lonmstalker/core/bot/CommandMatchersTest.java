@@ -1,3 +1,5 @@
+package io.lonmstalker.core.bot;
+
 import io.lonmstalker.core.matching.*;
 import io.lonmstalker.core.storage.BotRequestHolder;
 import io.lonmstalker.core.user.BotUserInfo;
@@ -16,6 +18,7 @@ import static org.mockito.Mockito.*;
 
 @DisplayName("CommandMatch implementations")
 class CommandMatchersTest {
+
     @AfterEach
     void cleanup() {
         BotRequestHolder.clear();

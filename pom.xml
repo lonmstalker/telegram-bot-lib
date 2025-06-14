@@ -14,8 +14,7 @@
     </modules>
 
     <properties>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
+        <maven.compiler.release>21</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- LIBS -->
@@ -33,17 +32,22 @@
         <checkstyle-maven-plugin.version>3.6.0</checkstyle-maven-plugin.version>
 
         <!-- TEST -->
+        <h2.version>2.2.224</h2.version>
+        <mockito.version>5.11.0</mockito.version>
         <junit.jupiter.version>5.13.1</junit.jupiter.version>
     </properties>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>org.projectlombok</groupId>
-                <artifactId>lombok</artifactId>
-                <version>${lombok.version}</version>
-                <scope>provided</scope>
-            </dependency>
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
@@ -95,12 +99,14 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven-compiler.plugin}</version>
                 <configuration>
-                    <source>${maven.compiler.source}</source>
-                    <target>${maven.compiler.target}</target>
                     <fork>true</fork>
-                    <compilerArgument>-Xlint:all</compilerArgument>
                     <showWarnings>true</showWarnings>
                     <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
                         <path>
                             <groupId>org.checkerframework</groupId>
                             <artifactId>checker</artifactId>
@@ -111,21 +117,8 @@
                         <annotationProcessor>
                             org.checkerframework.checker.nullness.NullnessChecker
                         </annotationProcessor>
-                        <annotationProcessor>
-                            org.checkerframework.checker.interning.InterningChecker
-                        </annotationProcessor>
-                        <annotationProcessor>
-                            org.checkerframework.checker.fenum.FenumChecker
-                        </annotationProcessor>
-                        <annotationProcessor>
-                            org.checkerframework.checker.formatter.FormatterChecker
-                        </annotationProcessor>
-                        <annotationProcessor>
-                            org.checkerframework.checker.regex.RegexChecker
-                        </annotationProcessor>
                     </annotationProcessors>
                     <compilerArgs combine.children="append">
-                        <arg>-Awarns</arg>
                         <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED</arg>
                         <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED</arg>
                         <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED</arg>

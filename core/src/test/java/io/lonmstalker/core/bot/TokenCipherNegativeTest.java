@@ -1,3 +1,5 @@
+package io.lonmstalker.core.bot;
+
 import io.lonmstalker.core.exception.BotApiException;
 import io.lonmstalker.core.utils.TokenCipher;
 import io.lonmstalker.core.utils.TokenCipherImpl;

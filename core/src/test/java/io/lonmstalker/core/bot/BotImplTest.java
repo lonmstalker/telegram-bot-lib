@@ -22,7 +22,7 @@ class BotImplTest {
 
         @Override
         @SuppressWarnings("unchecked")
-        protected <T extends Serializable, Method extends BotApiMethod<T>> T sendApiMethod(Method method) throws TelegramApiException {
+        public <T extends Serializable, Method extends BotApiMethod<T>> T execute(Method method) throws BotApiException {
             if (method instanceof GetMe) {
                 User user = new User();
                 user.setId(123L);
