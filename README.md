@@ -20,6 +20,8 @@
 
 ## Пример использования
 
+Аннотация `@BotHandler` позволяет указать класс матчера и конвертер аргумента метода.
+
 ```java
 public class EchoCommands {
 
@@ -37,4 +39,17 @@ Bot bot = BotFactory.INSTANCE.from(token, new BotConfig(), new BotAdapterImpl(bo
 bot.start();
 ```
 
-Аннотация `@BotHandler` позволяет указать класс матчера и конвертер аргумента метода.
+### Пример использования `StateStore`
+```java
+BotConfig config = new BotConfig();
+config.setStore(new InMemoryStateStore());
+
+Bot bot = BotFactory.INSTANCE.from(token, config, adapter);
+
+// в хендлере
+public void handle(BotRequest<Message> req) {
+    String state = req.botInfo().store().get(req.user().chatId());
+    // ...
+    req.botInfo().store().set(req.user().chatId(), "new-state");
+}
+```
