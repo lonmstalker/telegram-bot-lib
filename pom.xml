@@ -115,6 +115,9 @@
                     </annotationProcessorPaths>
                     <annotationProcessors>
                         <annotationProcessor>
+                            lombok.launch.AnnotationProcessorHider$AnnotationProcessor
+                        </annotationProcessor>
+                        <annotationProcessor>
                             org.checkerframework.checker.nullness.NullnessChecker
                         </annotationProcessor>
                     </annotationProcessors>
