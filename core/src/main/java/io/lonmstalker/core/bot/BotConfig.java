@@ -2,6 +2,8 @@ package io.lonmstalker.core.bot;
 
 import io.lonmstalker.core.exception.BotExceptionHandler;
 import io.lonmstalker.core.interceptor.BotInterceptor;
+import io.lonmstalker.core.state.InMemoryStateStore;
+import io.lonmstalker.core.state.StateStore;
 import lombok.Getter;
 import lombok.Setter;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -15,4 +17,5 @@ import java.util.List;
 public class BotConfig extends DefaultBotOptions {
     private @Nullable BotExceptionHandler globalExceptionHandler;
     private @NonNull List<BotInterceptor> globalInterceptors = List.of();
+    private @NonNull StateStore store = new InMemoryStateStore();
 }

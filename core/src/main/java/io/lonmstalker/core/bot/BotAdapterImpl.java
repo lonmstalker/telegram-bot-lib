@@ -51,7 +51,7 @@ public class BotAdapterImpl implements BotAdapter {
             BotRequestHolder.setUpdate(update);
             BotRequestHolder.setSender(sender);
             BotUserInfo user = userProvider.resolve(update);
-            BotInfo info = new BotInfo(bot.internalId(), sender);
+            BotInfo info = new BotInfo(bot.internalId(), sender, bot.config().getStore());
             response = command.handle(new BotRequest<>(update.getUpdateId(), data, info, user));
             interceptors.forEach(i -> i.postHandle(update));
             return response != null ? response.getMethod() : null;
