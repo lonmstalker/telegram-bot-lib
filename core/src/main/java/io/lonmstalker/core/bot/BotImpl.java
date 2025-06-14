@@ -82,6 +82,16 @@ public class BotImpl implements Bot {
         completeActions.add(action);
     }
 
+    @Override
+    public @NonNull BotConfig config() {
+        return this.config;
+    }
+
+    @Override
+    public @NonNull String token() {
+        return this.token;
+    }
+
     private void checkStarted() {
         if (user == null) {
             throw new BotApiException("Bot not started");
