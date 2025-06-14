@@ -17,6 +17,7 @@
 16. Улучшенная работа с файлами и медиапотоками
 17. Поддерживаются базы данных: H2, PostgreSQL, MySQL, Oracle (без JDBC-драйвера)
 18. Токен бота хранится в зашифрованном виде (ключ для шифрования передаётся в `TokenCipher`)
+19. Поддержка локализации ответов команд бота
 
 ## Пример использования
 
@@ -36,6 +37,8 @@ public class EchoCommands {
 Bot bot = BotFactory.INSTANCE.from(token, new BotConfig(), new BotAdapterImpl(bot, converter, provider), "com.example.bot");
 bot.start();
 ```
+
+Внутри обработчиков команд можно использовать `request.localizer().get("key")` для получения локализованного текста.
 
 ### Пример использования `StateStore`
 ```java
