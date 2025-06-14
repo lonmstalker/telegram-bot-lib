@@ -1,0 +1,26 @@
+package io.lonmstalker.core.matching;
+
+import java.util.regex.Pattern;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.telegram.telegrambots.meta.api.objects.Message;
+
+/**
+ * Matcher that checks a message text against a regular expression.
+ */
+public class MessageRegexMatch implements CommandMatch<Message> {
+
+    private final Pattern pattern;
+
+    public MessageRegexMatch(@NonNull String regex) {
+        this.pattern = Pattern.compile(regex);
+    }
+
+    public MessageRegexMatch(@NonNull Pattern pattern) {
+        this.pattern = pattern;
+    }
+
+    @Override
+    public boolean match(@NonNull Message data) {
+        return data.getText() != null && pattern.matcher(data.getText()).matches();
+    }
+}
