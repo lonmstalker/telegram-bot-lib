@@ -17,3 +17,18 @@
 16. Улучшенная работа с файлами и медиапотоками
 17. Поддерживаются базы данных: H2, PostgreSQL, MySQL, Oracle (без JDBC-драйвера)
 18. Токен бота хранится в зашифрованном виде (ключ для шифрования передаётся в `TokenCipher`)
+
+### Пример использования `StateStore`
+```java
+BotConfig config = new BotConfig();
+config.setStore(new InMemoryStateStore());
+
+Bot bot = BotFactory.INSTANCE.from(token, config, adapter);
+
+// в хендлере
+public void handle(BotRequest<Message> req) {
+    String state = req.botInfo().store().get(req.user().chatId());
+    // ...
+    req.botInfo().store().set(req.user().chatId(), "new-state");
+}
+```
