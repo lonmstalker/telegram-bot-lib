@@ -14,6 +14,10 @@ public interface BotCommand<T extends BotApiObject> {
 
     @NonNull CommandMatch<T> matcher();
 
+    default @NonNull String bot() {
+        return "";
+    }
+
     default int order() {
         return BotCommandOrder.LAST;
     }

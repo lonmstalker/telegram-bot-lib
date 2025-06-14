@@ -6,6 +6,12 @@ import io.lonmstalker.core.BotRequestType;
 import io.lonmstalker.core.BotResponse;
 import io.lonmstalker.core.BotHandlerConverter;
 import io.lonmstalker.core.annotation.BotHandler;
+import io.lonmstalker.core.annotation.AlwaysMatch;
+import io.lonmstalker.core.annotation.CustomMatcher;
+import io.lonmstalker.core.annotation.MessageContainsMatch;
+import io.lonmstalker.core.annotation.MessageRegexMatch;
+import io.lonmstalker.core.annotation.MessageTextMatch;
+import io.lonmstalker.core.annotation.UserRoleMatch;
 import io.lonmstalker.core.bot.BotCommandRegistry;
 import io.lonmstalker.core.exception.BotApiException;
 import io.lonmstalker.core.matching.CommandMatch;
@@ -41,7 +47,29 @@ public final class AnnotatedCommandLoader {
 
             Object instance = createInstance(method.getDeclaringClass());
 
-            CommandMatch<BotApiObject> matcher = (CommandMatch<BotApiObject>) createInstance(ann.matcher());
+            CommandMatch<BotApiObject> matcher = null;
+            if (method.isAnnotationPresent(MessageContainsMatch.class)) {
+                MessageContainsMatch mc = method.getAnnotation(MessageContainsMatch.class);
+                matcher = new io.lonmstalker.core.matching.MessageContainsMatch(mc.value(), mc.ignoreCase());
+            } else if (method.isAnnotationPresent(MessageRegexMatch.class)) {
+                MessageRegexMatch mr = method.getAnnotation(MessageRegexMatch.class);
+                matcher = new io.lonmstalker.core.matching.MessageRegexMatch(mr.value());
+            } else if (method.isAnnotationPresent(MessageTextMatch.class)) {
+                MessageTextMatch mt = method.getAnnotation(MessageTextMatch.class);
+                matcher = new io.lonmstalker.core.matching.MessageTextMatch(mt.value(), mt.ignoreCase());
+            } else if (method.isAnnotationPresent(UserRoleMatch.class)) {
+                UserRoleMatch ur = method.getAnnotation(UserRoleMatch.class);
+                var provider = (io.lonmstalker.core.user.BotUserProvider) createInstance(ur.provider());
+                matcher = new io.lonmstalker.core.matching.UserRoleMatch<>(provider, Set.of(ur.roles()));
+            } else {
+                CustomMatcher custom = method.getAnnotation(CustomMatcher.class);
+                if (custom != null) {
+                    matcher = (CommandMatch<BotApiObject>) createInstance(custom.value());
+                }
+            }
+            if (matcher == null) {
+                matcher = new io.lonmstalker.core.matching.AlwaysMatch<>();
+            }
 
             BotHandlerConverter<?> converter = (BotHandlerConverter<?>) createInstance(ann.converter());
 
@@ -72,6 +100,11 @@ public final class AnnotatedCommandLoader {
                 @Override
                 public @NonNull CommandMatch<BotApiObject> matcher() {
                     return matcher;
+                }
+
+                @Override
+                public @NonNull String bot() {
+                    return ann.bot();
                 }
 
                 @Override

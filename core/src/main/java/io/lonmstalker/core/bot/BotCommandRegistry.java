@@ -10,5 +10,7 @@ public interface BotCommandRegistry {
 
     void add(@NonNull BotCommand<?> command);
 
-    <T extends BotApiObject> @Nullable BotCommand<T> find(@NonNull BotRequestType type, @NonNull T data);
+    <T extends BotApiObject> @Nullable BotCommand<T> find(@NonNull BotRequestType type,
+                                                          @NonNull String bot,
+                                                          @NonNull T data);
 }

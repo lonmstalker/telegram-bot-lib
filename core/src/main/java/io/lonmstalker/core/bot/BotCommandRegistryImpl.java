@@ -18,7 +18,9 @@ public class BotCommandRegistryImpl implements BotCommandRegistry {
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T extends BotApiObject> @Nullable BotCommand<T> find(@NonNull BotRequestType type, @NonNull T data) {
+    public <T extends BotApiObject> @Nullable BotCommand<T> find(@NonNull BotRequestType type,
+                                                                 @NonNull String bot,
+                                                                 @NonNull T data) {
         type.checkType(data.getClass());
         var commands = this.commands.get(type);
 
@@ -27,6 +29,7 @@ public class BotCommandRegistryImpl implements BotCommandRegistry {
         }
 
         return (BotCommand<T>) commands.stream()
+                .filter(command -> command.bot().isEmpty() || command.bot().equals(bot))
                 .filter(command -> ((CommandMatch<T>) command.matcher()).match(data))
                 .findFirst()
                 .orElse(null);

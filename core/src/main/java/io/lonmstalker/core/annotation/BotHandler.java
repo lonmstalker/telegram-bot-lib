@@ -3,8 +3,6 @@ package io.lonmstalker.core.annotation;
 import io.lonmstalker.core.BotCommandOrder;
 import io.lonmstalker.core.BotRequestType;
 import io.lonmstalker.core.BotHandlerConverter;
-import io.lonmstalker.core.matching.AlwaysMatch;
-import io.lonmstalker.core.matching.CommandMatch;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.lang.annotation.ElementType;
@@ -16,9 +14,9 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface BotHandler {
 
-    @NonNull BotRequestType type();
+    @NonNull BotRequestType type() default BotRequestType.MESSAGE;
 
-    Class<? extends CommandMatch<?>> matcher();
+    String bot() default "";
 
     Class<? extends BotHandlerConverter<?>> converter() default BotHandlerConverter.Identity.class;
 
