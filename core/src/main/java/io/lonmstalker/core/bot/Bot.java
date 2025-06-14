@@ -20,4 +20,10 @@ public interface Bot {
     boolean isStarted();
 
     void onComplete(@NonNull BotCompleteAction action);
+
+    @NonNull
+    BotConfig config();
+
+    @NonNull
+    String token();
 }

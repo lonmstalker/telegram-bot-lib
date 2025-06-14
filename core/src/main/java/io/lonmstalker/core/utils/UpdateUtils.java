@@ -66,4 +66,34 @@ public class UpdateUtils {
 
         throw new IllegalArgumentException("Unknown update type");
     }
+
+    /**
+     * Attempts to extract {@link org.telegram.telegrambots.meta.api.objects.User} from update.
+     *
+     * @throws IllegalArgumentException when no user information can be resolved
+     */
+    public static @NonNull org.telegram.telegrambots.meta.api.objects.User getUser(@NonNull Update update) {
+        if (update.getMessage() != null && update.getMessage().getFrom() != null) {
+            return update.getMessage().getFrom();
+        }
+        if (update.getEditedMessage() != null && update.getEditedMessage().getFrom() != null) {
+            return update.getEditedMessage().getFrom();
+        }
+        if (update.getChannelPost() != null && update.getChannelPost().getFrom() != null) {
+            return update.getChannelPost().getFrom();
+        }
+        if (update.getEditedChannelPost() != null && update.getEditedChannelPost().getFrom() != null) {
+            return update.getEditedChannelPost().getFrom();
+        }
+        if (update.getCallbackQuery() != null && update.getCallbackQuery().getFrom() != null) {
+            return update.getCallbackQuery().getFrom();
+        }
+        if (update.getInlineQuery() != null && update.getInlineQuery().getFrom() != null) {
+            return update.getInlineQuery().getFrom();
+        }
+        if (update.getChosenInlineQuery() != null && update.getChosenInlineQuery().getFrom() != null) {
+            return update.getChosenInlineQuery().getFrom();
+        }
+        throw new IllegalArgumentException("User not found in update");
+    }
 }
