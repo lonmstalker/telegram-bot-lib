@@ -28,6 +28,11 @@ public class BotAdapterImpl implements BotAdapter {
     private final BotUserProvider userProvider;
 
     public BotAdapterImpl(@NonNull Bot bot,
+                          @NonNull BotUserProvider userProvider) {
+        this(bot, new BotRequestConverterImpl(), userProvider);
+    }
+
+    public BotAdapterImpl(@NonNull Bot bot,
                           @NonNull BotRequestConverter<BotApiObject> converter,
                           @NonNull BotUserProvider userProvider) {
         this.bot = bot;

@@ -1,4 +1,4 @@
-package io.lonmstalker.core.bot;
+package io.lonmstalker.core.loader;
 
 import io.lonmstalker.core.BotCommand;
 import io.lonmstalker.core.BotRequest;
@@ -6,6 +6,7 @@ import io.lonmstalker.core.BotRequestType;
 import io.lonmstalker.core.BotResponse;
 import io.lonmstalker.core.BotHandlerConverter;
 import io.lonmstalker.core.annotation.BotHandler;
+import io.lonmstalker.core.bot.BotCommandRegistry;
 import io.lonmstalker.core.exception.BotApiException;
 import io.lonmstalker.core.matching.CommandMatch;
 import java.lang.reflect.Constructor;
@@ -13,22 +14,23 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Set;
+
+import lombok.experimental.UtilityClass;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.reflections.Reflections;
-import org.reflections.scanners.MethodAnnotationsScanner;
+import org.reflections.scanners.Scanners;
 import org.reflections.util.ConfigurationBuilder;
 import org.telegram.telegrambots.meta.api.interfaces.BotApiObject;
 
 /** Utility to scan packages for {@link BotHandler} methods. */
+@UtilityClass
 public final class AnnotatedCommandLoader {
 
-    private AnnotatedCommandLoader() {
-    }
-
+    @SuppressWarnings("unchecked")
     public static void load(@NonNull BotCommandRegistry registry, @NonNull String... packages) {
         ConfigurationBuilder cb = new ConfigurationBuilder();
         cb.forPackages(packages);
-        cb.addScanners(new MethodAnnotationsScanner());
+        cb.addScanners(Scanners.MethodsAnnotated);
         Reflections reflections = new Reflections(cb);
         Set<Method> methods = reflections.getMethodsAnnotatedWith(BotHandler.class);
         for (Method method : methods) {

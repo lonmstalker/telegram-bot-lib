@@ -15,9 +15,10 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface BotHandler {
+
     @NonNull BotRequestType type();
 
-    Class<? extends CommandMatch<?>> matcher() default AlwaysMatch.class;
+    Class<? extends CommandMatch<?>> matcher();
 
     Class<? extends BotHandlerConverter<?>> converter() default BotHandlerConverter.Identity.class;
 
