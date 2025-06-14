@@ -3,7 +3,7 @@ package io.lonmstalker.core.bot;
 import io.lonmstalker.core.exception.BotApiException;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.bots.DefaultAbsSender;
-import org.telegram.telegrambots.bots.DefaultBotOptions;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.groupadministration.SetChatPhoto;
 import org.telegram.telegrambots.meta.api.methods.send.SendAnimation;
@@ -28,152 +28,198 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+// rate limit support
+import io.lonmstalker.core.bot.BotConfig;
+import io.lonmstalker.core.bot.RateLimiter;
+import org.telegram.telegrambots.meta.generics.BackOff;
+import org.telegram.telegrambots.updatesreceivers.ExponentialBackOff;
+
 public class TelegramSender extends DefaultAbsSender {
 
-    protected TelegramSender(@NonNull DefaultBotOptions options,
+    private final RateLimiter rateLimiter;
+    private final BackOff backOff;
+
+    protected TelegramSender(@NonNull BotConfig options,
                              @NonNull String botToken) {
         super(options, botToken);
+        this.rateLimiter = new RateLimiter(options.getRequestsPerSecond());
+        BackOff tmp = options.getBackOff();
+        if (tmp == null) {
+            tmp = new ExponentialBackOff();
+            options.setBackOff(tmp);
+        }
+        this.backOff = tmp;
     }
 
     @Override
     public <T extends Serializable, Method extends BotApiMethod<T>> T execute(Method method) throws BotApiException {
-        return withConvertException(() -> super.execute(method));
+        return executeWithRetry(() -> super.execute(method));
     }
 
     @Override
     public <T extends Serializable, Method extends BotApiMethod<T>> CompletableFuture<T> executeAsync(
             Method method) throws BotApiException {
-        return withConvertException(() -> super.executeAsync(method));
+        return CompletableFuture.supplyAsync(() -> execute(method));
     }
 
     @Override
     public <T extends Serializable, Method extends BotApiMethod<T>, Callback extends SentCallback<T>> void executeAsync(
             Method method, Callback callback) throws BotApiException {
-        withConvertException(() -> {
-            super.executeAsync(method, callback);
-            return null;
+        executeAsync(method).whenComplete((r, ex) -> {
+            if (ex == null) {
+                callback.onResult(method, r);
+            } else {
+                BotApiException botEx = convertToBotApiException(ex);
+                callback.onException(method, botEx);
+            }
         });
     }
 
     @Override
     protected <T extends Serializable, Method extends BotApiMethod<T>> CompletableFuture<T> sendApiMethodAsync(
             Method method) throws BotApiException {
-        return withConvertException(() -> super.sendApiMethodAsync(method));
+        return CompletableFuture.supplyAsync(() -> execute(method));
     }
 
     @Override
     public CompletableFuture<Message> executeAsync(SendAnimation sendAnimation) throws BotApiException {
-        return withConvertException(() -> super.executeAsync(sendAnimation));
+        return CompletableFuture.supplyAsync(() -> execute(sendAnimation));
     }
 
     @Override
     public CompletableFuture<Serializable> executeAsync(EditMessageMedia editMessageMedia) throws BotApiException {
-        return withConvertException(() -> super.executeAsync(editMessageMedia));
+        return CompletableFuture.supplyAsync(() -> execute(editMessageMedia));
     }
 
     @Override
     public CompletableFuture<File> executeAsync(UploadStickerFile uploadStickerFile) throws BotApiException {
-        return withConvertException(() -> super.executeAsync(uploadStickerFile));
+        return CompletableFuture.supplyAsync(() -> execute(uploadStickerFile));
     }
 
     @Override
     public CompletableFuture<Boolean> executeAsync(CreateNewStickerSet createNewStickerSet) throws BotApiException {
-        return withConvertException(() -> super.executeAsync(createNewStickerSet));
+        return CompletableFuture.supplyAsync(() -> execute(createNewStickerSet));
     }
 
     @Override
     public CompletableFuture<Boolean> executeAsync(SetStickerSetThumbnail setStickerSetThumbnail) throws BotApiException {
-        return withConvertException(() -> super.executeAsync(setStickerSetThumbnail));
+        return CompletableFuture.supplyAsync(() -> execute(setStickerSetThumbnail));
     }
 
     @Override
     public CompletableFuture<Boolean> executeAsync(AddStickerToSet addStickerToSet) throws BotApiException {
-        return withConvertException(() -> super.executeAsync(addStickerToSet));
+        return CompletableFuture.supplyAsync(() -> execute(addStickerToSet));
     }
 
     @Override
     public CompletableFuture<Boolean> executeAsync(SetChatPhoto setChatPhoto) throws BotApiException {
-        return withConvertException(() -> super.executeAsync(setChatPhoto));
+        return CompletableFuture.supplyAsync(() -> execute(setChatPhoto));
     }
 
     @Override
     public CompletableFuture<List<Message>> executeAsync(SendMediaGroup sendMediaGroup) throws BotApiException {
-        return withConvertException(() -> super.executeAsync(sendMediaGroup));
+        return CompletableFuture.supplyAsync(() -> execute(sendMediaGroup));
     }
 
     @Override
     public CompletableFuture<Message> executeAsync(SendVoice sendVoice) throws BotApiException {
-        return withConvertException(() -> super.executeAsync(sendVoice));
+        return CompletableFuture.supplyAsync(() -> execute(sendVoice));
     }
 
     @Override
     public CompletableFuture<Message> executeAsync(SendAudio sendAudio) throws BotApiException {
-        return withConvertException(() -> super.executeAsync(sendAudio));
+        return CompletableFuture.supplyAsync(() -> execute(sendAudio));
     }
 
     @Override
     public CompletableFuture<Message> executeAsync(SendSticker sendSticker) throws BotApiException {
-        return withConvertException(() -> super.executeAsync(sendSticker));
+        return CompletableFuture.supplyAsync(() -> execute(sendSticker));
     }
 
     @Override
     public CompletableFuture<Message> executeAsync(SendVideoNote sendVideoNote) throws BotApiException {
-        return withConvertException(() -> super.executeAsync(sendVideoNote));
+        return CompletableFuture.supplyAsync(() -> execute(sendVideoNote));
     }
 
     @Override
     public CompletableFuture<Message> executeAsync(SendVideo sendVideo) throws BotApiException {
-        return withConvertException(() -> super.executeAsync(sendVideo));
+        return CompletableFuture.supplyAsync(() -> execute(sendVideo));
     }
 
     @Override
     public CompletableFuture<Message> executeAsync(SendPhoto sendPhoto) throws BotApiException {
-        return withConvertException(() -> super.executeAsync(sendPhoto));
+        return CompletableFuture.supplyAsync(() -> execute(sendPhoto));
     }
 
     @Override
     public CompletableFuture<Message> executeAsync(SendDocument sendDocument) throws BotApiException {
-        return withConvertException(() -> super.executeAsync(sendDocument));
+        return CompletableFuture.supplyAsync(() -> execute(sendDocument));
     }
 
     @Override
     public Message execute(SendAnimation sendAnimation) throws BotApiException {
-        return withConvertException(() -> super.execute(sendAnimation));
+        return executeWithRetry(() -> super.execute(sendAnimation));
     }
 
     @Override
     public Serializable execute(EditMessageMedia editMessageMedia) throws BotApiException {
-        return withConvertException(() -> super.execute(editMessageMedia));
+        return executeWithRetry(() -> super.execute(editMessageMedia));
     }
 
     @Override
     public File execute(UploadStickerFile uploadStickerFile) throws BotApiException {
-        return withConvertException(() -> super.execute(uploadStickerFile));
+        return executeWithRetry(() -> super.execute(uploadStickerFile));
     }
 
     @Override
     public Boolean execute(CreateNewStickerSet createNewStickerSet) throws BotApiException {
-        return withConvertException(() -> super.execute(createNewStickerSet));
+        return executeWithRetry(() -> super.execute(createNewStickerSet));
     }
 
     @Override
     public Boolean execute(SetStickerSetThumbnail setStickerSetThumbnail) throws BotApiException {
-        return withConvertException(() -> super.execute(setStickerSetThumbnail));
+        return executeWithRetry(() -> super.execute(setStickerSetThumbnail));
     }
 
     @Override
     public Boolean execute(AddStickerToSet addStickerToSet) throws BotApiException {
-        return withConvertException(() -> super.execute(addStickerToSet));
+        return executeWithRetry(() -> super.execute(addStickerToSet));
     }
 
     @Override
     public List<Message> execute(SendMediaGroup sendMediaGroup) throws BotApiException {
-        return withConvertException(() -> super.execute(sendMediaGroup));
+        return executeWithRetry(() -> super.execute(sendMediaGroup));
     }
 
     @Override
     public Boolean execute(SetChatPhoto setChatPhoto) throws BotApiException {
-        return withConvertException(() -> super.execute(setChatPhoto));
+        return executeWithRetry(() -> super.execute(setChatPhoto));
+    }
+
+    private <T> T executeWithRetry(RuntimeExceptionExecutor<T> executor) {
+        while (true) {
+            try {
+                rateLimiter.acquire();
+                T result = withConvertException(executor);
+                backOff.reset();
+                return result;
+            } catch (BotApiException ex) {
+                Throwable cause = ex.getCause();
+                if (cause instanceof TelegramApiRequestException req && req.getErrorCode() == 429) {
+                    try {
+                        Thread.sleep(backOff.nextBackOffMillis());
+                    } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
+                        throw new BotApiException(ie);
+                    }
+                } else {
+                    throw ex;
+                }
+            } catch (InterruptedException ie) {
+                Thread.currentThread().interrupt();
+                throw new BotApiException(ie);
+            }
+        }
     }
 
     private <T> T withConvertException(RuntimeExceptionExecutor<T> executor) {
@@ -190,5 +236,18 @@ public class TelegramSender extends DefaultAbsSender {
 
     interface RuntimeExceptionExecutor<T> {
         T execute() throws Exception;
+    }
+
+    private BotApiException convertToBotApiException(Throwable throwable) {
+        if (throwable instanceof java.util.concurrent.CompletionException ce && ce.getCause() != null) {
+            throwable = ce.getCause();
+        }
+        if (throwable instanceof BotApiException be) {
+            return be;
+        }
+        if (throwable.getMessage() == null || throwable.getCause() == null) {
+            return new BotApiException(throwable);
+        }
+        return new BotApiException(throwable.getMessage(), throwable.getCause());
     }
 }
