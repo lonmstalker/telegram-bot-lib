@@ -1,6 +1,7 @@
 package io.lonmstalker.core.utils;
 
 import io.lonmstalker.core.BotRequestType;
+import io.lonmstalker.core.exception.BotException;
 import lombok.experimental.UtilityClass;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -65,13 +66,13 @@ public class UpdateUtils {
             return BotRequestType.REMOVED_CHAT_BOOST;
         }
 
-        throw new IllegalArgumentException("Unknown update type");
+        throw new BotException("Unknown update type");
     }
 
     /**
      * Attempts to extract {@link org.telegram.telegrambots.meta.api.objects.User} from update.
      *
-     * @throws IllegalArgumentException when no user information can be resolved
+     * @throws BotException when no user information can be resolved
      */
     public static @NonNull User getUser(@NonNull Update update) {
         if (update.getMessage() != null && update.getMessage().getFrom() != null) {
@@ -95,6 +96,6 @@ public class UpdateUtils {
         if (update.getChosenInlineQuery() != null) {
             return update.getChosenInlineQuery().getFrom();
         }
-        throw new IllegalArgumentException("User not found in update");
+        throw new BotException("User not found in update");
     }
 }

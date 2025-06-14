@@ -1,7 +1,10 @@
-package io.lonmstalker.core.bot;import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+package io.lonmstalker.core.bot;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import io.lonmstalker.core.exception.BotException;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.generics.BotOptions;
@@ -24,11 +27,14 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class ImprovedBotSession implements BotSession {
-    private static final Logger log = LoggerFactory.getLogger(ImprovedBotSession.class);
+public class BotSessionImpl implements BotSession {
+    private static final Logger log = LoggerFactory.getLogger(BotSessionImpl.class);
+
     private final AtomicBoolean running = new AtomicBoolean();
     private final BlockingQueue<Update> updates = new LinkedBlockingQueue<>();
-    private final ObjectMapper mapper = new ObjectMapper();
+
+    private final ObjectMapper mapper;
+    private final ExecutorService providedExecutor;
 
     private DefaultBotOptions options;
     private String token;
@@ -37,6 +43,15 @@ public class ImprovedBotSession implements BotSession {
     private ExecutorService executor;
     private HttpClient httpClient;
     private int lastUpdateId;
+
+    public BotSessionImpl() {
+        this(null, null);
+    }
+
+    public BotSessionImpl(ExecutorService executor, ObjectMapper mapper) {
+        this.providedExecutor = executor;
+        this.mapper = mapper != null ? mapper : new ObjectMapper();
+    }
 
     @Override
     public synchronized void start() {
@@ -56,7 +71,7 @@ public class ImprovedBotSession implements BotSession {
                 .connectTimeout(Duration.ofSeconds(75))
                 .build();
 
-        this.executor = Executors.newFixedThreadPool(2);
+        this.executor = providedExecutor != null ? providedExecutor : Executors.newFixedThreadPool(2);
         executor.execute(this::readLoop);
         executor.execute(this::handleLoop);
     }
@@ -67,7 +82,9 @@ public class ImprovedBotSession implements BotSession {
             throw new IllegalStateException("Session already stopped");
         }
         running.set(false);
-        executor.shutdownNow();
+        if (executor != null && providedExecutor == null) {
+            executor.shutdownNow();
+        }
     }
 
     @Override
@@ -78,7 +95,7 @@ public class ImprovedBotSession implements BotSession {
     @Override
     public void setOptions(BotOptions options) {
         if (this.options != null) {
-            throw new IllegalArgumentException("Options already set");
+            throw new BotException("Options already set");
         }
         this.options = (DefaultBotOptions) options;
     }
@@ -86,7 +103,7 @@ public class ImprovedBotSession implements BotSession {
     @Override
     public void setToken(String token) {
         if (this.token != null) {
-            throw new IllegalArgumentException("Token already set");
+            throw new BotException("Token already set");
         }
         this.token = token;
     }
@@ -94,7 +111,7 @@ public class ImprovedBotSession implements BotSession {
     @Override
     public void setCallback(LongPollingBot callback) {
         if (this.callback != null) {
-            throw new IllegalArgumentException("Callback already set");
+            throw new BotException("Callback already set");
         }
         this.callback = callback;
     }

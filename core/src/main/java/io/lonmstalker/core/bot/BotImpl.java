@@ -1,6 +1,7 @@
 package io.lonmstalker.core.bot;
 
 import io.lonmstalker.core.exception.BotApiException;
+import io.lonmstalker.core.bot.BotSessionImpl;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,6 +31,7 @@ public class BotImpl implements Bot {
     private @NonNull BotConfig config;
     private @NonNull AbsSender absSender;
     private @NonNull BotCommandRegistry commandRegistry;
+    private @Nullable BotSessionImpl session;
 
     @Builder.Default
     private @NonNull List<BotCompleteAction> completeActions = new ArrayList<>();
@@ -53,8 +55,18 @@ public class BotImpl implements Bot {
             this.user = absSender.execute(new GetMe());
             if (absSender instanceof LongPollingReceiver receiver) {
                 receiver.setUsername(this.user.getUserName());
+                if (this.session == null) {
+                    this.session = new BotSessionImpl();
+                }
+                this.session.setOptions(config);
+                this.session.setToken(token);
+                this.session.setCallback(receiver);
+                this.session.start();
             } else if (absSender instanceof WebHookReceiver receiver) {
                 receiver.setUsername(this.user.getUserName());
+                if (this.setWebhook != null) {
+                    receiver.execute(this.setWebhook);
+                }
             }
         } catch (Exception ex) {
             throw new BotApiException("Error starting bot", ex);
@@ -71,6 +83,13 @@ public class BotImpl implements Bot {
                 log.error("Complete action error", e);
             }
         }
+        if (session != null && session.isRunning()) {
+            try {
+                session.stop();
+            } catch (Exception e) {
+                log.warn("Error stopping session", e);
+            }
+        }
         if (absSender instanceof AutoCloseable closeable) {
             try {
                 closeable.close();
@@ -80,6 +99,7 @@ public class BotImpl implements Bot {
         }
         this.user = null;
         this.setWebhook = null;
+        this.session = null;
     }
 
     @Override
