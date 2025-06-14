@@ -15,3 +15,4 @@
 14. CLI‑утилита / Admin‑бот
 15. Auto‑documentation (OpenAPI‑style)
 16. Улучшенная работа с файлами и медиапотоками
+17. Поддерживаются базы данных: H2, PostgreSQL, MySQL, Oracle (без JDBC-драйвера)

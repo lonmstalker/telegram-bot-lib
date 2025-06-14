@@ -1,6 +1,7 @@
 package io.lonmstalker.core.bot;
 
 import io.lonmstalker.core.BotAdapter;
+import io.lonmstalker.core.bot.BotDataSourceFactory.BotData;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -31,8 +32,20 @@ public final class BotFactory {
                 .build();
     }
 
-    public @NonNull Bot from(@NonNull BotDataSourceConfig config) {
-        throw new UnsupportedOperationException();
+    public @NonNull Bot from(long botId,
+                             @NonNull BotDataSourceConfig config,
+                             @NonNull BotAdapter adapter) {
+        BotData data = BotDataSourceFactory.INSTANCE.load(config.getDataSource(), botId);
+        BotConfig cfg = config.getBotConfig();
+        if (cfg == null) {
+            cfg = data.config();
+        } else {
+            cfg.setProxyHost(data.config().getProxyHost());
+            cfg.setMaxThreads(data.config().getMaxThreads());
+            cfg.setGetUpdatesTimeout(data.config().getGetUpdatesTimeout());
+            cfg.setGetUpdatesLimit(data.config().getGetUpdatesLimit());
+        }
+        return from(data.token(), cfg, adapter);
     }
 
     private long nextId() {
