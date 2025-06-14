@@ -17,3 +17,39 @@
 16. Улучшенная работа с файлами и медиапотоками
 17. Поддерживаются базы данных: H2, PostgreSQL, MySQL, Oracle (без JDBC-драйвера)
 18. Токен бота хранится в зашифрованном виде (ключ для шифрования передаётся в `TokenCipher`)
+
+## Пример использования
+
+Аннотация `@BotHandler` позволяет указать класс матчера и конвертер аргумента метода.
+
+```java
+public class EchoCommands {
+
+    @BotHandler(type = BotRequestType.MESSAGE,
+            matcher = AlwaysMatch.class,
+            converter = BotHandlerConverter.Identity.class)
+    public BotResponse echo(BotRequest<Message> request) {
+        var msg = request.data();
+        var send = new SendMessage(msg.getChatId().toString(), msg.getText());
+        return BotResponse.builder().method(send).build();
+    }
+}
+
+Bot bot = BotFactory.INSTANCE.from(token, new BotConfig(), new BotAdapterImpl(bot, converter, provider), "com.example.bot");
+bot.start();
+```
+
+### Пример использования `StateStore`
+```java
+BotConfig config = new BotConfig();
+config.setStore(new InMemoryStateStore());
+
+Bot bot = BotFactory.INSTANCE.from(token, config, adapter);
+
+// в хендлере
+public void handle(BotRequest<Message> req) {
+    String state = req.botInfo().store().get(req.user().chatId());
+    // ...
+    req.botInfo().store().set(req.user().chatId(), "new-state");
+}
+```

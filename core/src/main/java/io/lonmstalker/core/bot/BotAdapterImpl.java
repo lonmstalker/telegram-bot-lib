@@ -28,6 +28,11 @@ public class BotAdapterImpl implements BotAdapter {
     private final BotUserProvider userProvider;
 
     public BotAdapterImpl(@NonNull Bot bot,
+                          @NonNull BotUserProvider userProvider) {
+        this(bot, new BotRequestConverterImpl(), userProvider);
+    }
+
+    public BotAdapterImpl(@NonNull Bot bot,
                           @NonNull BotRequestConverter<BotApiObject> converter,
                           @NonNull BotUserProvider userProvider) {
         this.bot = bot;
@@ -51,7 +56,7 @@ public class BotAdapterImpl implements BotAdapter {
             BotRequestHolder.setUpdate(update);
             BotRequestHolder.setSender(sender);
             BotUserInfo user = userProvider.resolve(update);
-            BotInfo info = new BotInfo(bot.internalId(), sender);
+            BotInfo info = new BotInfo(bot.internalId(), sender, bot.config().getStore());
             response = command.handle(new BotRequest<>(update.getUpdateId(), data, info, user));
             interceptors.forEach(i -> i.postHandle(update));
             return response != null ? response.getMethod() : null;
