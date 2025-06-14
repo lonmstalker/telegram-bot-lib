@@ -10,7 +10,7 @@ public class MessageLocalizerTest {
 
     @Test
     void russianLocale() {
-        MessageLocalizer localizer = new MessageLocalizer(new Locale("ru"));
+        MessageLocalizer localizer = new MessageLocalizer(Locale.forLanguageTag("ru"));
         assertEquals("Понг", localizer.get("command.ping.response"));
     }
 }

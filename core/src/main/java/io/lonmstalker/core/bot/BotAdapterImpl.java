@@ -67,9 +67,9 @@ public class BotAdapterImpl implements BotAdapter {
             BotRequestHolder.setUpdate(update);
             BotRequestHolder.setSender(sender);
             BotUserInfo user = userProvider.resolve(update);
-            BotInfo info = new BotInfo(bot.internalId(), sender, bot.config().getStore());
+            BotInfo info = new BotInfo(bot.internalId(), bot.config().getStore(), sender);
             var localizer = new io.lonmstalker.core.i18n.MessageLocalizer(bot.config().getLocale());
-            return command.handle(new BotRequest<>(update.getUpdateId(), data, info, user, localizer));
+            return command.handle(new BotRequest<>(update.getUpdateId(), data, info, user));
         } finally {
             try {
                 sender.close();
