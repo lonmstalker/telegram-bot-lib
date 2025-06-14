@@ -7,7 +7,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.telegram.telegrambots.meta.api.interfaces.BotApiObject;
 
-import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +36,7 @@ public class BotCommandRegistryImpl implements BotCommandRegistry {
     public void add(@NonNull BotCommand<?> command) {
         commands.compute(command.type(), (__, v) -> {
             if (v == null) {
-                v = new ArrayList<>();
+                v = new CopyOnWriteArrayList<>();
                 v.add(command);
             } else {
                 v.add(command);
