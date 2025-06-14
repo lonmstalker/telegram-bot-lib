@@ -12,10 +12,13 @@ import org.telegram.telegrambots.meta.api.methods.GetMe;
 import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.bots.AbsSender;
+import org.telegram.telegrambots.meta.generics.LongPollingBot;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import io.lonmstalker.core.bot.ImprovedBotSession;
 
 @Slf4j
 @Getter
@@ -30,6 +33,9 @@ public class BotImpl implements Bot {
     private @NonNull BotConfig config;
     private @NonNull AbsSender absSender;
     private @NonNull BotCommandRegistry commandRegistry;
+
+    @Builder.Default
+    private ImprovedBotSession session = null;
 
     @Builder.Default
     private @NonNull List<BotCompleteAction> completeActions = new ArrayList<>();
@@ -51,6 +57,22 @@ public class BotImpl implements Bot {
         checkNotStarted();
         try {
             this.user = absSender.execute(new GetMe());
+            if (absSender instanceof LongPollingReceiver receiver) {
+                receiver.setUsername(user.getUserName());
+                if (this.session == null) {
+                    this.session = new ImprovedBotSession();
+                }
+                this.session.setOptions(config);
+                this.session.setToken(token);
+                this.session.setCallback(receiver);
+                this.session.start();
+            }
+            if (absSender instanceof WebHookReceiver receiver) {
+                receiver.setUsername(user.getUserName());
+                if (setWebhook != null) {
+                    absSender.execute(setWebhook);
+                }
+            }
         } catch (Exception ex) {
             throw new BotApiException("Error starting bot", ex);
         }
@@ -59,6 +81,9 @@ public class BotImpl implements Bot {
     @Override
     public void stop() {
         checkStarted();
+        if (session != null && session.isRunning()) {
+            session.stop();
+        }
     }
 
     @Override
