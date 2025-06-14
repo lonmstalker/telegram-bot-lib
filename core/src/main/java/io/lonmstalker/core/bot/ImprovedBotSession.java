@@ -1,4 +1,5 @@
-package io.lonmstalker.core.bot;import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+package io.lonmstalker.core.bot;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

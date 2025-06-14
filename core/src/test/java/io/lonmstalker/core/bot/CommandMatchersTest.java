@@ -60,6 +60,18 @@ class CommandMatchersTest {
     }
 
     @Test
+    @DisplayName("AndMatch/OrMatch")
+    void compositeMatch() {
+        Message msg = new Message();
+        msg.setText("hello");
+        CommandMatch<Message> t1 = new MessageTextMatch("hello");
+        CommandMatch<Message> t2 = new MessageContainsMatch("hell");
+        assertTrue(new AndMatch<>(t1, t2).match(msg));
+        assertTrue(new OrMatch<>(t1, new MessageTextMatch("bye")).match(msg));
+        assertFalse(new AndMatch<>(t1, new MessageTextMatch("bye")).match(msg));
+    }
+
+    @Test
     @DisplayName("UserRoleMatch")
     void userRoleMatch() {
         Update update = new Update();

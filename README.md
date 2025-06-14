@@ -17,3 +17,17 @@
 16. Улучшенная работа с файлами и медиапотоками
 17. Поддерживаются базы данных: H2, PostgreSQL, MySQL, Oracle (без JDBC-драйвера)
 18. Токен бота хранится в зашифрованном виде (ключ для шифрования передаётся в `TokenCipher`)
+
+This project is licensed under the MIT License.
+
+### Пример аннотационного хендлера
+```java
+public class MyHandlers {
+    @BotCommandHandler(type = BotRequestType.MESSAGE)
+    @TextMatch("/start")
+    public BotResponse start(BotRequest<Message> req) {
+        // логика команды
+        return null;
+    }
+}
+```
