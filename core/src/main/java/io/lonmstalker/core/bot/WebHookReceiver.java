@@ -4,6 +4,7 @@ import io.lonmstalker.core.BotAdapter;
 import io.lonmstalker.core.exception.BotExceptionHandler;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
@@ -18,7 +19,7 @@ class WebHookReceiver extends TelegramWebhookBot {
     private final @NonNull BotExceptionHandler globalExceptionHandler;
     
     @Setter
-    private @NonNull String username;
+    private @Nullable String username;
 
     public WebHookReceiver(@NonNull DefaultBotOptions options,
                            @NonNull BotAdapter adapter,
@@ -33,12 +34,13 @@ class WebHookReceiver extends TelegramWebhookBot {
     }
 
     @Override
-    public String getBotUsername() {
-        return username;
+    public @NonNull String getBotUsername() {
+        return username != null ? username : StringUtils.EMPTY;
     }
 
     @Override
-    public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
+    @SuppressWarnings("override.return")
+    public @Nullable BotApiMethod<?> onWebhookUpdateReceived(Update update) {
        try {
            return adapter.handle(update);
        } catch (Exception e) {

@@ -12,6 +12,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
  */
 @Slf4j
 public class LoggingBotInterceptor implements BotInterceptor {
+
     @Override
     public void preHandle(@NonNull Update update) {
         log.info("Pre handle update: {}", update);
@@ -23,6 +24,7 @@ public class LoggingBotInterceptor implements BotInterceptor {
     }
 
     @Override
+    @SuppressWarnings("argument")
     public void afterCompletion(@NonNull Update update, @Nullable BotResponse response) {
         log.info("After completion update: {}, response: {}", update, response);
     }

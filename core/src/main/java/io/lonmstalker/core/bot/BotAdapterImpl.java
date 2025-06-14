@@ -12,7 +12,6 @@ import io.lonmstalker.core.storage.BotRequestHolder;
 import io.lonmstalker.core.user.BotUserInfo;
 import io.lonmstalker.core.user.BotUserProvider;
 import io.lonmstalker.core.utils.UpdateUtils;
-import io.lonmstalker.core.bot.TelegramSender;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -37,7 +36,6 @@ public class BotAdapterImpl implements BotAdapter {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public @Nullable BotApiMethod<?> handle(@NonNull Update update) {
         List<BotInterceptor> interceptors = bot.config().getGlobalInterceptors();
         interceptors.forEach(i -> i.preHandle(update));

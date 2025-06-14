@@ -21,7 +21,7 @@ public class TokenCipherImpl implements TokenCipher {
 
     private final SecretKeySpec key;
 
-    public TokenCipherImpl(@NonNull byte[] keyBytes) {
+    public TokenCipherImpl(byte[] keyBytes) {
         byte[] sized = Arrays.copyOf(keyBytes, 16);
         this.key = new SecretKeySpec(sized, ALGORITHM);
     }

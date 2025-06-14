@@ -32,8 +32,8 @@
         <checkstyle-maven-plugin.version>3.6.0</checkstyle-maven-plugin.version>
 
         <!-- TEST -->
-        <h2.version>2.2.224</h2.version>
-        <mockito.version>5.11.0</mockito.version>
+        <h2.version>2.3.232</h2.version>
+        <mockito.version>5.18.0</mockito.version>
         <junit.jupiter.version>5.13.1</junit.jupiter.version>
     </properties>
 
@@ -122,6 +122,8 @@
                         </annotationProcessor>
                     </annotationProcessors>
                     <compilerArgs combine.children="append">
+                        <arg>-Awarns</arg>
+                        <arg>-Xmaxwarns</arg><arg>10000</arg>
                         <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED</arg>
                         <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED</arg>
                         <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED</arg>
@@ -133,6 +135,22 @@
                         <arg>-J--add-opens=jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED</arg>
                     </compilerArgs>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>default-compile</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>disable-checker-in-tests</id>
+                        <phase>test-compile</phase>
+                        <goals>
+                            <goal>testCompile</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

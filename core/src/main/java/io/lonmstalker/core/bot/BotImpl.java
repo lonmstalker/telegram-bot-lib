@@ -1,7 +1,6 @@
 package io.lonmstalker.core.bot;
 
 import io.lonmstalker.core.exception.BotApiException;
-import io.lonmstalker.core.bot.BotSessionImpl;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,10 +8,11 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.telegram.telegrambots.bots.DefaultAbsSender;
 import org.telegram.telegrambots.meta.api.methods.GetMe;
 import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 import org.telegram.telegrambots.meta.api.objects.User;
-import org.telegram.telegrambots.meta.bots.AbsSender;
+import org.telegram.telegrambots.util.WebhookUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +29,7 @@ public class BotImpl implements Bot {
     private @Nullable SetWebhook setWebhook;
     private @NonNull String token;
     private @NonNull BotConfig config;
-    private @NonNull AbsSender absSender;
+    private @NonNull DefaultAbsSender absSender;
     private @NonNull BotCommandRegistry commandRegistry;
     private @Nullable BotSessionImpl session;
 
@@ -43,18 +43,19 @@ public class BotImpl implements Bot {
     }
 
     @Override
+    @SuppressWarnings("argument")
     public long externalId() {
         checkStarted();
         return Objects.requireNonNull(user).getId();
     }
 
     @Override
+    @SuppressWarnings("dereference.of.nullable")
     public void start() {
         checkNotStarted();
         try {
-            this.user = absSender.execute(new GetMe());
             if (absSender instanceof LongPollingReceiver receiver) {
-                receiver.setUsername(this.user.getUserName());
+                WebhookUtils.clearWebhook(absSender);
                 if (this.session == null) {
                     this.session = new BotSessionImpl();
                 }
@@ -62,11 +63,19 @@ public class BotImpl implements Bot {
                 this.session.setToken(token);
                 this.session.setCallback(receiver);
                 this.session.start();
+                this.user = absSender.execute(new GetMe());
+                receiver.setUsername(Objects.requireNonNull(this.user).getUserName());
             } else if (absSender instanceof WebHookReceiver receiver) {
-                receiver.setUsername(this.user.getUserName());
                 if (this.setWebhook != null) {
+                    if (this.setWebhook.getUrl() == null) {
+                        throw new BotApiException("setWebhook url is null");
+                    }
+                    setWebhook.validate();
+                    WebhookUtils.setWebhook(absSender, receiver, this.setWebhook);
                     receiver.execute(this.setWebhook);
                 }
+                this.user = absSender.execute(new GetMe());
+                receiver.setUsername(Objects.requireNonNull(this.user).getUserName());
             }
         } catch (Exception ex) {
             throw new BotApiException("Error starting bot", ex);
@@ -74,6 +83,7 @@ public class BotImpl implements Bot {
     }
 
     @Override
+    @SuppressWarnings("dereference.of.nullable")
     public void stop() {
         checkStarted();
         for (BotCompleteAction action : completeActions) {
@@ -103,6 +113,7 @@ public class BotImpl implements Bot {
     }
 
     @Override
+    @SuppressWarnings("argument")
     public @NonNull String username() {
         checkStarted();
         return Objects.requireNonNull(user).getUserName();

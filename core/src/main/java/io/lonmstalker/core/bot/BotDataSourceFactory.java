@@ -15,6 +15,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Objects;
 
 /**
  * Extracts bot information from database.
@@ -33,9 +34,9 @@ public final class BotDataSourceFactory {
     private static final int DEFAULT_UPDATES_TIMEOUT = 0;
     private static final int DEFAULT_UPDATES_LIMIT = 100;
 
-    private static String stringOrDefault(@NonNull ResultSet rs,
-                                          @NonNull String column,
-                                          @Nullable String def) throws SQLException {
+    private static @Nullable String stringOrDefault(@NonNull ResultSet rs,
+                                                    @NonNull String column,
+                                                    @Nullable String def) throws SQLException {
         var value = rs.getString(column);
         if (value == null) {
             if (def != null) {
@@ -57,6 +58,7 @@ public final class BotDataSourceFactory {
         return value;
     }
 
+    @SuppressWarnings("argument")
     public @NonNull BotData load(@NonNull DataSource dataSource,
                                  long id,
                                  @NonNull TokenCipher cipher) {
@@ -68,7 +70,7 @@ public final class BotDataSourceFactory {
                     throw new BotApiException("Bot not found");
                 }
 
-                String token = cipher.decrypt(stringOrDefault(rs, "token", ""));
+                String token = cipher.decrypt(Objects.requireNonNull(stringOrDefault(rs, "token", "")));
                 String proxyHost = stringOrDefault(rs, "proxy_host", null);
                 int proxyPort = intOrDefault(rs, "proxy_port", 0);
                 int proxyTypeValue = intOrDefault(rs, "proxy_type", DefaultBotOptions.ProxyType.NO_PROXY.ordinal());

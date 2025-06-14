@@ -26,6 +26,7 @@ public class FileBotUserRepository implements BotUserRepository {
     }
 
     @Override
+    @SuppressWarnings("argument")
     public @NonNull BotUserInfo getOrCreate(@NonNull User telegramUser) {
         long id = telegramUser.getId();
         try {

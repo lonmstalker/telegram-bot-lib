@@ -1,20 +1,25 @@
 package io.lonmstalker.core.storage;
 
 import io.lonmstalker.core.bot.TelegramSender;
+import io.lonmstalker.core.exception.BotApiException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.telegram.telegrambots.meta.api.objects.Update;
+
+import java.util.Optional;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class BotRequestHolder {
-    private static final ThreadLocal<Update> UPDATE = new ThreadLocal<>();
-    private static final ThreadLocal<TelegramSender> SENDER = new ThreadLocal<>();
+    private static final ThreadLocal<@Nullable Update> UPDATE = new ThreadLocal<>();
+    private static final ThreadLocal<@Nullable TelegramSender> SENDER = new ThreadLocal<>();
 
-    public static void setUpdate(Update update) {
+    public static void setUpdate(@NonNull Update update) {
         UPDATE.set(update);
     }
 
-    public static void setSender(TelegramSender sender) {
+    public static void setSender(@NonNull TelegramSender sender) {
         SENDER.set(sender);
     }
 
@@ -23,11 +28,21 @@ public final class BotRequestHolder {
         SENDER.remove();
     }
 
-    public static Update getUpdate() {
+    public static @Nullable Update getUpdate() {
         return UPDATE.get();
     }
 
-    public static TelegramSender getSender() {
+    public static @Nullable TelegramSender getSender() {
         return SENDER.get();
+    }
+
+    public static @NonNull Update getUpdateNotNull() {
+        return Optional.ofNullable(UPDATE.get())
+                .orElseThrow(() -> new BotApiException("Update not set"));
+    }
+
+    public static @NonNull TelegramSender getSenderNotNull() {
+        return Optional.ofNullable(SENDER.get())
+                .orElseThrow(() -> new BotApiException("Sender not set"));
     }
 }
