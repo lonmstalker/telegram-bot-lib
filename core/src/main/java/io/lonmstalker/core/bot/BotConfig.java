@@ -11,6 +11,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
 
 import java.util.List;
+import java.util.Locale;
 
 @Setter
 @Getter
@@ -20,6 +21,7 @@ public class BotConfig extends DefaultBotOptions {
     private @NonNull StateStore store = new InMemoryStateStore();
     private @NonNull String botPattern = "";
     private int requestsPerSecond = 30;
+    private @NonNull Locale locale = Locale.getDefault();
 
     public BotConfig() {
         setBackOff(new ExponentialBackOff());
