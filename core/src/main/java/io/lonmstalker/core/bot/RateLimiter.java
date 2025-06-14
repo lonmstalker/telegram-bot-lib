@@ -1,5 +1,7 @@
 package io.lonmstalker.core.bot;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.Semaphore;
@@ -9,11 +11,17 @@ class RateLimiter {
     private final int permitsPerSecond;
     private final Semaphore semaphore;
     private final ScheduledExecutorService scheduler;
+    private final boolean schedulerProvided;
 
     RateLimiter(int permitsPerSecond) {
+        this(permitsPerSecond, null);
+    }
+
+    RateLimiter(int permitsPerSecond, @Nullable ScheduledExecutorService scheduler) {
         this.permitsPerSecond = permitsPerSecond;
         this.semaphore = new Semaphore(permitsPerSecond);
-        this.scheduler = Executors.newSingleThreadScheduledExecutor();
+        this.schedulerProvided = scheduler != null;
+        this.scheduler = scheduler != null ? scheduler : Executors.newSingleThreadScheduledExecutor();
         this.scheduler.scheduleAtFixedRate(this::replenish, 1, 1, TimeUnit.SECONDS);
     }
 
@@ -25,6 +33,12 @@ class RateLimiter {
         int diff = permitsPerSecond - semaphore.availablePermits();
         if (diff > 0) {
             semaphore.release(diff);
+        }
+    }
+
+    void close() {
+        if (!schedulerProvided) {
+            scheduler.shutdownNow();
         }
     }
 }

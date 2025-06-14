@@ -87,6 +87,10 @@ public class BotSessionImpl implements BotSession {
         if (executor != null && providedExecutor == null) {
             executor.shutdownNow();
         }
+        if (httpClient != null && httpClient.executor().isPresent()) {
+            httpClient.executor().get().shutdownNow();
+        }
+        httpClient = null;
     }
 
     @Override
