@@ -59,6 +59,22 @@ public class BotImpl implements Bot {
     @Override
     public void stop() {
         checkStarted();
+        for (BotCompleteAction action : completeActions) {
+            try {
+                action.complete();
+            } catch (Exception e) {
+                log.error("Complete action error", e);
+            }
+        }
+        if (absSender instanceof AutoCloseable closeable) {
+            try {
+                closeable.close();
+            } catch (Exception e) {
+                log.warn("Error closing sender", e);
+            }
+        }
+        this.user = null;
+        this.setWebhook = null;
     }
 
     @Override
