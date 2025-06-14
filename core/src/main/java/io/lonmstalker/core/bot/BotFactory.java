@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicLong;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class BotFactory {
     public static final BotFactory INSTANCE = new BotFactory();
-    private final AtomicLong nextId = new AtomicLong();;
+    private final AtomicLong nextId = new AtomicLong();
 
     public @NonNull Bot from(@NonNull String token, 
                              @NonNull BotConfig config,
