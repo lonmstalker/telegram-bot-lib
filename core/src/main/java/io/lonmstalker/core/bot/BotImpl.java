@@ -51,6 +51,11 @@ public class BotImpl implements Bot {
         checkNotStarted();
         try {
             this.user = absSender.execute(new GetMe());
+            if (absSender instanceof LongPollingReceiver receiver) {
+                receiver.setUsername(this.user.getUserName());
+            } else if (absSender instanceof WebHookReceiver receiver) {
+                receiver.setUsername(this.user.getUserName());
+            }
         } catch (Exception ex) {
             throw new BotApiException("Error starting bot", ex);
         }
