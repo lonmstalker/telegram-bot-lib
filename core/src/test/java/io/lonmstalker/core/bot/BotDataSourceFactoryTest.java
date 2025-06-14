@@ -20,7 +20,7 @@ public class BotDataSourceFactoryTest {
         h2.setURL("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1");
         ds = h2;
         try (Connection c = ds.getConnection(); Statement st = c.createStatement()) {
-            st.executeUpdate("CREATE TABLE bot_settings (id INT PRIMARY KEY, token VARCHAR(255), proxy_host VARCHAR(255), proxy_port INT, proxy_type INT, max_threads INT, updates_timeout INT, updates_limit INT)");
+            st.executeUpdate("CREATE TABLE bot_settings (id INT PRIMARY KEY, token VARCHAR(255), proxy_host VARCHAR(255), proxy_port INT, proxy_type INT, max_threads INT, updates_timeout INT, updates_limit INT, bot_pattern VARCHAR(255))");
         }
     }
 
@@ -29,7 +29,7 @@ public class BotDataSourceFactoryTest {
         var cipher = new TokenCipherImpl("secretkey123456");
         String enc = cipher.encrypt("TEST_TOKEN");
         try (Connection c = ds.getConnection(); Statement st = c.createStatement()) {
-            st.executeUpdate("INSERT INTO bot_settings VALUES (1, '" + enc + "', NULL, NULL, 0, 1, 0, 100)");
+            st.executeUpdate("INSERT INTO bot_settings VALUES (1, '" + enc + "', NULL, NULL, 0, 1, 0, 100, '')");
         }
         var data = BotDataSourceFactory.INSTANCE.load(ds, 1, cipher);
         assertEquals("TEST_TOKEN", data.token());
