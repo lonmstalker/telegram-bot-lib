@@ -34,7 +34,7 @@ import io.lonmstalker.core.bot.BotConfig;
 import io.lonmstalker.core.bot.RateLimiter;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.telegram.telegrambots.meta.generics.BackOff;
-import org.telegram.telegrambots.updatesreceivers.ExponentialBackOff;
+import io.lonmstalker.core.bot.ExponentialBackOff;
 
 public class TelegramSender extends DefaultAbsSender implements AutoCloseable {
 
