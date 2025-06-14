@@ -66,6 +66,8 @@ class BotImplTest {
             super(new BotConfig(), update -> null, "token", null);
         }
 
+        boolean webhookSet = false;
+
         @Override
         @SuppressWarnings("unchecked")
         public <T extends Serializable, Method extends BotApiMethod<T>> T execute(Method method) {
@@ -74,6 +76,8 @@ class BotImplTest {
                 u.setId(1L);
                 u.setUserName("tester");
                 return (T) u;
+            } else if (method instanceof SetWebhook) {
+                webhookSet = true;
             }
             return null;
         }
@@ -137,5 +141,6 @@ class BotImplTest {
                 .build();
         bot.start();
         assertEquals("tester", receiver.getBotUsername());
+        assertTrue(receiver.webhookSet);
     }
 }

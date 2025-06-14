@@ -3,6 +3,7 @@ package io.lonmstalker.core.bot;
 import io.lonmstalker.core.BotAdapter;
 import io.lonmstalker.core.bot.BotDataSourceFactory.BotData;
 import io.lonmstalker.core.utils.TokenCipher;
+import io.lonmstalker.core.bot.BotSessionImpl;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -20,6 +21,7 @@ public final class BotFactory {
                              @NonNull BotAdapter adapter) {
         return implBuilder(token, config)
                 .absSender(new LongPollingReceiver(config, adapter, token, config.getGlobalExceptionHandler()))
+                .session(new BotSessionImpl())
                 .build();
     }
 
