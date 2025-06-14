@@ -27,22 +27,30 @@ import org.telegram.telegrambots.meta.updateshandlers.SentCallback;
 import java.io.Serializable;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ScheduledExecutorService;
 
 // rate limit support
 import io.lonmstalker.core.bot.BotConfig;
 import io.lonmstalker.core.bot.RateLimiter;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.telegram.telegrambots.meta.generics.BackOff;
 import org.telegram.telegrambots.updatesreceivers.ExponentialBackOff;
 
-public class TelegramSender extends DefaultAbsSender {
+public class TelegramSender extends DefaultAbsSender implements AutoCloseable {
 
     private final RateLimiter rateLimiter;
     private final BackOff backOff;
 
     protected TelegramSender(@NonNull BotConfig options,
                              @NonNull String botToken) {
+        this(options, botToken, null);
+    }
+
+    protected TelegramSender(@NonNull BotConfig options,
+                             @NonNull String botToken,
+                             @Nullable ScheduledExecutorService scheduler) {
         super(options, botToken);
-        this.rateLimiter = new RateLimiter(options.getRequestsPerSecond());
+        this.rateLimiter = new RateLimiter(options.getRequestsPerSecond(), scheduler);
         BackOff tmp = options.getBackOff();
         if (tmp == null) {
             tmp = new ExponentialBackOff();
@@ -249,5 +257,10 @@ public class TelegramSender extends DefaultAbsSender {
             return new BotApiException(throwable);
         }
         return new BotApiException(throwable.getMessage(), throwable.getCause());
+    }
+
+    @Override
+    public void close() {
+        rateLimiter.close();
     }
 }

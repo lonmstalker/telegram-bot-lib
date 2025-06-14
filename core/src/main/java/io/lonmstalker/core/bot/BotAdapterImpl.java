@@ -46,29 +46,49 @@ public class BotAdapterImpl implements BotAdapter {
         interceptors.forEach(i -> i.preHandle(update));
         BotResponse response = null;
         try {
-            BotRequestType type = UpdateUtils.getType(update);
-            BotApiObject data = converter.convert(update, type);
-            BotCommand<BotApiObject> command = bot.registry().find(type, bot.config().getBotPattern(), data);
-            if (command == null) {
-                return null;
-            }
-            var sender = new TelegramSender(bot.config(), bot.token());
+            response = doHandle(update);
+            interceptors.forEach(i -> i.postHandle(update));
+            return response != null ? response.getMethod() : null;
+        } finally {
+            afterCompletion(update, response, interceptors);
+            BotRequestHolder.clear();
+        }
+    }
+
+    private @Nullable BotResponse doHandle(Update update) {
+        BotRequestType type = UpdateUtils.getType(update);
+        BotApiObject data = converter.convert(update, type);
+        BotCommand<BotApiObject> command = bot.registry().find(type, bot.config().getBotPattern(), data);
+        if (command == null) {
+            return null;
+        }
+        var sender = createSender();
+        try {
             BotRequestHolder.setUpdate(update);
             BotRequestHolder.setSender(sender);
             BotUserInfo user = userProvider.resolve(update);
             BotInfo info = new BotInfo(bot.internalId(), sender, bot.config().getStore());
-            response = command.handle(new BotRequest<>(update.getUpdateId(), data, info, user));
-            interceptors.forEach(i -> i.postHandle(update));
-            return response != null ? response.getMethod() : null;
+            return command.handle(new BotRequest<>(update.getUpdateId(), data, info, user));
         } finally {
-            for (BotInterceptor i : interceptors) {
-                try {
-                    i.afterCompletion(update, response);
-                } catch (Exception e) {
-                    log.error("Interceptor afterCompletion error", e);
-                }
+            try {
+                sender.close();
+            } catch (Exception e) {
+                log.warn("Error closing sender", e);
             }
-            BotRequestHolder.clear();
+        }
+    }
+
+    private TelegramSender createSender() {
+        return new TelegramSender(bot.config(), bot.token());
+    }
+
+    private void afterCompletion(Update update, @Nullable BotResponse response, List<BotInterceptor> interceptors) {
+        for (BotInterceptor i : interceptors) {
+            try {
+                i.afterCompletion(update, response);
+            } catch (Exception e) {
+                log.error("Interceptor afterCompletion error", e);
+            }
         }
     }
 }
