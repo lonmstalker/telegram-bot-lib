@@ -2,6 +2,7 @@ package io.lonmstalker.core.bot;
 
 import io.lonmstalker.core.BotAdapter;
 import io.lonmstalker.core.bot.BotDataSourceFactory.BotData;
+import io.lonmstalker.core.utils.TokenCipher;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -34,13 +35,16 @@ public final class BotFactory {
 
     public @NonNull Bot from(long botId,
                              @NonNull BotDataSourceConfig config,
-                             @NonNull BotAdapter adapter) {
-        BotData data = BotDataSourceFactory.INSTANCE.load(config.getDataSource(), botId);
+                             @NonNull BotAdapter adapter,
+                             @NonNull TokenCipher cipher) {
+        BotData data = BotDataSourceFactory.INSTANCE.load(config.getDataSource(), botId, cipher);
         BotConfig cfg = config.getBotConfig();
         if (cfg == null) {
             cfg = data.config();
         } else {
             cfg.setProxyHost(data.config().getProxyHost());
+            cfg.setProxyPort(data.config().getProxyPort());
+            cfg.setProxyType(data.config().getProxyType());
             cfg.setMaxThreads(data.config().getMaxThreads());
             cfg.setGetUpdatesTimeout(data.config().getGetUpdatesTimeout());
             cfg.setGetUpdatesLimit(data.config().getGetUpdatesLimit());

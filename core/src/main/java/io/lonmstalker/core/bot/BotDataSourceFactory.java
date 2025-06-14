@@ -6,6 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import io.lonmstalker.core.exception.BotApiException;
+import io.lonmstalker.core.ProxyType;
+import io.lonmstalker.core.utils.TokenCipher;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import javax.sql.DataSource;
@@ -22,8 +24,10 @@ import java.sql.SQLException;
 public final class BotDataSourceFactory {
     public static final BotDataSourceFactory INSTANCE = new BotDataSourceFactory();
 
+    // language=SQL
     private static final String SELECT_QUERY =
-            "SELECT token, proxy, max_threads, get_updates_timeout, get_updates_limit FROM bots WHERE id = ?";
+            "SELECT token, proxy_host, proxy_port, proxy_type, max_threads, updates_timeout, updates_limit " +
+                    "FROM bot_settings WHERE id = ?";
 
     private static final int DEFAULT_MAX_THREADS = 1;
     private static final int DEFAULT_UPDATES_TIMEOUT = 0;
@@ -53,7 +57,9 @@ public final class BotDataSourceFactory {
         return value;
     }
 
-    public @NonNull BotData load(@NonNull DataSource dataSource, long id) {
+    public @NonNull BotData load(@NonNull DataSource dataSource,
+                                 long id,
+                                 @NonNull TokenCipher cipher) {
         try (Connection connection = dataSource.getConnection();
              PreparedStatement ps = connection.prepareStatement(SELECT_QUERY)) {
             ps.setLong(1, id);
@@ -62,18 +68,22 @@ public final class BotDataSourceFactory {
                     throw new BotApiException("Bot not found");
                 }
 
-                String token = stringOrDefault(rs, "token", "");
-                String proxy = stringOrDefault(rs, "proxy", null);
+                String token = cipher.decrypt(stringOrDefault(rs, "token", ""));
+                String proxyHost = stringOrDefault(rs, "proxy_host", null);
+                int proxyPort = intOrDefault(rs, "proxy_port", 0);
+                int proxyTypeValue = intOrDefault(rs, "proxy_type", ProxyType.HTTP.ordinal());
                 int maxThreads = intOrDefault(rs, "max_threads", DEFAULT_MAX_THREADS);
-                int timeout = intOrDefault(rs, "get_updates_timeout", DEFAULT_UPDATES_TIMEOUT);
-                int limit = intOrDefault(rs, "get_updates_limit", DEFAULT_UPDATES_LIMIT);
+                int timeout = intOrDefault(rs, "updates_timeout", DEFAULT_UPDATES_TIMEOUT);
+                int limit = intOrDefault(rs, "updates_limit", DEFAULT_UPDATES_LIMIT);
 
                 if (StringUtils.isBlank(token)) {
                     throw new BotApiException("Bot token is empty");
                 }
 
                 BotConfig config = new BotConfig();
-                config.setProxyHost(proxy);
+                config.setProxyHost(proxyHost);
+                config.setProxyPort(proxyPort);
+                config.setProxyType(ProxyType.values()[proxyTypeValue]);
                 config.setMaxThreads(maxThreads);
                 config.setGetUpdatesTimeout(timeout);
                 config.setGetUpdatesLimit(limit);
