@@ -32,7 +32,10 @@ class LongPollingReceiver extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(@NonNull Update update) {
         try {
-            execute(adapter.handle(update));
+            var result = adapter.handle(update);
+            if (result != null) {
+                execute(result);
+            }
         } catch (Exception e) {
             globalExceptionHandler.handle(update, e);
         }
