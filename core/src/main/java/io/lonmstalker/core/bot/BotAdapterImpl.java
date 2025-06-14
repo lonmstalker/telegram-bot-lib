@@ -48,7 +48,7 @@ public class BotAdapterImpl implements BotAdapter {
         try {
             BotRequestType type = UpdateUtils.getType(update);
             BotApiObject data = converter.convert(update, type);
-            BotCommand<BotApiObject> command = bot.registry().find(type, data);
+            BotCommand<BotApiObject> command = bot.registry().find(type, bot.config().getBotPattern(), data);
             if (command == null) {
                 return null;
             }

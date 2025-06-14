@@ -18,4 +18,5 @@ public class BotConfig extends DefaultBotOptions {
     private @Nullable BotExceptionHandler globalExceptionHandler;
     private @NonNull List<BotInterceptor> globalInterceptors = List.of();
     private @NonNull StateStore store = new InMemoryStateStore();
+    private @NonNull String botPattern = "";
 }

@@ -26,8 +26,8 @@
 public class EchoCommands {
 
     @BotHandler(type = BotRequestType.MESSAGE,
-            matcher = AlwaysMatch.class,
             converter = BotHandlerConverter.Identity.class)
+    @AlwaysMatch
     public BotResponse echo(BotRequest<Message> request) {
         var msg = request.data();
         var send = new SendMessage(msg.getChatId().toString(), msg.getText());

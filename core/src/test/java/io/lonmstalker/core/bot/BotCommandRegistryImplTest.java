@@ -21,7 +21,7 @@ class BotCommandRegistryImplTest {
         registry.add(second);
 
         Message msg = new Message();
-        BotCommand<Message> found = registry.find(BotRequestType.MESSAGE, msg);
+        BotCommand<Message> found = registry.find(BotRequestType.MESSAGE, "", msg);
         assertEquals(first, found);
     }
 
@@ -32,5 +32,6 @@ class BotCommandRegistryImplTest {
         @Override public BotRequestType type() {return BotRequestType.MESSAGE;}
         @Override public CommandMatch<Message> matcher() {return data -> true;}
         @Override public int order() {return order;}
+        @Override public String bot() {return "";}
     }
 }
