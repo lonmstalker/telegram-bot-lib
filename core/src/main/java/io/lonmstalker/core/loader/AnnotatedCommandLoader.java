@@ -32,6 +32,10 @@ import org.telegram.telegrambots.meta.api.interfaces.BotApiObject;
 @UtilityClass
 public final class AnnotatedCommandLoader {
 
+    /**
+     * Сканирует указанные пакеты и регистрирует все методы, помеченные
+     * аннотацией {@link BotHandler}.
+     */
     @SuppressWarnings({"argument"})
     public static void load(@NonNull BotCommandRegistry registry,
                             @NonNull String... packages) {
@@ -43,31 +47,39 @@ public final class AnnotatedCommandLoader {
 
         Set<Method> methods = reflections.getMethodsAnnotatedWith(BotHandler.class);
         for (Method method : methods) {
-            if (Modifier.isStatic(method.getModifiers())) {
-                throw new BotApiException("Handler methods must not be static: " + method);
-            }
-
-            BotHandler ann = Objects.requireNonNull(method.getAnnotation(BotHandler.class));
-            Object instance = createInstance(method.getDeclaringClass());
-
-            CommandMatch<? extends BotApiObject> matcher = extractMatcher(method);
-            BotHandlerConverter<?> converter = (BotHandlerConverter<?>) createInstance(ann.converter());
-
-            method.setAccessible(true);
-            BotCommand<BotApiObject> cmd = InternalCommandAdapter.builder()
-                    .method(method)
-                    .type(ann.type())
-                    .order(ann.order())
-                    .instance(instance)
-                    .converter(converter)
-                    .commandMatch(matcher)
-                    .botGroup(ann.botGroup())
-                    .params(extractParameters(method))
-                    .build();
-            registry.add(cmd);
+            registerHandler(registry, method);
         }
     }
 
+    /** Обрабатывает один найденный метод-хендлер и регистрирует его. */
+    @SuppressWarnings({"argument"})
+    private static void registerHandler(@NonNull BotCommandRegistry registry, @NonNull Method method) {
+        if (Modifier.isStatic(method.getModifiers())) {
+            throw new BotApiException("Handler methods must not be static: " + method);
+        }
+
+        BotHandler ann = Objects.requireNonNull(method.getAnnotation(BotHandler.class));
+        Object instance = createInstance(method.getDeclaringClass());
+        CommandMatch<? extends BotApiObject> matcher = extractMatcher(method);
+        BotHandlerConverter<?> converter = (BotHandlerConverter<?>) createInstance(ann.converter());
+
+        method.setAccessible(true);
+        BotCommand<BotApiObject> cmd = InternalCommandAdapter.builder()
+                .method(method)
+                .type(ann.type())
+                .order(ann.order())
+                .instance(instance)
+                .converter(converter)
+                .commandMatch(matcher)
+                .botGroup(ann.botGroup())
+                .params(extractParameters(method))
+                .build();
+        registry.add(cmd);
+    }
+
+    /**
+     * Создаёт экземпляр указанного класса, учитывая возможный метод getInstance().
+     */
     @SuppressWarnings("return")
     private static Object createInstance(Class<?> clazz) {
         try {
@@ -91,6 +103,9 @@ public final class AnnotatedCommandLoader {
         }
     }
 
+    /**
+     * Создаёт объект сравнения, исходя из аннотаций на методе.
+     */
     @SuppressWarnings({"unchecked", "argument"})
     private static @NonNull CommandMatch<? extends BotApiObject> extractMatcher(@NonNull Method method) {
         if (method.isAnnotationPresent(MessageContainsMatch.class)) {
@@ -115,6 +130,9 @@ public final class AnnotatedCommandLoader {
         return new io.lonmstalker.core.matching.AlwaysMatch<>();
     }
 
+    /**
+     * Формирует информацию о параметрах метода для последующего вызова хендлера.
+     */
     private InternalCommandAdapter.ParamInfo[] extractParameters(@NonNull Method method) {
         var parameters = method.getParameters();
         InternalCommandAdapter.ParamInfo[] infos = new InternalCommandAdapter.ParamInfo[parameters.length];
