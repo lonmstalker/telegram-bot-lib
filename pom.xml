@@ -12,6 +12,7 @@
     <modules>
         <module>core</module>
         <module>observability</module>
+        <module>plugin</module>
         <module>examples</module>
     </modules>
 

@@ -1,0 +1,7 @@
+id: hello-plugin
+name: "Hello Plugin"
+version: "1.0.0"
+permissions:
+  network: OUTBOUND
+  store: READ_ONLY
+  fileSystem: READ

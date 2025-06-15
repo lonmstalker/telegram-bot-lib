@@ -4,16 +4,17 @@
 
     <parent>
         <groupId>io.lonmstalker.tgkit</groupId>
-        <artifactId>parent</artifactId>
+        <artifactId>examples</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>examples</artifactId>
-    <packaging>pom</packaging>
+    <artifactId>plugin-demo</artifactId>
 
-    <modules>
-        <module>simple-bot</module>
-        <module>observability-demo</module>
-        <module>plugin-demo</module>
-    </modules>
+    <dependencies>
+        <dependency>
+            <groupId>io.lonmstalker.tgkit</groupId>
+            <artifactId>plugin</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 </project>
