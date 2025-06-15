@@ -22,6 +22,9 @@ public final class PluginLoader {
     private final Path pluginsDir = Paths.get("plugins");
     private final ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
 
+    /**
+     * Загружает все плагины из директории {@code plugins}.
+     */
     public Collection<PluginWrapper> loadAll() throws Exception {
         List<PluginWrapper> list = new ArrayList<>();
         if (!Files.isDirectory(pluginsDir)) {
@@ -40,6 +43,9 @@ public final class PluginLoader {
         return list;
     }
 
+    /**
+     * Считывает манифест плагина из ресурса {@code tgkit-plugin.yaml}.
+     */
     private PluginManifest readManifest(ClassLoader cl) throws Exception {
         try (InputStream is = cl.getResourceAsStream("tgkit-plugin.yaml")) {
             if (is == null) return new PluginManifest();

@@ -1,8 +1,27 @@
 package io.lonmstalker.tgkit.plugin;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-
+/**
+ * Простая шина сообщений между плагинами.
+ */
 public interface EventBus {
-    <T> @NonNull Subscription subscribe(@NonNull Class<T> type, @NonNull EventHandler<T> handler);
-    void publish(@NonNull Object event);
+
+    /**
+     * Подписывает обработчик на сообщения.
+     *
+     * @param handler обработчик сообщений
+     */
+    void subscribe(MessageHandler handler);
+
+    /**
+     * Публикует новое сообщение всем подписчикам.
+     *
+     * @param message текст сообщения
+     */
+    void publish(String message);
+
+    /** Обработчик сообщений. */
+    interface MessageHandler {
+        /** Вызывается при получении сообщения. */
+        void onMessage(String message);
+    }
 }
