@@ -20,59 +20,79 @@ public class WizardEngine {
     private final ObjectMapper mapper = new ObjectMapper();
 
     public @NonNull BotResponse handle(@NonNull BotRequest<?> req, @NonNull WizardMeta wizard) {
-        BotInfo info = req.botInfo();
-        String chatId;
-        String text;
-        if (req.data() instanceof Message msg) {
-            chatId = msg.getChatId().toString();
-            text = msg.getText();
-        } else if (req.data() instanceof CallbackQuery cb) {
-            chatId = cb.getMessage().getChatId().toString();
-            text = cb.getData();
-        } else {
+        Parsed in = parse(req);
+        if (in == null) {
             return BotResponse.empty();
         }
+
+        BotInfo info = req.botInfo();
         StateStore store = info.store();
-        String key = chatId + ":" + wizard.id();
-        WizardSession session;
-        String raw = store.get(key);
-        if (raw == null) {
-            session = new WizardSession();
-        } else {
-            try {
-                session = mapper.readValue(raw, WizardSession.class);
-            } catch (JsonProcessingException e) {
-                session = new WizardSession();
-            }
+        String key = in.chatId + ":" + wizard.id();
+        WizardSession session = load(store, key);
+
+        if ("/cancel".equals(in.text)) {
+            store.set(key, "");
+            return sendMessage(in.chatId, info.localizer().get("wizard.cancel", "Отменено"));
         }
 
-        // text уже получен из update выше
-        if ("/cancel".equals(text)) {
-            store.set(key, "");
-            return sendMessage(chatId, info.localizer().get("wizard.cancel", "Отменено"));
-        }
-        if ("/back".equals(text)) {
-            if (session.getStepIdx() > 0) {
-                session.setStepIdx(session.getStepIdx() - 1);
-            }
-        } else if (!"/next".equals(text)) {
+        if (!processNav(in.text, session)) {
             StepMeta step = wizard.steps().get(session.getStepIdx());
-            if (step.validator() == null || step.validator().validate(text)) {
-                session.getData().put(step.saveKey(), text);
+            if (step.validator() == null || step.validator().validate(in.text)) {
+                session.getData().put(step.saveKey(), in.text);
                 session.setStepIdx(session.getStepIdx() + 1);
             } else {
-                return sendMessage(chatId, info.localizer().get("wizard.invalid", "Неверный ввод"));
+                return sendMessage(in.chatId, info.localizer().get("wizard.invalid", "Неверный ввод"));
             }
-        } else {
-            session.setStepIdx(session.getStepIdx() + 1);
         }
 
         if (session.getStepIdx() >= wizard.steps().size()) {
             store.set(key, "");
-            return sendMessage(chatId, info.localizer().get("wizard.done", "Готово"));
+            return sendMessage(in.chatId, info.localizer().get("wizard.done", "Готово"));
         }
 
         store.set(key, toJson(session));
+        return askStep(session, wizard, in.chatId, info);
+    }
+
+    private record Parsed(String chatId, String text) {}
+
+    private Parsed parse(BotRequest<?> req) {
+        if (req.data() instanceof Message msg) {
+            return new Parsed(msg.getChatId().toString(), msg.getText());
+        }
+        if (req.data() instanceof CallbackQuery cb) {
+            return new Parsed(cb.getMessage().getChatId().toString(), cb.getData());
+        }
+        return null;
+    }
+
+    private WizardSession load(StateStore store, String key) {
+        String raw = store.get(key);
+        if (raw == null) {
+            return new WizardSession();
+        }
+        try {
+            return mapper.readValue(raw, WizardSession.class);
+        } catch (JsonProcessingException e) {
+            return new WizardSession();
+        }
+    }
+
+    private boolean processNav(String text, WizardSession session) {
+        if ("/back".equals(text)) {
+            if (session.getStepIdx() > 0) {
+                session.setStepIdx(session.getStepIdx() - 1);
+            }
+            return true;
+        }
+        if ("/next".equals(text)) {
+            session.setStepIdx(session.getStepIdx() + 1);
+            return true;
+        }
+        return false;
+    }
+
+    private BotResponse askStep(WizardSession session, WizardMeta wizard, String chatId, BotInfo info) {
         StepMeta next = wizard.steps().get(session.getStepIdx());
         String ask = info.localizer().get(next.askKey(), next.defaultAsk());
         SendMessage msg = new SendMessage(chatId, ask);
