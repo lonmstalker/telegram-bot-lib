@@ -45,12 +45,16 @@ public class BotAdapterImpl implements BotAdapter {
         List<BotInterceptor> interceptors = bot.config().getGlobalInterceptors();
         interceptors.forEach(i -> i.preHandle(update));
         BotResponse response = null;
+        Exception error = null;
         try {
             response = doHandle(update);
             interceptors.forEach(i -> i.postHandle(update));
             return response != null ? response.getMethod() : null;
+        } catch (Exception e) {
+            error = e;
+            throw e;
         } finally {
-            afterCompletion(update, response, interceptors);
+            afterCompletion(update, response, error, interceptors);
             BotRequestHolder.clear();
         }
     }
@@ -99,10 +103,10 @@ public class BotAdapterImpl implements BotAdapter {
         return new TelegramSender(bot.config(), bot.token());
     }
 
-    private void afterCompletion(Update update, @Nullable BotResponse response, List<BotInterceptor> interceptors) {
+    private void afterCompletion(Update update, @Nullable BotResponse response, @Nullable Exception error, List<BotInterceptor> interceptors) {
         for (BotInterceptor i : interceptors) {
             try {
-                i.afterCompletion(update, response);
+                i.afterCompletion(update, response, error);
             } catch (Exception e) {
                 log.error("Interceptor afterCompletion error", e);
             }

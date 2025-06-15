@@ -13,5 +13,6 @@
 
     <modules>
         <module>simple-bot</module>
+        <module>observability-demo</module>
     </modules>
 </project>
