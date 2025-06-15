@@ -10,9 +10,18 @@ import io.opentelemetry.sdk.trace.SdkTracerProvider;
 import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor;
 import io.opentelemetry.sdk.trace.export.SpanExporter;
 
+/**
+ * Реализация {@link Tracer} на базе OpenTelemetry.
+ */
 public final class OTelTracer implements Tracer {
     private final io.opentelemetry.api.trace.Tracer tracer;
 
+    /**
+     * Создаёт трассировщик.
+     *
+     * @param provider    провайдер OpenTelemetry
+     * @param serviceName имя сервиса
+     */
     public OTelTracer(TracerProvider provider, String serviceName) {
         this.tracer = provider.get(serviceName);
     }
@@ -26,6 +35,9 @@ public final class OTelTracer implements Tracer {
         return new OtelSpan(span);
     }
 
+    /**
+     * Обёртка над span OpenTelemetry.
+     */
     private record OtelSpan(io.opentelemetry.api.trace.Span delegate) implements Span {
         @Override
         public void setError(Throwable t) {
@@ -38,6 +50,9 @@ public final class OTelTracer implements Tracer {
         }
     }
 
+    /**
+     * Создаёт трассировщик, выводящий спаны в консоль. Используется для разработки.
+     */
     public static OTelTracer stdoutDev() {
         SpanExporter exporter = SpanExporter.composite(LoggingSpanExporter.create());
         SdkTracerProvider provider = SdkTracerProvider.builder()

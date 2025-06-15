@@ -16,6 +16,9 @@ import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.util.List;
 
+/**
+ * Реализация {@link MetricsCollector} на базе Micrometer.
+ */
 public record MicrometerCollector(MeterRegistry registry) implements MetricsCollector {
 
     @Override
@@ -28,6 +31,12 @@ public record MicrometerCollector(MeterRegistry registry) implements MetricsColl
         return Counter.builder(name).tags(List.of(tags.items())).register(registry);
     }
 
+    /**
+     * Создаёт collector и поднимает HTTP-сервер для экспонирования метрик в формате Prometheus.
+     *
+     * @param port порт HTTP-сервера
+     * @return созданный collector
+     */
     public static @NonNull MicrometerCollector prometheus(int port) {
         PrometheusMeterRegistry reg = new PrometheusMeterRegistry(PrometheusConfig.DEFAULT);
         try {
