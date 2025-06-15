@@ -22,7 +22,7 @@ public class WizardEngine {
     public @NonNull BotResponse handle(@NonNull BotRequest<?> req, @NonNull WizardMeta wizard) {
         Parsed in = parse(req);
         if (in == null) {
-            return BotResponse.empty();
+            return new BotResponse();
         }
 
         BotInfo info = req.botInfo();
