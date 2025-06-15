@@ -15,5 +15,6 @@
         <module>simple-bot</module>
         <module>observability-demo</module>
         <module>plugin-demo</module>
+        <module>security-demo</module>
     </modules>
 </project>

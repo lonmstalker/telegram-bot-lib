@@ -13,6 +13,7 @@
         <module>core</module>
         <module>observability</module>
         <module>plugin</module>
+        <module>security</module>
         <module>examples</module>
     </modules>
 

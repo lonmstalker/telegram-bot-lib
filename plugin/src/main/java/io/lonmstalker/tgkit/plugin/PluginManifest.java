@@ -6,7 +6,7 @@ import java.util.Map;
 import lombok.Data;
 
 /**
- * Манифест плагина, считываемый из craftbot-plugin.yaml внутри JAR.
+ * Манифест плагина, считываемый из tgkit-plugin.yaml внутри JAR.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Data
