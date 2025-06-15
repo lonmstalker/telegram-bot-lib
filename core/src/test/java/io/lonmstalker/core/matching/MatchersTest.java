@@ -57,6 +57,7 @@ public class MatchersTest {
         BotUserProvider provider = u -> new BotUserInfo() {
             @Override public String chatId() { return "1"; }
             @Override public Set<String> roles() { return Set.of("ADMIN"); }
+            @Override public java.util.Locale locale() { return null; }
         };
         User tgUser = new User();
         tgUser.setId(1L);

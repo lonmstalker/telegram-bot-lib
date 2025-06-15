@@ -136,7 +136,8 @@ class SimpleBotCommandsTest {
         assertNotNull(command);
 
         var user = provider.resolve(update);
-        BotInfo info = new BotInfo(1L, new InMemoryStateStore(), new TestSender());
+        var localizer = new io.lonmstalker.core.i18n.MessageLocalizer(java.util.Locale.getDefault());
+        BotInfo info = new BotInfo(1L, new InMemoryStateStore(), new TestSender(), localizer);
         BotResponse resp = command.handle(new BotRequest<>(1, data, info, user));
 
         assertNotNull(resp);

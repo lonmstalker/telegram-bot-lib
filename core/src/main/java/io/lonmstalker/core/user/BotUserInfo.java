@@ -1,8 +1,10 @@
 package io.lonmstalker.core.user;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.Set;
+import java.util.Locale;
 
 public interface BotUserInfo {
 
@@ -11,4 +13,9 @@ public interface BotUserInfo {
 
     @NonNull
     Set<String> roles();
+
+    @Nullable
+    default Locale locale() {
+        return null;
+    }
 }

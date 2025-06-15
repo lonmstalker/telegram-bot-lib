@@ -38,7 +38,7 @@ Bot bot = BotFactory.INSTANCE.from(token, new BotConfig(), new BotAdapterImpl(bo
 bot.start();
 ```
 
-Внутри обработчиков команд можно использовать `request.localizer().get("key")` для получения локализованного текста.
+Внутри обработчиков команд можно использовать `request.botInfo().localizer().get("key")` для получения локализованного текста.
 
 ### Пример использования `StateStore`
 ```java
