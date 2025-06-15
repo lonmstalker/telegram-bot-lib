@@ -13,4 +13,10 @@ public class MessageLocalizerTest {
         MessageLocalizer localizer = new MessageLocalizer(Locale.forLanguageTag("ru"));
         assertEquals("Понг", localizer.get("command.ping.response"));
     }
+
+    @Test
+    void formatArgs() {
+        MessageLocalizer loc = new MessageLocalizer(Locale.forLanguageTag("ru"));
+        assertEquals("Сколько будет 1 + 2?", loc.get("captcha.math.question", 1, 2));
+    }
 }

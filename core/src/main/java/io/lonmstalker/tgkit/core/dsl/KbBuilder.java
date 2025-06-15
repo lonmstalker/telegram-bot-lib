@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import io.lonmstalker.tgkit.core.i18n.MessageLocalizer;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
@@ -12,7 +13,12 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
  */
 public final class KbBuilder {
 
+    private final MessageLocalizer loc;
     private final List<List<InlineKeyboardButton>> rows = new ArrayList<>();
+
+    KbBuilder(MessageLocalizer loc) {
+        this.loc = loc;
+    }
 
     /** Добавляет строку кнопок. */
     public KbBuilder row(Button... buttons) {
@@ -23,7 +29,7 @@ public final class KbBuilder {
     /** Каждая кнопка в отдельной строке. */
     public KbBuilder col(Button... buttons) {
         for (Button b : buttons) {
-            rows.add(List.of(b.build()));
+            rows.add(to(b));
         }
         return this;
     }
@@ -32,7 +38,7 @@ public final class KbBuilder {
     public KbBuilder grid(int cols, Button... buttons) {
         List<InlineKeyboardButton> cur = new ArrayList<>();
         for (Button b : buttons) {
-            cur.add(b.build());
+            cur.add(b.build(loc));
             if (cur.size() == cols) {
                 rows.add(cur);
                 cur = new ArrayList<>();
@@ -53,7 +59,11 @@ public final class KbBuilder {
         return rows;
     }
 
-    private static List<InlineKeyboardButton> to(Button[] buttons) {
-        return Arrays.stream(buttons).map(Button::build).collect(Collectors.toList());
+    private List<InlineKeyboardButton> to(Button... buttons) {
+        return Arrays.stream(buttons).map(b -> b.build(loc)).collect(Collectors.toList());
+    }
+
+    private List<InlineKeyboardButton> to(Button b) {
+        return List.of(b.build(loc));
     }
 }

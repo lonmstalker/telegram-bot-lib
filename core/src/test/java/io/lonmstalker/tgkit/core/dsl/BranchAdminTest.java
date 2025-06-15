@@ -12,7 +12,7 @@ public class BranchAdminTest {
     void adminBranchAddsButton() {
         FakeContext ctx = new FakeContext(1L, Set.of("ADMIN"));
         FakeTransport tg = new FakeTransport();
-        BotResponse.msg("hi")
+        BotResponse.msg(TestUtils.request(1), "hi")
                 .chat(1)
                 .onlyAdmin(b -> b.keyboard(k -> k.row(Button.cb("A", "a"))))
                 .send(tg);

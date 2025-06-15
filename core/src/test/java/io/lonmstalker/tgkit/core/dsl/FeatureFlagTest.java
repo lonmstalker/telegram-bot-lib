@@ -16,7 +16,7 @@ public class FeatureFlagTest {
         FakeContext ctx = new FakeContext(1L, Set.of());
         FakeTransport tg = new FakeTransport();
 
-        BotResponse.msg("hi")
+        BotResponse.msg(TestUtils.request(1), "hi")
                 .chat(1)
                 .ifFlag("new", ctx, b -> b.keyboard(k -> k.row(Button.cb("N", "n"))))
                 .send(tg);
@@ -26,7 +26,7 @@ public class FeatureFlagTest {
 
         flags.enable("new", 1L);
         tg.sent.clear();
-        BotResponse.msg("hi")
+        BotResponse.msg(TestUtils.request(1), "hi")
                 .chat(1)
                 .ifFlag("new", ctx, b -> b.keyboard(k -> k.row(Button.cb("N", "n"))))
                 .send(tg);

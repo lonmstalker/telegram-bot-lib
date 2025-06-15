@@ -4,12 +4,14 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import io.lonmstalker.tgkit.core.BotRequest;
 
 /** Создание текстового сообщения. */
 public final class MessageBuilder extends BotResponse.CommonBuilder<MessageBuilder> {
     private final String text;
 
-    MessageBuilder(String text) {
+    MessageBuilder(BotRequest<?> req, String text) {
+        super(req);
         this.text = text;
     }
 

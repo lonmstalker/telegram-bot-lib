@@ -2,6 +2,7 @@ package io.lonmstalker.tgkit.core.i18n;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
+import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -24,5 +25,9 @@ public class MessageLocalizer {
         } catch (MissingResourceException ex) {
             return key;
         }
+    }
+
+    public @NonNull String get(@NonNull String key, Object... args) {
+        return MessageFormat.format(get(key), args);
     }
 }

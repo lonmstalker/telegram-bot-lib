@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import io.lonmstalker.tgkit.core.BotRequest;
+import io.lonmstalker.tgkit.core.i18n.MessageLocalizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
@@ -39,54 +39,109 @@ public final class BotResponse {
         cfg.accept(CONFIG);
     }
 
+    /** Контекст, привязанный к запросу. */
+    public static WithRequest with(BotRequest<?> req) {
+        return new WithRequest(req);
+    }
+
     /** Сообщение. */
-    public static MessageBuilder msg(String text) {
-        return new MessageBuilder(text);
+    public static MessageBuilder msg(BotRequest<?> req, String text) {
+        return new MessageBuilder(req, text);
     }
 
     /** Сообщение из i18n. */
-    public static MessageBuilder msgKey(String key, Function<String, Object[], String> i18n, Object... args) {
-        return new MessageBuilder(i18n.apply(key, args));
+    public static MessageBuilder msgKey(BotRequest<?> req, String key, Object... args) {
+        MessageLocalizer loc = req.botInfo().localizer();
+        return new MessageBuilder(req, loc.get(key, args));
     }
 
     /** Фото. */
-    public static PhotoBuilder photo(InputFile file) {
-        return new PhotoBuilder(file);
+    public static PhotoBuilder photo(BotRequest<?> req, InputFile file) {
+        return new PhotoBuilder(req, file);
     }
 
     /** Редактирование сообщения. */
-    public static EditBuilder edit(long msgId) {
-        return new EditBuilder(msgId);
+    public static EditBuilder edit(BotRequest<?> req, long msgId) {
+        return new EditBuilder(req, msgId);
     }
 
     /** Удаление сообщения. */
-    public static DeleteBuilder delete(long msgId) {
-        return new DeleteBuilder(msgId);
+    public static DeleteBuilder delete(BotRequest<?> req, long msgId) {
+        return new DeleteBuilder(req, msgId);
     }
 
     /** Отправка медиа-группы. */
-    public static MediaGroupBuilder mediaGroup() {
-        return new MediaGroupBuilder();
+    public static MediaGroupBuilder mediaGroup(BotRequest<?> req) {
+        return new MediaGroupBuilder(req);
     }
 
     /** Опрос. */
-    public static PollBuilder poll(String question) {
-        return new PollBuilder(question);
+    public static PollBuilder poll(BotRequest<?> req, String question) {
+        return new PollBuilder(req, question);
     }
 
     /** Викторина. */
-    public static QuizBuilder quiz(String question, int correct) {
-        return new QuizBuilder(question, correct);
+    public static QuizBuilder quiz(BotRequest<?> req, String question, int correct) {
+        return new QuizBuilder(req, question, correct);
     }
 
     /** Результаты инлайн-запроса. */
-    public static InlineResults inline() {
-        return new InlineResults();
+    public static InlineResults inline(BotRequest<?> req) {
+        return new InlineResults(req);
+    }
+
+    /** Построитель, привязанный к запросу. */
+    public static final class WithRequest {
+        private final BotRequest<?> req;
+        private final MessageLocalizer loc;
+
+        private WithRequest(BotRequest<?> req) {
+            this.req = req;
+            this.loc = req.botInfo().localizer();
+        }
+
+        public MessageBuilder msg(String text) {
+            return BotResponse.msg(req, text);
+        }
+
+        public MessageBuilder msgKey(String key, Object... args) {
+            return BotResponse.msgKey(req, key, args);
+        }
+
+        public PhotoBuilder photo(InputFile file) {
+            return BotResponse.photo(req, file);
+        }
+
+        public EditBuilder edit(long msgId) {
+            return BotResponse.edit(req, msgId);
+        }
+
+        public DeleteBuilder delete(long msgId) {
+            return BotResponse.delete(req, msgId);
+        }
+
+        public MediaGroupBuilder mediaGroup() {
+            return BotResponse.mediaGroup(req);
+        }
+
+        public PollBuilder poll(String question) {
+            return BotResponse.poll(req, question);
+        }
+
+        public QuizBuilder quiz(String question, int correct) {
+            return BotResponse.quiz(req, question, correct);
+        }
+
+        public InlineResults inline() {
+            return BotResponse.inline(req);
+        }
     }
 
     /** Базовый строитель. */
     @SuppressWarnings("unchecked")
     static abstract class CommonBuilder<T extends CommonBuilder<T>> implements Common<T> {
+        protected final BotRequest<?> req;
+        protected final MessageLocalizer loc;
         protected long chatId;
         protected Long replyTo;
         protected boolean disableNotif;
@@ -95,6 +150,14 @@ public final class BotResponse {
         protected Consumer<Long> success;
         protected Consumer<Throwable> error;
         protected Context ctx;
+
+        CommonBuilder(BotRequest<?> req) {
+            this.req = req;
+            this.loc = req != null ? req.botInfo().localizer() : null;
+            if (req != null) {
+                autoChat(req);
+            }
+        }
 
         @Override
         public T chat(long id) {
@@ -123,7 +186,7 @@ public final class BotResponse {
 
         @Override
         public T keyboard(Consumer<KbBuilder> cfg) {
-            KbBuilder kb = new KbBuilder();
+            KbBuilder kb = new KbBuilder(loc);
             cfg.accept(kb);
             this.keyboard = kb;
             return (T) this;

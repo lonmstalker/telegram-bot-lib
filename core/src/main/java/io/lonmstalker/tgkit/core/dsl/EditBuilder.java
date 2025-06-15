@@ -4,6 +4,7 @@ import java.time.Duration;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.methods.send.SendChatAction;
+import io.lonmstalker.tgkit.core.BotRequest;
 
 /** Редактирование сообщения. */
 public final class EditBuilder extends BotResponse.CommonBuilder<EditBuilder> {
@@ -11,7 +12,8 @@ public final class EditBuilder extends BotResponse.CommonBuilder<EditBuilder> {
     private Duration typing;
     private String newText;
 
-    EditBuilder(long msgId) {
+    EditBuilder(BotRequest<?> req, long msgId) {
+        super(req);
         this.msgId = msgId;
     }
 

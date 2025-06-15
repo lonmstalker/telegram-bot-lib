@@ -9,10 +9,15 @@ import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.media.InputMedia;
 import org.telegram.telegrambots.meta.api.objects.media.InputMediaPhoto;
 import org.telegram.telegrambots.meta.api.objects.media.InputMediaVideo;
+import io.lonmstalker.tgkit.core.BotRequest;
 
 /** Построитель медиа-группы. */
 public final class MediaGroupBuilder extends BotResponse.CommonBuilder<MediaGroupBuilder> {
     private final List<InputMedia> items = new ArrayList<>();
+
+    MediaGroupBuilder(BotRequest<?> req) {
+        super(req);
+    }
 
     /** Фото с подписью. */
     public MediaGroupBuilder photo(InputFile file, String cap) {
