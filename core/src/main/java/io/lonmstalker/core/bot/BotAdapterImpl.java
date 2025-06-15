@@ -67,8 +67,24 @@ public class BotAdapterImpl implements BotAdapter {
             BotRequestHolder.setUpdate(update);
             BotRequestHolder.setSender(sender);
             BotUserInfo user = userProvider.resolve(update);
-            BotInfo info = new BotInfo(bot.internalId(), bot.config().getStore(), sender);
-            var localizer = new io.lonmstalker.core.i18n.MessageLocalizer(bot.config().getLocale());
+
+            java.util.Locale locale = user.locale();
+            if (locale == null) {
+                org.telegram.telegrambots.meta.api.objects.User tgUser = null;
+                try {
+                    tgUser = io.lonmstalker.core.utils.UpdateUtils.getUser(update);
+                } catch (Exception ignored) {
+                    // no telegram user
+                }
+                if (tgUser != null && tgUser.getLanguageCode() != null && !tgUser.getLanguageCode().isBlank()) {
+                    locale = java.util.Locale.forLanguageTag(tgUser.getLanguageCode());
+                } else {
+                    locale = bot.config().getLocale();
+                }
+            }
+
+            var localizer = new io.lonmstalker.core.i18n.MessageLocalizer(locale);
+            BotInfo info = new BotInfo(bot.internalId(), bot.config().getStore(), sender, localizer);
             return command.handle(new BotRequest<>(update.getUpdateId(), data, info, user));
         } finally {
             try {
