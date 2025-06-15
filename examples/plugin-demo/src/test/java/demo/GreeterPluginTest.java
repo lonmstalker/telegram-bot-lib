@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 public class GreeterPluginTest {
     @Test
-    public void testReply() throws Exception {
+    public void shouldReplyWithWaveWhenHelloPublished() throws Exception {
         DefaultEventBus bus = new DefaultEventBus();
         RecordingHandler recorder = new RecordingHandler();
         bus.subscribe(recorder);

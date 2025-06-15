@@ -56,7 +56,7 @@ public class ObservabilityInterceptorTest {
     }
 
     @Test
-    void span_and_metrics_on_success() {
+    void shouldRecordSpanAndMetricsWhenSuccess() {
         Update update = createUpdate(1);
         interceptor.preHandle(update);
         assertEquals("1", MDC.get("updateId"));
@@ -69,7 +69,7 @@ public class ObservabilityInterceptorTest {
     }
 
     @Test
-    void error_metrics_and_span() {
+    void shouldRecordErrorAndMetricsWhenError() {
         Update update = createUpdate(2);
         interceptor.preHandle(update);
         RuntimeException ex = new RuntimeException("boom");

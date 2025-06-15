@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 public class TelegramSenderTest {
 
     @Test
-    void convertException() throws Exception {
+    void shouldConvertExceptionWhenUsingConvertException() throws Exception {
         TestSender sender = new TestSender();
         Method m = TelegramSender.class.getDeclaredMethod("withConvertException", TelegramSender.RuntimeExceptionExecutor.class);
         m.setAccessible(true);

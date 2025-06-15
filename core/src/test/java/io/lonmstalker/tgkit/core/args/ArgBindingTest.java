@@ -41,7 +41,7 @@ public class ArgBindingTest {
     }
 
     @Test
-    void bindArgument() {
+    void shouldBindArgumentWhenRegexMatches() {
         BotCommandRegistryImpl reg = new BotCommandRegistryImpl();
         AnnotatedCommandLoader.load(reg, Commands.class.getPackageName());
 

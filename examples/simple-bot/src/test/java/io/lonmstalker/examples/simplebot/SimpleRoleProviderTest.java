@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class SimpleRoleProviderTest {
 
     @Test
-    void resolveFailsWhenUserMissing() {
+    void shouldThrowWhenUserMissing() {
         SimpleRoleProvider provider = new SimpleRoleProvider();
         Update update = new Update();
         assertThrows(BotApiException.class, () -> provider.resolve(update));

@@ -25,7 +25,7 @@ public class LoggingBotInterceptorTest {
     }
 
     @Test
-    void logs_user_and_message_id_on_error() {
+    void shouldLogUserAndMessageIdWhenError() {
         appender.start();
         logger.addAppender(appender);
         LoggingBotInterceptor interceptor = new LoggingBotInterceptor();

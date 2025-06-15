@@ -7,7 +7,7 @@ import java.util.Locale;
 
 public class MathCaptchaTest {
     @Test
-    void verifyAnswer() {
+    void shouldVerifyAnswerWhenCorrect() {
         MathCaptcha c = MathCaptcha.easy();
         var msg = c.question(1L, new MessageLocalizer(Locale.US));
         String q = msg.getText();

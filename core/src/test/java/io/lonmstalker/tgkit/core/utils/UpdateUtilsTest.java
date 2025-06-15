@@ -10,27 +10,27 @@ import org.telegram.telegrambots.meta.api.objects.*;
 
 public class UpdateUtilsTest {
     @Test
-    void getTypeMessage() {
+    void shouldReturnTypeMessageWhenMessagePresent() {
         Update update = new Update();
         update.setMessage(new Message());
         assertEquals(BotRequestType.MESSAGE, UpdateUtils.getType(update));
     }
 
     @Test
-    void getTypeCallbackQuery() {
+    void shouldReturnTypeCallbackQueryWhenCallbackPresent() {
         Update update = new Update();
         update.setCallbackQuery(new CallbackQuery());
         assertEquals(BotRequestType.CALLBACK_QUERY, UpdateUtils.getType(update));
     }
 
     @Test
-    void getTypeUnknownThrows() {
+    void shouldThrowWhenTypeUnknown() {
         Update update = new Update();
         assertThrows(BotApiException.class, () -> UpdateUtils.getType(update));
     }
 
     @Test
-    void getUserFromCallback() {
+    void shouldReturnUserWhenCallbackQuery() {
         User user = new User();
         user.setId(1L);
         CallbackQuery cq = new CallbackQuery();

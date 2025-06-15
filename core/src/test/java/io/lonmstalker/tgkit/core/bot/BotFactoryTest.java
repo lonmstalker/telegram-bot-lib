@@ -15,7 +15,7 @@ import java.sql.Statement;
 public class BotFactoryTest {
 
     @Test
-    void createFromToken() {
+    void shouldCreateBotWhenFromToken() {
         BotAdapter adapter = u -> null;
         BotConfig cfg = BotConfig.builder().build();
         Bot bot = BotFactory.INSTANCE.from("TOKEN", cfg, adapter);
@@ -24,7 +24,7 @@ public class BotFactoryTest {
     }
 
     @Test
-    void createFromWebhook() {
+    void shouldCreateBotWhenFromWebhook() {
         BotAdapter adapter = u -> null;
         BotConfig cfg = BotConfig.builder().build();
         SetWebhook hook = new SetWebhook();
@@ -34,7 +34,7 @@ public class BotFactoryTest {
     }
 
     @Test
-    void createFromDataSource() throws Exception {
+    void shouldCreateBotWhenFromDataSource() throws Exception {
         JdbcDataSource h2 = new JdbcDataSource();
         h2.setURL("jdbc:h2:mem:bot;DB_CLOSE_DELAY=-1");
         DataSource ds = h2;

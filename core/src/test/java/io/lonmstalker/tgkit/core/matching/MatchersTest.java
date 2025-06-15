@@ -22,7 +22,7 @@ public class MatchersTest {
     void clear() { BotRequestHolder.clear(); }
 
     @Test
-    void messageTextMatch() {
+    void shouldMatchWhenMessageTextMatches() {
         Message msg = new Message();
         msg.setText("hello");
         assertTrue(new MessageTextMatch("hello").match(msg));
@@ -31,7 +31,7 @@ public class MatchersTest {
     }
 
     @Test
-    void messageContainsMatch() {
+    void shouldMatchWhenMessageContainsText() {
         Message msg = new Message();
         msg.setText("hello world");
         assertTrue(new MessageContainsMatch("world").match(msg));
@@ -40,7 +40,7 @@ public class MatchersTest {
     }
 
     @Test
-    void messageRegexMatch() {
+    void shouldMatchWhenMessageMatchesRegex() {
         Message msg = new Message();
         msg.setText("abc123");
         assertTrue(new MessageRegexMatch("[a-z]+\\d+").match(msg));
@@ -48,13 +48,13 @@ public class MatchersTest {
     }
 
     @Test
-    void alwaysMatch() {
+    void shouldAlwaysMatchWhenCalled() {
         BotApiObject obj = Mockito.mock(BotApiObject.class);
         assertTrue(new AlwaysMatch<>().match(obj));
     }
 
     @Test
-    void userRoleMatch() {
+    void shouldMatchWhenUserRoleAllowed() {
         BotUserProvider provider = u -> new BotUserInfo() {
             @Override public @NonNull String chatId() { return "1"; }
             @Override public @NonNull Set<String> roles() { return Set.of("ADMIN"); }

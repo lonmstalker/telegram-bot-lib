@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class RateLimiterTest {
 
     @Test
-    void permitsPerSecond() throws Exception {
+    void shouldRespectPermitsPerSecondWhenAcquiring() throws Exception {
         RateLimiter limiter = new RateLimiter(2);
         long start = System.currentTimeMillis();
         limiter.acquire();
@@ -27,7 +27,7 @@ class RateLimiterTest {
     }
 
     @Test
-    void externalSchedulerNotClosed() {
+    void shouldNotCloseExternalSchedulerWhenClosed() {
         ScheduledExecutorService external = Executors.newSingleThreadScheduledExecutor();
         RateLimiter limiter = new RateLimiter(1, external);
         limiter.close();

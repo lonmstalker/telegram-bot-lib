@@ -9,7 +9,7 @@ import java.util.Locale;
 public class MessageLocalizerTest {
 
     @Test
-    void russianLocale() {
+    void shouldReturnRussianMessageWhenLocaleIsRussian() {
         MessageLocalizer localizer = new MessageLocalizer(Locale.forLanguageTag("ru"));
         assertEquals("Понг", localizer.get("command.ping.response"));
     }

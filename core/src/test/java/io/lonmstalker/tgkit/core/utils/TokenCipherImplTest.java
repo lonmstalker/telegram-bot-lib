@@ -8,7 +8,7 @@ import io.lonmstalker.tgkit.core.exception.BotApiException;
 public class TokenCipherImplTest {
 
     @Test
-    void encrypt_decrypt_roundtrip() {
+    void shouldReturnOriginalWhenEncryptingAndDecrypting() {
         var cipher = new TokenCipherImpl("secretkey123456");
         var original = "myToken";
         var encrypted = cipher.encrypt(original);
@@ -18,7 +18,7 @@ public class TokenCipherImplTest {
     }
 
     @Test
-    void decrypt_invalid_data_throws() {
+    void shouldThrowWhenDecryptingInvalidData() {
         var cipher = new TokenCipherImpl("secretkey123456");
         assertThrows(BotApiException.class, () -> cipher.decrypt("boom"));
     }
