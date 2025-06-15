@@ -26,4 +26,16 @@ public class BotConfig extends DefaultBotOptions {
     public BotConfig() {
         setBackOff(new ExponentialBackOff());
     }
+
+    public void addInterceptor(@NonNull BotInterceptor interceptor) {
+        var list = new java.util.ArrayList<>(this.globalInterceptors);
+        list.add(interceptor);
+        this.globalInterceptors = List.copyOf(list);
+    }
+
+    public void addInterceptors(@NonNull List<BotInterceptor> interceptors) {
+        var list = new java.util.ArrayList<>(this.globalInterceptors);
+        list.addAll(interceptors);
+        this.globalInterceptors = List.copyOf(list);
+    }
 }

@@ -54,3 +54,15 @@ public void handle(BotRequest<Message> req) {
     req.botInfo().store().set(req.user().chatId(), "new-state");
 }
 ```
+
+### Observability
+Модуль `observability` содержит абстракции и готовую реализацию Micrometer + OpenTelemetry.
+Подключение выглядит так:
+```java
+var metrics = io.lonmstaler.observability.impl.MicrometerCollector.prometheus(9180);
+var tracer = io.lonmstaler.observability.impl.OTelTracer.stdoutDev();
+BotConfig config = new BotConfig();
+config.addInterceptor(new io.lonmstaler.observability.ObservabilityInterceptor(metrics, tracer));
+config.setGlobalExceptionHandler(new io.lonmstaler.observability.ObservabilityExceptionHandler(null, metrics));
+```
+Полный пример приведён в модуле `examples/observability-demo`.

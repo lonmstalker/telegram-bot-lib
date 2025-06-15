@@ -11,5 +11,5 @@ public interface BotInterceptor {
 
     void postHandle(@NonNull Update update);
 
-    void afterCompletion(@NonNull Update update, @Nullable BotResponse response) throws Exception;
+    void afterCompletion(@NonNull Update update, @Nullable BotResponse response, @Nullable Exception ex) throws Exception;
 }
