@@ -1,12 +1,14 @@
 package io.lonmstalker.observability;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.slf4j.MDC;
 
 /**
  * Утилитарный класс для работы с MDC при логировании.
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class LogContext {
-    private LogContext() {}
 
     /**
      * Помещает значение в контекст логирования.
@@ -14,9 +16,6 @@ public final class LogContext {
      * @param key   ключ MDC
      * @param value значение
      */
-public final class LogContext {
-    private LogContext() {}
-
     public static void put(String key, String value) {
         MDC.put(key, value);
     }

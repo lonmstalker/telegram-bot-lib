@@ -1,7 +1,7 @@
 package io.lonmstalker.observability;
 
-import io.lonmstalker.core.BotResponse;
-import io.lonmstalker.core.interceptor.BotInterceptor;
+import io.lonmstalker.tgkit.core.BotResponse;
+import io.lonmstalker.tgkit.core.interceptor.BotInterceptor;
 import io.micrometer.core.instrument.Tag;
 import io.micrometer.core.instrument.Timer;
 import io.opentelemetry.api.common.AttributeKey;

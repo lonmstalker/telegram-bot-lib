@@ -1,8 +1,8 @@
 package io.lonmstalker.examples.simplebot;
 
-import io.lonmstalker.core.exception.BotApiException;
-import io.lonmstalker.core.user.BotUserInfo;
-import io.lonmstalker.core.user.BotUserProvider;
+import io.lonmstalker.tgkit.core.exception.BotApiException;
+import io.lonmstalker.tgkit.core.user.BotUserInfo;
+import io.lonmstalker.tgkit.core.user.BotUserProvider;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;

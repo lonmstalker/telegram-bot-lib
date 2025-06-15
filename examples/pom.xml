@@ -3,9 +3,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>io.lonmstalker</groupId>
-        <artifactId>telegram-bot-lib</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <groupId>io.lonmstalker.tgkit</groupId>
+        <artifactId>parent</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>examples</artifactId>

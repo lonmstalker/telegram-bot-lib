@@ -1,5 +1,9 @@
 package io.lonmstaler.observability;
 
+import io.lonmstalker.observability.MetricsCollector;
+import io.lonmstalker.observability.ObservabilityInterceptor;
+import io.lonmstalker.observability.Span;
+import io.lonmstalker.observability.Tracer;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Timer;
@@ -19,7 +23,6 @@ public class ObservabilityInterceptorTest {
     private final MeterRegistry registry = new SimpleMeterRegistry();
     private MetricsCollector metrics;
     private Tracer tracer;
-    private Timer timer;
     private Counter counter;
     private Span span;
     private ObservabilityInterceptor interceptor;
@@ -33,7 +36,7 @@ public class ObservabilityInterceptorTest {
     void init() {
         metrics = mock(MetricsCollector.class);
         tracer = mock(Tracer.class);
-        timer = mock(Timer.class);
+        Timer timer = mock(Timer.class);
         counter = mock(Counter.class);
         span = mock(Span.class);
 

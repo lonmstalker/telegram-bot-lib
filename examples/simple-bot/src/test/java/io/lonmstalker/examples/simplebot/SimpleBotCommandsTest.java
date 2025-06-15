@@ -1,15 +1,17 @@
 package io.lonmstalker.examples.simplebot;
 
-import io.lonmstalker.core.BotInfo;
-import io.lonmstalker.core.BotRequest;
-import io.lonmstalker.core.BotRequestType;
-import io.lonmstalker.core.BotResponse;
-import io.lonmstalker.core.bot.BotCommandRegistryImpl;
-import io.lonmstalker.core.bot.BotRequestConverterImpl;
-import io.lonmstalker.core.bot.TelegramSender;
-import io.lonmstalker.core.loader.AnnotatedCommandLoader;
-import io.lonmstalker.core.state.InMemoryStateStore;
-import io.lonmstalker.core.utils.UpdateUtils;
+import io.lonmstalker.tgkit.core.BotInfo;
+import io.lonmstalker.tgkit.core.BotRequest;
+import io.lonmstalker.tgkit.core.BotRequestType;
+import io.lonmstalker.tgkit.core.BotResponse;
+import io.lonmstalker.tgkit.core.bot.BotCommandRegistryImpl;
+import io.lonmstalker.tgkit.core.bot.BotRequestConverterImpl;
+import io.lonmstalker.tgkit.core.bot.TelegramSender;
+import io.lonmstalker.tgkit.core.bot.BotConfig;
+import io.lonmstalker.tgkit.core.i18n.MessageLocalizer;
+import io.lonmstalker.tgkit.core.loader.AnnotatedCommandLoader;
+import io.lonmstalker.tgkit.core.state.InMemoryStateStore;
+import io.lonmstalker.tgkit.core.utils.UpdateUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -136,7 +138,7 @@ class SimpleBotCommandsTest {
         assertNotNull(command);
 
         var user = provider.resolve(update);
-        var localizer = new io.lonmstalker.core.i18n.MessageLocalizer(java.util.Locale.getDefault());
+        var localizer = new MessageLocalizer(java.util.Locale.getDefault());
         BotInfo info = new BotInfo(1L, new InMemoryStateStore(), new TestSender(), localizer);
         BotResponse resp = command.handle(new BotRequest<>(1, data, info, user));
 
@@ -147,7 +149,7 @@ class SimpleBotCommandsTest {
 
     static class TestSender extends TelegramSender {
         TestSender() {
-            super(io.lonmstalker.core.bot.BotConfig.builder().build(), "TOKEN");
+            super(BotConfig.builder().build(), "TOKEN");
         }
         @Override
         public void close() {

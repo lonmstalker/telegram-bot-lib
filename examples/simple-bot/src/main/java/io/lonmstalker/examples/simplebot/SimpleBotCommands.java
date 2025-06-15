@@ -1,14 +1,14 @@
 package io.lonmstalker.examples.simplebot;
 
-import io.lonmstalker.core.BotRequest;
-import io.lonmstalker.core.BotResponse;
-import io.lonmstalker.core.BotRequestType;
-import io.lonmstalker.core.annotation.AlwaysMatch;
-import io.lonmstalker.core.annotation.BotHandler;
-import io.lonmstalker.core.annotation.MessageContainsMatch;
-import io.lonmstalker.core.annotation.MessageRegexMatch;
-import io.lonmstalker.core.annotation.MessageTextMatch;
-import io.lonmstalker.core.annotation.UserRoleMatch;
+import io.lonmstalker.tgkit.core.BotRequest;
+import io.lonmstalker.tgkit.core.BotResponse;
+import io.lonmstalker.tgkit.core.BotRequestType;
+import io.lonmstalker.tgkit.core.annotation.AlwaysMatch;
+import io.lonmstalker.tgkit.core.annotation.BotHandler;
+import io.lonmstalker.tgkit.core.annotation.MessageContainsMatch;
+import io.lonmstalker.tgkit.core.annotation.MessageRegexMatch;
+import io.lonmstalker.tgkit.core.annotation.MessageTextMatch;
+import io.lonmstalker.tgkit.core.annotation.UserRoleMatch;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.AnswerInlineQuery;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;

@@ -3,7 +3,7 @@ package io.lonmstalker.observability.impl;
 import com.sun.net.httpserver.HttpServer;
 import io.lonmstalker.observability.MetricsCollector;
 import io.lonmstalker.observability.Tags;
-import io.lonmstalker.core.exception.BotApiException;
+import io.lonmstalker.tgkit.core.exception.BotApiException;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Timer;

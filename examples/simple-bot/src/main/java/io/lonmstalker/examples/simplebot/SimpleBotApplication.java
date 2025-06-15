@@ -1,9 +1,9 @@
 package io.lonmstalker.examples.simplebot;
 
-import io.lonmstalker.core.BotAdapter;
-import io.lonmstalker.core.bot.Bot;
-import io.lonmstalker.core.bot.BotConfig;
-import io.lonmstalker.core.bot.BotFactory;
+import io.lonmstalker.tgkit.core.BotAdapter;
+import io.lonmstalker.tgkit.core.bot.Bot;
+import io.lonmstalker.tgkit.core.bot.BotConfig;
+import io.lonmstalker.tgkit.core.bot.BotFactory;
 
 public class SimpleBotApplication {
 
