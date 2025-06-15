@@ -64,7 +64,8 @@ public class BotAdapterImpl implements BotAdapter {
     private @Nullable BotResponse doHandle(Update update) {
         BotRequestType type = UpdateUtils.getType(update);
         BotApiObject data = converter.convert(update, type);
-        BotCommand<BotApiObject> command = bot.registry().find(type, bot.config().getBotPattern(), data);
+        BotCommand<BotApiObject> command =
+                bot.registry().find(type, bot.config().getBotPattern(), data);
         if (command == null) {
             return null;
         }
@@ -73,31 +74,38 @@ public class BotAdapterImpl implements BotAdapter {
             BotRequestHolder.setUpdate(update);
             BotRequestHolder.setSender(sender);
             BotUserInfo user = userProvider.resolve(update);
-
-            java.util.Locale locale = user.locale();
-            if (locale == null) {
-                org.telegram.telegrambots.meta.api.objects.User tgUser = null;
-                try {
-                    tgUser = UpdateUtils.getUser(update);
-                } catch (Exception ignored) {
-                    // no telegram user
-                }
-                if (tgUser != null && tgUser.getLanguageCode() != null && !tgUser.getLanguageCode().isBlank()) {
-                    locale = java.util.Locale.forLanguageTag(tgUser.getLanguageCode());
-                } else {
-                    locale = bot.config().getLocale();
-                }
-            }
+            java.util.Locale locale = resolveLocale(update, user);
 
             var localizer = new MessageLocalizer(locale);
             BotInfo info = new BotInfo(bot.internalId(), bot.config().getStore(), sender, localizer);
             return command.handle(new BotRequest<>(update.getUpdateId(), data, info, user));
         } finally {
-            try {
-                sender.close();
-            } catch (Exception e) {
-                log.warn("Error closing sender", e);
-            }
+            closeSender(sender);
+        }
+    }
+
+    private java.util.Locale resolveLocale(Update update, BotUserInfo user) {
+        java.util.Locale locale = user.locale();
+        if (locale != null) {
+            return locale;
+        }
+        org.telegram.telegrambots.meta.api.objects.User tgUser = null;
+        try {
+            tgUser = UpdateUtils.getUser(update);
+        } catch (Exception ignored) {
+            // no telegram user
+        }
+        if (tgUser != null && tgUser.getLanguageCode() != null && !tgUser.getLanguageCode().isBlank()) {
+            return java.util.Locale.forLanguageTag(tgUser.getLanguageCode());
+        }
+        return bot.config().getLocale();
+    }
+
+    private void closeSender(TelegramSender sender) {
+        try {
+            sender.close();
+        } catch (Exception e) {
+            log.warn("Error closing sender", e);
         }
     }
 
