@@ -1,67 +1,115 @@
 package io.lonmstalker.tgkit.plugin;
 
-import io.lonmstalker.observability.MetricsCollector;
-import io.lonmstalker.observability.Tracer;
-import io.lonmstalker.tgkit.core.state.StateStore;
-import io.lonmstalker.tgkit.plugin.spi.BotRegistry;
-import io.lonmstalker.tgkit.plugin.spi.ConfigSection;
-import lombok.RequiredArgsConstructor;
-
-import java.net.http.HttpClient;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
+import java.util.ServiceLoader;
+import io.lonmstalker.tgkit.plugin.spi.Plugin;
 
 /**
- * Управление жизненным циклом плагинов.
+ * Менеджер плагинов: загрузка, выгрузка и перезагрузка JAR-файлов.
  */
-@RequiredArgsConstructor
-public final class PluginManager {
+public class PluginManager {
+    private final Path pluginsDir;
+    private final EventBus eventBus;
+    private final Map<String, LoadedPlugin> plugins = new HashMap<>();
+    private final ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
 
-    private final ConcurrentMap<String, PluginWrapper> active = new ConcurrentHashMap<>();
-    private final Map<String, ConfigSection> configs = new ConcurrentHashMap<>();
+    /**
+     * @param pluginsDir каталог с JAR-плагинами
+     * @param eventBus   шина событий
+     */
+    public PluginManager(Path pluginsDir, EventBus eventBus) {
+        this.pluginsDir = pluginsDir;
+        this.eventBus = eventBus;
+    }
 
-    private final BotRegistry bots;
-    private final EventBus bus;
-    private final StateStore store;
-    private final MetricsCollector metrics;
-    private final Tracer tracer;
-    private final HttpClient httpClient = HttpClient.newHttpClient();
-
-    public void bootstrap() throws Exception {
-        Collection<PluginWrapper> plugins = new PluginLoader().loadAll();
-        var sorted = new ArrayList<>(plugins);
-        sorted.sort(Comparator.comparingInt(p -> p.manifest().getOrder()));
-        for (PluginWrapper w : sorted) {
-            PluginContextImpl ctx = new PluginContextImpl(
-                    bots,
-                    bus,
-                    store,
-                    metrics,
-                    tracer,
-                    configs,
-                    w.manifest().getPermissions(),
-                    httpClient);
-            if (!w.manifest().getConfig().isEmpty()) {
-                ctx.registerConfig(w.manifest().getId(), new YamlConfigSection(w.manifest().getConfig()));
+    /**
+     * Загружает все JAR-файлы из каталога.
+     */
+    public void loadAll() throws Exception {
+        if (!Files.isDirectory(pluginsDir)) {
+            return;
+        }
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(pluginsDir, "*.jar")) {
+            for (Path jar : stream) {
+                load(jar);
             }
-            w.plugin().init(ctx);
-            w.plugin().start();
-            active.put(w.manifest().getId(), w);
         }
     }
 
-    public void stopAll() {
-        for (PluginWrapper w : active.values()) {
-            try {
-                w.plugin().stop();
-                w.classLoader().close();
-            } catch (Exception ignored) {
-            }
+    /**
+     * Загружает один плагин из файла.
+     *
+     * @param jarPath путь к JAR
+     */
+    public void load(Path jarPath) throws Exception {
+        URLClassLoader loader = new URLClassLoader(new URL[] {jarPath.toUri().toURL()});
+        ServiceLoader<Plugin> sl = ServiceLoader.load(Plugin.class, loader);
+        Iterator<Plugin> it = sl.iterator();
+        if (!it.hasNext()) {
+            loader.close();
+            throw new IllegalArgumentException("No Plugin implementation found in " + jarPath);
         }
-        active.clear();
+        Plugin plugin = it.next();
+        PluginManifest manifest = readManifest(loader);
+        plugin.init(new DefaultPluginContext(eventBus));
+        plugin.start();
+        plugins.put(manifest.getId(), new LoadedPlugin(plugin, manifest, loader, jarPath));
     }
+
+    private PluginManifest readManifest(ClassLoader loader) throws IOException {
+        try (InputStream is = loader.getResourceAsStream("tgkit-plugin.yaml")) {
+            if (is == null) {
+                throw new IOException("tgkit-plugin.yaml not found");
+            }
+            return mapper.readValue(is, PluginManifest.class);
+        }
+    }
+
+    /**
+     * Перезагружает плагин.
+     *
+     * @param id идентификатор плагина
+     */
+    public void reload(String id) throws Exception {
+        LoadedPlugin lp = plugins.get(id);
+        if (lp == null) return;
+        Path jar = lp.jarPath;
+        unload(id);
+        load(jar);
+    }
+
+    /**
+     * Выгружает плагин.
+     *
+     * @param id идентификатор
+     */
+    public void unload(String id) throws Exception {
+        LoadedPlugin lp = plugins.remove(id);
+        if (lp != null) {
+            lp.plugin.stop();
+            lp.loader.close();
+        }
+    }
+
+    /**
+     * @param id идентификатор плагина
+     * @return манифест или {@code null}, если не найден
+     */
+    public PluginManifest getManifest(String id) {
+        LoadedPlugin lp = plugins.get(id);
+        return lp == null ? null : lp.manifest;
+    }
+
+    private record LoadedPlugin(Plugin plugin, PluginManifest manifest, URLClassLoader loader, Path jarPath) {}
 }
