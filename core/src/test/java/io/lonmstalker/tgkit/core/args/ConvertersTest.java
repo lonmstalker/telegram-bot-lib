@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 
 public class ConvertersTest {
     @Test
-    void unsupported_number_converter() {
+    void shouldThrowWhenNumberConverterUnsupported() {
         var converter = Converters.getByType(BigDecimal.class);
         assertThrows(BotApiException.class,
                 () -> converter.convert("1", new Context(null, null)));

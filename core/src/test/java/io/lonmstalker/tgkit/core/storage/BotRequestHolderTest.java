@@ -10,7 +10,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 public class BotRequestHolderTest {
 
     @Test
-    void setAndGet() {
+    void shouldSetAndGetWhenStored() {
         Update u = new Update();
         TelegramSender sender = new TelegramSender(BotConfig.builder().build(), "token") {
         };
@@ -24,7 +24,7 @@ public class BotRequestHolderTest {
     }
 
     @Test
-    void clearAndExceptions() {
+    void shouldThrowWhenAccessingAfterClear() {
         BotRequestHolder.clear();
         assertNull(BotRequestHolder.getUpdate());
         assertNull(BotRequestHolder.getSender());

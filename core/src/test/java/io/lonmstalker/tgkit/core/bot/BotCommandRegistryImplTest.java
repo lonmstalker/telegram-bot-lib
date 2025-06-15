@@ -16,7 +16,7 @@ import io.lonmstalker.tgkit.core.exception.BotApiException;
 class BotCommandRegistryImplTest {
 
     @Test
-    void add_and_find_commands() {
+    void shouldFindCommandWhenAdded() {
         BotCommandRegistryImpl registry = new BotCommandRegistryImpl();
         BotCommand<Message> first = new TestCommand(1);
         BotCommand<Message> second = new TestCommand(2);
@@ -30,7 +30,7 @@ class BotCommandRegistryImplTest {
     }
 
     @Test
-    void find_wrong_type_throws() {
+    void shouldThrowWhenFindingWrongType() {
         BotCommandRegistryImpl registry = new BotCommandRegistryImpl();
         registry.add(new TestCommand(1));
 

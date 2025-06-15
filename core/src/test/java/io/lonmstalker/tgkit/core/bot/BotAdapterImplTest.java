@@ -16,7 +16,7 @@ import static org.mockito.Mockito.*;
 public class BotAdapterImplTest {
 
     @Test
-    void exception_in_preHandle_invokes_afterCompletion() {
+    void shouldInvokeAfterCompletionWhenPreHandleThrowsException() {
         TestInterceptor interceptor = new TestInterceptor();
         BotConfig config = BotConfig.builder()
                 .globalInterceptors(List.of(interceptor))

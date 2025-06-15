@@ -30,7 +30,7 @@ public class BotDataSourceFactoryTest {
     }
 
     @Test
-    void load_data() throws Exception {
+    void shouldLoadDataWhenRecordExists() throws Exception {
         var cipher = new TokenCipherImpl("secretkey123456");
         String enc = cipher.encrypt("TEST_TOKEN");
         try (Connection c = ds.getConnection();
@@ -45,14 +45,14 @@ public class BotDataSourceFactoryTest {
     }
 
     @Test
-    void bot_not_found_throws() {
+    void shouldThrowWhenBotNotFound() {
         var cipher = new TokenCipherImpl("secretkey123456");
         assertThrows(BotApiException.class,
                 () -> BotDataSourceFactory.INSTANCE.load(ds, 99, cipher));
     }
 
     @Test
-    void empty_token_throws() throws Exception {
+    void shouldThrowWhenTokenEmpty() throws Exception {
         var cipher = new TokenCipherImpl("secretkey123456");
         String enc = cipher.encrypt("");
         try (Connection c = ds.getConnection();

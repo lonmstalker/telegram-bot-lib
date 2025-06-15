@@ -38,7 +38,7 @@ class SimpleBotCommandsTest {
 
     @Test
     @DisplayName("тест MessageTextMatch")
-    void textPing() {
+    void shouldRespondWithSendMessageWhenPingText() {
         User user = new User();
         Chat chat = new Chat();
         Message msg = new Message();
@@ -58,7 +58,7 @@ class SimpleBotCommandsTest {
 
     @Test
     @DisplayName("тест MessageContainsMatch")
-    void containsHello() {
+    void shouldRespondWithSendMessageWhenContainsHello() {
         Chat chat = new Chat();
         User user = new User();
         Message msg = new Message();
@@ -78,7 +78,7 @@ class SimpleBotCommandsTest {
 
     @Test
     @DisplayName("тест MessageRegexMatch")
-    void regexNumbers() {
+    void shouldRespondWithSendMessageWhenRegexMatchesNumbers() {
         User user = new User();
         Chat chat = new Chat();
         Message msg = new Message();
@@ -98,7 +98,7 @@ class SimpleBotCommandsTest {
 
     @Test
     @DisplayName("тест UserRoleMatch")
-    void callback() {
+    void shouldRespondWithAnswerCallbackQueryWhenCallback() {
         User user = new User();
         CallbackQuery cq = new CallbackQuery();
 
@@ -115,7 +115,7 @@ class SimpleBotCommandsTest {
 
     @Test
     @DisplayName("тест AlwaysMatch")
-    void inlineQuery() {
+    void shouldRespondWithAnswerInlineQueryWhenInlineQuery() {
         User user = new User();
         InlineQuery iq = new InlineQuery();
 

@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 public class EventBusTest {
 
     @Test
-    public void publishAndSubscribe() {
+    public void shouldReceiveMessageWhenPublished() {
         SimpleEventBus bus = new SimpleEventBus();
         AtomicInteger counter = new AtomicInteger();
         bus.subscribe(String.class, s -> counter.incrementAndGet());

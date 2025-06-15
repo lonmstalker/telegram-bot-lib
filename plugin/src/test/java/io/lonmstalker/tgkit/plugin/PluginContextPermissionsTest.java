@@ -35,7 +35,7 @@ public class PluginContextPermissionsTest {
     }
 
     @Test
-    public void denyBotControl() {
+    public void shouldRestrictBotControlWhenPermissionMissing() {
         PluginPermissions perms = new PluginPermissions();
         PluginContextImpl ctx = new PluginContextImpl(
                 new DummyRegistry(),
@@ -52,7 +52,7 @@ public class PluginContextPermissionsTest {
     }
 
     @Test
-    public void readOnlyStore() {
+    public void shouldEnforceReadOnlyStoreWhenConfigured() {
         PluginPermissions perms = new PluginPermissions();
         perms.setStore(PluginPermissions.Store.READ_ONLY);
         PluginContextImpl ctx = new PluginContextImpl(

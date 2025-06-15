@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 public class BotSessionImplTest {
 
     @Test
-    void startAndStop() {
+    void shouldStartAndStopSessionWhenInvoked() {
         NoopExecutor executor = new NoopExecutor();
         BotSessionImpl session = new BotSessionImpl(executor, new ObjectMapper());
         DefaultBotOptions options = new DefaultBotOptions();
