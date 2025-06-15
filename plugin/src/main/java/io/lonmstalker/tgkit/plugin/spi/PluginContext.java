@@ -2,13 +2,14 @@ package io.lonmstalker.tgkit.plugin.spi;
 
 import io.lonmstalker.observability.MetricsCollector;
 import io.lonmstalker.observability.Tracer;
-import io.lonmstalker.tgkit.core.bot.Bot;
 import io.lonmstalker.tgkit.core.state.StateStore;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.http.HttpClient;
 import java.nio.file.Path;
 import java.util.Optional;
+
+import io.lonmstalker.tgkit.plugin.EventBus;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**

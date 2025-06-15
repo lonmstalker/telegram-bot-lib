@@ -1,5 +1,7 @@
 package io.lonmstalker.tgkit.plugin;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -12,7 +14,7 @@ public final class SimpleEventBus implements EventBus {
     private final ConcurrentHashMap<Class<?>, CopyOnWriteArrayList<EventHandler<?>>> handlers = new ConcurrentHashMap<>();
 
     @Override
-    public <T> Subscription subscribe(Class<T> type, EventHandler<T> handler) {
+    public <T> @NonNull Subscription subscribe(@NonNull Class<T> type, @NonNull EventHandler<T> handler) {
         handlers.computeIfAbsent(type, k -> new CopyOnWriteArrayList<>()).add(handler);
         return () -> handlers.getOrDefault(type, new CopyOnWriteArrayList<>()).remove(handler);
     }

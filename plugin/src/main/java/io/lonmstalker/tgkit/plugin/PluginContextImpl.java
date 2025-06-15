@@ -5,7 +5,6 @@ import io.lonmstalker.observability.Tracer;
 import io.lonmstalker.tgkit.core.state.StateStore;
 import io.lonmstalker.tgkit.plugin.spi.BotRegistry;
 import io.lonmstalker.tgkit.plugin.spi.ConfigSection;
-import io.lonmstalker.tgkit.plugin.spi.EventBus;
 import io.lonmstalker.tgkit.plugin.spi.PluginContext;
 import java.io.InputStream;
 import java.io.OutputStream;

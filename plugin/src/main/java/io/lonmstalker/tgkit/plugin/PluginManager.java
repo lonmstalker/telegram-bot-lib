@@ -4,9 +4,9 @@ import io.lonmstalker.observability.MetricsCollector;
 import io.lonmstalker.observability.Tracer;
 import io.lonmstalker.tgkit.core.state.StateStore;
 import io.lonmstalker.tgkit.plugin.spi.BotRegistry;
-import io.lonmstalker.tgkit.plugin.spi.Plugin;
-import io.lonmstalker.tgkit.plugin.spi.EventBus;
 import io.lonmstalker.tgkit.plugin.spi.ConfigSection;
+import lombok.RequiredArgsConstructor;
+
 import java.net.http.HttpClient;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -14,11 +14,11 @@ import java.util.Comparator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import io.lonmstalker.tgkit.plugin.YamlConfigSection;
 
 /**
  * Управление жизненным циклом плагинов.
  */
+@RequiredArgsConstructor
 public final class PluginManager {
 
     private final ConcurrentMap<String, PluginWrapper> active = new ConcurrentHashMap<>();
@@ -31,19 +31,10 @@ public final class PluginManager {
     private final Tracer tracer;
     private final HttpClient httpClient = HttpClient.newHttpClient();
 
-    public PluginManager(BotRegistry bots, EventBus bus, StateStore store,
-                         MetricsCollector metrics, Tracer tracer) {
-        this.bots = bots;
-        this.bus = bus;
-        this.store = store;
-        this.metrics = metrics;
-        this.tracer = tracer;
-    }
-
     public void bootstrap() throws Exception {
         Collection<PluginWrapper> plugins = new PluginLoader().loadAll();
         var sorted = new ArrayList<>(plugins);
-        sorted.sort(Comparator.comparingInt(p -> p.manifest().order()));
+        sorted.sort(Comparator.comparingInt(p -> p.manifest().getOrder()));
         for (PluginWrapper w : sorted) {
             PluginContextImpl ctx = new PluginContextImpl(
                     bots,
