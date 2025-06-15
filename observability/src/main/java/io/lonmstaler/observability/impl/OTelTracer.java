@@ -5,8 +5,10 @@ import io.lonmstaler.observability.Tracer;
 import io.opentelemetry.api.common.Attributes;
 import io.opentelemetry.api.trace.SpanKind;
 import io.opentelemetry.api.trace.TracerProvider;
+import io.opentelemetry.exporter.logging.LoggingSpanExporter;
 import io.opentelemetry.sdk.trace.SdkTracerProvider;
 import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor;
+import io.opentelemetry.sdk.trace.export.SpanExporter;
 
 public final class OTelTracer implements Tracer {
     private final io.opentelemetry.api.trace.Tracer tracer;
@@ -37,8 +39,9 @@ public final class OTelTracer implements Tracer {
     }
 
     public static OTelTracer stdoutDev() {
+        SpanExporter exporter = SpanExporter.composite(new LoggingSpanExporter());
         SdkTracerProvider provider = SdkTracerProvider.builder()
-                .addSpanProcessor(SimpleSpanProcessor.create(MultiSpanExporter.create()))
+                .addSpanProcessor(SimpleSpanProcessor.create(exporter))
                 .build();
         return new OTelTracer(provider, "tg-bot");
     }
