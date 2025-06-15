@@ -7,7 +7,6 @@ import io.opentelemetry.api.trace.SpanKind;
 import io.opentelemetry.api.trace.TracerProvider;
 import io.opentelemetry.sdk.trace.SdkTracerProvider;
 import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor;
-import io.opentelemetry.sdk.trace.export.LoggingSpanExporter;
 
 public final class OTelTracer implements Tracer {
     private final io.opentelemetry.api.trace.Tracer tracer;
@@ -39,8 +38,8 @@ public final class OTelTracer implements Tracer {
 
     public static OTelTracer stdoutDev() {
         SdkTracerProvider provider = SdkTracerProvider.builder()
-                .addSpanProcessor(SimpleSpanProcessor.create(LoggingSpanExporter.create()))
+                .addSpanProcessor(SimpleSpanProcessor.create(MultiSpanExporter.create()))
                 .build();
-        return new OTelTracer(provider, "craftbot");
+        return new OTelTracer(provider, "tg-bot");
     }
 }

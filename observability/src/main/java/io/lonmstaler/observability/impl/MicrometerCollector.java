@@ -8,6 +8,9 @@ import io.micrometer.core.instrument.Timer;
 import io.micrometer.prometheus.PrometheusConfig;
 import io.micrometer.prometheus.PrometheusMeterRegistry;
 import io.prometheus.client.exporter.HTTPServer;
+import org.checkerframework.checker.nullness.qual.NonNull;
+
+import java.util.List;
 
 public final class MicrometerCollector implements MetricsCollector {
     private final MeterRegistry registry;
@@ -17,18 +20,18 @@ public final class MicrometerCollector implements MetricsCollector {
     }
 
     @Override
-    public MeterRegistry registry() {
+    public @NonNull MeterRegistry registry() {
         return registry;
     }
 
     @Override
-    public Timer timer(String name, Tags tags) {
-        return Timer.builder(name).tags(tags.items()).register(registry);
+    public @NonNull Timer timer(@NonNull String name, @NonNull Tags tags) {
+        return Timer.builder(name).tags(List.of(tags.items())).register(registry);
     }
 
     @Override
-    public Counter counter(String name, Tags tags) {
-        return Counter.builder(name).tags(tags.items()).register(registry);
+    public @NonNull Counter counter(@NonNull String name, @NonNull Tags tags) {
+        return Counter.builder(name).tags(List.of(tags.items())).register(registry);
     }
 
     public static MicrometerCollector prometheus(int port) {

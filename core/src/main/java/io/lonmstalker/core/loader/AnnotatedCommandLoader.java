@@ -36,9 +36,11 @@ public final class AnnotatedCommandLoader {
     public static void load(@NonNull BotCommandRegistry registry,
                             @NonNull String... packages) {
         ConfigurationBuilder cb = new ConfigurationBuilder();
+
         cb.forPackages(packages);
         cb.addScanners(Scanners.MethodsAnnotated);
         Reflections reflections = new Reflections(cb);
+
         Set<Method> methods = reflections.getMethodsAnnotatedWith(BotHandler.class);
         for (Method method : methods) {
             if (Modifier.isStatic(method.getModifiers())) {
@@ -48,50 +50,10 @@ public final class AnnotatedCommandLoader {
             BotHandler ann = Objects.requireNonNull(method.getAnnotation(BotHandler.class));
             Object instance = createInstance(method.getDeclaringClass());
 
-            CommandMatch<? extends BotApiObject> matcher = null;
-            if (method.isAnnotationPresent(MessageContainsMatch.class)) {
-                MessageContainsMatch mc = method.getAnnotation(MessageContainsMatch.class);
-                matcher = new io.lonmstalker.core.matching.MessageContainsMatch(mc.value(), mc.ignoreCase());
-            } else if (method.isAnnotationPresent(MessageRegexMatch.class)) {
-                MessageRegexMatch mr = method.getAnnotation(MessageRegexMatch.class);
-                matcher = new io.lonmstalker.core.matching.MessageRegexMatch(mr.value());
-            } else if (method.isAnnotationPresent(MessageTextMatch.class)) {
-                MessageTextMatch mt = method.getAnnotation(MessageTextMatch.class);
-                matcher = new io.lonmstalker.core.matching.MessageTextMatch(mt.value(), mt.ignoreCase());
-            } else if (method.isAnnotationPresent(UserRoleMatch.class)) {
-                UserRoleMatch ur = method.getAnnotation(UserRoleMatch.class);
-                var provider = (io.lonmstalker.core.user.BotUserProvider) createInstance(ur.provider());
-                matcher = new io.lonmstalker.core.matching.UserRoleMatch<>(provider, Set.of(ur.roles()));
-            } else {
-                CustomMatcher custom = method.getAnnotation(CustomMatcher.class);
-                if (custom != null) {
-                    matcher = (CommandMatch<BotApiObject>) createInstance(custom.value());
-                }
-            }
-            if (matcher == null) {
-                matcher = new io.lonmstalker.core.matching.AlwaysMatch<>();
-            }
-
+            CommandMatch<? extends BotApiObject> matcher = extractMatcher(method);
             BotHandlerConverter<?> converter = (BotHandlerConverter<?>) createInstance(ann.converter());
 
             method.setAccessible(true);
-            var parameters = method.getParameters();
-            InternalCommandAdapter.ParamInfo[] infos = new InternalCommandAdapter.ParamInfo[parameters.length];
-            for (int i = 0; i < parameters.length; i++) {
-                var p = parameters[i];
-                Arg a = p.getAnnotation(Arg.class);
-                if (a != null) {
-                    BotArgumentConverter<?> conv;
-                    if (a.converter() != BotArgumentConverter.Identity.class) {
-                        conv = Converters.getByClass(a.converter());
-                    } else {
-                        conv = Converters.getByType(p.getType());
-                    }
-                    infos[i] = new InternalCommandAdapter.ParamInfo(false, a, conv);
-                } else {
-                    infos[i] = new InternalCommandAdapter.ParamInfo(true, null, null);
-                }
-            }
             BotCommand<BotApiObject> cmd = InternalCommandAdapter.builder()
                     .method(method)
                     .type(ann.type())
@@ -99,8 +61,8 @@ public final class AnnotatedCommandLoader {
                     .instance(instance)
                     .converter(converter)
                     .commandMatch(matcher)
-                    .params(infos)
                     .botGroup(ann.botGroup())
+                    .params(extractParameters(method))
                     .build();
             registry.add(cmd);
         }
@@ -126,5 +88,52 @@ public final class AnnotatedCommandLoader {
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
             throw new BotApiException("Cannot instantiate " + clazz.getName(), e);
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    private static @NonNull CommandMatch<? extends BotApiObject> extractMatcher(@NonNull Method method) {
+        if (method.isAnnotationPresent(MessageContainsMatch.class)) {
+            MessageContainsMatch mc = method.getAnnotation(MessageContainsMatch.class);
+            return new io.lonmstalker.core.matching.MessageContainsMatch(Objects.requireNonNull(mc).value(), mc.ignoreCase());
+        } else if (method.isAnnotationPresent(MessageRegexMatch.class)) {
+            MessageRegexMatch mr = method.getAnnotation(MessageRegexMatch.class);
+            return new io.lonmstalker.core.matching.MessageRegexMatch(Objects.requireNonNull(mr).value());
+        } else if (method.isAnnotationPresent(MessageTextMatch.class)) {
+            MessageTextMatch mt = method.getAnnotation(MessageTextMatch.class);
+            return new io.lonmstalker.core.matching.MessageTextMatch(Objects.requireNonNull(mt).value(), mt.ignoreCase());
+        } else if (method.isAnnotationPresent(UserRoleMatch.class)) {
+            UserRoleMatch ur = method.getAnnotation(UserRoleMatch.class);
+            var provider = (io.lonmstalker.core.user.BotUserProvider) createInstance(Objects.requireNonNull(ur).provider());
+            return new io.lonmstalker.core.matching.UserRoleMatch<>(provider, Set.of(ur.roles()));
+        } else {
+            CustomMatcher custom = method.getAnnotation(CustomMatcher.class);
+            if (custom != null) {
+                return  (CommandMatch<BotApiObject>) createInstance(custom.value());
+            }
+        }
+        return new io.lonmstalker.core.matching.AlwaysMatch<>();
+    }
+
+    private InternalCommandAdapter.ParamInfo[] extractParameters(@NonNull Method method) {
+        var parameters = method.getParameters();
+        InternalCommandAdapter.ParamInfo[] infos = new InternalCommandAdapter.ParamInfo[parameters.length];
+
+        for (int i = 0; i < parameters.length; i++) {
+            var p = parameters[i];
+            Arg a = p.getAnnotation(Arg.class);
+            if (a != null) {
+                BotArgumentConverter<?> conv;
+                if (a.converter() != BotArgumentConverter.Identity.class) {
+                    conv = Converters.getByClass(a.converter());
+                } else {
+                    conv = Converters.getByType(p.getType());
+                }
+                infos[i] = new InternalCommandAdapter.ParamInfo(false, a, conv);
+            } else {
+                infos[i] = new InternalCommandAdapter.ParamInfo(true, null, null);
+            }
+        }
+
+        return infos;
     }
 }

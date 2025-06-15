@@ -6,11 +6,10 @@ import io.lonmstalker.core.BotRequest;
 import io.lonmstalker.core.BotRequestType;
 import io.lonmstalker.core.BotResponse;
 import io.lonmstalker.core.exception.BotApiException;
-import io.lonmstalker.core.args.Arg;
+import io.lonmstalker.core.annotation.Arg;
 import io.lonmstalker.core.args.BotArgumentConverter;
 import io.lonmstalker.core.args.Context;
 import io.lonmstalker.core.args.RouteContextHolder;
-import io.lonmstalker.core.args.Converters;
 import io.lonmstalker.core.matching.CommandMatch;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -96,15 +95,6 @@ class InternalCommandAdapter implements BotCommand<BotApiObject> {
         return order;
     }
 
-    static final class ParamInfo {
-        final boolean request;
-        final Arg arg;
-        final BotArgumentConverter<?> converter;
-
-        ParamInfo(boolean request, Arg arg, BotArgumentConverter<?> converter) {
-            this.request = request;
-            this.arg = arg;
-            this.converter = converter;
-        }
+    record ParamInfo(boolean request, Arg arg, BotArgumentConverter<?> converter) {
     }
 }

@@ -7,6 +7,7 @@ import io.lonmstalker.core.BotRequest;
 import io.lonmstalker.core.BotRequestType;
 import io.lonmstalker.core.BotResponse;
 import io.lonmstalker.core.matching.CommandMatch;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.junit.jupiter.api.Test;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
@@ -28,10 +29,10 @@ class BotCommandRegistryImplTest {
     private static class TestCommand implements BotCommand<Message> {
         private final int order;
         TestCommand(int order) {this.order = order;}
-        @Override public BotResponse handle(BotRequest<Message> request) {return null;}
-        @Override public BotRequestType type() {return BotRequestType.MESSAGE;}
-        @Override public CommandMatch<Message> matcher() {return data -> true;}
+        @Override public BotResponse handle(@NonNull BotRequest<Message> request) {return null;}
+        @Override public @NonNull BotRequestType type() {return BotRequestType.MESSAGE;}
+        @Override public @NonNull CommandMatch<Message> matcher() {return data -> true;}
         @Override public int order() {return order;}
-        @Override public String botGroup() {return "";}
+        @Override public @NonNull String botGroup() {return "";}
     }
 }

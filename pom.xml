@@ -26,6 +26,7 @@
         <jackson.version>2.19.0</jackson.version>
         <commons.lang3.version>3.17.0</commons.lang3.version>
         <telegrambots.version>6.9.7.1</telegrambots.version>
+        <prometheus.version>1.15.0</prometheus.version>
 
         <!-- PLUGINS -->
         <maven-compiler.plugin>3.14.0</maven-compiler.plugin>
@@ -87,6 +88,11 @@
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-classic</artifactId>
                 <version>${logback.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.micrometer</groupId>
+                <artifactId>micrometer-registry-prometheus</artifactId>
+                <version>${prometheus.version}</version>
             </dependency>
 
             <!-- CHECKS -->

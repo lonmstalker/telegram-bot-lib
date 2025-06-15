@@ -8,6 +8,7 @@ import io.micrometer.core.instrument.noop.NoopCounter;
 import io.micrometer.core.instrument.noop.NoopMeterRegistry;
 import io.micrometer.core.instrument.noop.NoopTimer;
 import io.micrometer.core.instrument.Timer;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 public final class NoOpMetricsCollector implements MetricsCollector {
     private static final MeterRegistry REGISTRY = new NoopMeterRegistry();
@@ -15,17 +16,17 @@ public final class NoOpMetricsCollector implements MetricsCollector {
     private static final Timer TIMER = new NoopTimer(REGISTRY);
 
     @Override
-    public MeterRegistry registry() {
+    public @NonNull MeterRegistry registry() {
         return REGISTRY;
     }
 
     @Override
-    public Timer timer(String name, Tags tags) {
+    public @NonNull Timer timer(@NonNull String name, @NonNull Tags tags) {
         return TIMER;
     }
 
     @Override
-    public Counter counter(String name, Tags tags) {
+    public @NonNull Counter counter(@NonNull String name, @NonNull Tags tags) {
         return COUNTER;
     }
 }

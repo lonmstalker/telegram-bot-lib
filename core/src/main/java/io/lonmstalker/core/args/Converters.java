@@ -1,5 +1,8 @@
 package io.lonmstalker.core.args;
 
+import io.lonmstalker.core.exception.BotApiException;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.lang.reflect.ParameterizedType;
@@ -9,6 +12,8 @@ import java.util.ServiceLoader;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.UUID;
 
+@SuppressWarnings("unchecked")
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Converters {
     private static final Map<Class<?>, BotArgumentConverter<?>> BY_TYPE = new ConcurrentHashMap<>();
     private static final Map<Class<? extends BotArgumentConverter<?>>, BotArgumentConverter<?>> BY_CLASS = new ConcurrentHashMap<>();
@@ -21,9 +26,7 @@ public final class Converters {
         });
     }
 
-    private Converters() {}
-
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public static <T> @NonNull BotArgumentConverter<T> getByType(Class<T> type) {
         if (type.isPrimitive()) {
             type = (Class<T>) wrapPrimitive(type);
@@ -33,7 +36,8 @@ public final class Converters {
             return (BotArgumentConverter<T>) converter;
         }
         if (Enum.class.isAssignableFrom(type)) {
-            return (raw, ctx) -> (T) Enum.valueOf((Class) type, raw);
+            Class<T> finalType = type;
+            return (raw, ctx) -> (T) Enum.valueOf((Class) finalType, raw);
         }
         if (Number.class.isAssignableFrom(type)) {
             return (BotArgumentConverter<T>) numberConverter((Class<? extends Number>) type);
@@ -44,7 +48,6 @@ public final class Converters {
         return (BotArgumentConverter<T>) new BotArgumentConverter.Identity();
     }
 
-    @SuppressWarnings("unchecked")
     public static <T extends BotArgumentConverter<?>> @NonNull BotArgumentConverter<?> getByClass(Class<T> clazz) {
         return BY_CLASS.computeIfAbsent(clazz, Converters::instantiate);
     }
@@ -102,7 +105,7 @@ public final class Converters {
             } else if (type == Byte.class) {
                 return Byte.parseByte(raw);
             } else {
-                throw new IllegalArgumentException("Unsupported number type: " + type);
+                throw new BotApiException("Unsupported number type: " + type);
             }
         };
     }

@@ -3,9 +3,15 @@ package io.lonmstaler.observability;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Timer;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 public interface MetricsCollector {
+    @NonNull
     MeterRegistry registry();
-    Timer timer(String name, Tags tags);
-    Counter counter(String name, Tags tags);
+
+    @NonNull
+    Timer timer(@NonNull String name, @NonNull Tags tags);
+
+    @NonNull
+    Counter counter(@NonNull String name, @NonNull Tags tags);
 }

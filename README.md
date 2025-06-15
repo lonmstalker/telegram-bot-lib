@@ -63,6 +63,5 @@ var metrics = io.lonmstaler.observability.impl.MicrometerCollector.prometheus(91
 var tracer = io.lonmstaler.observability.impl.OTelTracer.stdoutDev();
 BotConfig config = new BotConfig();
 config.addInterceptor(new io.lonmstaler.observability.ObservabilityInterceptor(metrics, tracer));
-config.setGlobalExceptionHandler(new io.lonmstaler.observability.ObservabilityExceptionHandler(null, metrics));
 ```
 Полный пример приведён в модуле `examples/observability-demo`.
