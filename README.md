@@ -128,6 +128,15 @@ Bot bot = BotFactory.INSTANCE.from(token, cfg, adapter);
 
 ```
 
+## Сборка и тесты
+
+Минимальные требования: Java 21 и Maven 3.9.
+
+```bash
+mvn clean install
+mvn test
+```
+
 ## 🤝 Contributing
 PR-ы и идеи приветствуются! Перед отправкой ознакомьтесь с CONTRIBUTING.md и CODE_OF_CONDUCT.md.
 
