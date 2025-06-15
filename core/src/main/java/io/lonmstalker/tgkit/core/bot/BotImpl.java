@@ -54,23 +54,9 @@ public class BotImpl implements Bot {
         checkNotStarted();
         try {
             if (absSender instanceof LongPollingReceiver receiver) {
-                receiver.clearWebhook();
-                if (this.session == null) {
-                    this.session = new BotSessionImpl();
-                }
-                this.session.setOptions(config);
-                this.session.setToken(token);
-                this.session.setCallback(receiver);
-                this.session.start();
-                this.user = absSender.execute(new GetMe());
-                receiver.setUsername(Objects.requireNonNull(this.user).getUserName());
+                initLongPolling(receiver);
             } else if (absSender instanceof WebHookReceiver receiver) {
-                if (this.setWebhook != null) {
-                    setWebhook.validate();
-                    receiver.setWebhook(setWebhook);
-                }
-                this.user = absSender.execute(new GetMe());
-                receiver.setUsername(Objects.requireNonNull(this.user).getUserName());
+                initWebHook(receiver);
             }
         } catch (Exception ex) {
             throw new BotApiException("Error starting bot", ex);
@@ -81,6 +67,35 @@ public class BotImpl implements Bot {
     @SuppressWarnings("dereference.of.nullable")
     public void stop() {
         checkStarted();
+        runCompleteActions();
+        shutdownSession();
+        closeAbsSender();
+        clearState();
+    }
+
+    private void initLongPolling(LongPollingReceiver receiver) throws Exception {
+        receiver.clearWebhook();
+        if (this.session == null) {
+            this.session = new BotSessionImpl();
+        }
+        this.session.setOptions(config);
+        this.session.setToken(token);
+        this.session.setCallback(receiver);
+        this.session.start();
+        this.user = absSender.execute(new GetMe());
+        receiver.setUsername(Objects.requireNonNull(this.user).getUserName());
+    }
+
+    private void initWebHook(WebHookReceiver receiver) throws Exception {
+        if (this.setWebhook != null) {
+            setWebhook.validate();
+            receiver.setWebhook(setWebhook);
+        }
+        this.user = absSender.execute(new GetMe());
+        receiver.setUsername(Objects.requireNonNull(this.user).getUserName());
+    }
+
+    private void runCompleteActions() {
         for (BotCompleteAction action : completeActions) {
             try {
                 action.complete();
@@ -88,6 +103,9 @@ public class BotImpl implements Bot {
                 log.error("Complete action error", e);
             }
         }
+    }
+
+    private void shutdownSession() {
         if (session != null && session.isRunning()) {
             try {
                 session.stop();
@@ -95,6 +113,9 @@ public class BotImpl implements Bot {
                 log.warn("Error stopping session", e);
             }
         }
+    }
+
+    private void closeAbsSender() {
         if (absSender instanceof AutoCloseable closeable) {
             try {
                 closeable.close();
@@ -102,6 +123,9 @@ public class BotImpl implements Bot {
                 log.warn("Error closing sender", e);
             }
         }
+    }
+
+    private void clearState() {
         this.user = null;
         this.setWebhook = null;
         this.session = null;
