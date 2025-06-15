@@ -8,7 +8,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 /**
- * Default interceptor that logs update processing steps.
+ * Стандартный интерцептор, логирующий этапы обработки обновления.
  */
 @Slf4j
 public class LoggingBotInterceptor implements BotInterceptor {
