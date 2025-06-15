@@ -13,12 +13,12 @@
     <dependencies>
         <dependency>
             <groupId>io.lonmstalker.tgkit</groupId>
-            <artifactId>core</artifactId>
+            <artifactId>tgkit-core</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>io.lonmstalker.tgkit</groupId>
-            <artifactId>observability</artifactId>
+            <artifactId>tgkit-observability</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>

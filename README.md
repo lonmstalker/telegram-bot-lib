@@ -54,7 +54,7 @@
 ...
     <path>
         <groupId>io.lonmstalker</groupId>
-        <artifactId>core</artifactId>
+        <artifactId>tgkit-core</artifactId>
         <version>${project.version}</version>
     </path>
 ...

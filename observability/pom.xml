@@ -8,12 +8,12 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>observability</artifactId>
+    <artifactId>tgkit-observability</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>io.lonmstalker.tgkit</groupId>
-            <artifactId>core</artifactId>
+            <artifactId>tgkit-core</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
