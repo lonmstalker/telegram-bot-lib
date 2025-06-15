@@ -21,6 +21,7 @@ public class BotRequestHolderTest {
         assertEquals(sender, BotRequestHolder.getSender());
         assertEquals(u, BotRequestHolder.getUpdateNotNull());
         assertEquals(sender, BotRequestHolder.getSenderNotNull());
+        sender.close();
     }
 
     @Test

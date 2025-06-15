@@ -19,6 +19,7 @@ public class TelegramSenderTest {
         var ex = assertThrows(InvocationTargetException.class, () -> m.invoke(sender, exec));
         assertTrue(ex.getCause() instanceof BotApiException);
         assertEquals("boom", ex.getCause().getCause().getMessage());
+        sender.close();
     }
 
     static class TestSender extends TelegramSender {

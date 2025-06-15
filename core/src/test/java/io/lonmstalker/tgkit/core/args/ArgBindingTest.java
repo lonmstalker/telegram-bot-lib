@@ -50,11 +50,13 @@ public class ArgBindingTest {
         var cmd = reg.find(BotRequestType.MESSAGE, "", msg);
         assertNotNull(cmd);
 
+        TelegramSender sender = new TelegramSender(BotConfig.builder().build(), "T");
         BotInfo info = new BotInfo(1L, new InMemoryStateStore(),
-                new TelegramSender(BotConfig.builder().build(), "T"),
+                sender,
                 new MessageLocalizer(Locale.US));
         BotRequest<Message> req = new BotRequest<>(0, msg, info, new User("1"));
         cmd.handle(req);
+        sender.close();
 
         assertEquals(42, Commands.captured);
     }

@@ -21,7 +21,13 @@ class RateLimiter {
         this.permitsPerSecond = permitsPerSecond;
         this.semaphore = new Semaphore(permitsPerSecond);
         this.schedulerProvided = scheduler != null;
-        this.scheduler = scheduler != null ? scheduler : Executors.newSingleThreadScheduledExecutor();
+        this.scheduler = scheduler != null ? scheduler :
+                Executors.newSingleThreadScheduledExecutor(r -> {
+                    Thread t = Executors.defaultThreadFactory().newThread(r);
+                    t.setDaemon(true);
+                    t.setName("tgkit-rate-limiter");
+                    return t;
+                });
         this.scheduler.scheduleAtFixedRate(this::replenish, 1, 1, TimeUnit.SECONDS);
     }
 

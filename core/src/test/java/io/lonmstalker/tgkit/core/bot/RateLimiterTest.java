@@ -34,4 +34,15 @@ class RateLimiterTest {
         assertFalse(external.isShutdown());
         external.shutdownNow();
     }
+
+    @Test
+    void usesDaemonThread() throws Exception {
+        RateLimiter limiter = new RateLimiter(1);
+        Field field = RateLimiter.class.getDeclaredField("scheduler");
+        field.setAccessible(true);
+        ScheduledExecutorService executor = (ScheduledExecutorService) field.get(limiter);
+        var f = executor.schedule(() -> Thread.currentThread().isDaemon(), 0, java.util.concurrent.TimeUnit.MILLISECONDS);
+        assertTrue(f.get());
+        limiter.close();
+    }
 }

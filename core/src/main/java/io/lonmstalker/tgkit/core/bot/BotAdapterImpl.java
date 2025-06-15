@@ -28,6 +28,7 @@ public class BotAdapterImpl implements BotAdapter {
     private final Bot bot;
     private final BotRequestConverter<BotApiObject> converter;
     private final BotUserProvider userProvider;
+    private final TelegramSender sender;
 
     public BotAdapterImpl(@NonNull Bot bot,
                           @NonNull BotUserProvider userProvider) {
@@ -40,6 +41,8 @@ public class BotAdapterImpl implements BotAdapter {
         this.bot = bot;
         this.converter = converter;
         this.userProvider = userProvider;
+        this.sender = new TelegramSender(bot.config(), bot.token());
+        bot.onComplete(sender::close);
     }
 
     @Override
@@ -68,10 +71,9 @@ public class BotAdapterImpl implements BotAdapter {
         if (command == null) {
             return null;
         }
-        var sender = createSender();
+        BotRequestHolder.setUpdate(update);
+        BotRequestHolder.setSender(sender);
         try {
-            BotRequestHolder.setUpdate(update);
-            BotRequestHolder.setSender(sender);
             BotUserInfo user = userProvider.resolve(update);
 
             java.util.Locale locale = user.locale();
@@ -93,16 +95,8 @@ public class BotAdapterImpl implements BotAdapter {
             BotInfo info = new BotInfo(bot.internalId(), bot.config().getStore(), sender, localizer);
             return command.handle(new BotRequest<>(update.getUpdateId(), data, info, user));
         } finally {
-            try {
-                sender.close();
-            } catch (Exception e) {
-                log.warn("Error closing sender", e);
-            }
+            // sender is closed on bot shutdown
         }
-    }
-
-    private TelegramSender createSender() {
-        return new TelegramSender(bot.config(), bot.token());
     }
 
     private void afterCompletion(Update update, @Nullable BotResponse response, @Nullable Exception error, List<BotInterceptor> interceptors) {
