@@ -48,7 +48,9 @@ public final class PluginLoader {
      */
     private PluginManifest readManifest(ClassLoader cl) throws Exception {
         try (InputStream is = cl.getResourceAsStream("tgkit-plugin.yaml")) {
-            if (is == null) return new PluginManifest();
+            if (is == null) {
+                return new PluginManifest();
+            }
             return mapper.readValue(is, PluginManifest.class);
         }
     }

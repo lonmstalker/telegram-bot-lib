@@ -27,32 +27,52 @@ public class DefaultPluginContext implements PluginContext {
     }
 
     @Override
-    public BotRegistry bots() { throw new UnsupportedOperationException(); }
+    public BotRegistry bots() {
+        throw new UnsupportedOperationException();
+    }
 
     @Override
-    public EventBus bus() { return eventBus; }
+    public EventBus bus() {
+        return eventBus;
+    }
 
     @Override
-    public StateStore defaultStore() { throw new UnsupportedOperationException(); }
+    public StateStore defaultStore() {
+        throw new UnsupportedOperationException();
+    }
 
     @Override
-    public HttpClient httpClient() { throw new UnsupportedOperationException(); }
+    public HttpClient httpClient() {
+        throw new UnsupportedOperationException();
+    }
 
     @Override
-    public InputStream readFile(Path path) { throw new UnsupportedOperationException(); }
+    public InputStream readFile(Path path) {
+        throw new UnsupportedOperationException();
+    }
 
     @Override
-    public OutputStream writeFile(Path path) { throw new UnsupportedOperationException(); }
+    public OutputStream writeFile(Path path) {
+        throw new UnsupportedOperationException();
+    }
 
     @Override
-    public MetricsCollector metrics() { throw new UnsupportedOperationException(); }
+    public MetricsCollector metrics() {
+        throw new UnsupportedOperationException();
+    }
 
     @Override
-    public Tracer tracer() { throw new UnsupportedOperationException(); }
+    public Tracer tracer() {
+        throw new UnsupportedOperationException();
+    }
 
     @Override
-    public Optional<ConfigSection> config(String pluginId) { return Optional.empty(); }
+    public Optional<ConfigSection> config(String pluginId) {
+        return Optional.empty();
+    }
 
     @Override
-    public void registerConfig(String pluginId, ConfigSection config) { }
+    public void registerConfig(String pluginId, ConfigSection config) {
+        // nothing
+    }
 }

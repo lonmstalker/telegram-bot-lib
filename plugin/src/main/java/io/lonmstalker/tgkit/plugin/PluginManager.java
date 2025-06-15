@@ -83,7 +83,9 @@ public class PluginManager {
      */
     public void reload(String id) throws Exception {
         LoadedPlugin lp = plugins.get(id);
-        if (lp == null) return;
+        if (lp == null) {
+            return;
+        }
         Path jar = lp.jarPath;
         unload(id);
         load(jar);
@@ -108,7 +110,10 @@ public class PluginManager {
      */
     public PluginManifest getManifest(String id) {
         LoadedPlugin lp = plugins.get(id);
-        return lp == null ? null : lp.manifest;
+        if (lp == null) {
+            return null;
+        }
+        return lp.manifest;
     }
 
     private record LoadedPlugin(Plugin plugin, PluginManifest manifest, URLClassLoader loader, Path jarPath) {}
