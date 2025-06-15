@@ -1,4 +1,4 @@
-package io.lonmstalker.tgkit.core.utils;
+package io.lonmstalker.tgkit.core.update;
 
 import io.lonmstalker.tgkit.core.BotRequestType;
 import io.lonmstalker.tgkit.core.exception.BotApiException;

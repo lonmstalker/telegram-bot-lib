@@ -1,4 +1,4 @@
-package io.lonmstalker.tgkit.core.utils;
+package io.lonmstalker.tgkit.core.crypto;
 
 import io.lonmstalker.tgkit.core.exception.BotApiException;
 import org.checkerframework.checker.nullness.qual.NonNull;

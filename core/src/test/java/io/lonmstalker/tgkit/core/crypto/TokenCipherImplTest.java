@@ -1,4 +1,4 @@
-package io.lonmstalker.tgkit.core.utils;
+package io.lonmstalker.tgkit.core.crypto;
 
 import static org.junit.jupiter.api.Assertions.*;
 
