@@ -12,6 +12,9 @@
     <modules>
         <module>core</module>
         <module>observability</module>
+        <module>render-spi</module>
+        <module>tgkit-renderers-telegram</module>
+        <module>security</module>
         <module>examples</module>
     </modules>
 
@@ -175,7 +178,7 @@
                             org.checkerframework.checker.nullness.NullnessChecker
                         </annotationProcessor>
                         <annotationProcessor>
-                            io.lonmstalker.core.processor.BotHandlerProcessor
+                            io.lonmstalker.tgkit.core.processor.BotHandlerProcessor
                         </annotationProcessor>
                     </annotationProcessors>
                     <compilerArgs combine.children="append">

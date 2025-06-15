@@ -10,6 +10,9 @@ import io.lonmstalker.tgkit.core.annotation.Arg;
 import io.lonmstalker.tgkit.core.args.BotArgumentConverter;
 import io.lonmstalker.tgkit.core.args.Context;
 import io.lonmstalker.tgkit.core.args.RouteContextHolder;
+import io.lonmstalker.tgkit.core.storage.BotRequestHolder;
+import io.craftbot.security.SecurityBundleHolder;
+import io.craftbot.security.SecurityInterceptor;
 import io.lonmstalker.tgkit.core.matching.CommandMatch;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -36,6 +39,10 @@ class InternalCommandAdapter implements BotCommand<BotApiObject> {
     @SuppressWarnings("argument")
     public @Nullable BotResponse handle(@NonNull BotRequest<BotApiObject> request) {
         try {
+            SecurityInterceptor sec = SecurityBundleHolder.get();
+            if (sec != null) {
+                sec.handle(BotRequestHolder.getUpdateNotNull(), method);
+            }
             Object converted = converter.convert(request);
             Object[] args = new Object[params.length];
             for (int i = 0; i < params.length; i++) {

@@ -60,7 +60,8 @@ public class ObservabilityInterceptor implements BotInterceptor {
      * @param ex       ошибка, если возникла
      */
     public void afterCompletion(@NonNull Update update, @Nullable BotResponse response, @Nullable Exception ex) {
-        Tags tags = Tags.of(Tag.of("type", String.valueOf(update.hasMessage())));
+        String updateType = io.lonmstalker.tgkit.core.utils.UpdateUtils.getType(update).name();
+        Tags tags = Tags.of(Tag.of("type", updateType));
         Timer.Sample s = SAMPLE.get();
         if (s != null) {
             s.stop(metrics.timer("update_latency_ms", tags));

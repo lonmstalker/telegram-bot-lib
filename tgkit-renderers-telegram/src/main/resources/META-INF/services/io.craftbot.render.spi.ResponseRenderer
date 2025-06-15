@@ -1,0 +1,3 @@
+io.lonmstalker.tgkit.render.telegram.TextRenderer
+io.lonmstalker.tgkit.render.telegram.CaptchaRenderer
+io.lonmstalker.tgkit.render.telegram.PhotoRenderer

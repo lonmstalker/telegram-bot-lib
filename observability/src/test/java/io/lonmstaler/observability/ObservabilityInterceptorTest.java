@@ -18,6 +18,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.argThat;
 
 public class ObservabilityInterceptorTest {
     private final MeterRegistry registry = new SimpleMeterRegistry();
@@ -63,8 +64,8 @@ public class ObservabilityInterceptorTest {
         interceptor.afterCompletion(update, null, null);
         verify(tracer).start(eq("update"), any(Attributes.class));
         verify(span).close();
-        verify(metrics, atLeastOnce()).counter(eq("updates_total"), any());
-        verify(metrics).timer(eq("update_latency_ms"), any());
+        verify(metrics, atLeastOnce()).counter(eq("updates_total"), argThat(t -> t.items()[0].getValue().equals("MESSAGE")));
+        verify(metrics).timer(eq("update_latency_ms"), argThat(t -> t.items()[0].getValue().equals("MESSAGE")));
         assertNull(MDC.get("updateId"));
     }
 

@@ -8,12 +8,15 @@ import io.lonmstalker.tgkit.core.BotRequestConverter;
 import io.lonmstalker.tgkit.core.BotRequestType;
 import io.lonmstalker.tgkit.core.BotResponse;
 import io.lonmstalker.tgkit.core.args.RouteContextHolder;
+import io.craftbot.render.spi.ResponseDispatcher;
+import io.lonmstalker.tgkit.core.args.Context;
 import io.lonmstalker.tgkit.core.i18n.MessageLocalizer;
 import io.lonmstalker.tgkit.core.interceptor.BotInterceptor;
 import io.lonmstalker.tgkit.core.storage.BotRequestHolder;
 import io.lonmstalker.tgkit.core.user.BotUserInfo;
 import io.lonmstalker.tgkit.core.user.BotUserProvider;
 import io.lonmstalker.tgkit.core.utils.UpdateUtils;
+import io.craftbot.security.CaptchaRequired;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -28,6 +31,7 @@ public class BotAdapterImpl implements BotAdapter {
     private final Bot bot;
     private final BotRequestConverter<BotApiObject> converter;
     private final BotUserProvider userProvider;
+    private final ResponseDispatcher dispatcher;
 
     public BotAdapterImpl(@NonNull Bot bot,
                           @NonNull BotUserProvider userProvider) {
@@ -40,6 +44,7 @@ public class BotAdapterImpl implements BotAdapter {
         this.bot = bot;
         this.converter = converter;
         this.userProvider = userProvider;
+        this.dispatcher = new ResponseDispatcher(bot.getClass().getClassLoader());
     }
 
     @Override
@@ -61,7 +66,7 @@ public class BotAdapterImpl implements BotAdapter {
         }
     }
 
-    private @Nullable BotResponse doHandle(Update update) {
+    private @Nullable BotResponse doHandle(Update update) throws Exception {
         BotRequestType type = UpdateUtils.getType(update);
         BotApiObject data = converter.convert(update, type);
         BotCommand<BotApiObject> command = bot.registry().find(type, bot.config().getBotPattern(), data);
@@ -91,7 +96,16 @@ public class BotAdapterImpl implements BotAdapter {
 
             var localizer = new MessageLocalizer(locale);
             BotInfo info = new BotInfo(bot.internalId(), bot.config().getStore(), sender, localizer);
-            return command.handle(new BotRequest<>(update.getUpdateId(), data, info, user));
+            var request = new BotRequest<>(update.getUpdateId(), data, info, user);
+            Context ctx = new Context(request, null);
+            Object res;
+            try {
+                res = command.handle(request);
+            } catch (io.craftbot.security.CaptchaRequired cr) {
+                return dispatcher.toResponse(cr.challenge(), ctx);
+            }
+            if (res == null) return null;
+            return dispatcher.toResponse(res, ctx);
         } finally {
             try {
                 sender.close();

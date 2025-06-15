@@ -60,7 +60,7 @@
 ...
 <annotationProcessors>
     <annotationProcessor>
-        io.lonmstalker.core.processor.BotHandlerProcessor
+        io.lonmstalker.tgkit.core.processor.BotHandlerProcessor
     </annotationProcessor>
 ...
 </plugin>
