@@ -60,9 +60,9 @@ public void handle(BotRequest<Message> req) {
 Модуль `observability` содержит абстракции и готовую реализацию Micrometer + OpenTelemetry.
 Подключение выглядит так:
 ```java
-var metrics = io.lonmstaler.observability.impl.MicrometerCollector.prometheus(9180);
-var tracer = io.lonmstaler.observability.impl.OTelTracer.stdoutDev();
+var metrics = io.lonmstalker.observability.impl.MicrometerCollector.prometheus(9180);
+var tracer = io.lonmstalker.observability.impl.OTelTracer.stdoutDev();
 BotConfig config = new BotConfig();
-config.addInterceptor(new io.lonmstaler.observability.ObservabilityInterceptor(metrics, tracer));
+config.addInterceptor(new io.lonmstalker.observability.ObservabilityInterceptor(metrics, tracer));
 ```
 Полный пример приведён в модуле `examples/observability-demo`.
