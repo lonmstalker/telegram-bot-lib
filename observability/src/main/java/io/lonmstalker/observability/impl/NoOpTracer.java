@@ -12,6 +12,8 @@ public final class NoOpTracer implements Tracer {
     /**
      * Возвращает пустой {@link Span}, не совершающий никаких действий.
      */
+public final class NoOpTracer implements Tracer {
+    @Override
     public Span start(String spanName, Attributes attributes) {
         return new Span() {
             @Override

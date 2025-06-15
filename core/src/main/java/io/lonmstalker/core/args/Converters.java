@@ -90,23 +90,19 @@ public final class Converters {
         };
     }
 
+    /**
+     * Возвращает конвертер для числовых типов.
+     */
     private static BotArgumentConverter<? extends Number> numberConverter(Class<? extends Number> type) {
-        return (raw, ctx) -> {
-            if (type == Integer.class) {
-                return Integer.parseInt(raw);
-            } else if (type == Long.class) {
-                return Long.parseLong(raw);
-            } else if (type == Double.class) {
-                return Double.parseDouble(raw);
-            } else if (type == Float.class) {
-                return Float.parseFloat(raw);
-            } else if (type == Short.class) {
-                return Short.parseShort(raw);
-            } else if (type == Byte.class) {
-                return Byte.parseByte(raw);
-            } else {
-                throw new BotApiException("Unsupported number type: " + type);
-            }
+        // преобразование строковых аргументов в нужный числовой тип
+        return (raw, ctx) -> switch (type.getSimpleName()) {
+            case "Integer" -> Integer.parseInt(raw);
+            case "Long" -> Long.parseLong(raw);
+            case "Double" -> Double.parseDouble(raw);
+            case "Float" -> Float.parseFloat(raw);
+            case "Short" -> Short.parseShort(raw);
+            case "Byte" -> Byte.parseByte(raw);
+            default -> throw new BotApiException("Unsupported number type: " + type);
         };
     }
 }

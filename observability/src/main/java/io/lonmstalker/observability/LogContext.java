@@ -14,6 +14,9 @@ public final class LogContext {
      * @param key   ключ MDC
      * @param value значение
      */
+public final class LogContext {
+    private LogContext() {}
+
     public static void put(String key, String value) {
         MDC.put(key, value);
     }
