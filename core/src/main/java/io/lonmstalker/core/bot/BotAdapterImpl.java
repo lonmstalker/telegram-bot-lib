@@ -107,5 +107,6 @@ public class BotAdapterImpl implements BotAdapter {
                 log.error("Interceptor afterCompletion error", e);
             }
         }
+        io.lonmstalker.core.args.RouteContextHolder.clear();
     }
 }
