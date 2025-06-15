@@ -45,10 +45,10 @@ public class BotAdapterImpl implements BotAdapter {
     @Override
     public @Nullable BotApiMethod<?> handle(@NonNull Update update) {
         List<BotInterceptor> interceptors = bot.config().getGlobalInterceptors();
-        interceptors.forEach(i -> i.preHandle(update));
         BotResponse response = null;
         Exception error = null;
         try {
+            interceptors.forEach(i -> i.preHandle(update));
             response = doHandle(update);
             interceptors.forEach(i -> i.postHandle(update));
             return response != null ? response.getMethod() : null;
