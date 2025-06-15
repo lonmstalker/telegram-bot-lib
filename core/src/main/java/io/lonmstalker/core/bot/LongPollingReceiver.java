@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
@@ -19,7 +18,7 @@ class LongPollingReceiver extends TelegramLongPollingBot {
     @Setter
     private @Nullable String username;
 
-    public LongPollingReceiver(@NonNull DefaultBotOptions options,
+    public LongPollingReceiver(@NonNull BotConfig options,
                                @NonNull BotAdapter adapter,
                                @NonNull String token,
                                @Nullable BotExceptionHandler globalExceptionHandler) {

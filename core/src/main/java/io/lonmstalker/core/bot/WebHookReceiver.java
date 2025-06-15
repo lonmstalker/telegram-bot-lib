@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.bots.TelegramWebhookBot;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -21,7 +20,7 @@ class WebHookReceiver extends TelegramWebhookBot {
     @Setter
     private @Nullable String username;
 
-    public WebHookReceiver(@NonNull DefaultBotOptions options,
+    public WebHookReceiver(@NonNull BotConfig options,
                            @NonNull BotAdapter adapter,
                            @NonNull String token,
                            @Nullable BotExceptionHandler globalExceptionHandler) {

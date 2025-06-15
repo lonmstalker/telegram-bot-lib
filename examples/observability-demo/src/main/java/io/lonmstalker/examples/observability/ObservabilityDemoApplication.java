@@ -13,8 +13,9 @@ public class ObservabilityDemoApplication {
         var metrics = MicrometerCollector.prometheus(9180);
         var tracer = OTelTracer.stdoutDev();
 
-        BotConfig config = new BotConfig();
-        config.addInterceptor(new ObservabilityInterceptor(metrics, tracer));
+        BotConfig config = BotConfig.builder()
+                .addInterceptor(new ObservabilityInterceptor(metrics, tracer))
+                .build();
 
         BotAdapter adapter = update -> null;
         Bot bot = BotFactory.INSTANCE.from("TOKEN", config, adapter,

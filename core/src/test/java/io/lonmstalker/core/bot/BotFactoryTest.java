@@ -17,7 +17,7 @@ public class BotFactoryTest {
     @Test
     void createFromToken() {
         BotAdapter adapter = u -> null;
-        BotConfig cfg = new BotConfig();
+        BotConfig cfg = BotConfig.builder().build();
         Bot bot = BotFactory.INSTANCE.from("TOKEN", cfg, adapter);
         assertNotNull(bot);
         assertEquals("TOKEN", bot.token());
@@ -26,7 +26,7 @@ public class BotFactoryTest {
     @Test
     void createFromWebhook() {
         BotAdapter adapter = u -> null;
-        BotConfig cfg = new BotConfig();
+        BotConfig cfg = BotConfig.builder().build();
         SetWebhook hook = new SetWebhook();
         Bot bot = BotFactory.INSTANCE.from("TOKEN", cfg, adapter, hook);
         assertNotNull(bot);

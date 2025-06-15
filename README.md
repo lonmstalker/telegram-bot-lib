@@ -35,7 +35,9 @@ public class EchoCommands {
     }
 }
 
-Bot bot = BotFactory.INSTANCE.from(token, new BotConfig(), new BotAdapterImpl(bot, converter, provider), "com.example.bot");
+Bot bot = BotFactory.INSTANCE.from(token,
+        BotConfig.builder().build(),
+        new BotAdapterImpl(bot, converter, provider), "com.example.bot");
 bot.start();
 ```
 
@@ -43,8 +45,9 @@ bot.start();
 
 ### Пример использования `StateStore`
 ```java
-BotConfig config = new BotConfig();
-config.setStore(new InMemoryStateStore());
+BotConfig config = BotConfig.builder()
+        .store(new InMemoryStateStore())
+        .build();
 
 Bot bot = BotFactory.INSTANCE.from(token, config, adapter);
 
@@ -62,7 +65,8 @@ public void handle(BotRequest<Message> req) {
 ```java
 var metrics = io.lonmstaler.observability.impl.MicrometerCollector.prometheus(9180);
 var tracer = io.lonmstaler.observability.impl.OTelTracer.stdoutDev();
-BotConfig config = new BotConfig();
-config.addInterceptor(new io.lonmstaler.observability.ObservabilityInterceptor(metrics, tracer));
+BotConfig config = BotConfig.builder()
+        .addInterceptor(new io.lonmstaler.observability.ObservabilityInterceptor(metrics, tracer))
+        .build();
 ```
 Полный пример приведён в модуле `examples/observability-demo`.

@@ -12,7 +12,7 @@ public class BotRequestHolderTest {
     @Test
     void setAndGet() {
         Update u = new Update();
-        TelegramSender sender = new TelegramSender(new BotConfig(), "token") {
+        TelegramSender sender = new TelegramSender(BotConfig.builder().build(), "token") {
         };
         BotRequestHolder.setUpdate(u);
         BotRequestHolder.setSender(sender);

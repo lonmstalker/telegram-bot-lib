@@ -147,7 +147,7 @@ class SimpleBotCommandsTest {
 
     static class TestSender extends TelegramSender {
         TestSender() {
-            super(new io.lonmstalker.core.bot.BotConfig(), "TOKEN");
+            super(io.lonmstalker.core.bot.BotConfig.builder().build(), "TOKEN");
         }
         @Override
         public void close() {

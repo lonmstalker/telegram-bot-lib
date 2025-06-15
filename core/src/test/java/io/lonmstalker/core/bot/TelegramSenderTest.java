@@ -22,6 +22,6 @@ public class TelegramSenderTest {
     }
 
     static class TestSender extends TelegramSender {
-        TestSender() { super(new BotConfig(), "token"); }
+        TestSender() { super(BotConfig.builder().build(), "token"); }
     }
 }
