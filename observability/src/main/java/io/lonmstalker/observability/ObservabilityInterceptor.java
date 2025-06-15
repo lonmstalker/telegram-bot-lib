@@ -1,4 +1,4 @@
-package io.lonmstaler.observability;
+package io.lonmstalker.observability;
 
 import io.lonmstalker.core.BotResponse;
 import io.lonmstalker.core.interceptor.BotInterceptor;

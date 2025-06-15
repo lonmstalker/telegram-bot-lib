@@ -34,10 +34,15 @@ public class TokenCipherImpl implements TokenCipher {
     public @NonNull String encrypt(@NonNull String token) {
         try {
             byte[] iv = new byte[IV_LENGTH];
+
             new SecureRandom().nextBytes(iv);
+
             Cipher cipher = Cipher.getInstance(TRANSFORMATION);
+
             cipher.init(Cipher.ENCRYPT_MODE, this.key, new GCMParameterSpec(TAG_LENGTH, iv));
+
             byte[] encrypted = cipher.doFinal(token.getBytes(StandardCharsets.UTF_8));
+
             byte[] result = new byte[IV_LENGTH + encrypted.length];
             System.arraycopy(iv, 0, result, 0, IV_LENGTH);
             System.arraycopy(encrypted, 0, result, IV_LENGTH, encrypted.length);
@@ -51,11 +56,17 @@ public class TokenCipherImpl implements TokenCipher {
     public @NonNull String decrypt(@NonNull String cipherText) {
         try {
             byte[] decoded = Base64.getDecoder().decode(cipherText);
+
             byte[] iv = Arrays.copyOfRange(decoded, 0, IV_LENGTH);
+
             byte[] data = Arrays.copyOfRange(decoded, IV_LENGTH, decoded.length);
+
             Cipher cipher = Cipher.getInstance(TRANSFORMATION);
+
             cipher.init(Cipher.DECRYPT_MODE, this.key, new GCMParameterSpec(TAG_LENGTH, iv));
+
             byte[] decrypted = cipher.doFinal(data);
+
             return new String(decrypted, StandardCharsets.UTF_8);
         } catch (GeneralSecurityException ex) {
             throw new BotApiException("Unable to decrypt token", ex);
