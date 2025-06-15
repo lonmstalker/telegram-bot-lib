@@ -4,11 +4,14 @@ import io.lonmstalker.observability.MetricsCollector;
 import io.lonmstalker.observability.ObservabilityInterceptor;
 import io.lonmstalker.observability.Span;
 import io.lonmstalker.observability.Tracer;
+import io.lonmstalker.tgkit.core.utils.UpdateUtils;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Timer;
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
+import io.micrometer.core.instrument.Tag;
 import io.opentelemetry.api.common.Attributes;
+import org.mockito.ArgumentCaptor;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -63,7 +66,13 @@ public class ObservabilityInterceptorTest {
         interceptor.afterCompletion(update, null, null);
         verify(tracer).start(eq("update"), any(Attributes.class));
         verify(span).close();
-        verify(metrics, atLeastOnce()).counter(eq("updates_total"), any());
+
+        ArgumentCaptor<Tags> captor = ArgumentCaptor.forClass(Tags.class);
+        verify(metrics).counter(eq("updates_total"), captor.capture());
+        Tag tag = captor.getValue().items()[0];
+        assertEquals("type", tag.getKey());
+        assertEquals(UpdateUtils.getType(update).name(), tag.getValue());
+
         verify(metrics).timer(eq("update_latency_ms"), any());
         assertNull(MDC.get("updateId"));
     }
@@ -76,6 +85,13 @@ public class ObservabilityInterceptorTest {
         interceptor.afterCompletion(update, null, ex);
         verify(span).setError(ex);
         verify(counter, atLeastOnce()).increment();
+
+        ArgumentCaptor<Tags> captor = ArgumentCaptor.forClass(Tags.class);
+        verify(metrics).counter(eq("errors_total"), captor.capture());
+        Tag tag = captor.getValue().items()[0];
+        assertEquals("type", tag.getKey());
+        assertEquals(UpdateUtils.getType(update).name(), tag.getValue());
+
         verify(metrics).timer(eq("update_latency_ms"), any());
     }
 }
