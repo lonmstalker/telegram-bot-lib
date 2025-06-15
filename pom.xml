@@ -175,7 +175,7 @@
                             org.checkerframework.checker.nullness.NullnessChecker
                         </annotationProcessor>
                         <annotationProcessor>
-                            io.lonmstalker.core.processor.BotHandlerProcessor
+                            io.lonmstalker.tgkit.core.processor.BotHandlerProcessor
                         </annotationProcessor>
                     </annotationProcessors>
                     <compilerArgs combine.children="append">

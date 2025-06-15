@@ -60,7 +60,7 @@
 ...
 <annotationProcessors>
     <annotationProcessor>
-        io.lonmstalker.core.processor.BotHandlerProcessor
+        io.lonmstalker.tgkit.core.processor.BotHandlerProcessor
     </annotationProcessor>
 ...
 </plugin>
@@ -87,10 +87,11 @@ public class EchoCommands {
     }
 }
 
+BotAdapter adapter = update -> null; // логику выполняют аннотированные методы
 Bot bot = BotFactory.INSTANCE.from(
         token,
         BotConfig.builder().build(),
-        new BotAdapterImpl(bot, converter, provider),
+        adapter,
         "com.example.bot");
 bot.start();          // smart Webhook ↔︎ Polling
 
