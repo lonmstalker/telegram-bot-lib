@@ -17,6 +17,9 @@ import org.telegram.telegrambots.meta.api.objects.polls.PollAnswer;
 import org.telegram.telegrambots.meta.api.objects.reactions.MessageReactionCountUpdated;
 import org.telegram.telegrambots.meta.api.objects.reactions.MessageReactionUpdated;
 
+/**
+ * Перечень поддерживаемых типов обновлений Telegram.
+ */
 @Getter
 public enum BotRequestType {
     /** Обычные сообщения и их правки **/
@@ -51,12 +54,19 @@ public enum BotRequestType {
     /** Уведомление о снятии ранее оформленного “буста” чата **/
     REMOVED_CHAT_BOOST(ChatBoostUpdated.class);
 
+    /** Класс Telegram API, соответствующий типу запроса. */
     private final @NonNull Class<?> type;
 
     BotRequestType(@NonNull Class<?> type) {
         this.type = type;
     }
 
+    /**
+     * Проверяет, что переданный тип соответствует ожидаемому.
+     *
+     * @param type класс для проверки
+     * @throws BotApiException если тип не совместим
+     */
     public void checkType(Class<?> type) {
         if (!this.type.isAssignableFrom(type)) {
             throw new BotApiException(String.format("%s is not a %s", this.type.getSimpleName(), type.getCanonicalName()));

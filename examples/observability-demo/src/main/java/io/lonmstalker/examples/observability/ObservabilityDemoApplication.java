@@ -4,9 +4,9 @@ import io.lonmstalker.core.BotAdapter;
 import io.lonmstalker.core.bot.Bot;
 import io.lonmstalker.core.bot.BotConfig;
 import io.lonmstalker.core.bot.BotFactory;
-import io.lonmstaler.observability.ObservabilityInterceptor;
-import io.lonmstaler.observability.impl.MicrometerCollector;
-import io.lonmstaler.observability.impl.OTelTracer;
+import io.lonmstalker.observability.ObservabilityInterceptor;
+import io.lonmstalker.observability.impl.MicrometerCollector;
+import io.lonmstalker.observability.impl.OTelTracer;
 
 public class ObservabilityDemoApplication {
     public static void main(String[] args) {
