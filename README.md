@@ -43,6 +43,27 @@
     <artifactId>tgkit</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 </dependency>
+
+<!-- Подключение compile-time проверок -->
+...
+<plugin>
+<groupId>org.apache.maven.plugins</groupId>
+<artifactId>maven-compiler-plugin</artifactId>
+...
+<annotationProcessorPaths>
+...
+    <path>
+        <groupId>io.lonmstalker</groupId>
+        <artifactId>core</artifactId>
+        <version>${project.version}</version>
+    </path>
+...
+<annotationProcessors>
+    <annotationProcessor>
+        io.lonmstalker.core.processor.BotHandlerProcessor
+    </annotationProcessor>
+...
+</plugin>
 ```
 </details> 
 <details>
