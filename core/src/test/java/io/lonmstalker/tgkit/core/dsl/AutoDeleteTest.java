@@ -10,7 +10,7 @@ public class AutoDeleteTest {
     @Test
     void schedulesDelete() {
         FakeTransport tg = new FakeTransport();
-        BotResponse.msg("bye").chat(1).ttl(Duration.ofMinutes(2)).send(tg);
+        BotResponse.msg(TestUtils.request(1), "bye").chat(1).ttl(Duration.ofMinutes(2)).send(tg);
         assertThat(tg.ttls).hasSize(1);
     }
 }

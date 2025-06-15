@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.polls.SendPoll;
+import io.lonmstalker.tgkit.core.BotRequest;
 
 /** Построитель опроса. */
 public class PollBuilder extends BotResponse.CommonBuilder<PollBuilder> {
@@ -11,7 +12,8 @@ public class PollBuilder extends BotResponse.CommonBuilder<PollBuilder> {
     private final List<String> options = new ArrayList<>();
     private boolean anonymous = true;
 
-    PollBuilder(String question) {
+    PollBuilder(BotRequest<?> req, String question) {
+        super(req);
         this.question = question;
     }
 

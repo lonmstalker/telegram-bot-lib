@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 public class InlineResultTest {
     @Test
     void buildResults() {
-        InlineResults res = InlineResults.build().article("1", "T", "Text");
+        InlineResults res = BotResponse.inline(TestUtils.request(1)).article("1", "T", "Text");
         assertThat(res.results()).isNotEmpty();
     }
 }

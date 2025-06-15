@@ -3,13 +3,15 @@ package io.lonmstalker.tgkit.core.dsl;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
+import io.lonmstalker.tgkit.core.BotRequest;
 
 /** Построитель отправки фото. */
 public final class PhotoBuilder extends BotResponse.CommonBuilder<PhotoBuilder> {
     private final InputFile file;
     private String caption;
 
-    PhotoBuilder(InputFile file) {
+    PhotoBuilder(BotRequest<?> req, InputFile file) {
+        super(req);
         this.file = file;
     }
 

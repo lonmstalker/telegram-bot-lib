@@ -9,9 +9,11 @@ import org.telegram.telegrambots.meta.api.methods.polls.SendPoll;
 public class PollQuizTest {
     @Test
     void pollAndQuiz() {
-        SendPoll poll = (SendPoll) BotResponse.poll("Q").option("A").option("B").chat(1).build();
+        SendPoll poll = (SendPoll) BotResponse.poll(TestUtils.request(1), "Q")
+                .option("A").option("B").chat(1).build();
         assertThat(poll.getQuestion()).isEqualTo("Q");
-        SendPoll quiz = (SendPoll) BotResponse.quiz("2+2", 1).option("3").option("4").chat(1).build();
+        SendPoll quiz = (SendPoll) BotResponse.quiz(TestUtils.request(1), "2+2", 1)
+                .option("3").option("4").chat(1).build();
         assertThat(quiz.getCorrectOptionId()).isEqualTo(1);
     }
 }

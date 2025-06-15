@@ -30,7 +30,7 @@ public class WizardEngine {
         String key = in.chatId + ":" + wizard.id();
         WizardSession session = load(store, key);
 
-        if ("/cancel".equals(in.text)) {
+        if ("/cancel".equals(in.text) || "wiz:cancel".equals(in.text)) {
             store.set(key, "");
             return sendMessage(in.chatId, info.localizer().get("wizard.cancel", "Отменено"));
         }
@@ -79,13 +79,13 @@ public class WizardEngine {
     }
 
     private boolean processNav(String text, WizardSession session) {
-        if ("/back".equals(text)) {
+        if ("/back".equals(text) || "wiz:back".equals(text)) {
             if (session.getStepIdx() > 0) {
                 session.setStepIdx(session.getStepIdx() - 1);
             }
             return true;
         }
-        if ("/next".equals(text)) {
+        if ("/next".equals(text) || "wiz:next".equals(text)) {
             session.setStepIdx(session.getStepIdx() + 1);
             return true;
         }
