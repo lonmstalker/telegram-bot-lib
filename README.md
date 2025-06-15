@@ -39,8 +39,8 @@
 
 ```xml
 <dependency>
-    <groupId>io.lonmstalker</groupId>
-    <artifactId>tgkit</artifactId>
+    <groupId>io.lonmstalker.tgkit</groupId>
+    <artifactId>tgkit-core</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 </dependency>
 
@@ -53,14 +53,14 @@
 <annotationProcessorPaths>
 ...
     <path>
-        <groupId>io.lonmstalker</groupId>
-        <artifactId>core</artifactId>
+        <groupId>io.lonmstalker.tgkit</groupId>
+        <artifactId>tgkit-core</artifactId>
         <version>${project.version}</version>
     </path>
 ...
 <annotationProcessors>
     <annotationProcessor>
-        io.lonmstalker.core.processor.BotHandlerProcessor
+        io.lonmstalker.tgkit.core.processor.BotHandlerProcessor
     </annotationProcessor>
 ...
 </plugin>
@@ -70,7 +70,7 @@
 <summary>Gradle Kotlin DSL</summary>
 
 ```kotlin 
-implementation("io.lonmstalker:tgkit:0.0.1-SNAPSHOT")
+implementation("io.lonmstalker.tgkit:tgkit-core:0.0.1-SNAPSHOT")
 ```
 </details>
 
