@@ -7,10 +7,13 @@ import io.lonmstalker.core.annotation.CustomMatcher;
 import io.lonmstalker.core.annotation.MessageContainsMatch;
 import io.lonmstalker.core.annotation.MessageRegexMatch;
 import io.lonmstalker.core.annotation.MessageTextMatch;
+import io.lonmstalker.core.annotation.Arg;
 import io.lonmstalker.core.annotation.UserRoleMatch;
 import io.lonmstalker.core.bot.BotCommandRegistry;
 import io.lonmstalker.core.exception.BotApiException;
 import io.lonmstalker.core.matching.CommandMatch;
+import io.lonmstalker.core.args.BotArgumentConverter;
+import io.lonmstalker.core.args.Converters;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -72,6 +75,23 @@ public final class AnnotatedCommandLoader {
             BotHandlerConverter<?> converter = (BotHandlerConverter<?>) createInstance(ann.converter());
 
             method.setAccessible(true);
+            var parameters = method.getParameters();
+            InternalCommandAdapter.ParamInfo[] infos = new InternalCommandAdapter.ParamInfo[parameters.length];
+            for (int i = 0; i < parameters.length; i++) {
+                var p = parameters[i];
+                Arg a = p.getAnnotation(Arg.class);
+                if (a != null) {
+                    BotArgumentConverter<?> conv;
+                    if (a.converter() != BotArgumentConverter.Identity.class) {
+                        conv = Converters.getByClass(a.converter());
+                    } else {
+                        conv = Converters.getByType(p.getType());
+                    }
+                    infos[i] = new InternalCommandAdapter.ParamInfo(false, a, conv);
+                } else {
+                    infos[i] = new InternalCommandAdapter.ParamInfo(true, null, null);
+                }
+            }
             BotCommand<BotApiObject> cmd = InternalCommandAdapter.builder()
                     .method(method)
                     .type(ann.type())
@@ -79,6 +99,7 @@ public final class AnnotatedCommandLoader {
                     .instance(instance)
                     .converter(converter)
                     .commandMatch(matcher)
+                    .params(infos)
                     .botGroup(ann.botGroup())
                     .build();
             registry.add(cmd);

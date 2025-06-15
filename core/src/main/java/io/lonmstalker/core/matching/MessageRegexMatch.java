@@ -1,5 +1,7 @@
 package io.lonmstalker.core.matching;
 
+import io.lonmstalker.core.args.RouteContextHolder;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -21,6 +23,14 @@ public class MessageRegexMatch implements CommandMatch<Message> {
 
     @Override
     public boolean match(@NonNull Message data) {
-        return data.getText() != null && pattern.matcher(data.getText()).matches();
+        if (data.getText() == null) {
+            return false;
+        }
+        Matcher m = pattern.matcher(data.getText());
+        boolean res = m.matches();
+        if (res) {
+            RouteContextHolder.setMatcher(m);
+        }
+        return res;
     }
 }
