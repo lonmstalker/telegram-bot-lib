@@ -161,6 +161,11 @@
                             <artifactId>checker</artifactId>
                             <version>${checkerframework.version}</version>
                         </path>
+                        <path>
+                            <groupId>io.lonmstalker</groupId>
+                            <artifactId>core</artifactId>
+                            <version>${project.version}</version>
+                        </path>
                     </annotationProcessorPaths>
                     <annotationProcessors>
                         <annotationProcessor>
@@ -168,6 +173,9 @@
                         </annotationProcessor>
                         <annotationProcessor>
                             org.checkerframework.checker.nullness.NullnessChecker
+                        </annotationProcessor>
+                        <annotationProcessor>
+                            io.lonmstalker.core.processor.BotHandlerProcessor
                         </annotationProcessor>
                     </annotationProcessors>
                     <compilerArgs combine.children="append">
