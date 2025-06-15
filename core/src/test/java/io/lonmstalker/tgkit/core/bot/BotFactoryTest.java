@@ -3,7 +3,7 @@ package io.lonmstalker.tgkit.core.bot;
 import static org.junit.jupiter.api.Assertions.*;
 
 import io.lonmstalker.tgkit.core.BotAdapter;
-import io.lonmstalker.tgkit.core.utils.TokenCipherImpl;
+import io.lonmstalker.tgkit.core.crypto.TokenCipherImpl;
 import org.h2.jdbcx.JdbcDataSource;
 import org.junit.jupiter.api.Test;
 import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;

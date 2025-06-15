@@ -14,7 +14,7 @@ public class PluginManagerIT {
     Path tempDir;
 
     @Test
-    public void testLoadAndReload() throws Exception {
+    public void shouldReloadPluginWhenUpdated() throws Exception {
         // build jar from compiled plugin classes
         Path classes = Path.of("target/classes");
         Path jar = tempDir.resolve("greeter.jar");

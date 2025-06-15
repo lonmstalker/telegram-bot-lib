@@ -3,7 +3,7 @@ package io.lonmstalker.tgkit.core.bot;
 import static org.junit.jupiter.api.Assertions.*;
 
 import io.lonmstalker.tgkit.core.exception.BotApiException;
-import io.lonmstalker.tgkit.core.utils.TokenCipherImpl;
+import io.lonmstalker.tgkit.core.crypto.TokenCipherImpl;
 import org.h2.jdbcx.JdbcDataSource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -73,7 +73,7 @@ public class BotSessionImpl implements BotSession {
                 .connectTimeout(Duration.ofSeconds(75))
                 .build();
 
-        this.executor = providedExecutor != null ? providedExecutor : Executors.newFixedThreadPool(2);
+        this.executor = providedExecutor != null ? providedExecutor : Executors.newVirtualThreadPerTaskExecutor();
         executor.execute(this::readLoop);
         executor.execute(this::handleLoop);
     }
@@ -86,6 +86,13 @@ public class BotSessionImpl implements BotSession {
         running.set(false);
         if (executor != null && providedExecutor == null) {
             executor.shutdownNow();
+            if (executor instanceof AutoCloseable closable) {
+                try {
+                    closable.close();
+                } catch (Exception e) {
+                    log.warn("Error closing executor: {}", e.getMessage());
+                }
+            }
         }
         if (httpClient != null) {
             httpClient.close();
