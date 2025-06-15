@@ -69,3 +69,6 @@ BotConfig config = new BotConfig();
 config.addInterceptor(new io.lonmstalker.observability.ObservabilityInterceptor(metrics, tracer));
 ```
 Полный пример приведён в модуле `examples/observability-demo`.
+
+### Сборка
+Для корректной работы аннотационного процессора `BotHandlerProcessor` модуль `core` должен быть добавлен в `annotationProcessorPaths`, а сам процессор указан в `annotationProcessors` внутри `maven-compiler-plugin`.
