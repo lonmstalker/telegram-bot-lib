@@ -13,13 +13,16 @@ public class SimpleRoleProvider implements BotUserProvider {
 
     @Override
     public @NonNull BotUserInfo resolve(Update update) {
-        User user = update.getMessage() != null
-                ? update.getMessage().getFrom()
-                : update.getCallbackQuery() != null
-                ? update.getCallbackQuery().getFrom()
-                : update.getInlineQuery().getFrom();
+        User user = null;
+        if (update.getMessage() != null) {
+            user = update.getMessage().getFrom();
+        } else if (update.getCallbackQuery() != null) {
+            user = update.getCallbackQuery().getFrom();
+        } else if (update.getInlineQuery() != null) {
+            user = update.getInlineQuery().getFrom();
+        }
         if (user == null) {
-            throw new BotApiException("User not found");
+            throw new BotApiException("User not found in update");
         }
         String chatId = user.getId().toString();
         return new SimpleInfo(chatId, Set.of("ADMIN"));
