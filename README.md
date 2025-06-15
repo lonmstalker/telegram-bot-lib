@@ -35,7 +35,9 @@ public class EchoCommands {
     }
 }
 
-Bot bot = BotFactory.INSTANCE.from(token, new BotConfig(), new BotAdapterImpl(bot, converter, provider), "com.example.bot");
+Bot bot = BotFactory.INSTANCE.from(token,
+        BotConfig.builder().build(),
+        new BotAdapterImpl(bot, converter, provider), "com.example.bot");
 bot.start();
 ```
 
@@ -43,8 +45,9 @@ bot.start();
 
 ### Пример использования `StateStore`
 ```java
-BotConfig config = new BotConfig();
-config.setStore(new InMemoryStateStore());
+BotConfig config = BotConfig.builder()
+        .store(new InMemoryStateStore())
+        .build();
 
 Bot bot = BotFactory.INSTANCE.from(token, config, adapter);
 

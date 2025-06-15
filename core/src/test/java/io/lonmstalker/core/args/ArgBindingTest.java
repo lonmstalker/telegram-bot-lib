@@ -53,7 +53,7 @@ public class ArgBindingTest {
         assertNotNull(cmd);
 
         BotInfo info = new BotInfo(1L, new InMemoryStateStore(),
-                new TelegramSender(new BotConfig(), "T"),
+                new TelegramSender(BotConfig.builder().build(), "T"),
                 new MessageLocalizer(Locale.US));
         BotRequest<Message> req = new BotRequest<>(0, msg, info, new User("1"));
         cmd.handle(req);

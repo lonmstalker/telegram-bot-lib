@@ -83,14 +83,15 @@ public final class BotDataSourceFactory {
                     throw new BotApiException("Bot token is empty");
                 }
 
-                BotConfig config = new BotConfig();
-                config.setProxyHost(proxyHost);
-                config.setProxyPort(proxyPort);
-                config.setProxyType(DefaultBotOptions.ProxyType.values()[proxyTypeValue]);
-                config.setMaxThreads(maxThreads);
-                config.setGetUpdatesTimeout(timeout);
-                config.setGetUpdatesLimit(limit);
-                config.setBotPattern(Objects.requireNonNull(botPattern));
+                BotConfig config = BotConfig.builder()
+                        .proxyHost(proxyHost)
+                        .proxyPort(proxyPort)
+                        .proxyType(DefaultBotOptions.ProxyType.values()[proxyTypeValue])
+                        .maxThreads(maxThreads)
+                        .getUpdatesTimeout(timeout)
+                        .getUpdatesLimit(limit)
+                        .botPattern(Objects.requireNonNull(botPattern))
+                        .build();
 
                 return new BotData(token, config);
             }
