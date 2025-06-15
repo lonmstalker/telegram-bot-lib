@@ -1,7 +1,7 @@
-package io.lonmstaler.observability.impl;
+package io.lonmstalker.observability.impl;
 
-import io.lonmstaler.observability.Span;
-import io.lonmstaler.observability.Tracer;
+import io.lonmstalker.observability.Span;
+import io.lonmstalker.observability.Tracer;
 import io.opentelemetry.api.common.Attributes;
 
 public final class NoOpTracer implements Tracer {

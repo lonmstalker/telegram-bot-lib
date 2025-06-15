@@ -1,4 +1,4 @@
-package io.lonmstaler.observability;
+package io.lonmstalker.observability;
 
 import io.micrometer.core.instrument.Tag;
 

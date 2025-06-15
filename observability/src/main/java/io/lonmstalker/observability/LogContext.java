@@ -1,4 +1,4 @@
-package io.lonmstaler.observability;
+package io.lonmstalker.observability;
 
 import org.slf4j.MDC;
 

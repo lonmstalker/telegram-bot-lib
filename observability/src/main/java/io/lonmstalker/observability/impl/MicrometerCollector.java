@@ -1,8 +1,8 @@
-package io.lonmstaler.observability.impl;
+package io.lonmstalker.observability.impl;
 
 import com.sun.net.httpserver.HttpServer;
-import io.lonmstaler.observability.MetricsCollector;
-import io.lonmstaler.observability.Tags;
+import io.lonmstalker.observability.MetricsCollector;
+import io.lonmstalker.observability.Tags;
 import io.lonmstalker.core.exception.BotApiException;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
