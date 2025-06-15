@@ -90,7 +90,7 @@ public class EchoCommands {
 Bot bot = BotFactory.INSTANCE.from(
         token,
         BotConfig.builder().build(),
-        new BotAdapterImpl(bot, converter, provider),
+        update -> null,                       // вся логика в аннотированных хендлерах
         "com.example.bot");
 bot.start();          // smart Webhook ↔︎ Polling
 
