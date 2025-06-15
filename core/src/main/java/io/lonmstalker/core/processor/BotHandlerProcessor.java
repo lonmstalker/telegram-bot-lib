@@ -6,7 +6,6 @@ import io.lonmstalker.core.annotation.Arg;
 import io.lonmstalker.core.annotation.BotHandler;
 
 import javax.annotation.processing.AbstractProcessor;
-import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.annotation.processing.SupportedSourceVersion;
@@ -21,8 +20,8 @@ import javax.lang.model.type.TypeMirror;
 import javax.tools.Diagnostic;
 import java.util.Set;
 
-@SupportedAnnotationTypes("io.lonmstalker.core.annotation.BotHandler")
 @SupportedSourceVersion(SourceVersion.RELEASE_21)
+@SupportedAnnotationTypes("io.lonmstalker.core.annotation.BotHandler")
 public class BotHandlerProcessor extends AbstractProcessor {
 
     @Override

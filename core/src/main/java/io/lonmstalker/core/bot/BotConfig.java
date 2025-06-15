@@ -10,6 +10,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -23,18 +24,19 @@ public class BotConfig extends DefaultBotOptions {
     private int requestsPerSecond = 30;
     private @NonNull Locale locale = Locale.getDefault();
 
+    @SuppressWarnings("method.invocation")
     public BotConfig() {
         setBackOff(new ExponentialBackOff());
     }
 
     public void addInterceptor(@NonNull BotInterceptor interceptor) {
-        var list = new java.util.ArrayList<>(this.globalInterceptors);
+        var list = new ArrayList<>(this.globalInterceptors);
         list.add(interceptor);
         this.globalInterceptors = List.copyOf(list);
     }
 
     public void addInterceptors(@NonNull List<BotInterceptor> interceptors) {
-        var list = new java.util.ArrayList<>(this.globalInterceptors);
+        var list = new ArrayList<>(this.globalInterceptors);
         list.addAll(interceptors);
         this.globalInterceptors = List.copyOf(list);
     }

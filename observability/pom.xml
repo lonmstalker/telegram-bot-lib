@@ -43,7 +43,7 @@
         <dependency>
             <groupId>io.prometheus</groupId>
             <artifactId>simpleclient_httpserver</artifactId>
-            <version>${prometheus.version}</version>
+            <version>${http-simple-client.version}</version>
         </dependency>
     </dependencies>
 </project>

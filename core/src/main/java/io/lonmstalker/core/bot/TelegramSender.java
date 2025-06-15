@@ -37,12 +37,12 @@ public class TelegramSender extends DefaultAbsSender implements AutoCloseable {
     private final RateLimiter rateLimiter;
     private final BackOff backOff;
 
-    protected TelegramSender(@NonNull BotConfig options,
-                             @NonNull String botToken) {
+    public TelegramSender(@NonNull BotConfig options,
+                          @NonNull String botToken) {
         this(options, botToken, null);
     }
 
-    protected TelegramSender(@NonNull BotConfig options,
+    public TelegramSender(@NonNull BotConfig options,
                              @NonNull String botToken,
                              @Nullable ScheduledExecutorService scheduler) {
         super(options, botToken);

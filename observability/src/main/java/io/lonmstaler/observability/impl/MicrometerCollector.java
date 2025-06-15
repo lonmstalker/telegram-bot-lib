@@ -1,28 +1,22 @@
 package io.lonmstaler.observability.impl;
 
+import com.sun.net.httpserver.HttpServer;
 import io.lonmstaler.observability.MetricsCollector;
 import io.lonmstaler.observability.Tags;
+import io.lonmstalker.core.exception.BotApiException;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Timer;
-import io.micrometer.prometheus.PrometheusConfig;
-import io.micrometer.prometheus.PrometheusMeterRegistry;
-import io.prometheus.client.exporter.HTTPServer;
+import io.micrometer.prometheusmetrics.PrometheusConfig;
+import io.micrometer.prometheusmetrics.PrometheusMeterRegistry;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.InetSocketAddress;
 import java.util.List;
 
-public final class MicrometerCollector implements MetricsCollector {
-    private final MeterRegistry registry;
-
-    public MicrometerCollector(MeterRegistry registry) {
-        this.registry = registry;
-    }
-
-    @Override
-    public @NonNull MeterRegistry registry() {
-        return registry;
-    }
+public record MicrometerCollector(MeterRegistry registry) implements MetricsCollector {
 
     @Override
     public @NonNull Timer timer(@NonNull String name, @NonNull Tags tags) {
@@ -34,12 +28,21 @@ public final class MicrometerCollector implements MetricsCollector {
         return Counter.builder(name).tags(List.of(tags.items())).register(registry);
     }
 
-    public static MicrometerCollector prometheus(int port) {
+    public static @NonNull MicrometerCollector prometheus(int port) {
         PrometheusMeterRegistry reg = new PrometheusMeterRegistry(PrometheusConfig.DEFAULT);
         try {
-            new HTTPServer(port, reg.getPrometheusRegistry());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+            HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
+            server.createContext("/prometheus", httpExchange -> {
+                String response = reg.scrape();
+                httpExchange.sendResponseHeaders(200, response.getBytes().length);
+                try (OutputStream os = httpExchange.getResponseBody()) {
+                    os.write(response.getBytes());
+                }
+            });
+
+            new Thread(server::start).start();
+        } catch (IOException e) {
+            throw new BotApiException(e);
         }
         return new MicrometerCollector(reg);
     }

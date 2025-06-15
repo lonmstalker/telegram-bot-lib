@@ -19,6 +19,7 @@ import org.telegram.telegrambots.meta.api.interfaces.BotApiObject;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Objects;
 
 @Builder(access = AccessLevel.PACKAGE)
 class InternalCommandAdapter implements BotCommand<BotApiObject> {
@@ -32,6 +33,7 @@ class InternalCommandAdapter implements BotCommand<BotApiObject> {
     private final ParamInfo[] params;
 
     @Override
+    @SuppressWarnings("argument")
     public @Nullable BotResponse handle(@NonNull BotRequest<BotApiObject> request) {
         try {
             Object converted = converter.convert(request);
@@ -57,7 +59,7 @@ class InternalCommandAdapter implements BotCommand<BotApiObject> {
                         throw new BotApiException("Required arg missing: " + pi.arg.value());
                     }
                     Context ctx = new Context(request, matcher);
-                    args[i] = pi.converter.convert(raw, ctx);
+                    args[i] = Objects.requireNonNull(pi.converter.convert(raw, ctx));
                 }
             }
 

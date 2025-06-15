@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import io.lonmstalker.core.storage.BotRequestHolder;
 import io.lonmstalker.core.user.BotUserInfo;
 import io.lonmstalker.core.user.BotUserProvider;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -55,8 +56,8 @@ public class MatchersTest {
     @Test
     void userRoleMatch() {
         BotUserProvider provider = u -> new BotUserInfo() {
-            @Override public String chatId() { return "1"; }
-            @Override public Set<String> roles() { return Set.of("ADMIN"); }
+            @Override public @NonNull String chatId() { return "1"; }
+            @Override public @NonNull Set<String> roles() { return Set.of("ADMIN"); }
             @Override public java.util.Locale locale() { return null; }
         };
         User tgUser = new User();

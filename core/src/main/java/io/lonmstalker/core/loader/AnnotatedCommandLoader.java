@@ -32,7 +32,7 @@ import org.telegram.telegrambots.meta.api.interfaces.BotApiObject;
 @UtilityClass
 public final class AnnotatedCommandLoader {
 
-    @SuppressWarnings({"unchecked", "argument"})
+    @SuppressWarnings({"argument"})
     public static void load(@NonNull BotCommandRegistry registry,
                             @NonNull String... packages) {
         ConfigurationBuilder cb = new ConfigurationBuilder();
@@ -68,6 +68,7 @@ public final class AnnotatedCommandLoader {
         }
     }
 
+    @SuppressWarnings("return")
     private static Object createInstance(Class<?> clazz) {
         try {
             Method getInstance = clazz.getDeclaredMethod("getInstance");
@@ -90,7 +91,7 @@ public final class AnnotatedCommandLoader {
         }
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "argument"})
     private static @NonNull CommandMatch<? extends BotApiObject> extractMatcher(@NonNull Method method) {
         if (method.isAnnotationPresent(MessageContainsMatch.class)) {
             MessageContainsMatch mc = method.getAnnotation(MessageContainsMatch.class);

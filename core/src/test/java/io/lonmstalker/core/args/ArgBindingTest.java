@@ -1,11 +1,13 @@
 package io.lonmstalker.core.args;
 
 import io.lonmstalker.core.BotCommand;
-import io.lonmstalker.core.BotConfig;
 import io.lonmstalker.core.BotInfo;
 import io.lonmstalker.core.BotRequest;
 import io.lonmstalker.core.BotRequestType;
 import io.lonmstalker.core.BotResponse;
+import io.lonmstalker.core.bot.BotConfig;
+import io.lonmstalker.core.bot.TelegramSender;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.interfaces.BotApiObject;
 import io.lonmstalker.core.annotation.Arg;
 import io.lonmstalker.core.annotation.BotHandler;
@@ -37,7 +39,7 @@ public class ArgBindingTest {
     }
 
     private record User(String chatId) implements BotUserInfo {
-        @Override public Set<String> roles() { return Set.of(); }
+        @Override public @NonNull Set<String> roles() { return Set.of(); }
     }
 
     @Test
@@ -51,10 +53,10 @@ public class ArgBindingTest {
         assertNotNull(cmd);
 
         BotInfo info = new BotInfo(1L, new InMemoryStateStore(),
-                new io.lonmstalker.core.bot.TelegramSender(new BotConfig(), "T"),
+                new TelegramSender(new BotConfig(), "T"),
                 new MessageLocalizer(Locale.US));
         BotRequest<Message> req = new BotRequest<>(0, msg, info, new User("1"));
-        ((BotCommand<Message>) cmd).handle((BotRequest<BotApiObject>)(BotRequest<?>)req);
+        cmd.handle(req);
 
         assertEquals(42, Commands.captured);
     }

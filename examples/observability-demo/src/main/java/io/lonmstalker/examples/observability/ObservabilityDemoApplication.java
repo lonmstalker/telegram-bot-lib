@@ -1,7 +1,7 @@
 package io.lonmstalker.examples.observability;
 
+import io.lonmstalker.core.BotAdapter;
 import io.lonmstalker.core.bot.Bot;
-import io.lonmstalker.core.bot.BotAdapter;
 import io.lonmstalker.core.bot.BotConfig;
 import io.lonmstalker.core.bot.BotFactory;
 import io.lonmstaler.observability.ObservabilityInterceptor;

@@ -39,7 +39,7 @@ public final class OTelTracer implements Tracer {
     }
 
     public static OTelTracer stdoutDev() {
-        SpanExporter exporter = SpanExporter.composite(new LoggingSpanExporter());
+        SpanExporter exporter = SpanExporter.composite(LoggingSpanExporter.create());
         SdkTracerProvider provider = SdkTracerProvider.builder()
                 .addSpanProcessor(SimpleSpanProcessor.create(exporter))
                 .build();

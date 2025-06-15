@@ -14,8 +14,7 @@ public interface BotUserInfo {
     @NonNull
     Set<String> roles();
 
-    @Nullable
-    default Locale locale() {
+    default @Nullable Locale locale() {
         return null;
     }
 }
