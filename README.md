@@ -145,7 +145,7 @@ mvn test
 ```
 
 ## 🤝 Contributing
-PR-ы и идеи приветствуются! Перед отправкой ознакомьтесь с CONTRIBUTING.md и CODE_OF_CONDUCT.md.
+PR-ы и идеи приветствуются! Перед отправкой ознакомьтесь с [CONTRIBUTING.md](CONTRIBUTING.md) и [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
 
 ⚖️ Лицензия
 Apache License 2.0 © 2025 TgKit Team
