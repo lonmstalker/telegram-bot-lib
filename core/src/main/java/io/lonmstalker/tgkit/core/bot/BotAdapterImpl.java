@@ -13,7 +13,7 @@ import io.lonmstalker.tgkit.core.interceptor.BotInterceptor;
 import io.lonmstalker.tgkit.core.storage.BotRequestHolder;
 import io.lonmstalker.tgkit.core.user.BotUserInfo;
 import io.lonmstalker.tgkit.core.user.BotUserProvider;
-import io.lonmstalker.tgkit.core.utils.UpdateUtils;
+import io.lonmstalker.tgkit.core.update.UpdateUtils;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.checkerframework.checker.nullness.qual.Nullable;

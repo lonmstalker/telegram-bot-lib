@@ -11,7 +11,7 @@ import io.lonmstalker.tgkit.core.bot.BotConfig;
 import io.lonmstalker.tgkit.core.i18n.MessageLocalizer;
 import io.lonmstalker.tgkit.core.loader.AnnotatedCommandLoader;
 import io.lonmstalker.tgkit.core.state.InMemoryStateStore;
-import io.lonmstalker.tgkit.core.utils.UpdateUtils;
+import io.lonmstalker.tgkit.core.update.UpdateUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

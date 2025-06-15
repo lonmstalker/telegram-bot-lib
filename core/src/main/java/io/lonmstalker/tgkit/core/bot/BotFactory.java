@@ -2,7 +2,7 @@ package io.lonmstalker.tgkit.core.bot;
 
 import io.lonmstalker.tgkit.core.BotAdapter;
 import io.lonmstalker.tgkit.core.bot.BotDataSourceFactory.BotData;
-import io.lonmstalker.tgkit.core.utils.TokenCipher;
+import io.lonmstalker.tgkit.core.crypto.TokenCipher;
 import io.lonmstalker.tgkit.core.loader.AnnotatedCommandLoader;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
