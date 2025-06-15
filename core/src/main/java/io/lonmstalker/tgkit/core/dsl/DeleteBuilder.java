@@ -1,5 +1,6 @@
 package io.lonmstalker.tgkit.core.dsl;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import io.lonmstalker.tgkit.core.BotRequest;
@@ -8,14 +9,13 @@ import io.lonmstalker.tgkit.core.BotRequest;
 public final class DeleteBuilder extends BotResponse.CommonBuilder<DeleteBuilder> {
     private final long msgId;
 
-    DeleteBuilder(BotRequest<?> req, long msgId) {
+    DeleteBuilder(@NonNull BotRequest<?> req, long msgId) {
         super(req);
         this.msgId = msgId;
     }
 
     @Override
-    protected BotApiMethod<?> build() {
-        DeleteMessage dm = new DeleteMessage(String.valueOf(chatId), (int) msgId);
-        return dm;
+    public @NonNull BotApiMethod<?> build() {
+        return new DeleteMessage(String.valueOf(chatId), (int) msgId);
     }
 }

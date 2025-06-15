@@ -2,7 +2,9 @@ package io.lonmstalker.tgkit.core.dsl;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.polls.SendPoll;
 import io.lonmstalker.tgkit.core.BotRequest;
 
@@ -12,13 +14,13 @@ public class PollBuilder extends BotResponse.CommonBuilder<PollBuilder> {
     private final List<String> options = new ArrayList<>();
     private boolean anonymous = true;
 
-    PollBuilder(BotRequest<?> req, String question) {
+    PollBuilder(@NonNull BotRequest<?> req, @NonNull String question) {
         super(req);
         this.question = question;
     }
 
     /** Добавляет вариант ответа. */
-    public PollBuilder option(String o) {
+    public @NonNull PollBuilder option(@NonNull String o) {
         options.add(o);
         return this;
     }
@@ -30,12 +32,12 @@ public class PollBuilder extends BotResponse.CommonBuilder<PollBuilder> {
     }
 
     @Override
-    protected BotApiMethod<?> build() {
+    public @NonNull PartialBotApiMethod<?> build() {
         SendPoll poll = new SendPoll();
         poll.setChatId(String.valueOf(chatId));
         poll.setQuestion(question);
         poll.setOptions(options);
-        poll.setAnonymous(anonymous);
+        poll.setIsAnonymous(anonymous);
         return poll;
     }
 }

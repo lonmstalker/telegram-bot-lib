@@ -1,6 +1,7 @@
 package io.lonmstalker.tgkit.core.dsl;
 
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 import io.lonmstalker.tgkit.core.BotRequest;
@@ -10,23 +11,25 @@ public final class PhotoBuilder extends BotResponse.CommonBuilder<PhotoBuilder> 
     private final InputFile file;
     private String caption;
 
-    PhotoBuilder(BotRequest<?> req, InputFile file) {
+    PhotoBuilder(@NonNull BotRequest<?> req, @NonNull InputFile file) {
         super(req);
         this.file = file;
     }
 
     /** Подпись к фото. */
-    public PhotoBuilder caption(String text) {
+    public @NonNull PhotoBuilder caption(@NonNull String text) {
         this.caption = text;
         return this;
     }
 
     @Override
-    protected BotApiMethod<?> build() {
+    public @NonNull PartialBotApiMethod<?> build() {
         SendPhoto photo = new SendPhoto(String.valueOf(chatId), file);
         photo.setCaption(caption);
-        if (keyboard != null) photo.setReplyMarkup(keyboard.build());
         photo.setDisableNotification(disableNotif);
+        if (keyboard != null) {
+            photo.setReplyMarkup(keyboard.build());
+        }
         return photo;
     }
 }

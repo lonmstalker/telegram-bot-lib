@@ -1,23 +1,30 @@
 package io.lonmstalker.tgkit.core.dsl;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 /**
  * Построитель форматированного текста Markdown.
  */
 public final class RichText {
     private final StringBuilder sb = new StringBuilder();
 
-    public static RichText text() {
+    public static @NonNull RichText text() {
         return new RichText();
     }
 
-    /** Полужирный текст. */
-    public RichText bold(String text) {
+    /**
+     * Полужирный текст.
+     */
+    public @NonNull RichText bold(@NonNull String text) {
         sb.append("**").append(text).append("**");
         return this;
     }
 
-    /** Ссылка. */
-    public RichText url(String label, String url) {
+    /**
+     * Ссылка.
+     */
+    public @NonNull RichText url(@NonNull String label,
+                                 @NonNull String url) {
         sb.append("[").append(label).append("](").append(url).append(")");
         return this;
     }

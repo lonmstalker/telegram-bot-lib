@@ -9,6 +9,7 @@ import java.util.Set;
  * @param roles  роли пользователя
  */
 public record Context(long chatId, Set<String> roles) {
+
     /** Проверяет роль администратора. */
     public boolean isAdmin() {
         return roles.contains("ADMIN");

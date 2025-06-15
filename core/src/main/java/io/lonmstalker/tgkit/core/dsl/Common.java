@@ -5,35 +5,56 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 
-/** Общие операции билдера. */
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
+
+/**
+ * Общие операции билдера.
+ */
 public interface Common<T extends Common<T>> {
+
+    @NonNull
     T chat(long id);
 
-    T autoChat(BotRequest<?> req);
-
+    @NonNull
     T replyTo(long msgId);
 
+    @NonNull
     T disableNotif();
 
-    T keyboard(java.util.function.Consumer<KbBuilder> cfg);
+    @NonNull
+    T keyboard(@NonNull Consumer<KbBuilder> cfg);
 
-    T when(Predicate<Context> cond, Consumer<? extends Common<?>> branch);
+    @NonNull
+    T when(@NonNull Predicate<Context> cond,
+           @NonNull Consumer<Common<T>> branch);
 
-    T onlyAdmin(Consumer<? extends Common<?>> branch);
+    @NonNull
+    T onlyAdmin(@NonNull Consumer<Common<T>> branch);
 
-    T ifFlag(String flag, Context ctx, Consumer<? extends Common<?>> branch);
+    @NonNull
+    T ifFlag(@NonNull String flag,
+             @NonNull Context ctx,
+             @NonNull Consumer<Common<T>> branch);
 
-    T flag(String flag, Context ctx, Consumer<? extends Common<?>> branch);
+    @NonNull
+    T flag(@NonNull String flag,
+           @NonNull Context ctx,
+           @NonNull Consumer<Common<T>> branch);
 
-    T ttl(Duration duration);
+    @NonNull
+    T ttl(@NonNull Duration duration);
 
-    T hooks(Consumer<Long> ok, Consumer<Throwable> fail);
+    @NonNull
+    T hooks(@NonNull Consumer<Long> ok, @NonNull Consumer<Throwable> fail);
 
-    BotResponse send(TelegramTransport tg);
+    @NonNull
+    BotResponse send(@NonNull TelegramTransport tg);
 
-    CompletableFuture<BotResponse> sendAsync(Executor executor);
+    @NonNull
+    CompletableFuture<BotResponse> sendAsync(@NonNull Executor executor);
 
-    BotApiMethod<?> build();
+    @NonNull
+    PartialBotApiMethod<?> build();
 }

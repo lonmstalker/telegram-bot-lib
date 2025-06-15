@@ -1,7 +1,10 @@
 package io.lonmstalker.tgkit.core.dsl;
 
 import java.time.Duration;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.telegram.telegrambots.meta.api.methods.ActionType;
+import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.methods.send.SendChatAction;
 import io.lonmstalker.tgkit.core.BotRequest;
@@ -12,30 +15,30 @@ public final class EditBuilder extends BotResponse.CommonBuilder<EditBuilder> {
     private Duration typing;
     private String newText;
 
-    EditBuilder(BotRequest<?> req, long msgId) {
+    EditBuilder(@NonNull BotRequest<?> req, long msgId) {
         super(req);
         this.msgId = msgId;
     }
 
     /** Показать набор текста перед редактированием. */
-    public EditBuilder typing(Duration d) {
+    public @NonNull EditBuilder typing(@NonNull Duration d) {
         this.typing = d;
         return this;
     }
 
     /** Текст после редактирования. */
-    public EditBuilder thenEdit(String text) {
+    public @NonNull EditBuilder thenEdit(@NonNull String text) {
         this.newText = text;
         return this;
     }
 
     @Override
-    protected BotApiMethod<?> build() {
+    public @NonNull PartialBotApiMethod<?> build() {
         if (typing != null) {
             SendChatAction act = new SendChatAction();
             act.setChatId(String.valueOf(chatId));
-            act.setAction("typing");
-            CONFIG.transport.execute(act);
+            act.setAction(ActionType.TYPING);
+            DslGlobalConfig.INSTANCE.getTransport().execute(act);
         }
         EditMessageText edit = new EditMessageText();
         edit.setChatId(String.valueOf(chatId));

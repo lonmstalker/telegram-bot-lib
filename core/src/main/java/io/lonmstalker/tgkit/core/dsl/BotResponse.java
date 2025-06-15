@@ -1,147 +1,158 @@
 package io.lonmstalker.tgkit.core.dsl;
 
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+
 import io.lonmstalker.tgkit.core.BotRequest;
+import io.lonmstalker.tgkit.core.exception.BotApiException;
 import io.lonmstalker.tgkit.core.i18n.MessageLocalizer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import org.telegram.telegrambots.meta.api.methods.ParseMode;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.methods.send.SendMediaGroup;
-import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
-import org.telegram.telegrambots.meta.api.objects.media.InputMedia;
-import org.telegram.telegrambots.meta.api.objects.media.InputMediaPhoto;
-import org.telegram.telegrambots.meta.api.objects.media.InputMediaVideo;
 
 /**
  * Точка входа в DSL ответа бота.
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class BotResponse {
+    public static final BotResponse EMPTY = new BotResponse();
 
-    private static final Logger log = LoggerFactory.getLogger(BotResponse.class);
-
-    /** Глобальная конфигурация. */
-    private static final Config CONFIG = new Config();
-
-    private BotResponse() {}
-
-    /** Конфигурирует глобальные параметры. */
-    public static void config(Consumer<Config> cfg) {
-        cfg.accept(CONFIG);
+    /**
+     * Конфигурирует глобальные параметры.
+     */
+    public static void config(@NonNull Consumer<DslGlobalConfig> cfg) {
+        cfg.accept(DslGlobalConfig.INSTANCE);
     }
 
-    /** Контекст, привязанный к запросу. */
-    public static WithRequest with(BotRequest<?> req) {
+    /**
+     * Контекст, привязанный к запросу.
+     */
+    public static @NonNull WithRequest with(@NonNull BotRequest<?> req) {
         return new WithRequest(req);
     }
 
-    /** Сообщение. */
-    public static MessageBuilder msg(BotRequest<?> req, String text) {
+    /**
+     * Сообщение.
+     */
+    public static @NonNull MessageBuilder msg(@NonNull BotRequest<?> req, @NonNull String text) {
         return new MessageBuilder(req, text);
     }
 
-    /** Сообщение из i18n. */
-    public static MessageBuilder msgKey(BotRequest<?> req, String key, Object... args) {
+    /**
+     * Сообщение из i18n.
+     */
+    public static @NonNull MessageBuilder msgKey(@NonNull BotRequest<?> req, @NonNull String key, @NonNull Object... args) {
         MessageLocalizer loc = req.botInfo().localizer();
         return new MessageBuilder(req, loc.get(key, args));
     }
 
-    /** Фото. */
-    public static PhotoBuilder photo(BotRequest<?> req, InputFile file) {
+    /**
+     * Фото.
+     */
+    public static @NonNull PhotoBuilder photo(@NonNull BotRequest<?> req, @NonNull InputFile file) {
         return new PhotoBuilder(req, file);
     }
 
-    /** Редактирование сообщения. */
-    public static EditBuilder edit(BotRequest<?> req, long msgId) {
+    /**
+     * Редактирование сообщения.
+     */
+    public static @NonNull EditBuilder edit(@NonNull BotRequest<?> req, long msgId) {
         return new EditBuilder(req, msgId);
     }
 
-    /** Удаление сообщения. */
-    public static DeleteBuilder delete(BotRequest<?> req, long msgId) {
+    /**
+     * Удаление сообщения.
+     */
+    public static @NonNull DeleteBuilder delete(@NonNull BotRequest<?> req, long msgId) {
         return new DeleteBuilder(req, msgId);
     }
 
-    /** Отправка медиа-группы. */
-    public static MediaGroupBuilder mediaGroup(BotRequest<?> req) {
+    /**
+     * Отправка медиа-группы.
+     */
+    public static @NonNull MediaGroupBuilder mediaGroup(@NonNull BotRequest<?> req) {
         return new MediaGroupBuilder(req);
     }
 
-    /** Опрос. */
-    public static PollBuilder poll(BotRequest<?> req, String question) {
+    /**
+     * Опрос.
+     */
+    public static @NonNull PollBuilder poll(@NonNull BotRequest<?> req, @NonNull String question) {
         return new PollBuilder(req, question);
     }
 
-    /** Викторина. */
-    public static QuizBuilder quiz(BotRequest<?> req, String question, int correct) {
+    /**
+     * Викторина.
+     */
+    public static @NonNull QuizBuilder quiz(@NonNull BotRequest<?> req, @NonNull String question, int correct) {
         return new QuizBuilder(req, question, correct);
     }
 
-    /** Результаты инлайн-запроса. */
-    public static InlineResults inline(BotRequest<?> req) {
+    /**
+     * Результаты инлайн-запроса.
+     */
+    public static @NonNull InlineResults inline(@NonNull BotRequest<?> req) {
         return new InlineResults(req);
     }
 
-    /** Построитель, привязанный к запросу. */
+    /**
+     * Построитель, привязанный к запросу.
+     */
     public static final class WithRequest {
-        private final BotRequest<?> req;
-        private final MessageLocalizer loc;
+        private final @NonNull BotRequest<?> req;
 
-        private WithRequest(BotRequest<?> req) {
+        private WithRequest(@NonNull BotRequest<?> req) {
             this.req = req;
-            this.loc = req.botInfo().localizer();
         }
 
-        public MessageBuilder msg(String text) {
+        public @NonNull MessageBuilder msg(@NonNull String text) {
             return BotResponse.msg(req, text);
         }
 
-        public MessageBuilder msgKey(String key, Object... args) {
+        public @NonNull MessageBuilder msgKey(@NonNull String key, @NonNull Object... args) {
             return BotResponse.msgKey(req, key, args);
         }
 
-        public PhotoBuilder photo(InputFile file) {
+        public @NonNull PhotoBuilder photo(@NonNull InputFile file) {
             return BotResponse.photo(req, file);
         }
 
-        public EditBuilder edit(long msgId) {
+        public @NonNull EditBuilder edit(long msgId) {
             return BotResponse.edit(req, msgId);
         }
 
-        public DeleteBuilder delete(long msgId) {
+        public @NonNull DeleteBuilder delete(long msgId) {
             return BotResponse.delete(req, msgId);
         }
 
-        public MediaGroupBuilder mediaGroup() {
+        public @NonNull MediaGroupBuilder mediaGroup() {
             return BotResponse.mediaGroup(req);
         }
 
-        public PollBuilder poll(String question) {
+        public @NonNull PollBuilder poll(@NonNull String question) {
             return BotResponse.poll(req, question);
         }
 
-        public QuizBuilder quiz(String question, int correct) {
+        public @NonNull QuizBuilder quiz(@NonNull String question, int correct) {
             return BotResponse.quiz(req, question, correct);
         }
 
-        public InlineResults inline() {
+        public @NonNull InlineResults inline() {
             return BotResponse.inline(req);
         }
     }
 
-    /** Базовый строитель. */
+    /**
+     * Базовый строитель.
+     */
     @SuppressWarnings("unchecked")
     static abstract class CommonBuilder<T extends CommonBuilder<T>> implements Common<T> {
-        protected final BotRequest<?> req;
-        protected final MessageLocalizer loc;
+        protected final @NonNull BotRequest<?> req;
         protected long chatId;
         protected Long replyTo;
         protected boolean disableNotif;
@@ -151,49 +162,41 @@ public final class BotResponse {
         protected Consumer<Throwable> error;
         protected Context ctx;
 
-        CommonBuilder(BotRequest<?> req) {
+        CommonBuilder(@NonNull BotRequest<?> req) {
             this.req = req;
-            this.loc = req != null ? req.botInfo().localizer() : null;
-            if (req != null) {
-                autoChat(req);
-            }
+            this.chatId = Long.parseLong(req.user().chatId());
+            this.ctx = new Context(chatId, req.user().roles());
         }
 
         @Override
-        public T chat(long id) {
+        public @NonNull T chat(long id) {
             this.chatId = id;
             return (T) this;
         }
 
         @Override
-        public T autoChat(BotRequest<?> req) {
-            this.chatId = Long.parseLong(req.user().chatId());
-            this.ctx = new Context(chatId, req.user().roles());
-            return (T) this;
-        }
-
-        @Override
-        public T replyTo(long msgId) {
+        public @NonNull T replyTo(long msgId) {
             this.replyTo = msgId;
             return (T) this;
         }
 
         @Override
-        public T disableNotif() {
+        public @NonNull T disableNotif() {
             this.disableNotif = true;
             return (T) this;
         }
 
         @Override
-        public T keyboard(Consumer<KbBuilder> cfg) {
-            KbBuilder kb = new KbBuilder(loc);
+        public @NonNull T keyboard(@NonNull Consumer<KbBuilder> cfg) {
+            KbBuilder kb = new KbBuilder(req.botInfo().localizer());
             cfg.accept(kb);
             this.keyboard = kb;
             return (T) this;
         }
 
         @Override
-        public T when(Predicate<Context> cond, Consumer<? extends Common<?>> branch) {
+        public @NonNull T when(@NonNull Predicate<Context> cond,
+                               @NonNull Consumer<Common<T>> branch) {
             if (ctx != null && cond.test(ctx)) {
                 branch.accept(this);
             }
@@ -201,7 +204,7 @@ public final class BotResponse {
         }
 
         @Override
-        public T onlyAdmin(Consumer<? extends Common<?>> branch) {
+        public @NonNull T onlyAdmin(@NonNull Consumer<Common<T>> branch) {
             if (ctx != null && ctx.isAdmin()) {
                 branch.accept(this);
             }
@@ -209,35 +212,40 @@ public final class BotResponse {
         }
 
         @Override
-        public T ifFlag(String flag, Context c, Consumer<? extends Common<?>> branch) {
-            if (CONFIG.flags.enabled(flag, c.chatId())) {
+        public @NonNull T ifFlag(@NonNull String flag,
+                                 @NonNull Context c,
+                                 @NonNull Consumer<Common<T>> branch) {
+            if (DslGlobalConfig.INSTANCE.getFlags().enabled(flag, c.chatId())) {
                 branch.accept(this);
             }
             return (T) this;
         }
 
         @Override
-        public T flag(String flag, Context c, Consumer<? extends Common<?>> branch) {
+        public @NonNull T flag(@NonNull String flag,
+                               @NonNull Context c,
+                               @NonNull Consumer<Common<T>> branch) {
             return ifFlag(flag, c, branch);
         }
 
         @Override
-        public T ttl(Duration duration) {
+        public @NonNull T ttl(@NonNull Duration duration) {
             this.ttl = duration;
             return (T) this;
         }
 
         @Override
-        public T hooks(Consumer<Long> ok, Consumer<Throwable> fail) {
+        public @NonNull T hooks(@NonNull Consumer<Long> ok,
+                                @NonNull Consumer<Throwable> fail) {
             this.success = ok;
             this.error = fail;
             return (T) this;
         }
 
         @Override
-        public BotResponse send(TelegramTransport tg) {
+        public @NonNull BotResponse send(@NonNull TelegramTransport tg) {
             try {
-                BotApiMethod<?> m = build();
+                PartialBotApiMethod<?> m = build();
                 long id = tg.execute(m);
                 if (ttl != null) {
                     tg.scheduleDelete(chatId, id, ttl);
@@ -245,57 +253,18 @@ public final class BotResponse {
                 if (success != null) {
                     success.accept(id);
                 }
-                return new BotResponse();
+                return BotResponse.EMPTY;
             } catch (Exception ex) {
                 if (error != null) {
                     error.accept(ex);
                 }
-                throw ex instanceof RuntimeException r ? r : new RuntimeException(ex);
+                throw new BotApiException(ex);
             }
         }
 
         @Override
-        public CompletableFuture<BotResponse> sendAsync(Executor executor) {
-            return CompletableFuture.supplyAsync(() -> send(CONFIG.transport), executor);
-        }
-
-        protected abstract BotApiMethod<?> build();
-    }
-
-    /** Настройки по умолчанию. */
-    public static final class Config {
-        private String parseMode = ParseMode.HTML;
-        private boolean sanitize;
-        private FeatureFlags flags = FeatureFlags.noop();
-        private TelegramTransport transport = new TelegramTransport() {
-            @Override
-            public long execute(BotApiMethod<?> method) {
-                log.debug("execute: {}", method); return 0;
-            }
-            @Override
-            public void delete(long chatId, long messageId) {
-                log.debug("delete: {}", messageId);
-            }
-        };
-
-        public Config markdownV2() {
-            this.parseMode = ParseMode.MARKDOWNV2;
-            return this;
-        }
-
-        public Config sanitizeMarkdown() {
-            this.sanitize = true;
-            return this;
-        }
-
-        public Config featureFlags(FeatureFlags flags) {
-            this.flags = flags;
-            return this;
-        }
-
-        public Config transport(TelegramTransport tr) {
-            this.transport = tr;
-            return this;
+        public @NonNull CompletableFuture<BotResponse> sendAsync(@NonNull Executor executor) {
+            return CompletableFuture.supplyAsync(() -> send(DslGlobalConfig.INSTANCE.getTransport()), executor);
         }
     }
 }

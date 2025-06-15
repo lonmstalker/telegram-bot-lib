@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import io.lonmstalker.tgkit.core.i18n.MessageLocalizer;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
@@ -13,21 +14,21 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
  */
 public final class KbBuilder {
 
-    private final MessageLocalizer loc;
+    private final @NonNull MessageLocalizer loc;
     private final List<List<InlineKeyboardButton>> rows = new ArrayList<>();
 
-    KbBuilder(MessageLocalizer loc) {
+    KbBuilder(@NonNull MessageLocalizer loc) {
         this.loc = loc;
     }
 
     /** Добавляет строку кнопок. */
-    public KbBuilder row(Button... buttons) {
+    public @NonNull KbBuilder row(@NonNull Button... buttons) {
         rows.add(to(buttons));
         return this;
     }
 
     /** Каждая кнопка в отдельной строке. */
-    public KbBuilder col(Button... buttons) {
+    public @NonNull KbBuilder col(@NonNull Button... buttons) {
         for (Button b : buttons) {
             rows.add(to(b));
         }
@@ -35,7 +36,7 @@ public final class KbBuilder {
     }
 
     /** Размещает кнопки по сетке. */
-    public KbBuilder grid(int cols, Button... buttons) {
+    public @NonNull KbBuilder grid(int cols, @NonNull Button... buttons) {
         List<InlineKeyboardButton> cur = new ArrayList<>();
         for (Button b : buttons) {
             cur.add(b.build(loc));
@@ -51,19 +52,19 @@ public final class KbBuilder {
     }
 
     /** Итоговая разметка. */
-    public InlineKeyboardMarkup build() {
+    public @NonNull InlineKeyboardMarkup build() {
         return new InlineKeyboardMarkup(rows);
     }
 
-    List<List<InlineKeyboardButton>> rows() {
+    @NonNull List<List<InlineKeyboardButton>> rows() {
         return rows;
     }
 
-    private List<InlineKeyboardButton> to(Button... buttons) {
+    private @NonNull List<InlineKeyboardButton> to(@NonNull Button... buttons) {
         return Arrays.stream(buttons).map(b -> b.build(loc)).collect(Collectors.toList());
     }
 
-    private List<InlineKeyboardButton> to(Button b) {
+    private @NonNull List<InlineKeyboardButton> to(@NonNull Button b) {
         return List.of(b.build(loc));
     }
 }

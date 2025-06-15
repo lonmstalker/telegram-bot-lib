@@ -3,17 +3,18 @@ package io.lonmstalker.tgkit.core.dsl;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import org.telegram.telegrambots.meta.api.methods.send.SendMediaGroup;
+
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 
 /** Простейшая реализация транспорта для тестов. */
 public final class FakeTransport implements TelegramTransport {
-    public final List<BotApiMethod<?>> sent = new ArrayList<>();
     public final List<Long> deleted = new ArrayList<>();
     public final List<Duration> ttls = new ArrayList<>();
+    public final List<PartialBotApiMethod<?>> sent = new ArrayList<>();
 
     @Override
-    public long execute(BotApiMethod<?> method) {
+    public long execute(@NonNull PartialBotApiMethod<?> method) {
         sent.add(method);
         return sent.size();
     }
@@ -24,7 +25,7 @@ public final class FakeTransport implements TelegramTransport {
     }
 
     @Override
-    public void scheduleDelete(long chatId, long messageId, Duration ttl) {
+    public void scheduleDelete(long chatId, long messageId, @NonNull Duration ttl) {
         ttls.add(ttl);
     }
 }
