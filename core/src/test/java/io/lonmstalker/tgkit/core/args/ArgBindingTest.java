@@ -6,6 +6,7 @@ import io.lonmstalker.tgkit.core.BotRequestType;
 import io.lonmstalker.tgkit.core.BotResponse;
 import io.lonmstalker.tgkit.core.bot.BotConfig;
 import io.lonmstalker.tgkit.core.bot.TelegramSender;
+import io.lonmstalker.tgkit.core.i18n.MessageLocalizerImpl;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import io.lonmstalker.tgkit.core.annotation.Arg;
 import io.lonmstalker.tgkit.core.annotation.BotHandler;
@@ -52,8 +53,8 @@ public class ArgBindingTest {
 
         BotInfo info = new BotInfo(1L, new InMemoryStateStore(),
                 new TelegramSender(BotConfig.builder().build(), "T"),
-                new MessageLocalizer(Locale.US));
-        BotRequest<Message> req = new BotRequest<>(0, msg, info, new User("1"));
+                new MessageLocalizerImpl("i18n/messages", Locale.US));
+        BotRequest<Message> req = new BotRequest<>(0, msg, info, new User("1"), Locale.getDefault());
         cmd.handle(req);
 
         assertEquals(42, Commands.captured);

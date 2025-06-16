@@ -25,7 +25,7 @@ public class BotDataSourceFactoryTest {
             st.executeUpdate(
                     "CREATE TABLE IF NOT EXISTS bot_settings (id INT PRIMARY KEY, token VARCHAR(255), " +
                             "proxy_host VARCHAR(255), proxy_port INT, proxy_type INT, " +
-                            "max_threads INT, updates_timeout INT, updates_limit INT, bot_pattern VARCHAR(255))");
+                            "max_threads INT, updates_timeout INT, updates_limit INT, bot_group VARCHAR(255))");
         }
     }
 

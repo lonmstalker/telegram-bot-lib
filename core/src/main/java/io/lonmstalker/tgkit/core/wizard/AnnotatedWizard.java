@@ -2,18 +2,20 @@ package io.lonmstalker.tgkit.core.wizard;
 
 import io.lonmstalker.tgkit.core.wizard.annotation.Step;
 import io.lonmstalker.tgkit.core.wizard.annotation.Wizard;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
 /** Утилита для построения {@link WizardMeta} из аннотированного класса. */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class AnnotatedWizard {
 
-    private AnnotatedWizard() {
-    }
-
-    public static WizardMeta parse(Class<?> clazz) {
+    public static @NonNull WizardMeta parse(@NonNull Class<?> clazz) {
         Wizard w = clazz.getAnnotation(Wizard.class);
         if (w == null) {
             throw new IllegalArgumentException("Missing @Wizard: " + clazz);

@@ -83,7 +83,7 @@ public final class AnnotatedCommandLoader {
      * Создаёт экземпляр указанного класса, учитывая возможный метод getInstance().
      */
     @SuppressWarnings("return")
-    private static Object createInstance(Class<?> clazz) {
+    private static @NonNull Object createInstance(@NonNull Class<?> clazz) {
         try {
             Method getInstance = clazz.getDeclaredMethod("getInstance");
             if (Modifier.isStatic(getInstance.getModifiers())) {

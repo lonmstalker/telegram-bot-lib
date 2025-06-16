@@ -4,6 +4,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
+import java.util.Locale;
+
+import io.lonmstalker.tgkit.core.i18n.MessageLocalizerImpl;
 import org.junit.jupiter.api.Test;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
@@ -13,7 +16,7 @@ public class KeyboardLayoutTest {
 
     @Test
     void layoutToJson() throws Exception {
-        InlineKeyboardMarkup kb = new KbBuilder()
+        InlineKeyboardMarkup kb = new KbBuilder(new MessageLocalizerImpl("i18n/messages", Locale.forLanguageTag("ru")))
                 .row(Button.cb("A", "a"), Button.cb("B", "b"))
                 .col(Button.cb("C", "c"))
                 .grid(2, Button.cb("D", "d"), Button.cb("E", "e"), Button.cb("F", "f"))

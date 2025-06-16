@@ -26,6 +26,6 @@ public class LoggingBotInterceptor implements BotInterceptor {
     @Override
     @SuppressWarnings("argument")
     public void afterCompletion(@NonNull Update update, @Nullable BotResponse response, @Nullable Exception ex) {
-        log.debug("After completion update: {}, response: {}, error: {}", update, response, ex);
+        log.debug("After completion update: {}, response: {}, error: ", update, response, ex);
     }
 }

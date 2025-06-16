@@ -7,6 +7,7 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 import io.lonmstalker.tgkit.core.BotRequest;
+import io.lonmstalker.tgkit.core.BotResponse;
 import io.lonmstalker.tgkit.core.exception.BotApiException;
 import io.lonmstalker.tgkit.core.i18n.MessageLocalizer;
 import lombok.AccessLevel;
@@ -19,8 +20,8 @@ import org.telegram.telegrambots.meta.api.objects.InputFile;
  * Точка входа в DSL ответа бота.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class BotResponse {
-    public static final BotResponse EMPTY = new BotResponse();
+@SuppressWarnings("initialization.fields.uninitialized")
+public final class BotDSL {
 
     /**
      * Конфигурирует глобальные параметры.
@@ -111,39 +112,39 @@ public final class BotResponse {
         }
 
         public @NonNull MessageBuilder msg(@NonNull String text) {
-            return BotResponse.msg(req, text);
+            return BotDSL.msg(req, text);
         }
 
         public @NonNull MessageBuilder msgKey(@NonNull String key, @NonNull Object... args) {
-            return BotResponse.msgKey(req, key, args);
+            return BotDSL.msgKey(req, key, args);
         }
 
         public @NonNull PhotoBuilder photo(@NonNull InputFile file) {
-            return BotResponse.photo(req, file);
+            return BotDSL.photo(req, file);
         }
 
         public @NonNull EditBuilder edit(long msgId) {
-            return BotResponse.edit(req, msgId);
+            return BotDSL.edit(req, msgId);
         }
 
         public @NonNull DeleteBuilder delete(long msgId) {
-            return BotResponse.delete(req, msgId);
+            return BotDSL.delete(req, msgId);
         }
 
         public @NonNull MediaGroupBuilder mediaGroup() {
-            return BotResponse.mediaGroup(req);
+            return BotDSL.mediaGroup(req);
         }
 
         public @NonNull PollBuilder poll(@NonNull String question) {
-            return BotResponse.poll(req, question);
+            return BotDSL.poll(req, question);
         }
 
         public @NonNull QuizBuilder quiz(@NonNull String question, int correct) {
-            return BotResponse.quiz(req, question, correct);
+            return BotDSL.quiz(req, question, correct);
         }
 
         public @NonNull InlineResults inline() {
-            return BotResponse.inline(req);
+            return BotDSL.inline(req);
         }
     }
 
@@ -253,7 +254,7 @@ public final class BotResponse {
                 if (success != null) {
                     success.accept(id);
                 }
-                return BotResponse.EMPTY;
+                return new BotResponse();
             } catch (Exception ex) {
                 if (error != null) {
                     error.accept(ex);

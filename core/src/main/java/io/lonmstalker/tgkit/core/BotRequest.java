@@ -3,6 +3,8 @@ package io.lonmstalker.tgkit.core;
 import io.lonmstalker.tgkit.core.user.BotUserInfo;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
+import java.util.Locale;
+
 /**
  * Обёртка над обновлением Telegram, содержащая дополнительную информацию о боте
  * и пользователе.
@@ -16,5 +18,6 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 public record BotRequest<T>(int updateId,
                             @NonNull T data,
                             @NonNull BotInfo botInfo,
-                            @NonNull BotUserInfo user) {
+                            @NonNull BotUserInfo user,
+                            @NonNull Locale locale) {
 }

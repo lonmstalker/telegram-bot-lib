@@ -10,7 +10,8 @@ import org.telegram.telegrambots.meta.api.methods.send.SendChatAction;
 import io.lonmstalker.tgkit.core.BotRequest;
 
 /** Редактирование сообщения. */
-public final class EditBuilder extends BotResponse.CommonBuilder<EditBuilder> {
+@SuppressWarnings("initialization.fields.uninitialized")
+public final class EditBuilder extends BotDSL.CommonBuilder<EditBuilder> {
     private final long msgId;
     private Duration typing;
     private String newText;

@@ -3,6 +3,7 @@ package io.lonmstalker.tgkit.core.dsl;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.lonmstalker.tgkit.core.BotResponse;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMediaGroup;
@@ -13,7 +14,7 @@ import org.telegram.telegrambots.meta.api.objects.media.InputMediaVideo;
 import io.lonmstalker.tgkit.core.BotRequest;
 
 /** Построитель медиа-группы. */
-public final class MediaGroupBuilder extends BotResponse.CommonBuilder<MediaGroupBuilder> {
+public final class MediaGroupBuilder extends BotDSL.CommonBuilder<MediaGroupBuilder> {
     private final List<InputMedia> items = new ArrayList<>();
 
     MediaGroupBuilder(@NonNull BotRequest<?> req) {
@@ -65,6 +66,6 @@ public final class MediaGroupBuilder extends BotResponse.CommonBuilder<MediaGrou
             g.setMedias(c);
             tg.execute(g);
         }
-        return BotResponse.EMPTY;
+        return new BotResponse();
     }
 }

@@ -10,9 +10,9 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 public class BranchAdminTest {
     @Test
     void adminBranchAddsButton() {
-        FakeContext ctx = new FakeContext(1L, Set.of("ADMIN"));
+        Context ctx = new Context(1L, Set.of("ADMIN"));
         FakeTransport tg = new FakeTransport();
-        BotResponse.msg(TestUtils.request(1), "hi")
+        BotDSL.msg(TestUtils.request(1), "hi")
                 .chat(1)
                 .onlyAdmin(b -> b.keyboard(k -> k.row(Button.cb("A", "a"))))
                 .send(tg);

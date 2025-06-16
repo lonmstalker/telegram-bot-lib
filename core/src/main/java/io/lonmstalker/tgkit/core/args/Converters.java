@@ -16,7 +16,8 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Converters {
     private static final Map<Class<?>, BotArgumentConverter<?>> BY_TYPE = new ConcurrentHashMap<>();
-    private static final Map<Class<? extends BotArgumentConverter<?>>, BotArgumentConverter<?>> BY_CLASS = new ConcurrentHashMap<>();
+    private static final Map<Class<? extends BotArgumentConverter<?>>, BotArgumentConverter<?>> BY_CLASS =
+            new ConcurrentHashMap<>();
 
     static {
         ServiceLoader.load(BotArgumentConverter.class).forEach(c -> {
@@ -27,7 +28,7 @@ public final class Converters {
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public static <T> @NonNull BotArgumentConverter<T> getByType(Class<T> type) {
+    public static <T> @NonNull BotArgumentConverter<T> getByType(@NonNull Class<T> type) {
         if (type.isPrimitive()) {
             type = (Class<T>) wrapPrimitive(type);
         }
@@ -43,16 +44,18 @@ public final class Converters {
             return (BotArgumentConverter<T>) numberConverter((Class<? extends Number>) type);
         }
         if (UUID.class.equals(type)) {
-            return (BotArgumentConverter<T>) (BotArgumentConverter<?>) (raw, ctx) -> UUID.fromString(raw);
+            return (BotArgumentConverter<T>) (BotArgumentConverter<?>) (raw, ctx) ->
+                    UUID.fromString(raw);
         }
         return (BotArgumentConverter<T>) new BotArgumentConverter.Identity();
     }
 
-    public static <T extends BotArgumentConverter<?>> @NonNull BotArgumentConverter<?> getByClass(Class<T> clazz) {
+    public static <T extends BotArgumentConverter<?>> @NonNull BotArgumentConverter<?> getByClass(
+            @NonNull Class<T> clazz) {
         return BY_CLASS.computeIfAbsent(clazz, Converters::instantiate);
     }
 
-    private static BotArgumentConverter<?> instantiate(Class<? extends BotArgumentConverter<?>> clazz) {
+    private static @NonNull BotArgumentConverter<?> instantiate(@NonNull Class<? extends BotArgumentConverter<?>> clazz) {
         try {
             return clazz.getDeclaredConstructor().newInstance();
         } catch (Exception e) {
@@ -60,7 +63,7 @@ public final class Converters {
         }
     }
 
-    private static Class<?> extractType(Class<?> clazz) {
+    private static @NonNull Class<?> extractType(@NonNull Class<?> clazz) {
         for (Type t : clazz.getGenericInterfaces()) {
             if (t instanceof ParameterizedType pt && pt.getRawType() == BotArgumentConverter.class) {
                 Type arg = pt.getActualTypeArguments()[0];
@@ -76,7 +79,7 @@ public final class Converters {
         return Object.class;
     }
 
-    private static Class<?> wrapPrimitive(Class<?> type) {
+    private static @NonNull Class<?> wrapPrimitive(@NonNull Class<?> type) {
         return switch (type.getName()) {
             case "int" -> Integer.class;
             case "long" -> Long.class;
@@ -93,7 +96,8 @@ public final class Converters {
     /**
      * Возвращает конвертер для числовых типов.
      */
-    private static BotArgumentConverter<? extends Number> numberConverter(Class<? extends Number> type) {
+    private static @NonNull BotArgumentConverter<? extends Number> numberConverter(
+            @NonNull Class<? extends Number> type) {
         // преобразование строковых аргументов в нужный числовой тип
         return (raw, ctx) -> switch (type.getSimpleName()) {
             case "Integer" -> Integer.parseInt(raw);

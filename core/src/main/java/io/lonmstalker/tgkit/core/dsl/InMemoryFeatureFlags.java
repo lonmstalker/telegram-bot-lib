@@ -9,8 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Хранит состояние флагов в памяти.
  */
-public final class InMemoryFeatureFlags implements FeatureFlags {
-
+public class InMemoryFeatureFlags implements FeatureFlags {
     private final Map<String, Set<Long>> flags = new ConcurrentHashMap<>();
 
     @Override

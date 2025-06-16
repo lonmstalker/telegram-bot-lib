@@ -12,7 +12,7 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Slf4j
-class WebHookReceiver extends TelegramWebhookBot {
+class WebHookReceiver extends TelegramWebhookBot implements AutoCloseable {
     private final @NonNull String token;
     private final @NonNull BotAdapter adapter;
     private final @NonNull BotExceptionHandler globalExceptionHandler;
@@ -51,5 +51,16 @@ class WebHookReceiver extends TelegramWebhookBot {
     @Override
     public String getBotPath() {
         return token;
+    }
+
+    @Override
+    public void close() {
+        if (adapter instanceof AutoCloseable) {
+            try {
+                ((AutoCloseable) adapter).close();
+            } catch (Exception e) {
+                // ignored
+            }
+        }
     }
 }

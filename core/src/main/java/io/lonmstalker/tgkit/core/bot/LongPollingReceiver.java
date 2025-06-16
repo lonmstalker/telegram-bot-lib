@@ -11,7 +11,7 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Slf4j
-class LongPollingReceiver extends TelegramLongPollingBot {
+class LongPollingReceiver extends TelegramLongPollingBot implements AutoCloseable {
     private final @NonNull BotAdapter adapter;
     private final @NonNull BotExceptionHandler globalExceptionHandler;
 
@@ -44,5 +44,17 @@ class LongPollingReceiver extends TelegramLongPollingBot {
     @Override
     public @NonNull String getBotUsername() {
         return username != null ? username : StringUtils.EMPTY;
+    }
+
+    @Override
+    public void close() throws Exception {
+        onClosing();
+        if (adapter instanceof AutoCloseable) {
+            try {
+                ((AutoCloseable) adapter).close();
+            } catch (Exception e) {
+                // ignored
+            }
+        }
     }
 }

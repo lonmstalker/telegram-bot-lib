@@ -33,9 +33,8 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.telegram.telegrambots.meta.generics.BackOff;
 
 public class TelegramSender extends DefaultAbsSender implements AutoCloseable {
-
-    private final RateLimiter rateLimiter;
     private final BackOff backOff;
+    private final RateLimiter rateLimiter;
 
     public TelegramSender(@NonNull BotConfig options,
                           @NonNull String botToken) {
@@ -43,8 +42,8 @@ public class TelegramSender extends DefaultAbsSender implements AutoCloseable {
     }
 
     public TelegramSender(@NonNull BotConfig options,
-                             @NonNull String botToken,
-                             @Nullable ScheduledExecutorService scheduler) {
+                          @NonNull String botToken,
+                          @Nullable ScheduledExecutorService scheduler) {
         super(options, botToken);
         this.rateLimiter = new RateLimiter(options.getRequestsPerSecond(), scheduler);
         BackOff tmp = options.getBackOff();
@@ -56,19 +55,20 @@ public class TelegramSender extends DefaultAbsSender implements AutoCloseable {
     }
 
     @Override
-    public <T extends Serializable, Method extends BotApiMethod<T>> T execute(Method method) throws BotApiException {
+    public <T extends Serializable, Method extends BotApiMethod<T>> @NonNull T execute(
+            @NonNull Method method) throws BotApiException {
         return executeWithRetry(() -> super.execute(method));
     }
 
     @Override
-    public <T extends Serializable, Method extends BotApiMethod<T>> CompletableFuture<T> executeAsync(
-            Method method) throws BotApiException {
+    public <T extends Serializable, Method extends BotApiMethod<T>> @NonNull CompletableFuture<T> executeAsync(
+            @NonNull Method method) throws BotApiException {
         return CompletableFuture.supplyAsync(() -> execute(method));
     }
 
     @Override
     public <T extends Serializable, Method extends BotApiMethod<T>, Callback extends SentCallback<T>> void executeAsync(
-            Method method, Callback callback) throws BotApiException {
+            @NonNull Method method, @NonNull Callback callback) throws BotApiException {
         executeAsync(method).whenComplete((r, ex) -> {
             if (ex == null) {
                 callback.onResult(method, r);
@@ -80,127 +80,135 @@ public class TelegramSender extends DefaultAbsSender implements AutoCloseable {
     }
 
     @Override
-    protected <T extends Serializable, Method extends BotApiMethod<T>> CompletableFuture<T> sendApiMethodAsync(
-            Method method) throws BotApiException {
+    protected <T extends Serializable, Method extends BotApiMethod<T>> @NonNull CompletableFuture<T> sendApiMethodAsync(
+            @NonNull Method method) throws BotApiException {
         return CompletableFuture.supplyAsync(() -> execute(method));
     }
 
     @Override
-    public CompletableFuture<Message> executeAsync(SendAnimation sendAnimation) throws BotApiException {
+    public @NonNull CompletableFuture<Message> executeAsync(
+            @NonNull SendAnimation sendAnimation) throws BotApiException {
         return CompletableFuture.supplyAsync(() -> execute(sendAnimation));
     }
 
     @Override
-    public CompletableFuture<Serializable> executeAsync(EditMessageMedia editMessageMedia) throws BotApiException {
+    public @NonNull CompletableFuture<Serializable> executeAsync(
+            @NonNull EditMessageMedia editMessageMedia) throws BotApiException {
         return CompletableFuture.supplyAsync(() -> execute(editMessageMedia));
     }
 
     @Override
-    public CompletableFuture<File> executeAsync(UploadStickerFile uploadStickerFile) throws BotApiException {
+    public @NonNull CompletableFuture<File> executeAsync(
+            @NonNull UploadStickerFile uploadStickerFile) throws BotApiException {
         return CompletableFuture.supplyAsync(() -> execute(uploadStickerFile));
     }
 
     @Override
-    public CompletableFuture<Boolean> executeAsync(CreateNewStickerSet createNewStickerSet) throws BotApiException {
+    public @NonNull CompletableFuture<Boolean> executeAsync(
+            @NonNull CreateNewStickerSet createNewStickerSet) throws BotApiException {
         return CompletableFuture.supplyAsync(() -> execute(createNewStickerSet));
     }
 
     @Override
-    public CompletableFuture<Boolean> executeAsync(SetStickerSetThumbnail setStickerSetThumbnail) throws BotApiException {
+    public @NonNull CompletableFuture<Boolean> executeAsync(
+            @NonNull SetStickerSetThumbnail setStickerSetThumbnail) throws BotApiException {
         return CompletableFuture.supplyAsync(() -> execute(setStickerSetThumbnail));
     }
 
     @Override
-    public CompletableFuture<Boolean> executeAsync(AddStickerToSet addStickerToSet) throws BotApiException {
+    public @NonNull CompletableFuture<Boolean> executeAsync(
+            @NonNull AddStickerToSet addStickerToSet) throws BotApiException {
         return CompletableFuture.supplyAsync(() -> execute(addStickerToSet));
     }
 
     @Override
-    public CompletableFuture<Boolean> executeAsync(SetChatPhoto setChatPhoto) throws BotApiException {
+    public @NonNull CompletableFuture<Boolean> executeAsync(
+            @NonNull SetChatPhoto setChatPhoto) throws BotApiException {
         return CompletableFuture.supplyAsync(() -> execute(setChatPhoto));
     }
 
     @Override
-    public CompletableFuture<List<Message>> executeAsync(SendMediaGroup sendMediaGroup) throws BotApiException {
+    public @NonNull CompletableFuture<List<Message>> executeAsync(
+            @NonNull SendMediaGroup sendMediaGroup) throws BotApiException {
         return CompletableFuture.supplyAsync(() -> execute(sendMediaGroup));
     }
 
     @Override
-    public CompletableFuture<Message> executeAsync(SendVoice sendVoice) throws BotApiException {
+    public @NonNull CompletableFuture<Message> executeAsync(@NonNull SendVoice sendVoice) throws BotApiException {
         return CompletableFuture.supplyAsync(() -> executeWithRetry(() -> execute(sendVoice)));
     }
 
     @Override
-    public CompletableFuture<Message> executeAsync(SendAudio sendAudio) throws BotApiException {
+    public @NonNull CompletableFuture<Message> executeAsync(@NonNull SendAudio sendAudio) throws BotApiException {
         return CompletableFuture.supplyAsync(() -> executeWithRetry(() -> execute(sendAudio)));
     }
 
     @Override
-    public CompletableFuture<Message> executeAsync(SendSticker sendSticker) throws BotApiException {
+    public @NonNull CompletableFuture<Message> executeAsync(@NonNull SendSticker sendSticker) throws BotApiException {
         return CompletableFuture.supplyAsync(() -> executeWithRetry(() -> execute(sendSticker)));
     }
 
     @Override
-    public CompletableFuture<Message> executeAsync(SendVideoNote sendVideoNote) throws BotApiException {
+    public @NonNull CompletableFuture<Message> executeAsync(@NonNull SendVideoNote sendVideoNote) throws BotApiException {
         return CompletableFuture.supplyAsync(() -> executeWithRetry(() -> execute(sendVideoNote)));
     }
 
     @Override
-    public CompletableFuture<Message> executeAsync(SendVideo sendVideo) throws BotApiException {
+    public @NonNull CompletableFuture<Message> executeAsync(@NonNull SendVideo sendVideo) throws BotApiException {
         return CompletableFuture.supplyAsync(() -> executeWithRetry(() -> execute(sendVideo)));
     }
 
     @Override
-    public CompletableFuture<Message> executeAsync(SendPhoto sendPhoto) throws BotApiException {
+    public @NonNull CompletableFuture<Message> executeAsync(@NonNull SendPhoto sendPhoto) throws BotApiException {
         return CompletableFuture.supplyAsync(() -> executeWithRetry(() -> execute(sendPhoto)));
     }
 
     @Override
-    public CompletableFuture<Message> executeAsync(SendDocument sendDocument) throws BotApiException {
+    public @NonNull CompletableFuture<Message> executeAsync(@NonNull SendDocument sendDocument) throws BotApiException {
         return CompletableFuture.supplyAsync(() -> executeWithRetry(() -> execute(sendDocument)));
     }
 
     @Override
-    public Message execute(SendAnimation sendAnimation) throws BotApiException {
+    public @NonNull Message execute(@NonNull SendAnimation sendAnimation) throws BotApiException {
         return executeWithRetry(() -> super.execute(sendAnimation));
     }
 
     @Override
-    public Serializable execute(EditMessageMedia editMessageMedia) throws BotApiException {
+    public @NonNull Serializable execute(@NonNull EditMessageMedia editMessageMedia) throws BotApiException {
         return executeWithRetry(() -> super.execute(editMessageMedia));
     }
 
     @Override
-    public File execute(UploadStickerFile uploadStickerFile) throws BotApiException {
+    public @NonNull File execute(@NonNull UploadStickerFile uploadStickerFile) throws BotApiException {
         return executeWithRetry(() -> super.execute(uploadStickerFile));
     }
 
     @Override
-    public Boolean execute(CreateNewStickerSet createNewStickerSet) throws BotApiException {
+    public @NonNull Boolean execute(@NonNull CreateNewStickerSet createNewStickerSet) throws BotApiException {
         return executeWithRetry(() -> super.execute(createNewStickerSet));
     }
 
     @Override
-    public Boolean execute(SetStickerSetThumbnail setStickerSetThumbnail) throws BotApiException {
+    public @NonNull Boolean execute(@NonNull SetStickerSetThumbnail setStickerSetThumbnail) throws BotApiException {
         return executeWithRetry(() -> super.execute(setStickerSetThumbnail));
     }
 
     @Override
-    public Boolean execute(AddStickerToSet addStickerToSet) throws BotApiException {
+    public @NonNull Boolean execute(@NonNull AddStickerToSet addStickerToSet) throws BotApiException {
         return executeWithRetry(() -> super.execute(addStickerToSet));
     }
 
     @Override
-    public List<Message> execute(SendMediaGroup sendMediaGroup) throws BotApiException {
+    public @NonNull List<Message> execute(@NonNull SendMediaGroup sendMediaGroup) throws BotApiException {
         return executeWithRetry(() -> super.execute(sendMediaGroup));
     }
 
     @Override
-    public Boolean execute(SetChatPhoto setChatPhoto) throws BotApiException {
+    public @NonNull Boolean execute(@NonNull SetChatPhoto setChatPhoto) throws BotApiException {
         return executeWithRetry(() -> super.execute(setChatPhoto));
     }
 
-    private <T> T executeWithRetry(RuntimeExceptionExecutor<T> executor) {
+    private <T> T executeWithRetry(@NonNull RuntimeExceptionExecutor<T> executor) {
         while (true) {
             try {
                 rateLimiter.acquire();
@@ -226,7 +234,7 @@ public class TelegramSender extends DefaultAbsSender implements AutoCloseable {
         }
     }
 
-    private <T> T withConvertException(RuntimeExceptionExecutor<T> executor) {
+    private <T> T withConvertException(@NonNull RuntimeExceptionExecutor<T> executor) {
         try {
             return executor.execute();
         } catch (Exception e) {
@@ -242,7 +250,7 @@ public class TelegramSender extends DefaultAbsSender implements AutoCloseable {
         T execute() throws Exception;
     }
 
-    private BotApiException convertToBotApiException(Throwable throwable) {
+    private BotApiException convertToBotApiException(@NonNull Throwable throwable) {
         if (throwable instanceof java.util.concurrent.CompletionException ce && ce.getCause() != null) {
             throwable = ce.getCause();
         }

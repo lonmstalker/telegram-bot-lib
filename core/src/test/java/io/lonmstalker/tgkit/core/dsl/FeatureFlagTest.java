@@ -12,11 +12,11 @@ public class FeatureFlagTest {
     @Test
     void toggleFlag() {
         StubFeatureFlags flags = new StubFeatureFlags();
-        BotResponse.config(c -> c.featureFlags(flags));
-        FakeContext ctx = new FakeContext(1L, Set.of());
+        BotDSL.config(c -> c.featureFlags(flags));
+        Context ctx = new Context(1L, Set.of());
         FakeTransport tg = new FakeTransport();
 
-        BotResponse.msg(TestUtils.request(1), "hi")
+        BotDSL.msg(TestUtils.request(1), "hi")
                 .chat(1)
                 .ifFlag("new", ctx, b -> b.keyboard(k -> k.row(Button.cb("N", "n"))))
                 .send(tg);
@@ -26,7 +26,7 @@ public class FeatureFlagTest {
 
         flags.enable("new", 1L);
         tg.sent.clear();
-        BotResponse.msg(TestUtils.request(1), "hi")
+        BotDSL.msg(TestUtils.request(1), "hi")
                 .chat(1)
                 .ifFlag("new", ctx, b -> b.keyboard(k -> k.row(Button.cb("N", "n"))))
                 .send(tg);

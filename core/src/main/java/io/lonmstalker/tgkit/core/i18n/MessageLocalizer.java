@@ -2,32 +2,41 @@ package io.lonmstalker.tgkit.core.i18n;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-import java.text.MessageFormat;
 import java.util.Locale;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
 
-public class MessageLocalizer {
+public interface MessageLocalizer {
 
-    private final ResourceBundle bundle;
+    /**
+     * Устанавливает локаль для текущего потока.
+     *
+     * @param locale новая локаль
+     */
+    void setLocale(@NonNull Locale locale);
 
-    public MessageLocalizer() {
-        this(Locale.getDefault());
-    }
+    /**
+     * Сбрасывает локаль текущего потока на дефолтную.
+     */
+    void resetLocale();
 
-    public MessageLocalizer(@NonNull Locale locale) {
-        this.bundle = ResourceBundle.getBundle("i18n.messages", locale);
-    }
+    /**
+     * Получить локализованную строку по ключу.
+     * Если ключ не найден, возвращается сам ключ.
+     */
+    @NonNull String get(@NonNull String key);
 
-    public @NonNull String get(@NonNull String key) {
-        try {
-            return this.bundle.getString(key);
-        } catch (MissingResourceException ex) {
-            return key;
-        }
-    }
+    /**
+     * Получить локализованную строку по ключу.
+     * Если ключ не найден, возвращается сам ключ.
+     */
+    @NonNull String get(@NonNull String key, @NonNull String defaultValue);
 
-    public @NonNull String get(@NonNull String key, Object... args) {
-        return MessageFormat.format(get(key), args);
-    }
+    /**
+     * Получить локализованную и форматированную строку по ключу с параметрами.
+     */
+    @NonNull String get(@NonNull String key, Object... args);
+
+    /**
+     * Получить локализованную и форматированную строку по ключу с параметрами.
+     */
+    @NonNull String get(@NonNull String key, @NonNull String defaultValue, Object... args);
 }

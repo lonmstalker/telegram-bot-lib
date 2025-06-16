@@ -20,8 +20,8 @@ public final class BotFactory {
                              @NonNull BotConfig config,
                              @NonNull BotAdapter adapter) {
         return implBuilder(token, config)
-                .absSender(new LongPollingReceiver(config, adapter, token, config.getGlobalExceptionHandler()))
                 .session(new BotSessionImpl())
+                .absSender(new LongPollingReceiver(config, adapter, token, config.getGlobalExceptionHandler()))
                 .build();
     }
 
@@ -67,7 +67,7 @@ public final class BotFactory {
             cfg.setProxyPort(data.config().getProxyPort());
             cfg.setProxyType(data.config().getProxyType());
             cfg.setMaxThreads(data.config().getMaxThreads());
-            cfg.setBotPattern(data.config().getBotPattern());
+            cfg.setBotGroup(data.config().getBotGroup());
             cfg.setGetUpdatesTimeout(data.config().getGetUpdatesTimeout());
             cfg.setGetUpdatesLimit(data.config().getGetUpdatesLimit());
         }

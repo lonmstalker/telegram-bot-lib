@@ -5,5 +5,5 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 public interface BotUserProvider {
 
-    @NonNull BotUserInfo resolve(Update update);
+    @NonNull BotUserInfo resolve(@NonNull Update update);
 }

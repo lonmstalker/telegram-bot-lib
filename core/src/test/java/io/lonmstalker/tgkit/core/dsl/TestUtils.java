@@ -5,6 +5,7 @@ import io.lonmstalker.tgkit.core.BotRequest;
 import io.lonmstalker.tgkit.core.bot.BotConfig;
 import io.lonmstalker.tgkit.core.bot.TelegramSender;
 import io.lonmstalker.tgkit.core.i18n.MessageLocalizer;
+import io.lonmstalker.tgkit.core.i18n.MessageLocalizerImpl;
 import io.lonmstalker.tgkit.core.state.InMemoryStateStore;
 import io.lonmstalker.tgkit.core.user.BotUserInfo;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -20,11 +21,11 @@ final class TestUtils {
     static BotRequest<Message> request(long chatId) {
         BotInfo info = new BotInfo(1L, new InMemoryStateStore(),
                 new TelegramSender(BotConfig.builder().build(), "T"),
-                new MessageLocalizer(Locale.US));
+                new MessageLocalizerImpl("i18n/messages", Locale.US));
         BotUserInfo user = new BotUserInfo() {
             @Override public @NonNull String chatId() { return String.valueOf(chatId); }
             @Override public @NonNull Set<String> roles() { return Set.of(); }
         };
-        return new BotRequest<>(0, new Message(), info, user);
+        return new BotRequest<>(0, new Message(), info, user, Locale.getDefault());
     }
 }

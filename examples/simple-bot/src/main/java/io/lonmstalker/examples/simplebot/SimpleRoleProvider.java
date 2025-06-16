@@ -12,7 +12,7 @@ import java.util.Set;
 public class SimpleRoleProvider implements BotUserProvider {
 
     @Override
-    public @NonNull BotUserInfo resolve(Update update) {
+    public @NonNull BotUserInfo resolve(@NonNull Update update) {
         User user = null;
         if (update.getMessage() != null) {
             user = update.getMessage().getFrom();

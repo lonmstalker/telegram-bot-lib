@@ -6,7 +6,9 @@ import io.lonmstalker.tgkit.core.BotInfo;
 import io.lonmstalker.tgkit.core.BotRequest;
 import io.lonmstalker.tgkit.core.BotResponse;
 import io.lonmstalker.tgkit.core.state.StateStore;
+import org.apache.commons.lang3.StringUtils;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -32,7 +34,7 @@ public class WizardEngine {
 
         if ("/cancel".equals(in.text) || "wiz:cancel".equals(in.text)) {
             store.set(key, "");
-            return sendMessage(in.chatId, info.localizer().get("wizard.cancel", "Отменено"));
+            return sendMessage(in.chatId, info.localizer().get("wizard.cancel"));
         }
 
         if (!processNav(in.text, session)) {
@@ -41,22 +43,23 @@ public class WizardEngine {
                 session.getData().put(step.saveKey(), in.text);
                 session.setStepIdx(session.getStepIdx() + 1);
             } else {
-                return sendMessage(in.chatId, info.localizer().get("wizard.invalid", "Неверный ввод"));
+                return sendMessage(in.chatId, info.localizer().get("wizard.invalid"));
             }
         }
 
         if (session.getStepIdx() >= wizard.steps().size()) {
             store.set(key, "");
-            return sendMessage(in.chatId, info.localizer().get("wizard.done", "Готово"));
+            return sendMessage(in.chatId, info.localizer().get("wizard.done"));
         }
 
         store.set(key, toJson(session));
         return askStep(session, wizard, in.chatId, info);
     }
 
-    private record Parsed(String chatId, String text) {}
+    private record Parsed(String chatId, String text) {
+    }
 
-    private Parsed parse(BotRequest<?> req) {
+    private @Nullable Parsed parse(@NonNull BotRequest<?> req) {
         if (req.data() instanceof Message msg) {
             return new Parsed(msg.getChatId().toString(), msg.getText());
         }
@@ -66,7 +69,7 @@ public class WizardEngine {
         return null;
     }
 
-    private WizardSession load(StateStore store, String key) {
+    private @NonNull WizardSession load(@NonNull StateStore store, @NonNull String key) {
         String raw = store.get(key);
         if (raw == null) {
             return new WizardSession();
@@ -78,7 +81,7 @@ public class WizardEngine {
         }
     }
 
-    private boolean processNav(String text, WizardSession session) {
+    private boolean processNav(@NonNull String text, @NonNull WizardSession session) {
         if ("/back".equals(text) || "wiz:back".equals(text)) {
             if (session.getStepIdx() > 0) {
                 session.setStepIdx(session.getStepIdx() - 1);
@@ -92,20 +95,26 @@ public class WizardEngine {
         return false;
     }
 
-    private BotResponse askStep(WizardSession session, WizardMeta wizard, String chatId, BotInfo info) {
+    private BotResponse askStep(@NonNull WizardSession session,
+                                @NonNull WizardMeta wizard,
+                                @NonNull String chatId,
+                                @NonNull BotInfo info) {
         StepMeta next = wizard.steps().get(session.getStepIdx());
-        String ask = info.localizer().get(next.askKey(), next.defaultAsk());
+        String ask = next.defaultAsk() != null
+                ? info.localizer().get(next.askKey(), next.defaultAsk())
+                : info.localizer().get(next.askKey());
         SendMessage msg = new SendMessage(chatId, ask);
         msg.setReplyMarkup(nav());
         return BotResponse.builder().method(msg).build();
     }
 
-    private BotResponse sendMessage(String chatId, String text) {
+    private @NonNull BotResponse sendMessage(@NonNull String chatId,
+                                             @NonNull String text) {
         SendMessage msg = new SendMessage(chatId, text);
         return BotResponse.builder().method(msg).build();
     }
 
-    private InlineKeyboardMarkup nav() {
+    private @NonNull InlineKeyboardMarkup nav() {
         List<InlineKeyboardButton> row = new ArrayList<>();
         row.add(InlineKeyboardButton.builder().text("◀").callbackData("wiz:back").build());
         row.add(InlineKeyboardButton.builder().text("▶").callbackData("wiz:next").build());
@@ -113,11 +122,11 @@ public class WizardEngine {
         return new InlineKeyboardMarkup(List.of(row));
     }
 
-    private String toJson(WizardSession session) {
+    private @NonNull String toJson(@NonNull WizardSession session) {
         try {
             return mapper.writeValueAsString(session);
         } catch (JsonProcessingException e) {
-            return "";
+            return StringUtils.EMPTY;
         }
     }
 }

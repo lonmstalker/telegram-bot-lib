@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS bot_settings (
     updates_timeout INTEGER,
     updates_limit INTEGER,
     max_threads INTEGER,
-    bot_pattern VARCHAR(255)
+    bot_group VARCHAR(255)
 );
 
 COMMENT ON TABLE bot_settings IS 'Параметры работы бота и прокси';
@@ -16,4 +16,4 @@ COMMENT ON COLUMN bot_settings.proxy_type IS 'Тип прокси: 1 - HTTP, 2 -
 COMMENT ON COLUMN bot_settings.updates_timeout IS 'Таймаут ожидания обновлений, сек.';
 COMMENT ON COLUMN bot_settings.updates_limit IS 'Максимум обновлений за запрос';
 COMMENT ON COLUMN bot_settings.max_threads IS 'Максимальное число потоков';
-COMMENT ON COLUMN bot_settings.bot_pattern IS 'Шаблон бота';
+COMMENT ON COLUMN bot_settings.bot_group IS 'Группа бота для определения команд';

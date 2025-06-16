@@ -17,6 +17,7 @@ import java.util.function.Predicate;
 public class UpdateUtils {
 
     /** Таблица, сопоставляющая условие из Update типу запроса. */
+    @SuppressWarnings("method.invocation")
     private static final Map<Predicate<Update>, BotRequestType> TYPE_MAP = new LinkedHashMap<>() {{
         put(u -> u.getMessage() != null, BotRequestType.MESSAGE);
         put(u -> u.getEditedMessage() != null, BotRequestType.EDITED_MESSAGE);
@@ -39,6 +40,7 @@ public class UpdateUtils {
     }};
 
     /** Функции, извлекающие пользователя из update. */
+    @SuppressWarnings("argument")
     private static final List<Function<Update, User>> USER_EXTRACTORS = List.of(
             u -> u.getMessage() != null ? u.getMessage().getFrom() : null,
             u -> u.getEditedMessage() != null ? u.getEditedMessage().getFrom() : null,

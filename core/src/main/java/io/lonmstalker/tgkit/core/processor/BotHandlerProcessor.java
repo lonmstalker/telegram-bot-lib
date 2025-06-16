@@ -21,7 +21,7 @@ import javax.tools.Diagnostic;
 import java.util.Set;
 
 @SupportedSourceVersion(SourceVersion.RELEASE_21)
-@SupportedAnnotationTypes("io.lonmstalker.core.annotation.BotHandler")
+@SupportedAnnotationTypes("io.lonmstalker.tgkit.core.annotation.BotHandler")
 public class BotHandlerProcessor extends AbstractProcessor {
 
     @Override

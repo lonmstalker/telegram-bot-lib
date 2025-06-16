@@ -10,7 +10,8 @@ import io.lonmstalker.tgkit.core.BotRequest;
 /**
  * Создание текстового сообщения.
  */
-public final class MessageBuilder extends BotResponse.CommonBuilder<MessageBuilder> {
+@SuppressWarnings("initialization.fields.uninitialized")
+public final class MessageBuilder extends BotDSL.CommonBuilder<MessageBuilder> {
     private final String text;
     private ParseMode parseMode;
 

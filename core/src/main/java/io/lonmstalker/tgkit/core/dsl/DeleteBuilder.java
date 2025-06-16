@@ -6,7 +6,7 @@ import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage
 import io.lonmstalker.tgkit.core.BotRequest;
 
 /** Удаление сообщения. */
-public final class DeleteBuilder extends BotResponse.CommonBuilder<DeleteBuilder> {
+public final class DeleteBuilder extends BotDSL.CommonBuilder<DeleteBuilder> {
     private final long msgId;
 
     DeleteBuilder(@NonNull BotRequest<?> req, long msgId) {

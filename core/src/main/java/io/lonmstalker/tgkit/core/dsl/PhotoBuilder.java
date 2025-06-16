@@ -7,10 +7,12 @@ import org.telegram.telegrambots.meta.api.objects.InputFile;
 import io.lonmstalker.tgkit.core.BotRequest;
 
 /** Построитель отправки фото. */
-public final class PhotoBuilder extends BotResponse.CommonBuilder<PhotoBuilder> {
+@SuppressWarnings("initialization.fields.uninitialized")
+public final class PhotoBuilder extends BotDSL.CommonBuilder<PhotoBuilder> {
     private final InputFile file;
     private String caption;
 
+    @SuppressWarnings("initialization.fields.uninitialized")
     PhotoBuilder(@NonNull BotRequest<?> req, @NonNull InputFile file) {
         super(req);
         this.file = file;

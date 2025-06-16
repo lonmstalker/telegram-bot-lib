@@ -24,8 +24,8 @@ import java.util.Locale;
 public class BotConfig extends DefaultBotOptions {
     private static final String BASE_URL = "https://api.telegram.org/bot";
     private @NonNull Locale locale;
+    private @NonNull String botGroup;
     private @NonNull StateStore store;
-    private @NonNull String botPattern;
     private @Nullable BotExceptionHandler globalExceptionHandler;
     private @NonNull List<BotInterceptor> globalInterceptors = List.of();
     private int requestsPerSecond;
@@ -47,7 +47,7 @@ public class BotConfig extends DefaultBotOptions {
     public BotConfig(@Nullable BotExceptionHandler globalExceptionHandler,
                      List<BotInterceptor> globalInterceptors,
                      @Nullable StateStore store,
-                     @Nullable String botPattern,
+                     @Nullable String botGroup,
                      @Nullable Integer requestsPerSecond,
                      @Nullable Locale locale,
                      @Nullable String proxyHost,
@@ -68,7 +68,7 @@ public class BotConfig extends DefaultBotOptions {
         }
         this.store = store != null ? store : new InMemoryStateStore();
         this.locale = locale != null ? locale : Locale.getDefault();
-        this.botPattern = botPattern != null ? botPattern : "";
+        this.botGroup = botGroup != null ? botGroup : "";
         this.requestsPerSecond = requestsPerSecond != null ? requestsPerSecond : 30;
 
         this.setProxyHost(proxyHost);

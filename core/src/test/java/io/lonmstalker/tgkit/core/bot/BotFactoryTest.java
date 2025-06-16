@@ -39,7 +39,7 @@ public class BotFactoryTest {
         h2.setURL("jdbc:h2:mem:bot;DB_CLOSE_DELAY=-1");
         DataSource ds = h2;
         try (Connection c = ds.getConnection(); Statement st = c.createStatement()) {
-            st.executeUpdate("CREATE TABLE bot_settings (id INT PRIMARY KEY, token VARCHAR(255), proxy_host VARCHAR(255), proxy_port INT, proxy_type INT, max_threads INT, updates_timeout INT, updates_limit INT, bot_pattern VARCHAR(255))");
+            st.executeUpdate("CREATE TABLE bot_settings (id INT PRIMARY KEY, token VARCHAR(255), proxy_host VARCHAR(255), proxy_port INT, proxy_type INT, max_threads INT, updates_timeout INT, updates_limit INT, bot_group VARCHAR(255))");
         }
         TokenCipherImpl cipher = new TokenCipherImpl("secretkey123456");
         String enc = cipher.encrypt("TOKEN");

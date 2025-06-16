@@ -9,7 +9,7 @@ import org.telegram.telegrambots.meta.api.methods.polls.SendPoll;
 import io.lonmstalker.tgkit.core.BotRequest;
 
 /** Построитель опроса. */
-public class PollBuilder extends BotResponse.CommonBuilder<PollBuilder> {
+public class PollBuilder extends BotDSL.CommonBuilder<PollBuilder> {
     private final String question;
     private final List<String> options = new ArrayList<>();
     private boolean anonymous = true;

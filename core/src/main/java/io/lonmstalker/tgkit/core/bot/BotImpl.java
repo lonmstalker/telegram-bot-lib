@@ -73,7 +73,39 @@ public class BotImpl implements Bot {
         clearState();
     }
 
-    private void initLongPolling(LongPollingReceiver receiver) throws Exception {
+    @Override
+    @SuppressWarnings("argument")
+    public @NonNull String username() {
+        checkStarted();
+        return Objects.requireNonNull(user).getUserName();
+    }
+
+    @Override
+    public @NonNull BotCommandRegistry registry() {
+        return commandRegistry;
+    }
+
+    @Override
+    public boolean isStarted() {
+        return user != null;
+    }
+
+    @Override
+    public void onComplete(@NonNull BotCompleteAction action) {
+        completeActions.add(action);
+    }
+
+    @Override
+    public @NonNull BotConfig config() {
+        return this.config;
+    }
+
+    @Override
+    public @NonNull String token() {
+        return this.token;
+    }
+
+    private void initLongPolling(@NonNull LongPollingReceiver receiver) throws Exception {
         receiver.clearWebhook();
         if (this.session == null) {
             this.session = new BotSessionImpl();
@@ -129,38 +161,6 @@ public class BotImpl implements Bot {
         this.user = null;
         this.setWebhook = null;
         this.session = null;
-    }
-
-    @Override
-    @SuppressWarnings("argument")
-    public @NonNull String username() {
-        checkStarted();
-        return Objects.requireNonNull(user).getUserName();
-    }
-
-    @Override
-    public @NonNull BotCommandRegistry registry() {
-        return commandRegistry;
-    }
-
-    @Override
-    public boolean isStarted() {
-        return user != null;
-    }
-
-    @Override
-    public void onComplete(@NonNull BotCompleteAction action) {
-        completeActions.add(action);
-    }
-
-    @Override
-    public @NonNull BotConfig config() {
-        return this.config;
-    }
-
-    @Override
-    public @NonNull String token() {
-        return this.token;
     }
 
     private void checkStarted() {

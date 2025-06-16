@@ -11,7 +11,7 @@ public class MediaGroupTest {
     @Test
     void chunking() {
         FakeTransport tg = new FakeTransport();
-        MediaGroupBuilder b = BotResponse.mediaGroup(TestUtils.request(1)).chat(1);
+        MediaGroupBuilder b = BotDSL.mediaGroup(TestUtils.request(1)).chat(1);
         IntStream.range(0, 12).forEach(i -> b.photo(new InputFile("f" + i), "c"));
         b.send(tg);
         assertThat(tg.sent).hasSize(2);

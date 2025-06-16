@@ -27,7 +27,7 @@ public final class BotDataSourceFactory {
 
     // language=SQL
     private static final String SELECT_QUERY =
-            "SELECT token, proxy_host, proxy_port, proxy_type, max_threads, updates_timeout, updates_limit, bot_pattern " +
+            "SELECT token, proxy_host, proxy_port, proxy_type, max_threads, updates_timeout, updates_limit, bot_group " +
                     "FROM bot_settings WHERE id = ?";
 
     private static final int DEFAULT_MAX_THREADS = 1;
@@ -77,7 +77,7 @@ public final class BotDataSourceFactory {
                 int maxThreads = intOrDefault(rs, "max_threads", DEFAULT_MAX_THREADS);
                 int timeout = intOrDefault(rs, "updates_timeout", DEFAULT_UPDATES_TIMEOUT);
                 int limit = intOrDefault(rs, "updates_limit", DEFAULT_UPDATES_LIMIT);
-                String botPattern = stringOrDefault(rs, "bot_pattern", "");
+                String botGroup = stringOrDefault(rs, "bot_group", "");
 
                 if (StringUtils.isBlank(token)) {
                     throw new BotApiException("Bot token is empty");
@@ -90,7 +90,7 @@ public final class BotDataSourceFactory {
                         .maxThreads(maxThreads)
                         .getUpdatesTimeout(timeout)
                         .getUpdatesLimit(limit)
-                        .botPattern(Objects.requireNonNull(botPattern))
+                        .botGroup(Objects.requireNonNull(botGroup))
                         .build();
 
                 return new BotData(token, config);
