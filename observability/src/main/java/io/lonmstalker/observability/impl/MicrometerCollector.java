@@ -1,6 +1,5 @@
 package io.lonmstalker.observability.impl;
 
-import com.sun.net.httpserver.HttpServer;
 import io.lonmstalker.observability.MetricsCollector;
 import io.lonmstalker.observability.Tags;
 import io.lonmstalker.tgkit.core.exception.BotApiException;
@@ -9,26 +8,34 @@ import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Timer;
 import io.micrometer.prometheusmetrics.PrometheusConfig;
 import io.micrometer.prometheusmetrics.PrometheusMeterRegistry;
+import io.prometheus.client.CollectorRegistry;
+import lombok.AllArgsConstructor;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.IOException;
-import java.io.OutputStream;
-import java.net.InetSocketAddress;
-import java.util.List;
+import java.util.Arrays;
 
 /**
  * Реализация {@link MetricsCollector} на базе Micrometer.
  */
-public record MicrometerCollector(MeterRegistry registry) implements MetricsCollector {
+@AllArgsConstructor
+public class MicrometerCollector implements MetricsCollector {
+    private final MeterRegistry registry;
+    private final PrometheusMetricsServer httpServer;
+
+    @Override
+    public @NonNull MeterRegistry registry() {
+        return registry;
+    }
 
     @Override
     public @NonNull Timer timer(@NonNull String name, @NonNull Tags tags) {
-        return Timer.builder(name).tags(List.of(tags.items())).register(registry);
+        return Timer.builder(name).tags(Arrays.asList(tags.items())).register(registry);
     }
 
     @Override
     public @NonNull Counter counter(@NonNull String name, @NonNull Tags tags) {
-        return Counter.builder(name).tags(List.of(tags.items())).register(registry);
+        return Counter.builder(name).tags(Arrays.asList(tags.items())).register(registry);
     }
 
     /**
@@ -37,22 +44,18 @@ public record MicrometerCollector(MeterRegistry registry) implements MetricsColl
      * @param port порт HTTP-сервера
      * @return созданный collector
      */
-    public static @NonNull MicrometerCollector prometheus(int port) {
-        PrometheusMeterRegistry reg = new PrometheusMeterRegistry(PrometheusConfig.DEFAULT);
+    public static @NonNull MicrometerCollector prometheus(PrometheusConfig cfg, int port) {
+        PrometheusMeterRegistry reg = new PrometheusMeterRegistry(cfg);
         try {
-            HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
-            server.createContext("/prometheus", httpExchange -> {
-                String response = reg.scrape();
-                httpExchange.sendResponseHeaders(200, response.getBytes().length);
-                try (OutputStream os = httpExchange.getResponseBody()) {
-                    os.write(response.getBytes());
-                }
-            });
-
-            new Thread(server::start).start();
+            return new MicrometerCollector(reg, new PrometheusMetricsServer(port, new CollectorRegistry()));
         } catch (IOException e) {
             throw new BotApiException(e);
         }
-        return new MicrometerCollector(reg);
+    }
+
+    @Override
+    public void close() {
+        registry.close();
+        httpServer.stop();
     }
 }

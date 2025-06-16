@@ -1,6 +1,6 @@
 package io.lonmstalker.observability;
 
-import io.opentelemetry.api.common.Attributes;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Абстракция над системой трассировки.
@@ -11,8 +11,9 @@ public interface Tracer {
      * Запускает новый span.
      *
      * @param spanName  имя span
-     * @param attributes атрибуты
+     * @param tags теги
      * @return созданный {@link Span}
      */
-    Span start(String spanName, Attributes attributes);
+    Span start(@NonNull String spanName,
+               @NonNull Tags tags);
 }

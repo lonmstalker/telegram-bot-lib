@@ -1,0 +1,44 @@
+package io.lonmstalker.tgkit.core.dsl;
+
+import io.lonmstalker.tgkit.core.bot.TelegramSender;
+import io.lonmstalker.tgkit.core.dsl.common.MockCtx;
+import io.lonmstalker.tgkit.core.dsl.context.DSLContext;
+import io.lonmstalker.tgkit.core.dsl.feature_flags.InMemoryFeatureFlags;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Predicate;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.*;
+
+class ConditionalBranchesTest {
+
+    @Test
+    void nestedConditionsRunOnce() throws TelegramApiException {
+        TelegramSender sender = mock(TelegramSender.class);
+        doReturn(null)
+                .when(sender)
+                .execute(Mockito.<PartialBotApiMethod<?>>any());
+
+        InMemoryFeatureFlags ff = new InMemoryFeatureFlags();
+        ff.enableChat("BETA", 1L);
+        DslGlobalConfig.INSTANCE.featureFlags(ff);
+
+        DSLContext ctx = MockCtx.ctx(1L, 2L, sender);
+
+        AtomicInteger counter = new AtomicInteger();
+        Predicate<DSLContext> cond = c -> true;
+
+        new MessageBuilder(ctx, "hi")
+                .when(cond, b -> counter.incrementAndGet())
+                .onlyAdmin(b -> counter.incrementAndGet())
+                .flag("BETA", b -> counter.incrementAndGet())
+                .send();
+
+        assertThat(counter).hasValue(3);      // каждая ветка ровно раз
+    }
+}

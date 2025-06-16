@@ -1,14 +1,9 @@
 package io.lonmstalker.observability;
 
-import io.lonmstalker.observability.MetricsCollector;
-import io.lonmstalker.observability.ObservabilityInterceptor;
-import io.lonmstalker.observability.Span;
-import io.lonmstalker.observability.Tracer;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Timer;
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
-import io.opentelemetry.api.common.Attributes;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -43,7 +38,7 @@ public class ObservabilityInterceptorTest {
         when(metrics.registry()).thenReturn(registry);
         when(metrics.timer(anyString(), any())).thenReturn(timer);
         when(metrics.counter(anyString(), any())).thenReturn(counter);
-        when(tracer.start(anyString(), any(Attributes.class))).thenReturn(span);
+        when(tracer.start(anyString(), any(Tags.class))).thenReturn(span);
 
         interceptor = new ObservabilityInterceptor(metrics, tracer);
     }
@@ -61,7 +56,7 @@ public class ObservabilityInterceptorTest {
         interceptor.preHandle(update);
         assertEquals("1", MDC.get("updateId"));
         interceptor.afterCompletion(update, null, null);
-        verify(tracer).start(eq("update"), any(Attributes.class));
+        verify(tracer).start(eq("update"), any(Tags.class));
         verify(span).close();
         verify(metrics, atLeastOnce()).counter(eq("updates_total"), any());
         verify(metrics).timer(eq("update_latency_ms"), any());

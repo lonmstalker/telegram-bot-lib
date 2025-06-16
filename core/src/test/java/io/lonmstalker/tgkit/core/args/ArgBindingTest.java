@@ -12,10 +12,10 @@ import io.lonmstalker.tgkit.core.annotation.Arg;
 import io.lonmstalker.tgkit.core.annotation.BotHandler;
 import io.lonmstalker.tgkit.core.annotation.MessageRegexMatch;
 import io.lonmstalker.tgkit.core.bot.BotCommandRegistryImpl;
-import io.lonmstalker.tgkit.core.i18n.MessageLocalizer;
 import io.lonmstalker.tgkit.core.loader.AnnotatedCommandLoader;
 import io.lonmstalker.tgkit.core.state.InMemoryStateStore;
 import io.lonmstalker.tgkit.core.user.BotUserInfo;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.jupiter.api.Test;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
@@ -37,7 +37,18 @@ public class ArgBindingTest {
         }
     }
 
-    private record User(String chatId) implements BotUserInfo {
+    private record User(@Nullable Long chatId) implements BotUserInfo {
+
+        @Override
+        public @Nullable Long userId() {
+            return chatId;
+        }
+
+        @Override
+        public @Nullable Long internalUserId() {
+            return null;
+        }
+
         @Override public @NonNull Set<String> roles() { return Set.of(); }
     }
 
@@ -54,7 +65,7 @@ public class ArgBindingTest {
         BotInfo info = new BotInfo(1L, new InMemoryStateStore(),
                 new TelegramSender(BotConfig.builder().build(), "T"),
                 new MessageLocalizerImpl("i18n/messages", Locale.US));
-        BotRequest<Message> req = new BotRequest<>(0, msg, info, new User("1"), Locale.getDefault());
+        BotRequest<Message> req = new BotRequest<>(0, msg, info, new User(1L), Locale.getDefault());
         cmd.handle(req);
 
         assertEquals(42, Commands.captured);

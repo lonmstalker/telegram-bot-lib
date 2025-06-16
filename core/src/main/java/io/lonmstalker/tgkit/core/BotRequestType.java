@@ -3,10 +3,7 @@ package io.lonmstalker.tgkit.core;
 import io.lonmstalker.tgkit.core.exception.BotApiException;
 import lombok.Getter;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
-import org.telegram.telegrambots.meta.api.objects.ChatJoinRequest;
-import org.telegram.telegrambots.meta.api.objects.ChatMemberUpdated;
-import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.*;
 import org.telegram.telegrambots.meta.api.objects.boost.ChatBoostUpdated;
 import org.telegram.telegrambots.meta.api.objects.inlinequery.ChosenInlineQuery;
 import org.telegram.telegrambots.meta.api.objects.inlinequery.InlineQuery;
@@ -18,58 +15,84 @@ import org.telegram.telegrambots.meta.api.objects.reactions.MessageReactionCount
 import org.telegram.telegrambots.meta.api.objects.reactions.MessageReactionUpdated;
 
 /**
- * Перечень поддерживаемых типов обновлений Telegram.
+ * Перечень поддерживаемых типов обновлений Telegram + сведения,
+ * обязателен ли userId / chatId для данного события.
  */
 @Getter
 public enum BotRequestType {
-    /** Обычные сообщения и их правки **/
-    MESSAGE(Message.class),
-    EDITED_MESSAGE(Message.class),
-    /** Публикации в каналах и их правки **/
-    CHANNEL_POST(Message.class),
-    EDITED_CHANNEL_POST(Message.class),
-    /** Пользователь вводит адрес доставки при платежах через бот **/
-    SHIPPING_QUERY(ShippingQuery.class),
-    /** Перед финальной оплатой, когда пользователь подтверждает сумму **/
-    PRE_CHECKOUT_QUERY(PreCheckoutQuery.class),
-    /** Опросы и ответы на опросы **/
-    POLL(Poll.class),
-    POLL_ANSWER(PollAnswer.class),
-    /** Изменения статуса участников чата **/
-    CHAT_MEMBER(ChatMemberUpdated.class),
-    MY_CHAT_MEMBER(ChatMemberUpdated.class),
-    CHAT_JOIN_REQUEST(ChatJoinRequest.class),
-    /** Возникает при нажатии кнопок InlineKeyboard с параметром callback_data **/
-    CALLBACK_QUERY(CallbackQuery.class),
-    /** Пользователь набирает @yourbot в любом чате и запрашивает данные инлайн-поиска **/
-    INLINE_QUERY(InlineQuery.class),
-    /** Выбор результата инлайн-поиска **/
-    CHOSEN_INLINE_QUERY(ChosenInlineQuery.class),
-    /** Обновление при добавлении, изменении или удалении неанонимной реакции на сообщение **/
-    MESSAGE_REACTION(MessageReactionUpdated.class),
-    /** Обновление при изменении общего количества (анонимных) реакций на сообщение **/
-    MESSAGE_REACTION_COUNT(MessageReactionCountUpdated.class),
-    /** Уведомление о том, что пользователь “прокачал” (boosted) чат, например, оформив премиум-подписку. **/
-    CHAT_BOOST(ChatBoostUpdated.class),
-    /** Уведомление о снятии ранее оформленного “буста” чата **/
-    REMOVED_CHAT_BOOST(ChatBoostUpdated.class);
+
+    /* Сообщения в чатах */                                 // user  chat
+    MESSAGE               (Message.class,                true,  true),
+    EDITED_MESSAGE        (Message.class,                true,  true),
+
+    /* Публикации в каналах */
+    CHANNEL_POST          (Message.class,                false, true),
+    EDITED_CHANNEL_POST   (Message.class,                false, true),
+
+    /* Inline-клавиатура */
+    CALLBACK_QUERY        (CallbackQuery.class,          true,  false),
+
+    /* Инлайновые запросы */
+    INLINE_QUERY          (InlineQuery.class,            true,  false),
+    CHOSEN_INLINE_QUERY   (ChosenInlineQuery.class,      true,  false),
+
+    /* Платёжные события */
+    SHIPPING_QUERY        (ShippingQuery.class,          true,  false),
+    PRE_CHECKOUT_QUERY    (PreCheckoutQuery.class,       true,  false),
+
+    /* Опросы */
+    POLL                  (Poll.class,                   false, false),
+    POLL_ANSWER           (PollAnswer.class,             true,  false),
+
+    /* Изменения статусов участников */
+    CHAT_MEMBER           (ChatMemberUpdated.class,      true,  true),
+    MY_CHAT_MEMBER        (ChatMemberUpdated.class,      true,  true),
+    CHAT_JOIN_REQUEST     (ChatJoinRequest.class,        true,  true),
+
+    /* Реакции */
+    MESSAGE_REACTION      (MessageReactionUpdated.class, true,  true),
+    MESSAGE_REACTION_COUNT(MessageReactionCountUpdated.class,false,true),
+
+    /* Boost’ы (premium) */
+    CHAT_BOOST            (ChatBoostUpdated.class,       true,  true),
+    REMOVED_CHAT_BOOST    (ChatBoostUpdated.class,       true,  true);
 
     /** Класс Telegram API, соответствующий типу запроса. */
     private final @NonNull Class<?> type;
+    /** Может ли объект содержать User-ID? */
+    private final boolean hasUserId;
+    /** Может ли объект содержать Chat-ID? */
+    private final boolean hasChatId;
 
-    BotRequestType(@NonNull Class<?> type) {
+    BotRequestType(@NonNull Class<?> type,
+                   boolean hasUserId,
+                   boolean hasChatId) {
         this.type = type;
+        this.hasUserId = hasUserId;
+        this.hasChatId = hasChatId;
+    }
+
+    /** @return true, если userId гарантированно присутствует */
+    public boolean requiresUserId() {
+        return hasUserId;
+    }
+
+    /** @return true, если chatId гарантированно присутствует */
+    public boolean requiresChatId() {
+        return hasChatId;
     }
 
     /**
-     * Проверяет, что переданный тип соответствует ожидаемому.
+     * Проверяет, что переданный тип совместим с данным BotRequestType.
      *
-     * @param type класс для проверки
+     * @param clazz класс для проверки
      * @throws BotApiException если тип не совместим
      */
-    public void checkType(Class<?> type) {
-        if (!this.type.isAssignableFrom(type)) {
-            throw new BotApiException(String.format("%s is not a %s", this.type.getSimpleName(), type.getCanonicalName()));
+    public void checkType(@NonNull Class<?> clazz) {
+        if (!this.type.isAssignableFrom(clazz)) {
+            throw new BotApiException(
+                    "%s is not a %s".formatted(clazz.getCanonicalName(), this.type.getSimpleName())
+            );
         }
     }
 }

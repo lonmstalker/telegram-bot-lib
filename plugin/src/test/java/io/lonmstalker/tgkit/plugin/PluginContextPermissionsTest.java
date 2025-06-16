@@ -27,11 +27,11 @@ public class PluginContextPermissionsTest {
 
     private static class NoOpMetrics implements MetricsCollector {
         @Override
-        public io.micrometer.core.instrument.MeterRegistry registry() { return null; }
+        public io.micrometer.core.instrument.@NonNull MeterRegistry registry() { return null; }
         @Override
-        public io.micrometer.core.instrument.Timer timer(String name, io.lonmstalker.observability.Tags tags) { return null; }
+        public io.micrometer.core.instrument.@NonNull Timer timer(@NonNull String name, io.lonmstalker.observability.@NonNull Tags tags) { return null; }
         @Override
-        public io.micrometer.core.instrument.Counter counter(String name, io.lonmstalker.observability.Tags tags) { return null; }
+        public io.micrometer.core.instrument.@NonNull Counter counter(@NonNull String name, io.lonmstalker.observability.@NonNull Tags tags) { return null; }
     }
 
     @Test

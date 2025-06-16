@@ -3,6 +3,8 @@ package io.lonmstalker.tgkit.core.bot;
 import io.lonmstalker.tgkit.core.exception.BotApiException;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.bots.DefaultAbsSender;
+import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.stickers.*;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.groupadministration.SetChatPhoto;
@@ -15,10 +17,6 @@ import org.telegram.telegrambots.meta.api.methods.send.SendSticker;
 import org.telegram.telegrambots.meta.api.methods.send.SendVideo;
 import org.telegram.telegrambots.meta.api.methods.send.SendVideoNote;
 import org.telegram.telegrambots.meta.api.methods.send.SendVoice;
-import org.telegram.telegrambots.meta.api.methods.stickers.AddStickerToSet;
-import org.telegram.telegrambots.meta.api.methods.stickers.CreateNewStickerSet;
-import org.telegram.telegrambots.meta.api.methods.stickers.SetStickerSetThumbnail;
-import org.telegram.telegrambots.meta.api.methods.stickers.UploadStickerFile;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageMedia;
 import org.telegram.telegrambots.meta.api.objects.File;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -206,6 +204,31 @@ public class TelegramSender extends DefaultAbsSender implements AutoCloseable {
     @Override
     public @NonNull Boolean execute(@NonNull SetChatPhoto setChatPhoto) throws BotApiException {
         return executeWithRetry(() -> super.execute(setChatPhoto));
+    }
+
+    /**
+     * Синхронное выполнение любого PartialBotApiMethod<T>.
+     */
+    @SuppressWarnings("unchecked")
+    public <T extends Serializable> T execute(PartialBotApiMethod<T> method) throws BotApiException {
+        return withConvertException(() -> switch (method) {
+            case BotApiMethod<?> botApiMethod -> (T) execute(botApiMethod);
+            case SendPhoto sendPhoto -> (T) execute(sendPhoto);
+            case SendDocument sendDocument -> (T) execute(sendDocument);
+            case SendVideo sendVideo -> (T) execute(sendVideo);
+            case SendVideoNote sendVideoNote -> (T) execute(sendVideoNote);
+            case SendSticker sendSticker -> (T) execute(sendSticker);
+            case SendAudio sendAudio -> (T) execute(sendAudio);
+            case SendVoice sendVoice -> (T) execute(sendVoice);
+            case SendAnimation sendAnimation -> (T) execute(sendAnimation);
+            case SendMediaGroup sendMediaGroup -> (T) execute(sendMediaGroup);
+            case SetChatPhoto setChatPhoto -> (T) execute(setChatPhoto);
+            case CreateNewStickerSet createNewStickerSet -> (T) execute(createNewStickerSet);
+            case AddStickerToSet addStickerToSet -> (T) execute(addStickerToSet);
+            case UploadStickerFile uploadStickerFile -> (T) execute(uploadStickerFile);
+            case EditMessageMedia editMessageMedia -> (T) execute(editMessageMedia);
+            default -> throw new BotApiException("Unsupported method: " + method.getMethod());
+        });
     }
 
     private <T> T executeWithRetry(@NonNull RuntimeExceptionExecutor<T> executor) {

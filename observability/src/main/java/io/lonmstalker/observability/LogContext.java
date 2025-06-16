@@ -2,6 +2,7 @@ package io.lonmstalker.observability;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.slf4j.MDC;
 
 /**
@@ -16,7 +17,7 @@ public final class LogContext {
      * @param key   ключ MDC
      * @param value значение
      */
-    public static void put(String key, String value) {
+    public static void put(@NonNull String key, @NonNull String value) {
         MDC.put(key, value);
     }
 
@@ -25,5 +26,12 @@ public final class LogContext {
      */
     public static void clear() {
         MDC.clear();
+    }
+
+    /**
+     * Удаляет значение из MDC.
+     */
+    public static void remove(@NonNull String key) {
+        MDC.remove(key);
     }
 }

@@ -7,6 +7,7 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 import io.lonmstalker.tgkit.core.BotResponse;
+import io.lonmstalker.tgkit.core.dsl.context.DSLContext;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 
@@ -16,7 +17,10 @@ import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 public interface Common<T extends Common<T>> {
 
     @NonNull
-    T chat(long id);
+    T requireChatId();
+
+    @NonNull
+    T missingIdStrategy(@NonNull MissingIdStrategy strategy);
 
     @NonNull
     T replyTo(long msgId);
@@ -28,7 +32,7 @@ public interface Common<T extends Common<T>> {
     T keyboard(@NonNull Consumer<KbBuilder> cfg);
 
     @NonNull
-    T when(@NonNull Predicate<Context> cond,
+    T when(@NonNull Predicate<DSLContext> cond,
            @NonNull Consumer<Common<T>> branch);
 
     @NonNull
@@ -36,13 +40,22 @@ public interface Common<T extends Common<T>> {
 
     @NonNull
     T ifFlag(@NonNull String flag,
-             @NonNull Context ctx,
              @NonNull Consumer<Common<T>> branch);
 
     @NonNull
     T flag(@NonNull String flag,
-           @NonNull Context ctx,
            @NonNull Consumer<Common<T>> branch);
+
+    // проверка для userId
+    @NonNull
+    T flagUser(@NonNull String flag,
+               @NonNull Consumer<Common<T>> branch);
+
+    // A/B-сплит: control / variant
+    @NonNull
+    T abTest(@NonNull String key,
+             @NonNull Consumer<Common<T>> control,
+             @NonNull Consumer<Common<T>> variant);
 
     @NonNull
     T ttl(@NonNull Duration duration);
@@ -51,7 +64,7 @@ public interface Common<T extends Common<T>> {
     T hooks(@NonNull Consumer<Long> ok, @NonNull Consumer<Throwable> fail);
 
     @NonNull
-    BotResponse send(@NonNull TelegramTransport tg);
+    BotResponse send();
 
     @NonNull
     CompletableFuture<BotResponse> sendAsync(@NonNull Executor executor);

@@ -8,7 +8,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 /**
  * Абстракция над системой сбора метрик.
  */
-public interface MetricsCollector {
+public interface MetricsCollector extends AutoCloseable {
     /**
      * Возвращает используемый {@link MeterRegistry}.
      */

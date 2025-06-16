@@ -1,9 +1,8 @@
 package io.lonmstalker.tgkit.core.dsl;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import io.lonmstalker.tgkit.core.BotResponse;
+import io.lonmstalker.tgkit.core.dsl.context.DSLContext;
+import io.lonmstalker.tgkit.core.dsl.validator.MediaGroupSizeValidator;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMediaGroup;
@@ -11,14 +10,17 @@ import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.media.InputMedia;
 import org.telegram.telegrambots.meta.api.objects.media.InputMediaPhoto;
 import org.telegram.telegrambots.meta.api.objects.media.InputMediaVideo;
-import io.lonmstalker.tgkit.core.BotRequest;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /** Построитель медиа-группы. */
 public final class MediaGroupBuilder extends BotDSL.CommonBuilder<MediaGroupBuilder> {
+    private static final MediaGroupSizeValidator VALIDATOR = new MediaGroupSizeValidator();
     private final List<InputMedia> items = new ArrayList<>();
 
-    MediaGroupBuilder(@NonNull BotRequest<?> req) {
-        super(req);
+    MediaGroupBuilder(@NonNull DSLContext ctx) {
+        super(ctx);
     }
 
     /** Фото с подписью. */
@@ -47,7 +49,9 @@ public final class MediaGroupBuilder extends BotDSL.CommonBuilder<MediaGroupBuil
     }
 
     @Override
-    public @NonNull BotResponse send(@NonNull TelegramTransport tg) {
+    public @NonNull BotResponse send() {
+        requireChatId();
+
         List<List<InputMedia>> chunks = new ArrayList<>();
         List<InputMedia> cur = new ArrayList<>();
         for (InputMedia m : items) {
@@ -57,15 +61,20 @@ public final class MediaGroupBuilder extends BotDSL.CommonBuilder<MediaGroupBuil
                 cur = new ArrayList<>();
             }
         }
+
         if (!cur.isEmpty()) {
             chunks.add(cur);
         }
         for (List<InputMedia> c : chunks) {
+            VALIDATOR.validate(c);
             SendMediaGroup g = new SendMediaGroup();
+
             g.setChatId(String.valueOf(chatId));
             g.setMedias(c);
-            tg.execute(g);
+
+            super.ctx.botInfo().sender().execute(g);
         }
+
         return new BotResponse();
     }
 }

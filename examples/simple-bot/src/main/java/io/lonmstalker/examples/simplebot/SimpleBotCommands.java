@@ -26,7 +26,7 @@ public class SimpleBotCommands {
     private final WizardEngine wizard = new WizardEngine();
     private final WizardMeta orderWizard = new WizardBuilder("order")
             .step("wizard.name", "Введите товар:", "name", v -> !v.isBlank())
-            .step("wizard.qty", "Количество:", "qty", v -> v.matches("\d+"))
+            .step("wizard.qty", "Количество:", "qty", v -> v.matches("\\d+"))
             .build();
 
     @BotHandler(type = BotRequestType.MESSAGE)

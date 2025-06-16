@@ -1,10 +1,9 @@
 package io.lonmstalker.tgkit.core.dsl;
 
-import io.lonmstalker.tgkit.core.BotRequest;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import io.lonmstalker.tgkit.core.dsl.context.DSLContext;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.objects.inlinequery.inputmessagecontent.InputTextMessageContent;
 import org.telegram.telegrambots.meta.api.objects.inlinequery.result.InlineQueryResult;
@@ -15,11 +14,11 @@ import org.telegram.telegrambots.meta.api.objects.inlinequery.result.InlineQuery
  * Построитель результатов инлайн‑запроса.
  */
 public final class InlineResults {
-    private final @NonNull BotRequest<?> req;
+    private final @NonNull DSLContext ctx;
     private final List<InlineQueryResult> list = new ArrayList<>();
 
-    InlineResults(@NonNull BotRequest<?> req) {
-        this.req = req;
+    InlineResults(@NonNull DSLContext ctx) {
+        this.ctx = ctx;
     }
 
     /**
@@ -40,8 +39,8 @@ public final class InlineResults {
     public InlineResults articleKey(String id, String titleKey, String textKey, Object... args) {
         return article(
                 id,
-                req.botInfo().localizer().get(titleKey, args),
-                req.botInfo().localizer().get(textKey, args)
+                ctx.botInfo().localizer().get(titleKey, args),
+                ctx.botInfo().localizer().get(textKey, args)
         );
     }
 

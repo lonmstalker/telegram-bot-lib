@@ -1,21 +1,34 @@
 package io.lonmstalker.tgkit.core.dsl;
 
+import io.lonmstalker.tgkit.core.dsl.context.DSLContext;
+import io.lonmstalker.tgkit.core.dsl.validator.CaptionValidator;
+import io.lonmstalker.tgkit.core.dsl.validator.FileSizeValidator;
+import io.lonmstalker.tgkit.core.parse_mode.ParseMode;
+import io.lonmstalker.tgkit.core.parse_mode.Sanitizer;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
-import io.lonmstalker.tgkit.core.BotRequest;
 
 /** Построитель отправки фото. */
 @SuppressWarnings("initialization.fields.uninitialized")
 public final class PhotoBuilder extends BotDSL.CommonBuilder<PhotoBuilder> {
+    private static final CaptionValidator CAPTION_VALIDATOR = new CaptionValidator();
+    private static final FileSizeValidator FILE_SIZE_VALIDATOR =
+            new FileSizeValidator(20 * 1024 * 1024); // 20 MB фото
     private final InputFile file;
     private String caption;
+    private ParseMode parseMode;
 
     @SuppressWarnings("initialization.fields.uninitialized")
-    PhotoBuilder(@NonNull BotRequest<?> req, @NonNull InputFile file) {
-        super(req);
+    PhotoBuilder(@NonNull DSLContext ctx, @NonNull InputFile file) {
+        super(ctx);
         this.file = file;
+    }
+
+    public @NonNull PhotoBuilder parseMode(@NonNull ParseMode mode) {
+        this.parseMode = mode;
+        return this;
     }
 
     /** Подпись к фото. */
@@ -26,12 +39,22 @@ public final class PhotoBuilder extends BotDSL.CommonBuilder<PhotoBuilder> {
 
     @Override
     public @NonNull PartialBotApiMethod<?> build() {
+        requireChatId();
+
+        ParseMode p = parseMode != null ? parseMode : DslGlobalConfig.INSTANCE.getParseMode();
+        String t = Sanitizer.sanitize(caption, p);
+
+        CAPTION_VALIDATOR.validate(t);
+        FILE_SIZE_VALIDATOR.validate(file);
+
         SendPhoto photo = new SendPhoto(String.valueOf(chatId), file);
-        photo.setCaption(caption);
+        photo.setCaption(t);
         photo.setDisableNotification(disableNotif);
+
         if (keyboard != null) {
             photo.setReplyMarkup(keyboard.build());
         }
+
         return photo;
     }
 }

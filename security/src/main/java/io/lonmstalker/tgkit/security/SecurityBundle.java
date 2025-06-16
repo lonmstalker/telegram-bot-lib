@@ -1,5 +1,7 @@
 package io.lonmstalker.tgkit.security;
 
+import io.lonmstalker.tgkit.security.impl.MathCaptcha;
+
 public class SecurityBundle {
     private final RateLimiterBackend backend;
     private final CaptchaProvider captcha;

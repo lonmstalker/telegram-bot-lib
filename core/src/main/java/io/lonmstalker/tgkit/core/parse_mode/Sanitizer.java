@@ -27,6 +27,7 @@ public final class Sanitizer {
     public static @NonNull String sanitize(@NonNull String input,
                                            @NonNull ParseMode mode) {
         return switch (mode) {
+            case NONE -> input;
             case HTML -> sanitizeHtml(input);
             case MARKDOWN -> sanitizeMarkdown(input);
             case MARKDOWN_V2 -> sanitizeMarkdownV2(input);
@@ -40,26 +41,13 @@ public final class Sanitizer {
         StringBuilder sb = new StringBuilder(text.length());
         for (char c : text.toCharArray()) {
             switch (c) {
-                case '&':
-                    sb.append("&amp;");
-                    break;
-                case '<':
-                    sb.append("&lt;");
-                    break;
-                case '>':
-                    sb.append("&gt;");
-                    break;
-                case '"':
-                    sb.append("&quot;");
-                    break;
-                case '\'':
-                    sb.append("&#x27;");
-                    break;
-                case '/':
-                    sb.append("&#x2F;");
-                    break;
-                default:
-                    sb.append(c);
+                case '&' -> sb.append("&amp;");
+                case '<' -> sb.append("&lt;");
+                case '>' -> sb.append("&gt;");
+                case '"' -> sb.append("&quot;");
+                case '\''-> sb.append("&#x27;");
+                case '/' -> sb.append("&#x2F;");
+                default  -> sb.append(c);
             }
         }
         return sb.toString();
@@ -70,8 +58,6 @@ public final class Sanitizer {
     // Экранируем: '_', '*', '[', ']', '(', ')', '~', '`', '>', '#', '+', '-', '=', '|', '{', '}', '.', '!'
     // =======================
     private static @NonNull String sanitizeMarkdown(@NonNull String text) {
-        // В в1 спецификации Telegram не требует экранировать все символы,
-        // но мы экранируем минимально: '_', '*', '`', '['
         return text
                 .replace("_", "\\_")
                 .replace("*", "\\*")

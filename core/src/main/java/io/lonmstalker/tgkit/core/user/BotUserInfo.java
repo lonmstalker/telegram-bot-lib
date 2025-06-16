@@ -8,8 +8,14 @@ import java.util.Locale;
 
 public interface BotUserInfo {
 
-    @NonNull
-    String chatId();
+    @Nullable
+    Long chatId();
+
+    @Nullable
+    Long userId();
+
+    @Nullable
+    Long internalUserId();
 
     @NonNull
     Set<String> roles();

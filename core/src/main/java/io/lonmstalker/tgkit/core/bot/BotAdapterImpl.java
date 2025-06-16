@@ -59,9 +59,14 @@ public class BotAdapterImpl implements BotAdapter, AutoCloseable {
         Exception error = null;
         BotResponse response = null;
         try {
+            BotRequestHolder.setUpdate(update);
+            BotRequestHolder.setSender(sender);
+            BotRequestHolder.setRequestId(String.valueOf(update.getUpdateId()));
+
             interceptors.forEach(i -> i.preHandle(update));
             response = doHandle(update);
             interceptors.forEach(i -> i.postHandle(update));
+
             return response != null ? response.getMethod() : null;
         } catch (Exception e) {
             error = e;
@@ -80,9 +85,6 @@ public class BotAdapterImpl implements BotAdapter, AutoCloseable {
             return null;
         }
         try {
-            BotRequestHolder.setUpdate(update);
-            BotRequestHolder.setSender(sender);
-
             BotUserInfo user = userProvider.resolve(update);
             Locale locale = resolveLocale(update, user);
 

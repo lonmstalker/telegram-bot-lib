@@ -6,6 +6,7 @@ import io.lonmstalker.tgkit.core.storage.BotRequestHolder;
 import io.lonmstalker.tgkit.core.user.BotUserInfo;
 import io.lonmstalker.tgkit.core.user.BotUserProvider;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -19,7 +20,9 @@ import java.util.Set;
 public class MatchersTest {
 
     @AfterEach
-    void clear() { BotRequestHolder.clear(); }
+    void clear() {
+        BotRequestHolder.clear();
+    }
 
     @Test
     void messageTextMatch() {
@@ -56,9 +59,30 @@ public class MatchersTest {
     @Test
     void userRoleMatch() {
         BotUserProvider provider = u -> new BotUserInfo() {
-            @Override public @NonNull String chatId() { return "1"; }
-            @Override public @NonNull Set<String> roles() { return Set.of("ADMIN"); }
-            @Override public java.util.Locale locale() { return null; }
+            @Override
+            public @Nullable Long chatId() {
+                return 1L;
+            }
+
+            @Override
+            public @Nullable Long userId() {
+                return chatId();
+            }
+
+            @Override
+            public @Nullable Long internalUserId() {
+                return null;
+            }
+
+            @Override
+            public @NonNull Set<String> roles() {
+                return Set.of("ADMIN");
+            }
+
+            @Override
+            public java.util.Locale locale() {
+                return null;
+            }
         };
         User tgUser = new User();
         tgUser.setId(1L);

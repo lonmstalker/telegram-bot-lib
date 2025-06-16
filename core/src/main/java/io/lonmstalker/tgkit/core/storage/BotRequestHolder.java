@@ -13,6 +13,7 @@ import java.util.Optional;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class BotRequestHolder {
     private static final ThreadLocal<@Nullable Update> UPDATE = new ThreadLocal<>();
+    private static final ThreadLocal<@Nullable String> REQUEST_ID = new ThreadLocal<>();
     private static final ThreadLocal<@Nullable TelegramSender> SENDER = new ThreadLocal<>();
 
     public static void setUpdate(@NonNull Update update) {
@@ -23,9 +24,14 @@ public final class BotRequestHolder {
         SENDER.set(sender);
     }
 
+    public static void setRequestId(@NonNull String requestId) {
+        REQUEST_ID.set(requestId);
+    }
+
     public static void clear() {
         UPDATE.remove();
         SENDER.remove();
+        REQUEST_ID.remove();
     }
 
     public static @Nullable Update getUpdate() {
@@ -34,6 +40,10 @@ public final class BotRequestHolder {
 
     public static @Nullable TelegramSender getSender() {
         return SENDER.get();
+    }
+
+    public static @Nullable String getRequestId() {
+        return REQUEST_ID.get();
     }
 
     public static @NonNull Update getUpdateNotNull() {

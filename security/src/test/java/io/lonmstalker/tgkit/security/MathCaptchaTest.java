@@ -1,6 +1,7 @@
 package io.lonmstalker.tgkit.security;
 
 import io.lonmstalker.tgkit.core.i18n.MessageLocalizer;
+import io.lonmstalker.tgkit.security.impl.MathCaptcha;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.Locale;

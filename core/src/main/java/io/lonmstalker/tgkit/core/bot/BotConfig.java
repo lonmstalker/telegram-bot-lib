@@ -7,6 +7,7 @@ import io.lonmstalker.tgkit.core.state.StateStore;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.Singular;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.protocol.HttpContext;
@@ -26,26 +27,14 @@ public class BotConfig extends DefaultBotOptions {
     private @NonNull Locale locale;
     private @NonNull String botGroup;
     private @NonNull StateStore store;
+    private @NonNull List<BotInterceptor> globalInterceptors;
     private @Nullable BotExceptionHandler globalExceptionHandler;
-    private @NonNull List<BotInterceptor> globalInterceptors = List.of();
     private int requestsPerSecond;
-
-    public void addInterceptor(@NonNull BotInterceptor interceptor) {
-        var list = new ArrayList<>(this.globalInterceptors);
-        list.add(interceptor);
-        this.globalInterceptors = List.copyOf(list);
-    }
-
-    public void addInterceptors(@NonNull List<BotInterceptor> interceptors) {
-        var list = new ArrayList<>(this.globalInterceptors);
-        list.addAll(interceptors);
-        this.globalInterceptors = List.copyOf(list);
-    }
 
     @Builder
     @SuppressWarnings({"argument", "method.invocation"})
     public BotConfig(@Nullable BotExceptionHandler globalExceptionHandler,
-                     List<BotInterceptor> globalInterceptors,
+                     @Singular @Nullable List<BotInterceptor> globalInterceptors,
                      @Nullable StateStore store,
                      @Nullable String botGroup,
                      @Nullable Integer requestsPerSecond,
@@ -63,9 +52,7 @@ public class BotConfig extends DefaultBotOptions {
                      @Nullable Integer getUpdatesTimeout,
                      @Nullable Integer getUpdatesLimit) {
         this.globalExceptionHandler = globalExceptionHandler;
-        if (globalInterceptors != null) {
-            this.globalInterceptors = List.copyOf(globalInterceptors);
-        }
+        this.globalInterceptors = globalInterceptors == null ? new ArrayList<>() : globalInterceptors;
         this.store = store != null ? store : new InMemoryStateStore();
         this.locale = locale != null ? locale : Locale.getDefault();
         this.botGroup = botGroup != null ? botGroup : "";
