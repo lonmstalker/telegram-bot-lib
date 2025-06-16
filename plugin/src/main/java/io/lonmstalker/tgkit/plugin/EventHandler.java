@@ -1,5 +1,7 @@
 package io.lonmstalker.tgkit.plugin;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 /**
  * Обработчик события шины.
  */
@@ -11,5 +13,5 @@ public interface EventHandler<T> {
      *
      * @param event событие
      */
-    void handle(T event);
+    void handle(@NonNull T event);
 }
