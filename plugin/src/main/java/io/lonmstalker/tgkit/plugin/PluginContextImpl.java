@@ -30,14 +30,14 @@ public final class PluginContextImpl implements PluginContext {
     private final HttpClient httpClient;
 
     public PluginContextImpl(
-            BotRegistry bots,
-            EventBus bus,
-            StateStore store,
-            MetricsCollector metrics,
-            Tracer tracer,
-            Map<String, ConfigSection> configs,
-            PluginPermissions permissions,
-            HttpClient httpClient) {
+            @NonNull BotRegistry bots,
+            @NonNull EventBus bus,
+            @NonNull StateStore store,
+            @NonNull MetricsCollector metrics,
+            @NonNull Tracer tracer,
+            @NonNull Map<String, ConfigSection> configs,
+            @NonNull PluginPermissions permissions,
+            @NonNull HttpClient httpClient) {
         this.bots = bots;
         this.bus = bus;
         this.store = store;

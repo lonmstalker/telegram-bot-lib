@@ -14,6 +14,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.ServiceLoader;
 import io.lonmstalker.tgkit.plugin.spi.Plugin;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * Менеджер плагинов: загрузка, выгрузка и перезагрузка JAR-файлов.
@@ -28,7 +30,7 @@ public class PluginManager {
      * @param pluginsDir каталог с JAR-плагинами
      * @param eventBus   шина событий
      */
-    public PluginManager(Path pluginsDir, EventBus eventBus) {
+    public PluginManager(@NonNull Path pluginsDir, @NonNull EventBus eventBus) {
         this.pluginsDir = pluginsDir;
         this.eventBus = eventBus;
     }
@@ -52,7 +54,7 @@ public class PluginManager {
      *
      * @param jarPath путь к JAR
      */
-    public void load(Path jarPath) throws Exception {
+    public void load(@NonNull Path jarPath) throws Exception {
         URLClassLoader loader = new URLClassLoader(new URL[] {jarPath.toUri().toURL()});
         ServiceLoader<Plugin> sl = ServiceLoader.load(Plugin.class, loader);
         Iterator<Plugin> it = sl.iterator();
@@ -67,7 +69,7 @@ public class PluginManager {
         plugins.put(manifest.getId(), new LoadedPlugin(plugin, manifest, loader, jarPath));
     }
 
-    private PluginManifest readManifest(ClassLoader loader) throws IOException {
+    private @NonNull PluginManifest readManifest(@NonNull ClassLoader loader) throws IOException {
         try (InputStream is = loader.getResourceAsStream("tgkit-plugin.yaml")) {
             if (is == null) {
                 throw new IOException("tgkit-plugin.yaml not found");
@@ -81,7 +83,7 @@ public class PluginManager {
      *
      * @param id идентификатор плагина
      */
-    public void reload(String id) throws Exception {
+    public void reload(@NonNull String id) throws Exception {
         LoadedPlugin lp = plugins.get(id);
         if (lp == null) {
             return;
@@ -96,7 +98,7 @@ public class PluginManager {
      *
      * @param id идентификатор
      */
-    public void unload(String id) throws Exception {
+    public void unload(@NonNull String id) throws Exception {
         LoadedPlugin lp = plugins.remove(id);
         if (lp != null) {
             lp.plugin.stop();
@@ -108,7 +110,7 @@ public class PluginManager {
      * @param id идентификатор плагина
      * @return манифест или {@code null}, если не найден
      */
-    public PluginManifest getManifest(String id) {
+    public @Nullable PluginManifest getManifest(@NonNull String id) {
         LoadedPlugin lp = plugins.get(id);
         if (lp == null) {
             return null;
@@ -116,5 +118,9 @@ public class PluginManager {
         return lp.manifest;
     }
 
-    private record LoadedPlugin(Plugin plugin, PluginManifest manifest, URLClassLoader loader, Path jarPath) {}
+    private record LoadedPlugin(
+            @NonNull Plugin plugin,
+            @NonNull PluginManifest manifest,
+            @NonNull URLClassLoader loader,
+            @NonNull Path jarPath) {}
 }

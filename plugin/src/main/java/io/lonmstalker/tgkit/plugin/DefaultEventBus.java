@@ -1,5 +1,7 @@
 package io.lonmstalker.tgkit.plugin;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,13 +23,13 @@ public class DefaultEventBus implements EventBus {
     }
 
     @Override
-    public void subscribe(MessageHandler handler) {
+    public void subscribe(@NonNull MessageHandler handler) {
         checkThread();
         handlers.add(handler);
     }
 
     @Override
-    public void publish(String message) {
+    public void publish(@NonNull String message) {
         checkThread();
         for (MessageHandler handler : handlers) {
             handler.onMessage(message);

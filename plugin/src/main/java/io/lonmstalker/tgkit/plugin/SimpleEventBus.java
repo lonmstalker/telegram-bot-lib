@@ -21,7 +21,7 @@ public final class SimpleEventBus implements EventBus {
 
     @Override
     @SuppressWarnings("unchecked")
-    public void publish(Object event) {
+    public void publish(@NonNull Object event) {
         Class<?> cls = event.getClass();
         List<EventHandler<?>> list = handlers.get(cls);
         if (list == null) {

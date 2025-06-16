@@ -3,6 +3,7 @@ package io.lonmstalker.tgkit.plugin;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import io.lonmstalker.tgkit.plugin.spi.Plugin;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -25,7 +26,7 @@ public final class PluginLoader {
     /**
      * Загружает все плагины из директории {@code plugins}.
      */
-    public Collection<PluginWrapper> loadAll() throws Exception {
+    public @NonNull Collection<PluginWrapper> loadAll() throws Exception {
         List<PluginWrapper> list = new ArrayList<>();
         if (!Files.isDirectory(pluginsDir)) {
             return list;
@@ -46,7 +47,7 @@ public final class PluginLoader {
     /**
      * Считывает манифест плагина из ресурса {@code tgkit-plugin.yaml}.
      */
-    private PluginManifest readManifest(ClassLoader cl) throws Exception {
+    private @NonNull PluginManifest readManifest(@NonNull ClassLoader cl) throws Exception {
         try (InputStream is = cl.getResourceAsStream("tgkit-plugin.yaml")) {
             if (is == null) {
                 return new PluginManifest();
