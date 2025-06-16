@@ -2,18 +2,19 @@ package io.lonmstalker.tgkit.core.dsl;
 
 import java.io.Serializable;
 import java.time.Duration;
-import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
+import io.lonmstalker.tgkit.core.BotInfo;
 import io.lonmstalker.tgkit.core.BotRequest;
 import io.lonmstalker.tgkit.core.BotResponse;
 import io.lonmstalker.tgkit.core.dsl.context.DSLContext;
 import io.lonmstalker.tgkit.core.dsl.feature_flags.FeatureFlags;
 import io.lonmstalker.tgkit.core.exception.BotApiException;
 import io.lonmstalker.tgkit.core.i18n.MessageLocalizer;
+import io.lonmstalker.tgkit.core.user.BotUserInfo;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -37,11 +38,8 @@ public final class BotDSL {
         cfg.accept(DslGlobalConfig.INSTANCE);
     }
 
-    /**
-     * Контекст, привязанный к запросу.
-     */
-    public static @NonNull WithRequest with(@NonNull DSLContext ctx) {
-        return new WithRequest(ctx);
+    public static @NonNull DSLContext ctx(@NonNull BotInfo info, @NonNull BotUserInfo user) {
+        return new DSLContext.SimpleDSLContext(info, user);
     }
 
     /**
@@ -109,13 +107,6 @@ public final class BotDSL {
     }
 
     /**
-     * Контекст, привязанный к запросу.
-     */
-    public static @NonNull WithRequest with(@NonNull BotRequest<?> req) {
-        return new WithRequest(new DSLContext.SimpleDSLContext(req.botInfo(), req.user()));
-    }
-
-    /**
      * Сообщение.
      */
     public static @NonNull MessageBuilder msg(@NonNull BotRequest<?> req, @NonNull String text) {
@@ -177,53 +168,6 @@ public final class BotDSL {
      */
     public static @NonNull InlineResults inline(@NonNull BotRequest<?> req) {
         return new InlineResults(new DSLContext.SimpleDSLContext(req.botInfo(), req.user()));
-    }
-
-    /**
-     * Построитель, привязанный к запросу.
-     */
-    public static final class WithRequest {
-        private final @NonNull DSLContext ctx;
-
-        private WithRequest(@NonNull DSLContext ctx) {
-            this.ctx = ctx;
-        }
-
-        public @NonNull MessageBuilder msg(@NonNull String text) {
-            return BotDSL.msg(ctx, text);
-        }
-
-        public @NonNull MessageBuilder msgKey(@NonNull String key, @NonNull Object... args) {
-            return BotDSL.msgKey(ctx, key, args);
-        }
-
-        public @NonNull PhotoBuilder photo(@NonNull InputFile file) {
-            return BotDSL.photo(ctx, file);
-        }
-
-        public @NonNull EditBuilder edit(long msgId) {
-            return BotDSL.edit(ctx, msgId);
-        }
-
-        public @NonNull DeleteBuilder delete(long msgId) {
-            return BotDSL.delete(ctx, msgId);
-        }
-
-        public @NonNull MediaGroupBuilder mediaGroup() {
-            return BotDSL.mediaGroup(ctx);
-        }
-
-        public @NonNull PollBuilder poll(@NonNull String question) {
-            return BotDSL.poll(ctx, question);
-        }
-
-        public @NonNull QuizBuilder quiz(@NonNull String question, int correct) {
-            return BotDSL.quiz(ctx, question, correct);
-        }
-
-        public @NonNull InlineResults inline() {
-            return BotDSL.inline(ctx);
-        }
     }
 
     /**
@@ -307,7 +251,7 @@ public final class BotDSL {
             if (chatId == null) {
                 return (T) this;
             }
-            if (DslGlobalConfig.INSTANCE.getFlags().enabled(flag, chatId)) {
+            if (DslGlobalConfig.INSTANCE.getFlags().isEnabled(flag, chatId)) {
                 branch.accept(this);
             }
             return (T) this;
@@ -351,7 +295,7 @@ public final class BotDSL {
                                    @NonNull Consumer<Common<T>> branch) {
             Long uid = ctx.userInfo().userId();
             if (uid != null &&
-                    DslGlobalConfig.INSTANCE.getFlags().enabledForUser(flag, uid)) {
+                    DslGlobalConfig.INSTANCE.getFlags().isEnabledForUser(flag, uid)) {
                 branch.accept(this);
             }
             return (T) this;

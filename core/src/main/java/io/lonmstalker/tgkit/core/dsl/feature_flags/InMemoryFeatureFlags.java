@@ -12,39 +12,80 @@ import java.util.concurrent.ConcurrentHashMap;
  * Хранит состояние флагов в памяти.
  */
 public class InMemoryFeatureFlags implements FeatureFlags {
+    private final Set<String> disabledFlags = new HashSet<>();
     private final Map<String, Set<Long>> chatFlags = new ConcurrentHashMap<>();
     private final Map<String, Set<Long>> userFlags = new ConcurrentHashMap<>();
     private final Map<String, Integer> percentRoll = new ConcurrentHashMap<>(); // 0..100
 
-    /* --- обычные флаги --- */
-    public void enableChat(@NonNull String key, long chat) {
-        chatFlags.computeIfAbsent(key, k -> new HashSet<>()).add(chat);
+    @Override
+    public void enableChat(@NonNull String key, long chatId) {
+        var flags = chatFlags.get(key);
+        if (flags != null) {
+            flags.remove(chatId);
+        }
     }
 
-    public void enableUser(@NonNull String key, long user) {
-        userFlags.computeIfAbsent(key, k -> new HashSet<>()).add(user);
+    @Override
+    public void enableUser(@NonNull String key, long userId) {
+        var flags = userFlags.get(key);
+        if (flags != null) {
+            flags.remove(userId);
+        }
     }
 
-    /* --- процентный rollout --- */
+    @Override
+    public void disableChat(@NonNull String key, long chatId) {
+        chatFlags.computeIfAbsent(key, k -> new HashSet<>()).add(chatId);
+    }
+
+    @Override
+    public void disableUser(@NonNull String key, long userId) {
+        userFlags.computeIfAbsent(key, k -> new HashSet<>()).add(userId);
+    }
+
+    @Override
     public void rollout(@NonNull String key, int percent) {
+        if (percent < 0 || percent > 100) {
+            throw new IllegalArgumentException("Invalid percent: " + percent);
+        }
         percentRoll.put(key, percent);
     }
 
-    /* --- реализация интерфейса --- */
     @Override
-    public boolean enabled(@NonNull String key, long chatId) {
-        return chatFlags.getOrDefault(key, Set.of()).contains(chatId)
-                || percentRoll.getOrDefault(key, 0) >= (chatId % 100);
+    public void disable(@NonNull String key) {
+        disabledFlags.add(key);
     }
 
     @Override
-    public boolean enabledForUser(@NonNull String key, long userId) {
-        return userFlags.getOrDefault(key, Set.of()).contains(userId)
-                || percentRoll.getOrDefault(key, 0) >= (userId % 100);
+    public void enable(@NonNull String key) {
+        disabledFlags.remove(key);
+    }
+
+    @Override
+    public boolean isEnabled(@NonNull String key, long chatId) {
+        if (disabledFlags.contains(key)
+                || chatFlags.getOrDefault(key, Set.of()).contains(chatId)) {
+            return false;
+        }
+        var pct = percentRoll.get(key);
+        return pct == null || pct >= (chatId % 100);
+    }
+
+    @Override
+    public boolean isEnabledForUser(@NonNull String key, long userId) {
+        if (disabledFlags.contains(key)
+                || userFlags.getOrDefault(key, Set.of()).contains(userId)) {
+            return false;
+        }
+        var pct = percentRoll.get(key);
+        return pct == null || pct >= (userId % 100);
     }
 
     @Override
     public @Nullable Variant variant(@NonNull String key, long entityId) {
+        if (disabledFlags.contains(key)) {
+            return null;
+        }
         Integer pct = percentRoll.get(key);
         if (pct == null) {
             return null;

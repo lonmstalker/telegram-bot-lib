@@ -37,6 +37,11 @@ public class DslGlobalConfig {
         return this;
     }
 
+    public @NonNull DslGlobalConfig unSanitizeMarkdown() {
+        this.sanitize = false;
+        return this;
+    }
+
     public @NonNull DslGlobalConfig featureFlags(@NonNull FeatureFlags flags) {
         this.flags = flags;
         return this;

@@ -19,6 +19,7 @@ public final class PhotoBuilder extends BotDSL.CommonBuilder<PhotoBuilder> {
     private final InputFile file;
     private String caption;
     private ParseMode parseMode;
+    private Boolean sanitize;
 
     @SuppressWarnings("initialization.fields.uninitialized")
     PhotoBuilder(@NonNull DSLContext ctx, @NonNull InputFile file) {
@@ -37,12 +38,19 @@ public final class PhotoBuilder extends BotDSL.CommonBuilder<PhotoBuilder> {
         return this;
     }
 
+    public @NonNull PhotoBuilder sanitize(boolean sanitize) {
+        this.sanitize = sanitize;
+        return this;
+    }
+
     @Override
     public @NonNull PartialBotApiMethod<?> build() {
         requireChatId();
 
         ParseMode p = parseMode != null ? parseMode : DslGlobalConfig.INSTANCE.getParseMode();
-        String t = Sanitizer.sanitize(caption, p);
+        boolean s = this.sanitize != null ? this.sanitize : DslGlobalConfig.INSTANCE.isSanitize();
+
+        String t = s ? Sanitizer.sanitize(caption, p) : caption;
 
         CAPTION_VALIDATOR.validate(t);
         FILE_SIZE_VALIDATOR.validate(file);

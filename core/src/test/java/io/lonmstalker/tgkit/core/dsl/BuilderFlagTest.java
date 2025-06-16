@@ -39,6 +39,7 @@ class BuilderFlagTest {
     @Test
     void branchSkippedIfFlagDisabled() {
         AtomicBoolean ran = new AtomicBoolean(false);
+        DslGlobalConfig.INSTANCE.getFlags().disableChat("EXPERIMENT", 2);
 
         new MessageBuilder(ctx(2L), "hi")
                 .flag("EXPERIMENT", b -> ran.set(true))

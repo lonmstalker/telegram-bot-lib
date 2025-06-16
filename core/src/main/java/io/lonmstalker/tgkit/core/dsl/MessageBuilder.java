@@ -16,6 +16,7 @@ public final class MessageBuilder extends BotDSL.CommonBuilder<MessageBuilder> {
     private static final TextLengthValidator VALIDATOR = new TextLengthValidator();
     private final String text;
     private ParseMode parseMode;
+    private Boolean sanitize;
 
     MessageBuilder(DSLContext ctx, String text) {
         super(ctx);
@@ -27,12 +28,19 @@ public final class MessageBuilder extends BotDSL.CommonBuilder<MessageBuilder> {
         return this;
     }
 
+    public @NonNull MessageBuilder sanitize(boolean sanitize) {
+        this.sanitize = sanitize;
+        return this;
+    }
+
     @Override
     public @NonNull PartialBotApiMethod<?> build() {
         requireChatId();
 
         ParseMode p = parseMode != null ? parseMode : DslGlobalConfig.INSTANCE.getParseMode();
-        String t = Sanitizer.sanitize(text, p);
+        boolean s = this.sanitize != null ? this.sanitize : DslGlobalConfig.INSTANCE.isSanitize();
+
+        String t = s ? Sanitizer.sanitize(text, p) : text;
 
         VALIDATOR.validate(text);
 

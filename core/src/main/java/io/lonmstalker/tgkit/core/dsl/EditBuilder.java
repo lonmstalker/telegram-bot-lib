@@ -18,6 +18,7 @@ public final class EditBuilder extends BotDSL.CommonBuilder<EditBuilder> {
     private Duration typing;
     private String newText;
     private ParseMode parseMode;
+    private Boolean sanitize;
 
     EditBuilder(@NonNull DSLContext ctx, long msgId) {
         super(ctx);
@@ -41,12 +42,19 @@ public final class EditBuilder extends BotDSL.CommonBuilder<EditBuilder> {
         return this;
     }
 
+    public @NonNull EditBuilder sanitize(boolean sanitize) {
+        this.sanitize = sanitize;
+        return this;
+    }
+
     @Override
     public @NonNull PartialBotApiMethod<?> build() {
         requireChatId();
 
         ParseMode p = parseMode != null ? parseMode : DslGlobalConfig.INSTANCE.getParseMode();
-        String t = Sanitizer.sanitize(newText, p);
+        boolean s = this.sanitize != null ? this.sanitize : DslGlobalConfig.INSTANCE.isSanitize();
+
+        String t = s ? Sanitizer.sanitize(newText, p) : newText;
 
         if (typing != null) {
             SendChatAction act = new SendChatAction();
