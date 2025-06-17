@@ -1,0 +1,37 @@
+name: Build & Security-Scan
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Secret scanner  (fails build on token / key)
+      - name: Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        with:
+          fail: true
+
+      # OWASP Dependency-Check (CVEs in deps)
+      - name: Dependency-Check
+        uses: dependency-check/scan-action@v3
+        with:
+          project: tgkit
+          format: "SARIF,HTML"
+          failOnCVSS: "7"
+
+      - name: Upload SARIF to GH Security
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: results.sarif
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Maven test
+        run: mvn -B verify

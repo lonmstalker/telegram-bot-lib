@@ -2,6 +2,7 @@ package io.lonmstalker.tgkit.core.dsl;
 
 import java.time.Duration;
 
+import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
 import io.lonmstalker.tgkit.core.dsl.context.DSLContext;
 import io.lonmstalker.tgkit.core.parse_mode.ParseMode;
 import io.lonmstalker.tgkit.core.parse_mode.Sanitizer;
@@ -50,8 +51,8 @@ public final class EditBuilder extends BotDSL.CommonBuilder<EditBuilder, EditMes
     public @NonNull EditMessageText build() {
         requireChatId();
 
-        ParseMode p = parseMode != null ? parseMode : DslGlobalConfig.INSTANCE.getParseMode();
-        boolean s = this.sanitize != null ? this.sanitize : DslGlobalConfig.INSTANCE.isSanitize();
+        ParseMode p = parseMode != null ? parseMode : BotGlobalConfig.INSTANCE.dsl().getParseMode();
+        boolean s = this.sanitize != null ? this.sanitize : BotGlobalConfig.INSTANCE.dsl().isSanitize();
 
         String t = s ? Sanitizer.sanitize(newText, p) : newText;
 

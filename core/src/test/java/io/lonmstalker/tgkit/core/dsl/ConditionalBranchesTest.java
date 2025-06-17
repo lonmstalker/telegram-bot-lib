@@ -1,6 +1,7 @@
 package io.lonmstalker.tgkit.core.dsl;
 
 import io.lonmstalker.tgkit.core.bot.TelegramSender;
+import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
 import io.lonmstalker.tgkit.core.dsl.common.MockCtx;
 import io.lonmstalker.tgkit.core.dsl.context.DSLContext;
 import io.lonmstalker.tgkit.core.dsl.feature_flags.InMemoryFeatureFlags;
@@ -18,7 +19,7 @@ import static org.mockito.Mockito.*;
 class ConditionalBranchesTest {
 
     @Test
-    void nestedConditionsRunOnce() throws TelegramApiException {
+    void nestedConditionsRunOnce() {
         TelegramSender sender = mock(TelegramSender.class);
         doReturn(null)
                 .when(sender)
@@ -26,7 +27,7 @@ class ConditionalBranchesTest {
 
         InMemoryFeatureFlags ff = new InMemoryFeatureFlags();
         ff.enableChat("BETA", 1L);
-        DslGlobalConfig.INSTANCE.featureFlags(ff);
+        BotGlobalConfig.INSTANCE.dsl().featureFlags(ff);
 
         DSLContext ctx = MockCtx.ctx(1L, 2L, sender);
 

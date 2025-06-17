@@ -11,6 +11,7 @@ import io.lonmstalker.tgkit.core.BotInfo;
 import io.lonmstalker.tgkit.core.BotRequest;
 import io.lonmstalker.tgkit.core.BotResponse;
 import io.lonmstalker.tgkit.core.BotService;
+import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
 import io.lonmstalker.tgkit.core.dsl.context.DSLContext;
 import io.lonmstalker.tgkit.core.dsl.feature_flags.FeatureFlags;
 import io.lonmstalker.tgkit.core.exception.BotApiException;
@@ -35,8 +36,8 @@ public final class BotDSL {
     /**
      * Конфигурирует глобальные параметры.
      */
-    public static void config(@NonNull Consumer<DslGlobalConfig> cfg) {
-        cfg.accept(DslGlobalConfig.INSTANCE);
+    public static void config(@NonNull Consumer<BotGlobalConfig> cfg) {
+        cfg.accept(BotGlobalConfig.INSTANCE);
     }
 
     public static @NonNull DSLContext ctx(@NonNull BotInfo info,
@@ -205,7 +206,7 @@ public final class BotDSL {
             if (ctx.userInfo().chatId() == null) {
                 MissingIdStrategy s = missingIdStrategy != null
                         ? missingIdStrategy
-                        : DslGlobalConfig.INSTANCE.getMissingIdStrategy();
+                        : BotGlobalConfig.INSTANCE.dsl().getMissingIdStrategy();
                 s.onMissing("chatId", ctx);
             }
             return (T) this;
@@ -255,7 +256,7 @@ public final class BotDSL {
             if (chatId == null) {
                 return (T) this;
             }
-            if (DslGlobalConfig.INSTANCE.getFlags().isEnabled(flag, chatId)) {
+            if (BotGlobalConfig.INSTANCE.dsl().getFlags().isEnabled(flag, chatId)) {
                 branch.accept(this);
             }
             return (T) this;
@@ -283,7 +284,7 @@ public final class BotDSL {
             }
 
             FeatureFlags.Variant v =
-                    DslGlobalConfig.INSTANCE.getFlags().variant(key, entityId);
+                    BotGlobalConfig.INSTANCE.dsl().getFlags().variant(key, entityId);
 
             if (v == FeatureFlags.Variant.VARIANT) {
                 variant.accept(this);
@@ -299,7 +300,7 @@ public final class BotDSL {
                                    @NonNull Consumer<Common<T, D>> branch) {
             Long uid = ctx.userInfo().userId();
             if (uid != null &&
-                    DslGlobalConfig.INSTANCE.getFlags().isEnabledForUser(flag, uid)) {
+                    BotGlobalConfig.INSTANCE.dsl().getFlags().isEnabledForUser(flag, uid)) {
                 branch.accept(this);
             }
             return (T) this;

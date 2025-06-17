@@ -1,5 +1,6 @@
 package io.lonmstalker.tgkit.core.dsl;
 
+import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
 import io.lonmstalker.tgkit.core.dsl.context.DSLContext;
 import io.lonmstalker.tgkit.core.dsl.validator.TextLengthValidator;
 import io.lonmstalker.tgkit.core.parse_mode.ParseMode;
@@ -36,8 +37,8 @@ public final class MessageBuilder extends BotDSL.CommonBuilder<MessageBuilder, S
     public @NonNull SendMessage build() {
         requireChatId();
 
-        ParseMode p = parseMode != null ? parseMode : DslGlobalConfig.INSTANCE.getParseMode();
-        boolean s = this.sanitize != null ? this.sanitize : DslGlobalConfig.INSTANCE.isSanitize();
+        ParseMode p = parseMode != null ? parseMode : BotGlobalConfig.INSTANCE.dsl().getParseMode();
+        boolean s = this.sanitize != null ? this.sanitize : BotGlobalConfig.INSTANCE.dsl().isSanitize();
 
         String t = s ? Sanitizer.sanitize(text, p) : text;
 

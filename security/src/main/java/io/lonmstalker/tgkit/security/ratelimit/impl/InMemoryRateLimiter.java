@@ -1,7 +1,8 @@
-package io.lonmstalker.tgkit.security.ratelimit;
+package io.lonmstalker.tgkit.security.ratelimit.impl;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import io.lonmstalker.tgkit.security.ratelimit.RateLimiter;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.Objects;

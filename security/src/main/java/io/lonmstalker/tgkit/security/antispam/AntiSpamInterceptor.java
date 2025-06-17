@@ -52,12 +52,13 @@ public final class AntiSpamInterceptor implements BotInterceptor {
 
         String txt = msg.getText();
         Integer msgId = request.msgId();
+        long botId = request.botInfo().internalId();
         long chat = Objects.requireNonNull(request.user().chatId());
         long user = Objects.requireNonNull(request.user().userId());
 
         /* 1) Flood-gate */
-        if (!flood.tryAcquire("chat:" + chat, 20, 10) ||
-                !flood.tryAcquire("user:" + user, 8, 10)) {
+        if (!flood.tryAcquire(botId + ":chat:" + chat, 20, 10) ||
+                !flood.tryAcquire(botId + ":user:" + user, 8, 10)) {
             request.service().sender().execute(captcha.question(request));
             throw new DropUpdateException("flood");
         }

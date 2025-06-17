@@ -1,6 +1,6 @@
 package io.lonmstalker.tgkit.security.limiter;
 
-import io.lonmstalker.tgkit.security.ratelimit.InMemoryRateLimiter;
+import io.lonmstalker.tgkit.security.ratelimit.impl.InMemoryRateLimiter;
 import io.lonmstalker.tgkit.security.ratelimit.RateLimiter;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;

@@ -1,5 +1,6 @@
-package io.lonmstalker.tgkit.security.ratelimit;
+package io.lonmstalker.tgkit.security.ratelimit.impl;
 
+import io.lonmstalker.tgkit.security.ratelimit.RateLimiter;
 import lombok.RequiredArgsConstructor;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import redis.clients.jedis.Jedis;

@@ -1,9 +1,9 @@
 package io.lonmstalker.tgkit.core.dsl;
 
+import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
 import io.lonmstalker.tgkit.core.dsl.context.DSLContext;
 import io.lonmstalker.tgkit.core.ttl.DeleteTask;
 import io.lonmstalker.tgkit.core.ttl.TtlPolicy;
-import io.lonmstalker.tgkit.core.ttl.TtlScheduler;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
@@ -53,11 +53,12 @@ public final class WithTtl<T extends BotDSL.CommonBuilder<T, D>, D extends Parti
          */
         b.hooks(
                 msgId -> {
-                    Long chat = ctx.userInfo().chatId();
+                    Long chat = Objects.requireNonNull(ctx.userInfo().chatId());
                     Runnable action = () -> ctx.service().sender()
                             .execute(new DeleteMessage(Objects.requireNonNull(chat).toString(),
                                     msgId.intValue()));
-                    TtlScheduler.instance()
+                    BotGlobalConfig.INSTANCE.dsl()
+                            .getTtlScheduler()
                             .schedule(new DeleteTask(chat, msgId, action), d, policy);
                     onSuccess.accept(msgId);
                 },

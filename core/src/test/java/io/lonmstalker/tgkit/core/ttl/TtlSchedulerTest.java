@@ -1,5 +1,6 @@
 package io.lonmstalker.tgkit.core.ttl;
 
+import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.junit.jupiter.api.*;
 
@@ -18,7 +19,8 @@ class TtlSchedulerTest {
 
         DeleteTask task = new DeleteTask(1, 100, calls::incrementAndGet);
 
-        TtlHolder.singleton().schedule(task, Duration.ofMillis(150))
+        BotGlobalConfig.INSTANCE.dsl().getTtlScheduler()
+                .schedule(task, Duration.ofMillis(150))
                 .get(1, TimeUnit.SECONDS);
 
         assertThat(calls).hasValue(1);
@@ -31,7 +33,8 @@ class TtlSchedulerTest {
             throw new IllegalStateException("boom");
         });
 
-        CompletableFuture<Void> cf = TtlHolder.singleton().schedule(task, Duration.ZERO, noRunPolicy());
+        CompletableFuture<Void> cf = BotGlobalConfig.INSTANCE.dsl().getTtlScheduler()
+                .schedule(task, Duration.ZERO, noRunPolicy());
 
         assertThat(cf).isCompletedExceptionally();
     }

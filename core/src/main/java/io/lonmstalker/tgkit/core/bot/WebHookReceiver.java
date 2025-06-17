@@ -2,6 +2,7 @@ package io.lonmstalker.tgkit.core.bot;
 
 import io.lonmstalker.tgkit.core.BotAdapter;
 import io.lonmstalker.tgkit.core.exception.BotExceptionHandler;
+import io.lonmstalker.tgkit.core.secret.SecretStore;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -11,15 +12,26 @@ import org.telegram.telegrambots.bots.TelegramWebhookBot;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+import static io.lonmstalker.tgkit.core.bot.BotConstants.BOT_TOKEN_SECRET;
+
 @Slf4j
 class WebHookReceiver extends TelegramWebhookBot implements AutoCloseable {
     private final @NonNull String token;
     private final @NonNull BotAdapter adapter;
     private final @NonNull TelegramSender sender;
     private final @NonNull BotExceptionHandler globalExceptionHandler;
-    
+
     @Setter
     private @Nullable String username;
+
+    public WebHookReceiver(@NonNull BotConfig options,
+                           @NonNull BotAdapter adapter,
+                           @NonNull SecretStore store,
+                           @NonNull TelegramSender sender,
+                           @Nullable BotExceptionHandler globalExceptionHandler) {
+        this(options, adapter, store.get(BOT_TOKEN_SECRET).orElseThrow(() ->
+                new IllegalArgumentException("secret 'bot_token' not found")), sender, globalExceptionHandler);
+    }
 
     public WebHookReceiver(@NonNull BotConfig options,
                            @NonNull BotAdapter adapter,
@@ -46,12 +58,12 @@ class WebHookReceiver extends TelegramWebhookBot implements AutoCloseable {
     @Override
     @SuppressWarnings("override.return")
     public @Nullable BotApiMethod<?> onWebhookUpdateReceived(Update update) {
-       try {
-           return adapter.handle(update);
-       } catch (Exception e) {
-           globalExceptionHandler.handle(update, e);
-           return null;
-       }
+        try {
+            return adapter.handle(update);
+        } catch (Exception e) {
+            globalExceptionHandler.handle(update, e);
+            return null;
+        }
     }
 
     @Override

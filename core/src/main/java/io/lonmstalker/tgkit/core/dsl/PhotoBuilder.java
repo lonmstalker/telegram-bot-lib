@@ -1,5 +1,6 @@
 package io.lonmstalker.tgkit.core.dsl;
 
+import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
 import io.lonmstalker.tgkit.core.dsl.context.DSLContext;
 import io.lonmstalker.tgkit.core.dsl.validator.CaptionValidator;
 import io.lonmstalker.tgkit.core.dsl.validator.FileSizeValidator;
@@ -46,8 +47,8 @@ public final class PhotoBuilder extends BotDSL.CommonBuilder<PhotoBuilder, SendP
     public @NonNull SendPhoto build() {
         requireChatId();
 
-        ParseMode p = parseMode != null ? parseMode : DslGlobalConfig.INSTANCE.getParseMode();
-        boolean s = this.sanitize != null ? this.sanitize : DslGlobalConfig.INSTANCE.isSanitize();
+        ParseMode p = parseMode != null ? parseMode : BotGlobalConfig.INSTANCE.dsl().getParseMode();
+        boolean s = this.sanitize != null ? this.sanitize : BotGlobalConfig.INSTANCE.dsl().isSanitize();
 
         String t = s ? Sanitizer.sanitize(caption, p) : caption;
 

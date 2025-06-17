@@ -1,6 +1,7 @@
 package io.lonmstalker.tgkit.core.dsl;
 
 import io.lonmstalker.tgkit.core.BotService;
+import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
 import io.lonmstalker.tgkit.core.dsl.context.DSLContext;
 import io.lonmstalker.tgkit.core.parse_mode.ParseMode;
 import io.lonmstalker.tgkit.core.user.BotUserInfo;
@@ -27,7 +28,7 @@ class MessageBuilderTest {
 
     @Test
     void buildCreatesSanitizedMessage() {
-        DslGlobalConfig.INSTANCE.markdownV2().sanitizeMarkdown();
+        BotGlobalConfig.INSTANCE.dsl().markdownV2().sanitizeMarkdown();
 
         SendMessage msg = (SendMessage) new MessageBuilder(ctx, "*bold*")
                 .parseMode(ParseMode.MARKDOWN_V2)

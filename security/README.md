@@ -1,45 +1,53 @@
-# Security-bundle — шпаргалка 2.0
+# 📦 tgkit-security
+*Модуль безопасности для Telegram-ботов на базе **tgkit***
 
-Это краткое руководство по использованию модуля безопасности TgKit.
+---
 
-## Быстрые юзкейсы
-
-| Юзкейс | Что делаем | Аннотация / API |
-|--------|------------|-----------------|
-| Ограничить команду 5 запросами в минуту для каждого пользователя | `@RateLimit(key = USER, permits = 5, seconds = 60)` | `RateLimit` |
-| Разрешить доступ только ADMIN-ам | `@Roles("ADMIN")` | `Roles` |
-| Задать глобальный лимит 100 rps на бота | Аннотация `@RateLimit(key = GLOBAL, permits = 100, seconds = 1)` на классе или методе | `RateLimit` |
-| Зашить лимиты и роли в конфиг без аннотаций | `security.yml` | YAML-конфиг |
-
-## Новые возможности
-
-* **Дефолтная inline-CAPTCHA** — модуль готов к работе без дополнительных зависимостей. Math-CAPTCHA активируется автоматически.
-* **Несколько аннотаций `@RateLimit`** — можно комбинировать, например, лимиты `USER` и `GLOBAL` на одном методе. Аннотация стала `@Repeatable`.
-* **Поддержка Spring Boot** — модуль `tgkit-security-starter` обеспечивает автоконфигурацию и аннотацию `@EnableTgKitSecurity`.
-
-## Пример хэндлера с несколькими лимитами
-
+## TL;DR ⚡
 ```java
-@BotHandler(type = MESSAGE)
-@Roles("ADMIN")
-@RateLimits({
-    @RateLimit(key = USER,   permits = 5, seconds = 60),
-    @RateLimit(key = GLOBAL, permits = 50, seconds = 10)
-})
-public void heavyCmd(BotRequest<Message> req) {
-    // ...
-}
+RateLimiter rateLimiter = BotSecurity.inMemoryRateLimiter();
+CaptchaProvider captchaProvider =
+        BotSecurity.inMemoryCaptchaProvider(Duration.ofMinutes(1), 100);
+AntiSpamInterceptor antiSpamInterceptor = AntiSpamInterceptor
+        .builder()
+        .flood(rateLimiter)
+        .captcha(captchaProvider)
+        .build();
+
+BotConfig cfg = BotConfig.builder()
+        .globalInterceptor(antiSpamInterceptor)
+        .build();
+
+BotAdapter adapter = BotAdapterImpl.builder()
+        .config(cfg)
+        .build();
+
+Bot bot = BotFactory.INSTANCE.from("TOKEN", cfg, adapter,
+        "io.lonmstalker.examples.simplebot");
+        bot.start();
+);
 ```
 
-При превышении первого указанного лимита пользователь увидит inline-CAPTCHA. После успешного решения счётчики обнуляются.
+## Возможности 🚀
 
-## Подключение в Spring Boot
+| Категория        | Фича                                               | Что делает                                         |
+|------------------|----------------------------------------------------|----------------------------------------------------|
+| **DDoS / Abuse** | `RateLimitInterceptor`                             | Лимиты *per-user / chat / global* на вызовы команд |
+| **Spam / Flood** | `AntiSpamInterceptor`                              | Дубликаты, частотка, репутация URL, DLP-фильтры    |
+| **CAPTCHA**      | `MathCaptchaProvider`  <br>`SliderCaptchaProvider` | Текст-, touch- и web- (reCAPTCHA v3) варианты      |
+| **Audit**        | `AuditBus` + конвертеры                            | Единый поток событий безопасности (JSON-ready)     |
+| **Secrets**      | `SecretStore` SPI                                  | Ключи, токены, пароли — плаг-ин под Vault / AWS SM |
+| **RBAC**         | `@RequiresRole`                                    | Проверка ролей                                     |
 
+## Конфигурация 🔧
 ```java
-@Configuration
-@EnableTgKitSecurity
-public class BotConfig {
-}
-```
+SecurityGlobalConfig.INSTANCE
+        .captcha(c -> c
+            .type(CAPTCHA.SLIDER)
+            .ttl(Duration.ofMinutes(10)))
+        .rateLimits(r -> r
+            .backend(InMemoryLimiter.create())
+            .user(permits(30).per(Duration.ofMinutes(1))))
+        .audit(a -> a.bus(KafkaAuditBus.create("sec-events")));
 
-AutoConfiguration создаст `SecurityBundle` и добавит `SecurityInterceptor` в цепочку.
+```

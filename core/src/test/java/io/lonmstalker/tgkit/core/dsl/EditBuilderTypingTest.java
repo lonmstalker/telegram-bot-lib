@@ -1,6 +1,7 @@
 package io.lonmstalker.tgkit.core.dsl;
 
 import io.lonmstalker.tgkit.core.bot.TelegramSender;
+import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
 import io.lonmstalker.tgkit.core.dsl.common.MockCtx;
 import io.lonmstalker.tgkit.core.dsl.context.DSLContext;
 import org.junit.jupiter.api.Test;
@@ -25,7 +26,7 @@ class EditBuilderTypingTest {
 
         DSLContext ctx = MockCtx.ctx(123L, 999L, sender);
 
-        DslGlobalConfig.INSTANCE.markdownV2().sanitizeMarkdown();
+        BotGlobalConfig.INSTANCE.dsl().markdownV2().sanitizeMarkdown();
 
         new EditBuilder(ctx, 42)
                 .typing(Duration.ofMillis(0))        // не ждём, но метод вызовется

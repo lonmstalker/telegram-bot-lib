@@ -37,6 +37,7 @@
         <jedis.version>6.0.0</jedis.version>
         <http-simple-client.version>0.16.0</http-simple-client.version>
         <netty.version>4.2.2.Final</netty.version>
+        <vault.version>6.2.0</vault.version>
 
         <!-- PLUGINS -->
         <maven-compiler.plugin>3.14.0</maven-compiler.plugin>
@@ -137,6 +138,11 @@
                 <groupId>io.netty</groupId>
                 <artifactId>netty-transport</artifactId>
                 <version>${netty.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.jopenlibs</groupId>
+                <artifactId>vault-java-driver</artifactId>
+                <version>${vault.version}</version>
             </dependency>
 
             <!-- CHECKS -->

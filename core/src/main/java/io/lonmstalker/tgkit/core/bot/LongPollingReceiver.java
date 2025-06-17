@@ -2,7 +2,7 @@ package io.lonmstalker.tgkit.core.bot;
 
 import io.lonmstalker.tgkit.core.BotAdapter;
 import io.lonmstalker.tgkit.core.exception.BotExceptionHandler;
-import lombok.Builder;
+import io.lonmstalker.tgkit.core.secret.SecretStore;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -10,6 +10,8 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
+
+import static io.lonmstalker.tgkit.core.bot.BotConstants.BOT_TOKEN_SECRET;
 
 @Slf4j
 class LongPollingReceiver extends TelegramLongPollingBot implements AutoCloseable {
@@ -20,7 +22,15 @@ class LongPollingReceiver extends TelegramLongPollingBot implements AutoCloseabl
     @Setter
     private @Nullable String username;
 
-    @Builder
+    public LongPollingReceiver(@NonNull BotConfig options,
+                               @NonNull BotAdapter adapter,
+                               @NonNull SecretStore store,
+                               @NonNull TelegramSender sender,
+                               @Nullable BotExceptionHandler globalExceptionHandler) {
+        this(options, adapter, store.get(BOT_TOKEN_SECRET).orElseThrow(() ->
+                new IllegalArgumentException("secret 'bot_token' not found")), sender, globalExceptionHandler);
+    }
+
     public LongPollingReceiver(@NonNull BotConfig options,
                                @NonNull BotAdapter adapter,
                                @NonNull String token,

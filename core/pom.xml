@@ -85,12 +85,6 @@
             <artifactId>awaitility</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>io.opentelemetry</groupId>
-            <artifactId>opentelemetry-sdk-common</artifactId>
-            <version>1.38.0</version>
-            <scope>compile</scope>
-        </dependency>
     </dependencies>
 
 </project>

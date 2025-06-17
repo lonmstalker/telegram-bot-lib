@@ -2,7 +2,7 @@ package io.lonmstalker.tgkit.security.captcha;
 
 import io.lonmstalker.tgkit.core.BotRequest;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;
+import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 
 /**
  * Провайдер CAPTCHA. Возвращает готовое сообщение с вопросом и клавиатурой
@@ -13,10 +13,10 @@ public interface CaptchaProvider {
     /**
      * Формирует сообщение-вопрос для указанного чата.
      *
-     * @return {@link BotApiMethodMessage}
+     * @return {@link PartialBotApiMethod}
      */
     @NonNull
-    BotApiMethodMessage question(@NonNull BotRequest<?> request);
+    PartialBotApiMethod<?> question(@NonNull BotRequest<?> request);
 
     /**
      * Проверяет ответ пользователя.

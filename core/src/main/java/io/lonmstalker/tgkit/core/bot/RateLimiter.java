@@ -1,5 +1,6 @@
 package io.lonmstalker.tgkit.core.bot;
 
+import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.concurrent.Executors;
@@ -17,11 +18,14 @@ class RateLimiter {
         this(permitsPerSecond, null);
     }
 
-    RateLimiter(int permitsPerSecond, @Nullable ScheduledExecutorService scheduler) {
+    RateLimiter(int permitsPerSecond,
+                @Nullable ScheduledExecutorService scheduler) {
         this.permitsPerSecond = permitsPerSecond;
         this.semaphore = new Semaphore(permitsPerSecond);
         this.schedulerProvided = scheduler != null;
-        this.scheduler = scheduler != null ? scheduler : Executors.newSingleThreadScheduledExecutor();
+        this.scheduler = scheduler != null
+                ? scheduler
+                : BotGlobalConfig.INSTANCE.executors().getScheduledExecutorService();
         this.scheduler.scheduleAtFixedRate(this::replenish, 1, 1, TimeUnit.SECONDS);
     }
 

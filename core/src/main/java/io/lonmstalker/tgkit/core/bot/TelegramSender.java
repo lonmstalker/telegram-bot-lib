@@ -26,6 +26,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.telegram.telegrambots.meta.generics.BackOff;
@@ -242,7 +243,7 @@ public class TelegramSender extends DefaultAbsSender implements AutoCloseable {
                 Throwable cause = ex.getCause();
                 if (cause instanceof TelegramApiRequestException req && req.getErrorCode() == 429) {
                     try {
-                        Thread.sleep(backOff.nextBackOffMillis());
+                        TimeUnit.MILLISECONDS.sleep(backOff.nextBackOffMillis());
                     } catch (InterruptedException ie) {
                         Thread.currentThread().interrupt();
                         throw new BotApiException(ie);

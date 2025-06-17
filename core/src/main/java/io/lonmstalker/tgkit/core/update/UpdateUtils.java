@@ -5,23 +5,24 @@ import io.lonmstalker.tgkit.core.exception.BotApiException;
 import lombok.experimental.UtilityClass;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.telegram.telegrambots.meta.api.objects.MaybeInaccessibleMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
+import org.telegram.telegrambots.meta.api.objects.boost.ChatBoostUpdated;
 
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
 @UtilityClass
+@SuppressWarnings({"method.invocation", "argument", "type.anno.before.modifier", "return"})
 public class UpdateUtils {
 
     /**
      * Таблица, сопоставляющая условие из Update типу запроса.
      */
-    @SuppressWarnings("method.invocation")
     private static final Map<Predicate<Update>, BotRequestType> TYPE_MAP = new LinkedHashMap<>() {{
         put(u -> u.getMessage() != null, BotRequestType.MESSAGE);
         put(u -> u.getEditedMessage() != null, BotRequestType.EDITED_MESSAGE);
@@ -46,7 +47,6 @@ public class UpdateUtils {
     /**
      * Функции, извлекающие пользователя из update.
      */
-    @SuppressWarnings("argument")
     private static final List<Function<Update, User>> USER_EXTRACTORS = List.of(
             u -> u.getMessage() != null ? u.getMessage().getFrom() : null,
             u -> u.getEditedMessage() != null ? u.getEditedMessage().getFrom() : null,
@@ -54,7 +54,13 @@ public class UpdateUtils {
             u -> u.getEditedChannelPost() != null ? u.getEditedChannelPost().getFrom() : null,
             u -> u.getCallbackQuery() != null ? u.getCallbackQuery().getFrom() : null,
             u -> u.getInlineQuery() != null ? u.getInlineQuery().getFrom() : null,
-            u -> u.getChosenInlineQuery() != null ? u.getChosenInlineQuery().getFrom() : null
+            u -> u.getChosenInlineQuery() != null ? u.getChosenInlineQuery().getFrom() : null,
+            u -> u.getShippingQuery() != null ? u.getShippingQuery().getFrom() : null,
+            u -> u.getPreCheckoutQuery() != null ? u.getPreCheckoutQuery().getFrom() : null,
+            u -> u.getPollAnswer() != null ? u.getPollAnswer().getUser() : null,
+            u -> u.getChatMember() != null ? u.getChatMember().getFrom() : null,
+            u -> u.getMyChatMember() != null ? u.getMyChatMember().getFrom() : null,
+            u -> u.getChatJoinRequest() != null ? u.getChatJoinRequest().getUser() : null
     );
 
     /**
@@ -75,101 +81,105 @@ public class UpdateUtils {
      * @throws BotApiException when no user information can be resolved
      */
     public static @NonNull User getUser(@NonNull Update update) {
-        for (var extractor : USER_EXTRACTORS) {
-            User user = extractor.apply(update);
-            if (user != null) {
-                return user;
-            }
-        }
-        throw new BotApiException("User not found in update");
+        return USER_EXTRACTORS.stream()
+                .map(f -> f.apply(update))
+                .filter(Objects::nonNull)
+                .findFirst()
+                .orElseThrow(() -> new BotApiException("User not found in update: " + update));
     }
 
-    public static @Nullable Long resolveUserId(@NonNull Update update) {
-        User user = null;
+    /**
+     * userId или {@code null}, если не применимо (анонимные реакции и т.д.).
+     */
+    public @Nullable Long resolveUserId(@NonNull Update update) {
+        User u = getUserQuiet(update);
+        return u != null ? u.getId() : null;
+    }
 
-        // 1. Обычное сообщение / контакт
-        if (update.getMessage() != null) {
-            user = update.getMessage().getFrom();
-        } else if (update.getEditedMessage() != null) {
-            user = update.getEditedMessage().getFrom();
-        }
-        // 2. Callback-клавиатуры
-        else if (update.getCallbackQuery() != null) {
-            user = update.getCallbackQuery().getFrom();
-        }
-        // 3. Инлайн-запросы
-        else if (update.getInlineQuery() != null) {
-            user = update.getInlineQuery().getFrom();
-        } else if (update.getChosenInlineQuery() != null) {
-            user = update.getChosenInlineQuery().getFrom();
-        }
-        // 4. Платёжные события
-        else if (update.getPreCheckoutQuery() != null) {
-            user = update.getPreCheckoutQuery().getFrom();
-        } else if (update.getShippingQuery() != null) {
-            user = update.getShippingQuery().getFrom();
-        }
-        // 5. События членства
-        else if (update.getMyChatMember() != null) {
-            user = update.getMyChatMember().getFrom();
-        } else if (update.getChatMember() != null) {
-            user = update.getChatMember().getFrom();
-        } else if (update.getChatJoinRequest() != null) {
-            user = update.getChatJoinRequest().getUser();
-        }
-
-        return user == null ? null : user.getId();
+    /**
+     * Возвращает username пользователя (без @) или {@code null},
+     * если он отсутствует / событие анонимно.
+     */
+    public @Nullable String resolveUsername(@NonNull Update u) {
+        User user = getUserQuiet(u);
+        return user != null ? user.getUserName() : null;
     }
 
     /**
      * Извлекает chat_id из {@link Update}.
      */
-    public static @Nullable Long resolveChatId(@NonNull Update update) {
-        if (update.getMessage() != null) {
-            return update.getMessage().getChatId();
-        } else if (update.getEditedMessage() != null) {
-            return update.getEditedMessage().getChatId();
-        } else if (update.getCallbackQuery() != null) {
-            return update.getCallbackQuery().getMessage().getChatId();
-        } else if (update.getChannelPost() != null) {
-            return update.getChannelPost().getChatId();
-        } else if (update.getEditedChannelPost() != null) {
-            return update.getEditedChannelPost().getChatId();
-        } else if (update.getChatMember() != null) {
-            return update.getChatMember().getChat().getId();
-        } else if (update.getMyChatMember() != null) {
-            return update.getMyChatMember().getChat().getId();
-        } else if (update.getChatJoinRequest() != null) {
-            return update.getChatJoinRequest().getChat().getId();
+    public static @Nullable Long resolveChatId(@NonNull Update u) {
+        if (u.getMessage()            != null) return u.getMessage().getChatId();
+        if (u.getEditedMessage()      != null) return u.getEditedMessage().getChatId();
+        if (u.getChannelPost()        != null) return u.getChannelPost().getChatId();
+        if (u.getEditedChannelPost()  != null) return u.getEditedChannelPost().getChatId();
+        if (u.getCallbackQuery()      != null && u.getCallbackQuery().getMessage()!=null)
+            return u.getCallbackQuery().getMessage().getChatId();
+        if (u.getChatMember()         != null) return u.getChatMember().getChat().getId();
+        if (u.getMyChatMember()       != null) return u.getMyChatMember().getChat().getId();
+        if (u.getChatJoinRequest()    != null) return u.getChatJoinRequest().getChat().getId();
+        if (u.getChatBoost()          != null) {
+            var boost = u.getChatBoost();
+            return boost != null && boost.getChat() != null ? boost.getChat().getId() : null;
+        }
+        if (u.getRemovedChatBoost()   != null) {
+            var boost = u.getRemovedChatBoost();
+            return boost != null && boost.getChat() != null ? boost.getChat().getId() : null;
         }
         // InlineQuery, PreCheckoutQuery, ShippingQuery и другие события не содержат chat_id.
         return null;
     }
 
-
+    /** messageId или {@code null}. */
     public static @Nullable Integer resolveMessageId(@NonNull Update u) {
-
-        /* обычные сообщения */
-        if (u.getMessage() != null) return u.getMessage().getMessageId();
-        if (u.getEditedMessage() != null) return u.getEditedMessage().getMessageId();
-
-        /* посты в каналах */
-        if (u.getChannelPost() != null) return u.getChannelPost().getMessageId();
-        if (u.getEditedChannelPost() != null) return u.getEditedChannelPost().getMessageId();
-
-        /* callback-кнопки */
-        if (u.getCallbackQuery() != null) {
-            MaybeInaccessibleMessage m = u.getCallbackQuery().getMessage();
-            return m != null ? m.getMessageId() : null;
-        }
-
-        /* реакции (анонимные и публичные) */
-        if (u.getMessageReaction() != null)
-            return u.getMessageReaction().getMessageId();
-        if (u.getMessageReactionCount() != null)
-            return u.getMessageReactionCount().getMessageId();
-
-        /* в остальных апдейтах (inline-query, poll, shipping…) messageId отсутствует */
+        if (u.getMessage()            != null) return u.getMessage().getMessageId();
+        if (u.getEditedMessage()      != null) return u.getEditedMessage().getMessageId();
+        if (u.getChannelPost()        != null) return u.getChannelPost().getMessageId();
+        if (u.getEditedChannelPost()  != null) return u.getEditedChannelPost().getMessageId();
+        if (u.getMessageReaction()    != null) return u.getMessageReaction().getMessageId();
+        if (u.getMessageReactionCount()!= null) return u.getMessageReactionCount().getMessageId();
+        if (u.getCallbackQuery()      != null && u.getCallbackQuery().getMessage() != null)
+            return u.getCallbackQuery().getMessage().getMessageId();
+        /* Poll, PollAnswer, InlineQuery, ShippingQuery, Pre-Checkout и др. без messageId */
         return null;
+    }
+
+    /**
+     * Пытается извлечь «основной» текст из Update. Это может быть:
+     *  • text обычного сообщения / поста<br>
+     *  • data коллбэка (Inline-кнопка)<br>
+     *  • query из InlineQuery / ChosenInlineQuery<br>
+     *  • question опроса / викторины<br>
+     *  • payload платёжного события (Invoice payload)
+     * Если текст отсутствует — возвращает {@code null}.
+     */
+    public @Nullable String resolveText(@NonNull Update u) {
+        if (u.getMessage()            != null) return u.getMessage().getText();
+        if (u.getEditedMessage()      != null) return u.getEditedMessage().getText();
+        if (u.getChannelPost()        != null) return u.getChannelPost().getText();
+        if (u.getEditedChannelPost()  != null) return u.getEditedChannelPost().getText();
+
+        if (u.getCallbackQuery()      != null) return u.getCallbackQuery().getData();
+        if (u.getInlineQuery()        != null) return u.getInlineQuery().getQuery();
+        if (u.getChosenInlineQuery()  != null) return u.getChosenInlineQuery().getQuery();
+
+        if (u.getPoll()               != null) return u.getPoll().getQuestion();
+        if (u.getShippingQuery()      != null) return u.getShippingQuery().getInvoicePayload();
+        if (u.getPreCheckoutQuery()   != null) return u.getPreCheckoutQuery().getInvoicePayload();
+
+        /* Boost / Reaction / Member updates не содержат текстового поля */
+        return null;
+    }
+
+    private @Nullable User getUserQuiet(@NonNull Update u) {
+        for (Function<Update, User> f : USER_EXTRACTORS) {
+            User r = f.apply(u);
+            if (r != null) return r;
+        }
+        return null;
+    }
+
+    private @Nullable Long chatId(@Nullable ChatBoostUpdated boost) {
+        return boost != null && boost.getChat() != null ? boost.getChat().getId() : null;
     }
 }

@@ -121,7 +121,7 @@ var metrics = MicrometerCollector.prometheus(9180);   // /prometheus
 var tracer  = OTelTracer.stdoutDev();                 // спаны в лог
 
 BotConfig cfg = BotConfig.builder()
-        .addInterceptor(new ObservabilityInterceptor(metrics, tracer))
+        .globalInterceptor(new ObservabilityInterceptor(metrics, tracer))
         .build();
 
 Bot bot = BotFactory.INSTANCE.from(token, cfg, adapter);

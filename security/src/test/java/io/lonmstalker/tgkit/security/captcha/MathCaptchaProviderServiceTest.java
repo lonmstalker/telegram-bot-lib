@@ -1,6 +1,5 @@
 package io.lonmstalker.tgkit.security.captcha;
 
-import com.github.benmanes.caffeine.cache.Cache;
 import io.lonmstalker.tgkit.core.BotRequest;
 import io.lonmstalker.tgkit.core.BotService;
 import io.lonmstalker.tgkit.core.i18n.MessageLocalizer;
@@ -8,6 +7,7 @@ import io.lonmstalker.tgkit.core.i18n.MessageLocalizerImpl;
 import io.lonmstalker.tgkit.core.user.BotUserInfo;
 import io.lonmstalker.tgkit.core.user.store.UserKVStore;
 import io.lonmstalker.tgkit.security.TestUtils;
+import io.lonmstalker.tgkit.security.captcha.provider.MathCaptchaProvider;
 import org.apache.commons.lang3.Range;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

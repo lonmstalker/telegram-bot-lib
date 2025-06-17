@@ -26,7 +26,7 @@ public final class AntiSpamInterceptorFactory
     }
 
     @Override
-    public @NonNull Optional<BotInterceptor> build(@NonNull Method m, NoAnnotation __) {
+    public @NonNull Optional<BotInterceptor> build(@NonNull Method m, @NonNull NoAnnotation __) {
         return Optional.of(delegate);
     }
 

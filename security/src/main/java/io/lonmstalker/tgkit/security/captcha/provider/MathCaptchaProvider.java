@@ -1,6 +1,10 @@
-package io.lonmstalker.tgkit.security.captcha;
+package io.lonmstalker.tgkit.security.captcha.provider;
 
 import io.lonmstalker.tgkit.core.BotRequest;
+import io.lonmstalker.tgkit.security.captcha.CaptchaProvider;
+import io.lonmstalker.tgkit.security.captcha.InMemoryMathCaptchaProviderStore;
+import io.lonmstalker.tgkit.security.captcha.MathCaptchaOperations;
+import io.lonmstalker.tgkit.security.captcha.MathCaptchaProviderStore;
 import lombok.Builder;
 import org.apache.commons.lang3.Range;
 import org.checkerframework.checker.nullness.qual.NonNull;

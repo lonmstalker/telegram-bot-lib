@@ -2,6 +2,7 @@ package io.lonmstalker.tgkit.core.dsl;
 
 import io.lonmstalker.tgkit.core.BotInfo;
 import io.lonmstalker.tgkit.core.BotService;
+import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
 import io.lonmstalker.tgkit.core.dsl.context.DSLContext;
 import io.lonmstalker.tgkit.core.dsl.feature_flags.InMemoryFeatureFlags;
 import io.lonmstalker.tgkit.core.user.BotUserInfo;
@@ -23,7 +24,7 @@ class BuilderFlagTest {
         ff.enableChat("EXPERIMENT", 1L);
         ff.enableUser("VIP", 42L);
         ff.rollout("TEXT_EXPERIMENT", 50);     // 50 % → chatId < 50 в variant
-        DslGlobalConfig.INSTANCE.featureFlags(ff);
+        BotGlobalConfig.INSTANCE.dsl().featureFlags(ff);
     }
 
     @Test
@@ -40,7 +41,7 @@ class BuilderFlagTest {
     @Test
     void branchSkippedIfFlagDisabled() {
         AtomicBoolean ran = new AtomicBoolean(false);
-        DslGlobalConfig.INSTANCE.getFlags().disableChat("EXPERIMENT", 2);
+        BotGlobalConfig.INSTANCE.dsl().getFlags().disableChat("EXPERIMENT", 2);
 
         new MessageBuilder(ctx(2L), "hi")
                 .flag("EXPERIMENT", b -> ran.set(true))
@@ -92,7 +93,7 @@ class BuilderFlagTest {
     @Test
     void abTestDoesNothingIfKeyAbsent() {
         AtomicBoolean ran = new AtomicBoolean(false);
-        DslGlobalConfig.INSTANCE.featureFlags(new InMemoryFeatureFlags()); // ничего не задеплоено
+        BotGlobalConfig.INSTANCE.dsl().featureFlags(new InMemoryFeatureFlags()); // ничего не задеплоено
 
         new MessageBuilder(ctx(1L), "text")
                 .abTest("UNKNOWN",

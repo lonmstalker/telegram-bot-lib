@@ -2,6 +2,7 @@ package io.lonmstalker.tgkit.core.bot;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import io.lonmstalker.tgkit.core.exception.BotApiException;
@@ -24,8 +25,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @Slf4j
@@ -50,7 +51,8 @@ public class BotSessionImpl implements BotSession {
         this(null, null);
     }
 
-    public BotSessionImpl(@Nullable ExecutorService executor, @Nullable ObjectMapper mapper) {
+    public BotSessionImpl(@Nullable ExecutorService executor,
+                          @Nullable ObjectMapper mapper) {
         this.providedExecutor = executor;
         this.mapper = mapper != null ? mapper : new ObjectMapper();
     }
@@ -73,7 +75,9 @@ public class BotSessionImpl implements BotSession {
                 .connectTimeout(Duration.ofSeconds(75))
                 .build();
 
-        this.executor = providedExecutor != null ? providedExecutor : Executors.newVirtualThreadPerTaskExecutor();
+        this.executor = providedExecutor != null
+                ? providedExecutor
+                : BotGlobalConfig.INSTANCE.executors().getIoExecutorService();
         executor.execute(this::readLoop);
         executor.execute(this::handleLoop);
     }
@@ -151,7 +155,7 @@ public class BotSessionImpl implements BotSession {
             } catch (IOException | InterruptedException e) {
                 log.warn("Error getting updates: {}", e.getMessage());
                 try {
-                    Thread.sleep(1000L);
+                    TimeUnit.SECONDS.sleep(1);
                 } catch (InterruptedException ex) {
                     Thread.currentThread().interrupt();
                 }
