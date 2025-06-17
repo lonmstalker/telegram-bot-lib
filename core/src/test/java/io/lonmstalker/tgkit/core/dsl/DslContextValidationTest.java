@@ -1,5 +1,6 @@
 package io.lonmstalker.tgkit.core.dsl;
 
+import io.lonmstalker.tgkit.core.BotService;
 import io.lonmstalker.tgkit.core.dsl.context.DSLContext.SimpleDSLContext;
 import io.lonmstalker.tgkit.core.exception.BotApiException;
 import io.lonmstalker.tgkit.core.user.BotUserInfo;
@@ -18,7 +19,7 @@ class DslContextValidationTest {
         when(user.chatId()).thenReturn(null);
         when(user.userId()).thenReturn(null);
 
-        assertThatThrownBy(() -> new SimpleDSLContext(botInfo, user))
+        assertThatThrownBy(() -> new SimpleDSLContext(mock(BotService.class), botInfo, user))
                 .isInstanceOf(BotApiException.class)
                 .hasMessageContaining("Both chatId and userId are null");
     }

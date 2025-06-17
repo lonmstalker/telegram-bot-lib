@@ -1,12 +1,10 @@
 package io.lonmstalker.tgkit.core.args;
 
-import io.lonmstalker.tgkit.core.BotInfo;
-import io.lonmstalker.tgkit.core.BotRequest;
-import io.lonmstalker.tgkit.core.BotRequestType;
-import io.lonmstalker.tgkit.core.BotResponse;
+import io.lonmstalker.tgkit.core.*;
 import io.lonmstalker.tgkit.core.bot.BotConfig;
 import io.lonmstalker.tgkit.core.bot.TelegramSender;
 import io.lonmstalker.tgkit.core.i18n.MessageLocalizerImpl;
+import io.lonmstalker.tgkit.core.user.store.InMemoryUserKVStore;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import io.lonmstalker.tgkit.core.annotation.Arg;
 import io.lonmstalker.tgkit.core.annotation.BotHandler;
@@ -62,10 +60,15 @@ public class ArgBindingTest {
         var cmd = reg.find(BotRequestType.MESSAGE, "", msg);
         assertNotNull(cmd);
 
-        BotInfo info = new BotInfo(1L, new InMemoryStateStore(),
+        BotInfo info = new BotInfo(1L);
+        BotService service = new BotService(
+                new InMemoryStateStore(),
                 new TelegramSender(BotConfig.builder().build(), "T"),
-                new MessageLocalizerImpl("i18n/messages", Locale.US));
-        BotRequest<Message> req = new BotRequest<>(0, msg, info, new User(1L), Locale.getDefault());
+                new InMemoryUserKVStore(),
+                new MessageLocalizerImpl("i18n/messages", Locale.US)
+        );
+        BotRequest<Message> req = new BotRequest<>(0, msg, Locale.getDefault(),
+                null, info, new User(1L), service, BotRequestType.MESSAGE);
         cmd.handle(req);
 
         assertEquals(42, Commands.captured);

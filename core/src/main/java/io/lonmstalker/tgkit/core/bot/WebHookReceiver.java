@@ -15,6 +15,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 class WebHookReceiver extends TelegramWebhookBot implements AutoCloseable {
     private final @NonNull String token;
     private final @NonNull BotAdapter adapter;
+    private final @NonNull TelegramSender sender;
     private final @NonNull BotExceptionHandler globalExceptionHandler;
     
     @Setter
@@ -23,13 +24,18 @@ class WebHookReceiver extends TelegramWebhookBot implements AutoCloseable {
     public WebHookReceiver(@NonNull BotConfig options,
                            @NonNull BotAdapter adapter,
                            @NonNull String token,
+                           @NonNull TelegramSender sender,
                            @Nullable BotExceptionHandler globalExceptionHandler) {
         super(options, token);
         this.token = token;
+        this.sender = sender;
         this.adapter = adapter;
         this.globalExceptionHandler = globalExceptionHandler != null
                 ? globalExceptionHandler
                 : (update, ex) -> log.error("onUpdate with error: ", ex);
+        if (adapter instanceof BotAdapterImpl b) {
+            b.setSender(sender);
+        }
     }
 
     @Override

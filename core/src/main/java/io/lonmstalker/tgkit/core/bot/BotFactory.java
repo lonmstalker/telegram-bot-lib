@@ -19,9 +19,11 @@ public final class BotFactory {
     public @NonNull Bot from(@NonNull String token,
                              @NonNull BotConfig config,
                              @NonNull BotAdapter adapter) {
+        TelegramSender sender = new TelegramSender(config, token);
         return implBuilder(token, config)
                 .session(new BotSessionImpl())
-                .absSender(new LongPollingReceiver(config, adapter, token, config.getGlobalExceptionHandler()))
+                .absSender(new LongPollingReceiver(config, adapter,
+                        token, sender, config.getGlobalExceptionHandler()))
                 .build();
     }
 
@@ -38,9 +40,11 @@ public final class BotFactory {
                              @NonNull BotConfig config,
                              @NonNull BotAdapter adapter,
                              @NonNull SetWebhook setWebhook) {
+        TelegramSender sender = new TelegramSender(config, token);
         return implBuilder(token, config)
                 .setWebhook(setWebhook)
-                .absSender(new WebHookReceiver(config, adapter, token, config.getGlobalExceptionHandler()))
+                .absSender(new WebHookReceiver(config, adapter, token,
+                        sender, config.getGlobalExceptionHandler()))
                 .build();
     }
 

@@ -1,5 +1,6 @@
 package io.lonmstalker.tgkit.core.dsl;
 
+import io.lonmstalker.tgkit.core.BotService;
 import io.lonmstalker.tgkit.core.dsl.context.DSLContext;
 import io.lonmstalker.tgkit.core.parse_mode.ParseMode;
 import io.lonmstalker.tgkit.core.user.BotUserInfo;
@@ -21,7 +22,7 @@ class MessageBuilderTest {
         BotUserInfo user = mock(BotUserInfo.class);
         when(user.chatId()).thenReturn(555L);
         when(user.userId()).thenReturn(999L);
-        ctx = new DSLContext.SimpleDSLContext(bot, user);
+        ctx = new DSLContext.SimpleDSLContext(mock(BotService.class), bot, user);
     }
 
     @Test

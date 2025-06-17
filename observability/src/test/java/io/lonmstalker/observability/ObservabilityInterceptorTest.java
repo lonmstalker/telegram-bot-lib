@@ -7,6 +7,7 @@ import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.slf4j.MDC;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -53,9 +54,9 @@ public class ObservabilityInterceptorTest {
     @Test
     void span_and_metrics_on_success() {
         Update update = createUpdate(1);
-        interceptor.preHandle(update);
+        interceptor.preHandle(update, Mockito.mock());
         assertEquals("1", MDC.get("updateId"));
-        interceptor.afterCompletion(update, null, null);
+        interceptor.afterCompletion(update, Mockito.mock(), null, null);
         verify(tracer).start(eq("update"), any(Tags.class));
         verify(span).close();
         verify(metrics, atLeastOnce()).counter(eq("updates_total"), any());
@@ -66,9 +67,9 @@ public class ObservabilityInterceptorTest {
     @Test
     void error_metrics_and_span() {
         Update update = createUpdate(2);
-        interceptor.preHandle(update);
+        interceptor.preHandle(update, Mockito.mock());
         RuntimeException ex = new RuntimeException("boom");
-        interceptor.afterCompletion(update, null, ex);
+        interceptor.afterCompletion(update, Mockito.mock(), null, ex);
         verify(span).setError(ex);
         verify(counter, atLeastOnce()).increment();
         verify(metrics).timer(eq("update_latency_ms"), any());

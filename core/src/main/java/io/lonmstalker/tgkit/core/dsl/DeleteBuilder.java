@@ -2,11 +2,10 @@ package io.lonmstalker.tgkit.core.dsl;
 
 import io.lonmstalker.tgkit.core.dsl.context.DSLContext;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 
 /** Удаление сообщения. */
-public final class DeleteBuilder extends BotDSL.CommonBuilder<DeleteBuilder> {
+public final class DeleteBuilder extends BotDSL.CommonBuilder<DeleteBuilder, DeleteMessage> {
     private final long msgId;
 
     DeleteBuilder(@NonNull DSLContext ctx, long msgId) {
@@ -15,7 +14,7 @@ public final class DeleteBuilder extends BotDSL.CommonBuilder<DeleteBuilder> {
     }
 
     @Override
-    public @NonNull BotApiMethod<?> build() {
+    public @NonNull DeleteMessage build() {
         return new DeleteMessage(String.valueOf(chatId), (int) msgId);
     }
 }

@@ -10,19 +10,22 @@ import io.lonmstalker.tgkit.core.annotation.Arg;
 import io.lonmstalker.tgkit.core.args.BotArgumentConverter;
 import io.lonmstalker.tgkit.core.args.Context;
 import io.lonmstalker.tgkit.core.args.RouteContextHolder;
+import io.lonmstalker.tgkit.core.interceptor.BotInterceptor;
 import io.lonmstalker.tgkit.core.matching.CommandMatch;
+import io.lonmstalker.tgkit.core.storage.BotRequestHolder;
 import lombok.AccessLevel;
 import lombok.Builder;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.telegram.telegrambots.meta.api.interfaces.BotApiObject;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.List;
 import java.util.Objects;
 
 @Builder(access = AccessLevel.PACKAGE)
 class InternalCommandAdapter implements BotCommand<BotApiObject> {
+    private final @NonNull List<BotInterceptor> interceptors;
     private final int order;
     private final @NonNull Method method;
     private final @NonNull Object instance;
@@ -36,6 +39,10 @@ class InternalCommandAdapter implements BotCommand<BotApiObject> {
     @SuppressWarnings("argument")
     public @Nullable BotResponse handle(@NonNull BotRequest<BotApiObject> request) {
         try {
+            for (BotInterceptor i : interceptors) {
+                i.preHandle(BotRequestHolder.getUpdateNotNull(), request);
+            }
+
             Object converted = converter.convert(request);
             Object[] args = new Object[params.length];
             for (int i = 0; i < params.length; i++) {
@@ -64,16 +71,30 @@ class InternalCommandAdapter implements BotCommand<BotApiObject> {
             }
 
             Object res = method.invoke(instance, args);
+
             if (res == null) {
+                for (BotInterceptor i : interceptors) {
+                    i.afterCompletion(BotRequestHolder.getUpdateNotNull(), request, null, null);
+                }
                 return null;
             }
             if (res instanceof BotResponse r) {
+                for (BotInterceptor i : interceptors) {
+                    i.afterCompletion(BotRequestHolder.getUpdateNotNull(), request, r, null);
+                }
                 return r;
             }
-            throw new BotApiException("Handler must return BotResponse");
-        } catch (IllegalAccessException | InvocationTargetException e) {
+
+        } catch (Exception e) {
+            for (BotInterceptor i : interceptors) {
+                try {
+                    i.afterCompletion(BotRequestHolder.getUpdateNotNull(), request, null, e);
+                } catch (Exception ignored) {
+                }
+            }
             throw new BotApiException("Handler invocation error", e);
         }
+        throw new BotApiException("Handler must return BotResponse");
     }
 
     @Override

@@ -10,6 +10,7 @@ import java.util.function.Predicate;
 import io.lonmstalker.tgkit.core.BotInfo;
 import io.lonmstalker.tgkit.core.BotRequest;
 import io.lonmstalker.tgkit.core.BotResponse;
+import io.lonmstalker.tgkit.core.BotService;
 import io.lonmstalker.tgkit.core.dsl.context.DSLContext;
 import io.lonmstalker.tgkit.core.dsl.feature_flags.FeatureFlags;
 import io.lonmstalker.tgkit.core.exception.BotApiException;
@@ -38,8 +39,10 @@ public final class BotDSL {
         cfg.accept(DslGlobalConfig.INSTANCE);
     }
 
-    public static @NonNull DSLContext ctx(@NonNull BotInfo info, @NonNull BotUserInfo user) {
-        return new DSLContext.SimpleDSLContext(info, user);
+    public static @NonNull DSLContext ctx(@NonNull BotInfo info,
+                                          @NonNull BotUserInfo user,
+                                          @NonNull BotService service) {
+        return new DSLContext.SimpleDSLContext(service, info, user);
     }
 
     /**
@@ -53,7 +56,7 @@ public final class BotDSL {
      * Сообщение из i18n.
      */
     public static @NonNull MessageBuilder msgKey(@NonNull DSLContext ctx, @NonNull String key, @NonNull Object... args) {
-        MessageLocalizer loc = ctx.botInfo().localizer();
+        MessageLocalizer loc = ctx.service().localizer();
         return new MessageBuilder(ctx, loc.get(key, args));
     }
 
@@ -102,84 +105,85 @@ public final class BotDSL {
     /**
      * Результаты инлайн-запроса.
      */
-    public static @NonNull InlineResults inline(@NonNull DSLContext ctx) {
-        return new InlineResults(ctx);
+    public static @NonNull InlineResultBuilder inline(@NonNull DSLContext ctx) {
+        return new InlineResultBuilder(ctx);
     }
 
     /**
      * Сообщение.
      */
     public static @NonNull MessageBuilder msg(@NonNull BotRequest<?> req, @NonNull String text) {
-        return new MessageBuilder(new DSLContext.SimpleDSLContext(req.botInfo(), req.user()), text);
+        return new MessageBuilder(ctx(req.botInfo(), req.user(), req.service()), text);
     }
 
     /**
      * Сообщение из i18n.
      */
     public static @NonNull MessageBuilder msgKey(@NonNull BotRequest<?> req, @NonNull String key, @NonNull Object... args) {
-        MessageLocalizer loc = req.botInfo().localizer();
-        return new MessageBuilder(new DSLContext.SimpleDSLContext(req.botInfo(), req.user()), loc.get(key, args));
+        MessageLocalizer loc = req.service().localizer();
+        return new MessageBuilder(ctx(req.botInfo(), req.user(), req.service()), loc.get(key, args));
     }
 
     /**
      * Фото.
      */
     public static @NonNull PhotoBuilder photo(@NonNull BotRequest<?> req, @NonNull InputFile file) {
-        return new PhotoBuilder(new DSLContext.SimpleDSLContext(req.botInfo(), req.user()), file);
+        return new PhotoBuilder(ctx(req.botInfo(), req.user(), req.service()), file);
     }
 
     /**
      * Редактирование сообщения.
      */
     public static @NonNull EditBuilder edit(@NonNull BotRequest<?> req, long msgId) {
-        return new EditBuilder(new DSLContext.SimpleDSLContext(req.botInfo(), req.user()), msgId);
+        return new EditBuilder(ctx(req.botInfo(), req.user(), req.service()), msgId);
     }
 
     /**
      * Удаление сообщения.
      */
     public static @NonNull DeleteBuilder delete(@NonNull BotRequest<?> req, long msgId) {
-        return new DeleteBuilder(new DSLContext.SimpleDSLContext(req.botInfo(), req.user()), msgId);
+        return new DeleteBuilder(ctx(req.botInfo(), req.user(), req.service()), msgId);
     }
 
     /**
      * Отправка медиа-группы.
      */
     public static @NonNull MediaGroupBuilder mediaGroup(@NonNull BotRequest<?> req) {
-        return new MediaGroupBuilder(new DSLContext.SimpleDSLContext(req.botInfo(), req.user()));
+        return new MediaGroupBuilder(ctx(req.botInfo(), req.user(), req.service()));
     }
 
     /**
      * Опрос.
      */
     public static @NonNull PollBuilder poll(@NonNull BotRequest<?> req, @NonNull String question) {
-        return new PollBuilder(new DSLContext.SimpleDSLContext(req.botInfo(), req.user()), question);
+        return new PollBuilder(ctx(req.botInfo(), req.user(), req.service()), question);
     }
 
     /**
      * Викторина.
      */
     public static @NonNull QuizBuilder quiz(@NonNull BotRequest<?> req, @NonNull String question, int correct) {
-        return new QuizBuilder(new DSLContext.SimpleDSLContext(req.botInfo(), req.user()), question, correct);
+        return new QuizBuilder(ctx(req.botInfo(), req.user(), req.service()), question, correct);
     }
 
     /**
      * Результаты инлайн-запроса.
      */
-    public static @NonNull InlineResults inline(@NonNull BotRequest<?> req) {
-        return new InlineResults(new DSLContext.SimpleDSLContext(req.botInfo(), req.user()));
+    public static @NonNull InlineResultBuilder inline(@NonNull BotRequest<?> req) {
+        return new InlineResultBuilder(ctx(req.botInfo(), req.user(), req.service()));
     }
 
     /**
      * Базовый строитель.
      */
     @SuppressWarnings("unchecked")
-    static abstract class CommonBuilder<T extends CommonBuilder<T>> implements Common<T> {
+    static abstract class CommonBuilder<T extends CommonBuilder<T, D>, D
+            extends PartialBotApiMethod<?>> implements Common<T, D> {
         protected @Nullable Long chatId;
         protected Long replyTo;
         protected boolean disableNotif;
         protected KbBuilder keyboard;
-        protected Duration ttl;
+        protected WithTtl<T, D> ttl;
         protected Consumer<Long> success;
         protected Consumer<Throwable> error;
         protected DSLContext ctx;
@@ -221,7 +225,7 @@ public final class BotDSL {
 
         @Override
         public @NonNull T keyboard(@NonNull Consumer<KbBuilder> cfg) {
-            KbBuilder kb = new KbBuilder(ctx.botInfo().localizer());
+            KbBuilder kb = new KbBuilder(ctx.service().localizer());
             cfg.accept(kb);
             this.keyboard = kb;
             return (T) this;
@@ -229,7 +233,7 @@ public final class BotDSL {
 
         @Override
         public @NonNull T when(@NonNull Predicate<DSLContext> cond,
-                               @NonNull Consumer<Common<T>> branch) {
+                               @NonNull Consumer<Common<T, D>> branch) {
             if (ctx != null && cond.test(ctx)) {
                 branch.accept(this);
             }
@@ -237,7 +241,7 @@ public final class BotDSL {
         }
 
         @Override
-        public @NonNull T onlyAdmin(@NonNull Consumer<Common<T>> branch) {
+        public @NonNull T onlyAdmin(@NonNull Consumer<Common<T, D>> branch) {
             if (ctx != null && ctx.isAdmin()) {
                 branch.accept(this);
             }
@@ -247,7 +251,7 @@ public final class BotDSL {
         @Override
         @SuppressWarnings("unboxing.of.nullable")
         public @NonNull T ifFlag(@NonNull String flag,
-                                 @NonNull Consumer<Common<T>> branch) {
+                                 @NonNull Consumer<Common<T, D>> branch) {
             if (chatId == null) {
                 return (T) this;
             }
@@ -259,14 +263,14 @@ public final class BotDSL {
 
         @Override
         public @NonNull T flag(@NonNull String flag,
-                               @NonNull Consumer<Common<T>> branch) {
+                               @NonNull Consumer<Common<T, D>> branch) {
             return ifFlag(flag, branch);
         }
 
         @Override
         public @NonNull T abTest(@NonNull String key,
-                                 @NonNull Consumer<Common<T>> control,
-                                 @NonNull Consumer<Common<T>> variant) {
+                                 @NonNull Consumer<Common<T, D>> control,
+                                 @NonNull Consumer<Common<T, D>> variant) {
             Long entityId = ctx.userInfo().chatId() != null
                     ? ctx.userInfo().chatId()
                     : ctx.userInfo().userId();
@@ -292,18 +296,12 @@ public final class BotDSL {
 
         @Override
         public @NonNull T flagUser(@NonNull String flag,
-                                   @NonNull Consumer<Common<T>> branch) {
+                                   @NonNull Consumer<Common<T, D>> branch) {
             Long uid = ctx.userInfo().userId();
             if (uid != null &&
                     DslGlobalConfig.INSTANCE.getFlags().isEnabledForUser(flag, uid)) {
                 branch.accept(this);
             }
-            return (T) this;
-        }
-
-        @Override
-        public @NonNull T ttl(@NonNull Duration duration) {
-            this.ttl = duration;
             return (T) this;
         }
 
@@ -316,16 +314,23 @@ public final class BotDSL {
         }
 
         @Override
+        public @NonNull WithTtl<T, D> ttl(@NonNull Duration d) {
+            this.ttl = new WithTtl<>(d, ctx, this);
+            return this.ttl;
+        }
+
+        @Override
         public @NonNull BotResponse send() {
             try {
                 PartialBotApiMethod<?> m = build();
-                Serializable response = ctx.botInfo().sender().execute(m);
+                Serializable response = ctx.service().sender().execute(m);
 
                 if (response instanceof Message msg) {
                     success.accept(Long.valueOf(msg.getMessageId()));
                 } else if (response instanceof InaccessibleMessage msg) {
                     success.accept(Long.valueOf(msg.getMessageId()));
                 }
+
                 return new BotResponse();
             } catch (Exception ex) {
                 if (error != null) {

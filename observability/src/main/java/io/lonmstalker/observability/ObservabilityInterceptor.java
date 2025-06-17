@@ -1,5 +1,6 @@
 package io.lonmstalker.observability;
 
+import io.lonmstalker.tgkit.core.BotRequest;
 import io.lonmstalker.tgkit.core.BotResponse;
 import io.lonmstalker.tgkit.core.interceptor.BotInterceptor;
 import io.micrometer.core.instrument.Tag;
@@ -34,7 +35,7 @@ public class ObservabilityInterceptor implements BotInterceptor {
      * @param update полученное обновление
      */
     @Override
-    public void preHandle(@NonNull Update update) {
+    public void preHandle(@NonNull Update update, @NonNull BotRequest<?> request) {
         SAMPLE.set(Timer.start(metrics.registry()));
         SPANS.set(tracer.start("update", Tags.of(
                 Tag.of("id", String.valueOf(update.getUpdateId())))
@@ -46,19 +47,18 @@ public class ObservabilityInterceptor implements BotInterceptor {
      * Завершающий этап после хендлера. В данной реализации ничего не делает.
      */
     @Override
-    public void postHandle(@NonNull Update update) {
+    public void postHandle(@NonNull Update update, @NonNull BotRequest<?> request) {
         // nothing
     }
 
     /**
      * Завершает обработку: фиксирует метрики и закрывает span.
-     *
-     * @param update   обработанное обновление
-     * @param response сформированный ответ
-     * @param ex       ошибка, если возникла
      */
     @Override
-    public void afterCompletion(@NonNull Update update, @Nullable BotResponse response, @Nullable Exception ex) {
+    public void afterCompletion(@NonNull Update update,
+                                @Nullable BotRequest<?> request,
+                                @Nullable BotResponse response,
+                                @Nullable Exception ex) {
         Tags tags = Tags.of(Tag.of("type", String.valueOf(update.hasMessage())));
         Timer.Sample s = SAMPLE.get();
         if (s != null) {

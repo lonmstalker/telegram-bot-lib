@@ -4,7 +4,6 @@ import io.lonmstalker.tgkit.core.BotResponse;
 import io.lonmstalker.tgkit.core.dsl.context.DSLContext;
 import io.lonmstalker.tgkit.core.dsl.validator.MediaGroupSizeValidator;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMediaGroup;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.media.InputMedia;
@@ -15,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /** Построитель медиа-группы. */
-public final class MediaGroupBuilder extends BotDSL.CommonBuilder<MediaGroupBuilder> {
+public final class MediaGroupBuilder extends BotDSL.CommonBuilder<MediaGroupBuilder, SendMediaGroup> {
     private static final MediaGroupSizeValidator VALIDATOR = new MediaGroupSizeValidator();
     private final List<InputMedia> items = new ArrayList<>();
 
@@ -41,7 +40,7 @@ public final class MediaGroupBuilder extends BotDSL.CommonBuilder<MediaGroupBuil
     }
 
     @Override
-    public @NonNull PartialBotApiMethod<?> build() {
+    public @NonNull SendMediaGroup build() {
         SendMediaGroup group = new SendMediaGroup();
         group.setChatId(String.valueOf(chatId));
         group.setMedias(items);
@@ -72,7 +71,7 @@ public final class MediaGroupBuilder extends BotDSL.CommonBuilder<MediaGroupBuil
             g.setChatId(String.valueOf(chatId));
             g.setMedias(c);
 
-            super.ctx.botInfo().sender().execute(g);
+            super.ctx.service().sender().execute(g);
         }
 
         return new BotResponse();

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.lonmstalker.tgkit.core.BotInfo;
 import io.lonmstalker.tgkit.core.BotRequest;
 import io.lonmstalker.tgkit.core.BotResponse;
+import io.lonmstalker.tgkit.core.BotService;
 import io.lonmstalker.tgkit.core.state.StateStore;
 import org.apache.commons.lang3.StringUtils;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -27,14 +28,14 @@ public class WizardEngine {
             return new BotResponse();
         }
 
-        BotInfo info = req.botInfo();
-        StateStore store = info.store();
+        BotService service = req.service();
+        StateStore store = service.store();
         String key = in.chatId + ":" + wizard.id();
         WizardSession session = load(store, key);
 
         if ("/cancel".equals(in.text) || "wiz:cancel".equals(in.text)) {
             store.set(key, "");
-            return sendMessage(in.chatId, info.localizer().get("wizard.cancel"));
+            return sendMessage(in.chatId, service.localizer().get("wizard.cancel"));
         }
 
         if (!processNav(in.text, session)) {
@@ -43,17 +44,17 @@ public class WizardEngine {
                 session.getData().put(step.saveKey(), in.text);
                 session.setStepIdx(session.getStepIdx() + 1);
             } else {
-                return sendMessage(in.chatId, info.localizer().get("wizard.invalid"));
+                return sendMessage(in.chatId, service.localizer().get("wizard.invalid"));
             }
         }
 
         if (session.getStepIdx() >= wizard.steps().size()) {
             store.set(key, "");
-            return sendMessage(in.chatId, info.localizer().get("wizard.done"));
+            return sendMessage(in.chatId, service.localizer().get("wizard.done"));
         }
 
         store.set(key, toJson(session));
-        return askStep(session, wizard, in.chatId, info);
+        return askStep(session, wizard, in.chatId, service);
     }
 
     private record Parsed(String chatId, String text) {
@@ -98,11 +99,11 @@ public class WizardEngine {
     private BotResponse askStep(@NonNull WizardSession session,
                                 @NonNull WizardMeta wizard,
                                 @NonNull String chatId,
-                                @NonNull BotInfo info) {
+                                @NonNull BotService service) {
         StepMeta next = wizard.steps().get(session.getStepIdx());
         String ask = next.defaultAsk() != null
-                ? info.localizer().get(next.askKey(), next.defaultAsk())
-                : info.localizer().get(next.askKey());
+                ? service.localizer().get(next.askKey(), next.defaultAsk())
+                : service.localizer().get(next.askKey());
         SendMessage msg = new SendMessage(chatId, ask);
         msg.setReplyMarkup(nav());
         return BotResponse.builder().method(msg).build();

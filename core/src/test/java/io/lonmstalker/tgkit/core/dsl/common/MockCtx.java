@@ -1,6 +1,7 @@
 package io.lonmstalker.tgkit.core.dsl.common;
 
 import io.lonmstalker.tgkit.core.BotInfo;
+import io.lonmstalker.tgkit.core.BotService;
 import io.lonmstalker.tgkit.core.bot.TelegramSender;
 import io.lonmstalker.tgkit.core.dsl.context.DSLContext;
 import io.lonmstalker.tgkit.core.i18n.MessageLocalizer;
@@ -15,7 +16,7 @@ public class MockCtx {
 
     // фиктивные BotInfo / BotUserInfo
     public static DSLContext ctx(Long chatId, long userId, TelegramSender sender) {
-        BotInfo bot = mock(BotInfo.class);
+        BotService bot = mock(BotService.class);
         when(bot.sender()).thenReturn(sender);
         when(bot.localizer()).thenReturn(mock(MessageLocalizer.class));
 
@@ -24,6 +25,6 @@ public class MockCtx {
         when(user.userId()).thenReturn(userId);
         when(user.roles()).thenReturn(Set.of("ADMIN"));
 
-        return new DSLContext.SimpleDSLContext(bot, user);
+        return new DSLContext.SimpleDSLContext(bot, mock(BotInfo.class), user);
     }
 }

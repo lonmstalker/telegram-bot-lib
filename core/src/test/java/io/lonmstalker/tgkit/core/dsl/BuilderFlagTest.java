@@ -1,6 +1,7 @@
 package io.lonmstalker.tgkit.core.dsl;
 
 import io.lonmstalker.tgkit.core.BotInfo;
+import io.lonmstalker.tgkit.core.BotService;
 import io.lonmstalker.tgkit.core.dsl.context.DSLContext;
 import io.lonmstalker.tgkit.core.dsl.feature_flags.InMemoryFeatureFlags;
 import io.lonmstalker.tgkit.core.user.BotUserInfo;
@@ -107,6 +108,6 @@ class BuilderFlagTest {
         BotUserInfo user = mock(BotUserInfo.class);
         when(user.chatId()).thenReturn(id);
         when(user.userId()).thenReturn(42L);
-        return new DSLContext.SimpleDSLContext(botInfo, user);
+        return new DSLContext.SimpleDSLContext(mock(BotService.class), botInfo, user);
     }
 }

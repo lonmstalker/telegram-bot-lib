@@ -23,13 +23,13 @@ public final class QuizBuilder extends PollBuilder {
 
     @Override
     @SuppressWarnings("argument")
-    public @NonNull PartialBotApiMethod<?> build() {
+    public @NonNull SendPoll build() {
         requireChatId();
 
         PollSpec spec = new PollSpec(question, options, correct);
         VALIDATOR.validate(spec);
 
-        SendPoll poll = (SendPoll) super.build();
+        SendPoll poll = super.build();
         poll.setType("quiz");
         poll.setCorrectOptionId(correct);
         poll.setChatId(Objects.requireNonNull(chatId));

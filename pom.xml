@@ -34,7 +34,9 @@
         <logback.version>1.5.6</logback.version>
         <reflections.version>0.10.2</reflections.version>
         <caffeine.version>3.2.1</caffeine.version>
+        <jedis.version>6.0.0</jedis.version>
         <http-simple-client.version>0.16.0</http-simple-client.version>
+        <netty.version>4.2.2.Final</netty.version>
 
         <!-- PLUGINS -->
         <maven-compiler.plugin>3.14.0</maven-compiler.plugin>
@@ -46,6 +48,7 @@
         <h2.version>2.3.232</h2.version>
         <mockito.version>5.18.0</mockito.version>
         <assertj.version>3.25.1</assertj.version>
+        <awaitility.version>4.3.0</awaitility.version>
         <junit.jupiter.version>5.13.1</junit.jupiter.version>
     </properties>
 
@@ -125,6 +128,16 @@
                 <artifactId>caffeine</artifactId>
                 <version>${caffeine.version}</version>
             </dependency>
+            <dependency>
+                <groupId>redis.clients</groupId>
+                <artifactId>jedis</artifactId>
+                <version>${jedis.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-transport</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
 
             <!-- CHECKS -->
             <dependency>
@@ -148,7 +161,13 @@
             <dependency>
                 <groupId>org.assertj</groupId>
                 <artifactId>assertj-core</artifactId>
-                <version>3.25.1</version>
+                <version>${assertj.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.awaitility</groupId>
+                <artifactId>awaitility</artifactId>
+                <version>${awaitility.version}</version>
                 <scope>test</scope>
             </dependency>
         </dependencies>
@@ -185,7 +204,8 @@
                     </annotationProcessors>
                     <compilerArgs combine.children="append">
                         <arg>-Awarns</arg>
-                        <arg>-Xmaxwarns</arg><arg>10000</arg>
+                        <arg>-Xmaxwarns</arg>
+                        <arg>10000</arg>
                         <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED</arg>
                         <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED</arg>
                         <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED</arg>

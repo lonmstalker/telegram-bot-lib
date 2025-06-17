@@ -3,6 +3,7 @@ package io.lonmstalker.observability.impl;
 import io.lonmstalker.observability.ClosableMetricsServer;
 import io.prometheus.client.CollectorRegistry;
 import io.prometheus.client.exporter.HTTPServer;
+import lombok.Builder;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -13,6 +14,7 @@ import java.net.InetSocketAddress;
 public class PrometheusMetricsServer implements ClosableMetricsServer {
     private final HTTPServer server;
 
+    @Builder
     public PrometheusMetricsServer(int port, CollectorRegistry registry) throws IOException {
         // Создаём сервер без автоматического запуска
         server = new HTTPServer(new InetSocketAddress(port), registry, false);
@@ -26,5 +28,10 @@ public class PrometheusMetricsServer implements ClosableMetricsServer {
     @Override
     public void stop() {
         server.close();
+    }
+
+    @Override
+    public void close() throws Exception {
+        stop();
     }
 }

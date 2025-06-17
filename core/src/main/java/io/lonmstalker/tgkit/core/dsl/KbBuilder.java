@@ -2,8 +2,11 @@ package io.lonmstalker.tgkit.core.dsl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+
 import io.lonmstalker.tgkit.core.i18n.MessageLocalizer;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -13,7 +16,6 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
  * Конструктор inline-клавиатуры.
  */
 public final class KbBuilder {
-
     private final @NonNull MessageLocalizer loc;
     private final List<List<InlineKeyboardButton>> rows = new ArrayList<>();
 
@@ -21,13 +23,17 @@ public final class KbBuilder {
         this.loc = loc;
     }
 
-    /** Добавляет строку кнопок. */
+    /**
+     * Добавляет строку кнопок.
+     */
     public @NonNull KbBuilder row(@NonNull Button... buttons) {
         rows.add(to(buttons));
         return this;
     }
 
-    /** Каждая кнопка в отдельной строке. */
+    /**
+     * Каждая кнопка в отдельной строке.
+     */
     public @NonNull KbBuilder col(@NonNull Button... buttons) {
         for (Button b : buttons) {
             rows.add(to(b));
@@ -35,7 +41,33 @@ public final class KbBuilder {
         return this;
     }
 
-    /** Размещает кнопки по сетке. */
+    /**
+     * Добавляет строку кнопок.
+     */
+    public <T> @NonNull KbBuilder rowFrom(@NonNull Collection<T> data,
+                                          @NonNull Function<T, InlineKeyboardButton> map) {
+        List<InlineKeyboardButton> cur = new ArrayList<>();
+        for (T elem : data) {
+            cur.add(map.apply(elem));
+        }
+        rows.add(cur);
+        return this;
+    }
+
+    /**
+     * Каждая кнопка в отдельной строке.
+     */
+    public <T> @NonNull KbBuilder colFrom(@NonNull Collection<T> data,
+                                          @NonNull Function<T, InlineKeyboardButton> map) {
+        for (T elem : data) {
+            rows.add(List.of(map.apply(elem)));
+        }
+        return this;
+    }
+
+    /**
+     * Размещает кнопки по сетке.
+     */
     public @NonNull KbBuilder grid(int cols, @NonNull Button... buttons) {
         List<InlineKeyboardButton> cur = new ArrayList<>();
         for (Button b : buttons) {
@@ -51,12 +83,15 @@ public final class KbBuilder {
         return this;
     }
 
-    /** Итоговая разметка. */
+    /**
+     * Итоговая разметка.
+     */
     public @NonNull InlineKeyboardMarkup build() {
         return new InlineKeyboardMarkup(rows);
     }
 
-    @NonNull List<List<InlineKeyboardButton>> rows() {
+    @NonNull
+    List<List<InlineKeyboardButton>> rows() {
         return rows;
     }
 

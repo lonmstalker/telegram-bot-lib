@@ -5,7 +5,7 @@ import java.io.IOException;
 /**
  * Интерфейс для управляемого HTTP-сервера метрик.
  */
-public interface ClosableMetricsServer {
+public interface ClosableMetricsServer extends AutoCloseable {
 
     /**
      * Запустить сервер метрик, принимающий запросы Prometheus.

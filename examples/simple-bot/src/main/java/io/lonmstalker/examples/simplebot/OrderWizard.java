@@ -39,7 +39,7 @@ public class OrderWizard {
     @AlwaysMatch
     public BotResponse flowMsg(BotRequest<Message> req) {
         String key = req.data().getChatId() + ":" + meta.id();
-        if (req.botInfo().store().get(key) != null) {
+        if (req.service().store().get(key) != null) {
             return engine.handle(req, meta);
         }
         return null;
@@ -49,7 +49,7 @@ public class OrderWizard {
     @AlwaysMatch
     public BotResponse flowCb(BotRequest<CallbackQuery> req) {
         String key = req.data().getMessage().getChatId() + ":" + meta.id();
-        if (req.botInfo().store().get(key) != null) {
+        if (req.service().store().get(key) != null) {
             return engine.handle(req, meta);
         }
         return null;

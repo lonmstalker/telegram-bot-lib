@@ -1,6 +1,7 @@
 package io.lonmstalker.tgkit.core.dsl.context;
 
 import io.lonmstalker.tgkit.core.BotInfo;
+import io.lonmstalker.tgkit.core.BotService;
 import io.lonmstalker.tgkit.core.exception.BotApiException;
 import io.lonmstalker.tgkit.core.user.BotUserInfo;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -16,12 +17,16 @@ public interface DSLContext {
     @NonNull
     BotUserInfo userInfo();
 
+    @NonNull
+    BotService service();
+
     /**
      * Проверяет роль администратора.
      */
     boolean isAdmin();
 
-    record SimpleDSLContext(@NonNull BotInfo botInfo,
+    record SimpleDSLContext(@NonNull BotService service,
+                            @NonNull BotInfo botInfo,
                             @NonNull BotUserInfo userInfo) implements DSLContext {
 
         public SimpleDSLContext {

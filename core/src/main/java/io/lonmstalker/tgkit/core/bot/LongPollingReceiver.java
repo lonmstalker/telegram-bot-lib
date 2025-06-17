@@ -2,6 +2,7 @@ package io.lonmstalker.tgkit.core.bot;
 
 import io.lonmstalker.tgkit.core.BotAdapter;
 import io.lonmstalker.tgkit.core.exception.BotExceptionHandler;
+import lombok.Builder;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -13,20 +14,27 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 @Slf4j
 class LongPollingReceiver extends TelegramLongPollingBot implements AutoCloseable {
     private final @NonNull BotAdapter adapter;
+    private final @NonNull TelegramSender sender;
     private final @NonNull BotExceptionHandler globalExceptionHandler;
 
     @Setter
     private @Nullable String username;
 
+    @Builder
     public LongPollingReceiver(@NonNull BotConfig options,
                                @NonNull BotAdapter adapter,
                                @NonNull String token,
+                               @NonNull TelegramSender sender,
                                @Nullable BotExceptionHandler globalExceptionHandler) {
         super(options, token);
         this.adapter = adapter;
+        this.sender = sender;
         this.globalExceptionHandler = globalExceptionHandler != null
                 ? globalExceptionHandler
                 : (update, ex) -> log.error("onUpdate with error: ", ex);
+        if (adapter instanceof BotAdapterImpl b) {
+            b.setSender(sender);
+        }
     }
 
     @Override

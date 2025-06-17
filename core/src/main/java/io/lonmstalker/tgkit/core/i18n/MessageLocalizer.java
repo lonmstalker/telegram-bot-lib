@@ -33,7 +33,7 @@ public interface MessageLocalizer {
     /**
      * Получить локализованную и форматированную строку по ключу с параметрами.
      */
-    @NonNull String get(@NonNull String key, Object... args);
+    @NonNull String get(@NonNull String key, @NonNull Object... args);
 
     /**
      * Получить локализованную и форматированную строку по ключу с параметрами.

@@ -1,5 +1,6 @@
 package io.lonmstalker.tgkit.core.dsl;
 
+import io.lonmstalker.tgkit.core.BotService;
 import io.lonmstalker.tgkit.core.dsl.context.DSLContext;
 import io.lonmstalker.tgkit.core.exception.BotApiException;
 import io.lonmstalker.tgkit.core.user.BotUserInfo;
@@ -44,6 +45,6 @@ class MissingIdStrategyTest {
         BotUserInfo user = mock(BotUserInfo.class);
         when(user.chatId()).thenReturn(null);
         when(user.userId()).thenReturn(42L);
-        return new DSLContext.SimpleDSLContext(botInfo, user);
+        return new DSLContext.SimpleDSLContext(mock(BotService.class), botInfo, user);
     }
 }

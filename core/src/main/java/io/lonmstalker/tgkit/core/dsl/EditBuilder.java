@@ -7,13 +7,12 @@ import io.lonmstalker.tgkit.core.parse_mode.ParseMode;
 import io.lonmstalker.tgkit.core.parse_mode.Sanitizer;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.methods.ActionType;
-import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.methods.send.SendChatAction;
 
 /** Редактирование сообщения. */
 @SuppressWarnings("initialization.fields.uninitialized")
-public final class EditBuilder extends BotDSL.CommonBuilder<EditBuilder> {
+public final class EditBuilder extends BotDSL.CommonBuilder<EditBuilder, EditMessageText> {
     private final long msgId;
     private Duration typing;
     private String newText;
@@ -48,7 +47,7 @@ public final class EditBuilder extends BotDSL.CommonBuilder<EditBuilder> {
     }
 
     @Override
-    public @NonNull PartialBotApiMethod<?> build() {
+    public @NonNull EditMessageText build() {
         requireChatId();
 
         ParseMode p = parseMode != null ? parseMode : DslGlobalConfig.INSTANCE.getParseMode();
@@ -60,7 +59,7 @@ public final class EditBuilder extends BotDSL.CommonBuilder<EditBuilder> {
             SendChatAction act = new SendChatAction();
             act.setChatId(String.valueOf(chatId));
             act.setAction(ActionType.TYPING);
-            super.ctx.botInfo().sender().execute(act);
+            super.ctx.service().sender().execute(act);
         }
 
         EditMessageText edit = new EditMessageText();

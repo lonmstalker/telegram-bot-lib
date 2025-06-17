@@ -8,6 +8,7 @@ import io.lonmstalker.tgkit.core.BotResponse;
 import io.lonmstalker.tgkit.core.interceptor.defaults.LoggingBotInterceptor;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -36,7 +37,7 @@ public class LoggingBotInterceptorTest {
         user.setId(10L);
         msg.setFrom(user);
         update.setMessage(msg);
-        interceptor.afterCompletion(update, (BotResponse) null, new RuntimeException("boom"));
+        interceptor.afterCompletion(update, Mockito.mock(), null, new RuntimeException("boom"));
         assertFalse(appender.list.isEmpty());
         ILoggingEvent event = appender.list.get(0);
         assertEquals(Level.DEBUG, event.getLevel());

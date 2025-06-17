@@ -60,7 +60,7 @@ public class SimpleBotCommands {
     @AlwaysMatch
     public BotResponse orderFlow(BotRequest<Message> request) {
         String key = request.data().getChatId() + ":" + orderWizard.id();
-        if (request.botInfo().store().get(key) != null) {
+        if (request.service().store().get(key) != null) {
             return wizard.handle(request, orderWizard);
         }
         return null;

@@ -11,15 +11,18 @@ import io.lonmstalker.tgkit.core.annotation.Arg;
 import io.lonmstalker.tgkit.core.annotation.UserRoleMatch;
 import io.lonmstalker.tgkit.core.bot.BotCommandRegistry;
 import io.lonmstalker.tgkit.core.exception.BotApiException;
+import io.lonmstalker.tgkit.core.interceptor.BotInterceptor;
+import io.lonmstalker.tgkit.core.interceptor.BotInterceptorFactory;
 import io.lonmstalker.tgkit.core.matching.CommandMatch;
 import io.lonmstalker.tgkit.core.args.BotArgumentConverter;
 import io.lonmstalker.tgkit.core.args.Converters;
+
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 import io.lonmstalker.tgkit.core.matching.AlwaysMatch;
 import io.lonmstalker.tgkit.core.user.BotUserProvider;
@@ -30,9 +33,16 @@ import org.reflections.scanners.Scanners;
 import org.reflections.util.ConfigurationBuilder;
 import org.telegram.telegrambots.meta.api.interfaces.BotApiObject;
 
-/** Utility to scan packages for {@link BotHandler} methods. */
+/**
+ * Utility to scan packages for {@link BotHandler} methods.
+ */
 @UtilityClass
 public final class AnnotatedCommandLoader {
+    private static final List<BotInterceptorFactory<?>> FACTORIES = new ArrayList<>();
+
+    static {
+        ServiceLoader.load(BotInterceptorFactory.class).forEach(FACTORIES::add);
+    }
 
     /**
      * Сканирует указанные пакеты и регистрирует все методы, помеченные
@@ -53,7 +63,9 @@ public final class AnnotatedCommandLoader {
         }
     }
 
-    /** Обрабатывает один найденный метод-хендлер и регистрирует его. */
+    /**
+     * Обрабатывает один найденный метод-хендлер и регистрирует его.
+     */
     @SuppressWarnings({"argument"})
     private static void registerHandler(@NonNull BotCommandRegistry registry, @NonNull Method method) {
         if (Modifier.isStatic(method.getModifiers())) {
@@ -75,6 +87,7 @@ public final class AnnotatedCommandLoader {
                 .commandMatch(matcher)
                 .botGroup(ann.botGroup())
                 .params(extractParameters(method))
+                .interceptors(collectInterceptors(method))
                 .build();
         registry.add(cmd);
     }
@@ -100,7 +113,8 @@ public final class AnnotatedCommandLoader {
             Constructor<?> ctor = clazz.getDeclaredConstructor();
             ctor.setAccessible(true);
             return ctor.newInstance();
-        } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+        } catch (NoSuchMethodException | InstantiationException | IllegalAccessException |
+                 InvocationTargetException e) {
             throw new BotApiException("Cannot instantiate " + clazz.getName(), e);
         }
     }
@@ -126,7 +140,7 @@ public final class AnnotatedCommandLoader {
         } else {
             CustomMatcher custom = method.getAnnotation(CustomMatcher.class);
             if (custom != null) {
-                return  (CommandMatch<BotApiObject>) createInstance(custom.value());
+                return (CommandMatch<BotApiObject>) createInstance(custom.value());
             }
         }
         return new AlwaysMatch<>();
@@ -156,5 +170,18 @@ public final class AnnotatedCommandLoader {
         }
 
         return infos;
+    }
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    private static List<BotInterceptor> collectInterceptors(Method m) {
+        List<BotInterceptor> res = new ArrayList<>();
+
+        for (BotInterceptorFactory f : FACTORIES) {
+            Annotation ann = m.getAnnotation(f.annotationType());
+            if (ann != null) {
+                f.build(m, ann).ifPresent(r -> res.add((BotInterceptor) r));
+            }
+        }
+        return res;
     }
 }

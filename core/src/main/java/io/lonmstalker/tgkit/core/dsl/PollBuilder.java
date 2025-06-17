@@ -5,11 +5,10 @@ import java.util.List;
 
 import io.lonmstalker.tgkit.core.dsl.context.DSLContext;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.polls.SendPoll;
 
 /** Построитель опроса. */
-public class PollBuilder extends BotDSL.CommonBuilder<PollBuilder> {
+public class PollBuilder extends BotDSL.CommonBuilder<PollBuilder, SendPoll> {
     protected final String question;
     protected final List<String> options = new ArrayList<>();
     protected boolean anonymous = true;
@@ -32,7 +31,7 @@ public class PollBuilder extends BotDSL.CommonBuilder<PollBuilder> {
     }
 
     @Override
-    public @NonNull PartialBotApiMethod<?> build() {
+    public @NonNull SendPoll build() {
         requireChatId();
 
         SendPoll poll = new SendPoll();
