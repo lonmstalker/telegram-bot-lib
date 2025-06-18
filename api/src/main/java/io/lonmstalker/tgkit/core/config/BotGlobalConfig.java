@@ -4,12 +4,15 @@ import io.lonmstalker.tgkit.core.dsl.MissingIdStrategy;
 import io.lonmstalker.tgkit.core.dsl.feature_flags.FeatureFlags;
 import io.lonmstalker.tgkit.core.dsl.feature_flags.InMemoryFeatureFlags;
 import io.lonmstalker.tgkit.core.dsl.ttl.TtlSchedulerDefault;
+import io.lonmstalker.tgkit.core.event.BotEventBus;
 import io.lonmstalker.tgkit.core.parse_mode.ParseMode;
 import io.lonmstalker.tgkit.core.ttl.TtlScheduler;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
+import java.net.http.HttpClient;
+import java.time.Duration;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -26,11 +29,27 @@ public class BotGlobalConfig {
      */
     public static final BotGlobalConfig INSTANCE = new BotGlobalConfig();
     private final @NonNull DSLGlobalConfig dslGlobalConfig;
+    private final @NonNull HttpGlobalConfig httpGlobalConfig;
+    private final @NonNull EventGlobalConfig eventGlobalConfig;
     private final @NonNull ExecutorsGlobalConfig executorsGlobalConfig;
 
     private BotGlobalConfig() {
-        this.dslGlobalConfig = new DSLGlobalConfig();
         this.executorsGlobalConfig = new ExecutorsGlobalConfig();
+
+        this.dslGlobalConfig = new DSLGlobalConfig();
+        this.httpGlobalConfig = new HttpGlobalConfig();
+        this.eventGlobalConfig = new EventGlobalConfig();
+
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            eventGlobalConfig.close();
+            httpGlobalConfig.close();
+            dslGlobalConfig.close();
+            executorsGlobalConfig.close();
+        }));
+    }
+
+    public @NonNull EventGlobalConfig eventBus() {
+        return eventGlobalConfig;
     }
 
     public @NonNull DSLGlobalConfig dsl() {
@@ -41,11 +60,55 @@ public class BotGlobalConfig {
         return this.executorsGlobalConfig;
     }
 
+    public @NonNull HttpGlobalConfig http() {
+        return this.httpGlobalConfig;
+    }
+
+    @Getter
+    public static class EventGlobalConfig {
+        private final @NonNull AtomicReference<BotEventBus> eventBus = new AtomicReference<>();
+
+        public @NonNull BotEventBus getBus() {
+            return this.eventBus.get();
+        }
+
+        public @NonNull EventGlobalConfig bus(@NonNull BotEventBus eventBus) {
+            this.eventBus.set(eventBus);
+            return this;
+        }
+
+        void close() {
+            try {
+                this.eventBus.get().shutdown();
+            } catch (InterruptedException ignored) {
+            }
+        }
+    }
+
+    @Getter
+    public static class HttpGlobalConfig {
+        private final @NonNull AtomicReference<@NonNull HttpClient> client =
+                new AtomicReference<>(HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(75)).build());
+
+        public @NonNull HttpGlobalConfig httpClient(@NonNull HttpClient httpClient) {
+            this.client.set(httpClient);
+            return this;
+        }
+
+        public @NonNull HttpClient getClient() {
+            return this.client.get();
+        }
+
+        void close() {
+            client.get().close();
+        }
+    }
+
     @Getter
     public static class ExecutorsGlobalConfig {
-        private final @NonNull AtomicReference<ScheduledExecutorService> scheduledExecutorService =
+        private final @NonNull AtomicReference<@NonNull ScheduledExecutorService> scheduledExecutorService =
                 new AtomicReference<>(Executors.newScheduledThreadPool(1));
-        private final @NonNull AtomicReference<ExecutorService> ioExecutorService =
+        private final @NonNull AtomicReference<@NonNull ExecutorService> ioExecutorService =
                 new AtomicReference<>(Executors.newVirtualThreadPerTaskExecutor());
 
         public BotGlobalConfig.@NonNull ExecutorsGlobalConfig scheduledExecutorService(
@@ -65,6 +128,11 @@ public class BotGlobalConfig {
 
         public @NonNull ExecutorService getIoExecutorService() {
             return this.ioExecutorService.get();
+        }
+
+        void close() {
+            ioExecutorService.get().shutdown();
+            scheduledExecutorService.get().shutdownNow();
         }
     }
 
@@ -104,6 +172,13 @@ public class BotGlobalConfig {
         public @NonNull DSLGlobalConfig ttlScheduler(@NonNull TtlScheduler ttlScheduler) {
             this.ttlScheduler = ttlScheduler;
             return this;
+        }
+
+        void close() {
+            try {
+                ttlScheduler.close();
+            } catch (Exception ignored) {
+            }
         }
     }
 }

@@ -155,6 +155,11 @@
                 <artifactId>vault-java-driver</artifactId>
                 <version>${vault.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.dataformat</groupId>
+                <artifactId>jackson-dataformat-yaml</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
 
             <!-- CHECKS -->
             <dependency>

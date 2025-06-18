@@ -1,5 +1,8 @@
 package io.lonmstalker.tgkit.core.bot;
 
+import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
+import io.lonmstalker.tgkit.core.event.impl.StartStatusBotEvent;
+import io.lonmstalker.tgkit.core.event.impl.StopStatusBotEvent;
 import io.lonmstalker.tgkit.core.exception.BotApiException;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -13,6 +16,7 @@ import org.telegram.telegrambots.meta.api.methods.GetMe;
 import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 import org.telegram.telegrambots.meta.api.objects.User;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -58,9 +62,13 @@ public final class BotImpl implements Bot {
             } else if (absSender instanceof WebHookReceiver receiver) {
                 initWebHook(receiver);
             }
-            BotRegistry.INSTANCE.register(this);
-        } catch (Exception ex) {
-            BotRegistry.INSTANCE.unregister(this);
+            BotRegistryImpl.INSTANCE.register(this);
+            BotGlobalConfig.INSTANCE.eventBus().getBus()
+                    .publish(new StartStatusBotEvent(internalId(), externalId(), Instant.now(), null));
+        } catch (Throwable ex) {
+            BotRegistryImpl.INSTANCE.unregister(this);
+            BotGlobalConfig.INSTANCE.eventBus().getBus()
+                    .publish(new StartStatusBotEvent(internalId(), externalId(), Instant.now(), ex));
             throw new BotApiException("Error starting bot", ex);
         }
     }
@@ -68,11 +76,18 @@ public final class BotImpl implements Bot {
     @Override
     @SuppressWarnings("dereference.of.nullable")
     public void stop() {
-        checkStarted();
-        runCompleteActions();
-        shutdownSession();
-        closeAbsSender();
-        clearState();
+        try {
+            checkStarted();
+            runCompleteActions();
+            shutdownSession();
+            closeAbsSender();
+            clearState();
+            BotGlobalConfig.INSTANCE.eventBus().getBus()
+                    .publish(new StopStatusBotEvent(internalId(), externalId(), Instant.now(), null));
+        } catch (Throwable ex) {
+            BotGlobalConfig.INSTANCE.eventBus().getBus()
+                    .publish(new StopStatusBotEvent(internalId(), externalId(), Instant.now(), ex));
+        }
     }
 
     @Override
@@ -105,6 +120,11 @@ public final class BotImpl implements Bot {
     @Override
     public @NonNull String token() {
         return this.token;
+    }
+
+    @Override
+    public @NonNull BotRegistry botRegistry() {
+        return BotRegistryImpl.INSTANCE;
     }
 
     private void initLongPolling(@NonNull LongPollingReceiver receiver) throws Exception {
@@ -163,7 +183,7 @@ public final class BotImpl implements Bot {
         this.user = null;
         this.setWebhook = null;
         this.session = null;
-        BotRegistry.INSTANCE.unregister(this);
+        BotRegistryImpl.INSTANCE.unregister(this);
     }
 
     private void checkStarted() {

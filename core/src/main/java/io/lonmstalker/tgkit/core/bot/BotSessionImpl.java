@@ -67,13 +67,13 @@ public class BotSessionImpl implements BotSession {
         }
         running.set(true);
 
-        HttpClient.Builder clientBuilder = HttpClient.newBuilder();
         if (options.getProxyHost() != null && !options.getProxyHost().isEmpty()) {
-            clientBuilder.proxy(ProxySelector.of(new InetSocketAddress(options.getProxyHost(), options.getProxyPort())));
+            this.httpClient = HttpClient.newBuilder()
+                    .proxy(ProxySelector.of(new InetSocketAddress(options.getProxyHost(), options.getProxyPort())))
+                    .build();
+        } else {
+            this.httpClient = BotGlobalConfig.INSTANCE.http().getClient();
         }
-        this.httpClient = clientBuilder
-                .connectTimeout(Duration.ofSeconds(75))
-                .build();
 
         this.executor = providedExecutor != null
                 ? providedExecutor

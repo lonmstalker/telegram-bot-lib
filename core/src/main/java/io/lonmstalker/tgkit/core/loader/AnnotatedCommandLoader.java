@@ -10,6 +10,8 @@ import io.lonmstalker.tgkit.core.annotation.MessageTextMatch;
 import io.lonmstalker.tgkit.core.annotation.Arg;
 import io.lonmstalker.tgkit.core.annotation.UserRoleMatch;
 import io.lonmstalker.tgkit.core.bot.BotCommandRegistry;
+import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
+import io.lonmstalker.tgkit.core.event.impl.RegisterCommandBotEvent;
 import io.lonmstalker.tgkit.core.exception.BotApiException;
 import io.lonmstalker.tgkit.core.interceptor.BotInterceptor;
 import io.lonmstalker.tgkit.core.interceptor.BotInterceptorFactory;
@@ -22,6 +24,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.time.Instant;
 import java.util.*;
 
 import io.lonmstalker.tgkit.core.matching.AlwaysMatch;
@@ -89,6 +92,9 @@ public final class AnnotatedCommandLoader {
                 .params(extractParameters(method))
                 .interceptors(collectInterceptors(method))
                 .build();
+
+        BotGlobalConfig.INSTANCE.eventBus().getBus()
+                .publish(new RegisterCommandBotEvent(Instant.now(), method, cmd));
         registry.add(cmd);
     }
 

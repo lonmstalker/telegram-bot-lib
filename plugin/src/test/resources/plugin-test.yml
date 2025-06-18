@@ -1,0 +1,10 @@
+id: captcha-slider
+name: Slider CAPTCHA
+version: 1.0.3
+api: 1.2   # минимальная версия tgkit-api
+main: io.acme.slider.PluginMain
+requires:
+  - tgkit-security>=2.1
+  - kotlin-stdlib
+sandbox:
+  permissions: [ NET, FS_READ:/tmp ]  # optional

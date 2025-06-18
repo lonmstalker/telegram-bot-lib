@@ -1,0 +1,42 @@
+package io.lonmstalker.tgkit.core.config;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import io.lonmstalker.tgkit.core.resource.Loaders;
+import io.lonmstalker.tgkit.core.resource.ResourceLoader;
+import org.checkerframework.checker.nullness.qual.NonNull;
+
+import java.io.IOException;
+import java.io.InputStream;
+
+public class ConfigLoader {
+
+    private static final ObjectMapper YAML = new ObjectMapper(new YAMLFactory());
+    private static final ObjectMapper JSON = new ObjectMapper();
+
+    /**
+     * Читает и мержит YAML+JSON в единое JsonNode
+     */
+    public @NonNull JsonNode asJsonNode(@NonNull String path) throws IOException {
+        JsonNode merged = JSON.nullNode();
+        ResourceLoader loader = Loaders.load(path);
+        try (InputStream is = loader.open()) {
+            return parse(is, loader.text());
+        }
+    }
+
+    /**
+     * Приводит конфиг к строго типизированному POJO
+     */
+    public <T> T as(@NonNull String path, @NonNull Class<T> type) throws IOException {
+        return JSON.treeToValue(asJsonNode(path), type);
+    }
+
+    /*------------------- helpers -------------------*/
+    private static JsonNode parse(InputStream in, String id) throws IOException {
+        if (id.endsWith(".yml") || id.endsWith(".yaml")) return YAML.readTree(in);
+        if (id.endsWith(".json")) return JSON.readTree(in);
+        throw new IOException("unsupported config format: " + id);
+    }
+}

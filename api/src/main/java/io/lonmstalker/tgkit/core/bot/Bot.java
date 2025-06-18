@@ -98,4 +98,7 @@ public interface Bot {
      */
     @NonNull
     String token();
+
+    @NonNull
+    BotRegistry botRegistry();
 }

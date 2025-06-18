@@ -2,8 +2,10 @@ package io.lonmstalker.tgkit.security.antispam;
 
 import io.lonmstalker.tgkit.core.BotRequest;
 import io.lonmstalker.tgkit.core.BotResponse;
+import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
 import io.lonmstalker.tgkit.core.interceptor.BotInterceptor;
 import io.lonmstalker.tgkit.security.captcha.CaptchaProvider;
+import io.lonmstalker.tgkit.security.event.SecurityBotEvent;
 import io.lonmstalker.tgkit.security.ratelimit.RateLimiter;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +15,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+import java.time.Instant;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -60,12 +63,16 @@ public final class AntiSpamInterceptor implements BotInterceptor {
         if (!flood.tryAcquire(botId + ":chat:" + chat, 20, 10) ||
                 !flood.tryAcquire(botId + ":user:" + user, 8, 10)) {
             request.service().sender().execute(captcha.question(request));
+            BotGlobalConfig.INSTANCE.eventBus().getBus()
+                    .publish(new SecurityBotEvent(SecurityBotEvent.Type.FLOOD, Instant.now(), request));
             throw new DropUpdateException("flood");
         }
 
         /* 2) Дубликаты */
         if (dup.isDuplicate(chat, txt)) {
             request.service().sender().execute(captcha.question(request));
+            BotGlobalConfig.INSTANCE.eventBus().getBus()
+                    .publish(new SecurityBotEvent(SecurityBotEvent.Type.DUPLICATE, Instant.now(), request));
             throw new DropUpdateException("duplicate");
         }
 
@@ -75,6 +82,8 @@ public final class AntiSpamInterceptor implements BotInterceptor {
                 request.service().sender().execute(request.delete(msgId).build());
             }
             request.service().sender().execute(request.msgKey("link.blocked").build());
+            BotGlobalConfig.INSTANCE.eventBus().getBus()
+                    .publish(new SecurityBotEvent(SecurityBotEvent.Type.MALICIOUS_URL, Instant.now(), request));
             throw new DropUpdateException("malicious url");
         }
     }
