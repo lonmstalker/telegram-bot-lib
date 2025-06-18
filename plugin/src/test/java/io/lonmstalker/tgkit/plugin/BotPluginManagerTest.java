@@ -7,9 +7,11 @@ import io.lonmstalker.tgkit.security.audit.AuditBus;
 import io.lonmstalker.tgkit.security.audit.AuditEvent;
 import io.lonmstalker.tgkit.security.config.BotSecurityGlobalConfig;
 import io.lonmstalker.tgkit.security.init.BotSecurityInitializer;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.mockito.Mockito;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
@@ -68,6 +70,7 @@ public class BotPluginManagerTest {
         ));
 
         // выгрузка
+        Mockito.reset(auditBus);
         manager.unload("test-id");
         verify(auditBus).publish(argThat((AuditEvent evt) ->
                 "plugin-scan".equals(evt.getActor()) &&
@@ -135,15 +138,14 @@ public class BotPluginManagerTest {
                                         String mainClass,
                                         String sha256) throws Exception {
         ObjectMapper yaml = new ObjectMapper(new YAMLFactory());
-        BotPluginDescriptor desc = new BotPluginDescriptor(
-                id,
-                "",
-                version,
-                api,
-                mainClass,
-                sha256,
-                List.of()
-        );
+        BotPluginDescriptor desc = BotPluginDescriptor.builder()
+                .id(id)
+                .version(version)
+                .api(api)
+                .mainClass(mainClass)
+                .sha256(sha256)
+                .requires(List.of())
+                .build();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         yaml.writeValue(baos, desc);
 
@@ -155,9 +157,20 @@ public class BotPluginManagerTest {
     }
 
     public static class TestPlugin implements BotPlugin {
-        @Override public void onLoad(BotPluginContext context) {}
-        @Override public void start() {}
-        @Override public void stop() {}
-        @Override public void onUnload() {}
+        @Override
+        public void onLoad(@NonNull BotPluginContext context) {
+        }
+
+        @Override
+        public void start() {
+        }
+
+        @Override
+        public void stop() {
+        }
+
+        @Override
+        public void onUnload() {
+        }
     }
 }

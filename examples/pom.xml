@@ -6,6 +6,7 @@
         <groupId>io.lonmstalker.tgkit</groupId>
         <artifactId>parent</artifactId>
         <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>examples</artifactId>
@@ -13,8 +14,8 @@
 
     <modules>
         <module>simple-bot</module>
+        <module>plugin-demo</module>
         <module>observability-demo</module>
-        <module>security-demo</module>
     </modules>
 
     <build>
@@ -22,7 +23,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven-compiler.plugin}</version>
+                <version>${maven-compiler-plugin.version}</version>
                 <configuration>
                     <fork>true</fork>
                     <annotationProcessorPaths>

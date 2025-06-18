@@ -48,8 +48,14 @@ public class BotHandlerProcessor extends AbstractProcessor {
                 Arg arg = p.getAnnotation(Arg.class);
                 if (arg == null) {
                     requestParams++;
-                    if (!processingEnv.getTypeUtils().isAssignable(p.asType(), botRequest)) {
-                        error("Неаннотированные параметры должны иметь тип BotRequest", p);
+                    // стираем дженерики у параметра и сравниваем с BotRequest
+                    TypeMirror paramErased = processingEnv.getTypeUtils().erasure(p.asType());
+                    TypeMirror botRequestErased = processingEnv.getTypeUtils().erasure(botRequest);
+                    if (!processingEnv.getTypeUtils().isSameType(paramErased, botRequestErased)) {
+                        error(String.format(
+                                "Неаннотированные параметры должны иметь тип %s, вы передали %s",
+                                processingEnv.getTypeUtils(), p.asType()
+                        ), p);
                     }
                 } else if (arg.value().isEmpty()) {
                     error("Параметр @Arg должен содержать имя группы", p);

@@ -31,4 +31,14 @@ public interface PluginLifecycle {
     default void onUnload() throws Exception {
 
     }
+
+    /**
+     * Hook перед остановкой плагина, для подготовки.
+     */
+    default void beforeStop() throws Exception {}
+
+    /**
+     * Hook после stop, для финальной очистки.
+     */
+    default void afterStop() throws Exception {}
 }
