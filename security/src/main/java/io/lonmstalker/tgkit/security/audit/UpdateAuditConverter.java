@@ -5,15 +5,9 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.time.Instant;
-import java.util.EnumSet;
 import java.util.Map;
 
 public final class UpdateAuditConverter implements AuditConverter {
-    private final EnumSet<AuditField> fields;
-
-    public UpdateAuditConverter(@NonNull EnumSet<AuditField> f) {
-        this.fields = f;
-    }
 
     @Override
     public @NonNull AuditEvent convert(@NonNull Update u) {

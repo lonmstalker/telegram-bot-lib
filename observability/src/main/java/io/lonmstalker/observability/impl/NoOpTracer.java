@@ -1,8 +1,8 @@
 package io.lonmstalker.observability.impl;
 
-import io.lonmstalker.observability.Span;
-import io.lonmstalker.observability.Tags;
-import io.lonmstalker.observability.Tracer;
+import io.lonmstalker.tgkit.observability.Span;
+import io.lonmstalker.tgkit.observability.Tags;
+import io.lonmstalker.tgkit.observability.Tracer;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
@@ -14,7 +14,7 @@ public final class NoOpTracer implements Tracer {
      * Возвращает пустой {@link Span}, не совершающий никаких действий.
      */
     @Override
-    public @NonNull Span start(@NonNull String spanName, @NonNull Tags attributes) {
+    public @NonNull Span start(@NonNull String spanName, @NonNull Tags tags) {
         return new Span() {
             @Override
             public void setError(@NonNull Throwable t) {

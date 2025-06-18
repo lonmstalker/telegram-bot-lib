@@ -8,7 +8,6 @@ import io.lonmstalker.tgkit.core.dsl.feature_flags.InMemoryFeatureFlags;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;

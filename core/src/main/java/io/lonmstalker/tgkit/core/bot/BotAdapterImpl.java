@@ -5,6 +5,7 @@ import io.lonmstalker.tgkit.core.args.RouteContextHolder;
 import io.lonmstalker.tgkit.core.i18n.MessageLocalizer;
 import io.lonmstalker.tgkit.core.i18n.NoopMessageLocalizer;
 import io.lonmstalker.tgkit.core.interceptor.BotInterceptor;
+import io.lonmstalker.tgkit.core.state.InMemoryStateStore;
 import io.lonmstalker.tgkit.core.storage.BotRequestHolder;
 import io.lonmstalker.tgkit.core.user.BotUserInfo;
 import io.lonmstalker.tgkit.core.user.BotUserProvider;
@@ -61,7 +62,9 @@ public class BotAdapterImpl implements BotAdapter, AutoCloseable {
         this.converter = DEFAULT_CONVERTER;
         this.botInfo = new BotInfo(internalId);
         this.service = new BotService(
-                this.config.getStore(),
+                this.config.getStore() != null
+                        ? this.config.getStore()
+                        : new InMemoryStateStore(),
                 sender,
                 userKVStore == null ? new InMemoryUserKVStore() : userKVStore,
                 messageLocalizer != null ? messageLocalizer : new NoopMessageLocalizer()

@@ -1,6 +1,6 @@
 package io.lonmstalker.observability.impl;
 
-import io.lonmstalker.observability.ClosableMetricsServer;
+import io.lonmstalker.tgkit.observability.ClosableMetricsServer;
 import io.prometheus.client.CollectorRegistry;
 import io.prometheus.client.exporter.HTTPServer;
 import lombok.Builder;

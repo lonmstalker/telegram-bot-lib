@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.lonmstalker.tgkit.core.BotRequest;
 import io.lonmstalker.tgkit.core.dsl.Button;
 import io.lonmstalker.tgkit.core.exception.BotApiException;
-import io.lonmstalker.tgkit.core.secret.SecretStore;
+import io.lonmstalker.tgkit.security.secret.SecretStore;
 import io.lonmstalker.tgkit.security.captcha.CaptchaProvider;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;

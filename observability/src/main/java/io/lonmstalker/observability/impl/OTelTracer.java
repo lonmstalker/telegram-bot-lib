@@ -1,9 +1,9 @@
 package io.lonmstalker.observability.impl;
 
-import io.lonmstalker.observability.Span;
-import io.lonmstalker.observability.Tags;
-import io.lonmstalker.observability.Tracer;
-import io.micrometer.core.instrument.Tag;
+import io.lonmstalker.tgkit.observability.Span;
+import io.lonmstalker.tgkit.observability.Tag;
+import io.lonmstalker.tgkit.observability.Tags;
+import io.lonmstalker.tgkit.observability.Tracer;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
 import io.opentelemetry.sdk.trace.SdkTracerProvider;
 import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor;
@@ -29,7 +29,7 @@ public final class OTelTracer implements Tracer {
     public Span start(@NonNull String name, @NonNull Tags tags) {
         var span = tracer.spanBuilder(name);
         for (Tag item : tags.items()) {
-            span.setAttribute(item.getKey(), item.getValue());
+            span.setAttribute(item.key(), item.value());
         }
         return new OtelSpan(span.startSpan());
     }

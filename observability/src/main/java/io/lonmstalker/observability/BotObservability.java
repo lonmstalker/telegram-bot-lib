@@ -4,6 +4,7 @@ import io.lonmstalker.observability.impl.CompositeTracer;
 import io.lonmstalker.observability.impl.MicrometerCollector;
 import io.lonmstalker.observability.impl.NoOpTracer;
 import io.lonmstalker.observability.impl.OTelTracer;
+import io.lonmstalker.tgkit.observability.Tracer;
 import io.micrometer.prometheusmetrics.PrometheusConfig;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

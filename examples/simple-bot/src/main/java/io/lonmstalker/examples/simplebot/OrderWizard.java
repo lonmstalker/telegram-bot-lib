@@ -10,7 +10,6 @@ import io.lonmstalker.tgkit.core.annotation.AlwaysMatch;
 import io.lonmstalker.tgkit.core.wizard.AnnotatedWizard;
 import io.lonmstalker.tgkit.core.wizard.WizardEngine;
 import io.lonmstalker.tgkit.core.wizard.WizardMeta;
-import io.lonmstalker.tgkit.core.wizard.annotation.*;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 

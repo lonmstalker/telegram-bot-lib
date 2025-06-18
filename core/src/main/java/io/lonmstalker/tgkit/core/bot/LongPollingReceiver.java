@@ -2,7 +2,7 @@ package io.lonmstalker.tgkit.core.bot;
 
 import io.lonmstalker.tgkit.core.BotAdapter;
 import io.lonmstalker.tgkit.core.exception.BotExceptionHandler;
-import io.lonmstalker.tgkit.core.secret.SecretStore;
+import io.lonmstalker.tgkit.security.secret.SecretStore;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;

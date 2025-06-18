@@ -1,8 +1,8 @@
 package io.lonmstalker.observability.impl;
 
-import io.lonmstalker.observability.Span;
-import io.lonmstalker.observability.Tags;
-import io.lonmstalker.observability.Tracer;
+import io.lonmstalker.tgkit.observability.Span;
+import io.lonmstalker.tgkit.observability.Tags;
+import io.lonmstalker.tgkit.observability.Tracer;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.List;

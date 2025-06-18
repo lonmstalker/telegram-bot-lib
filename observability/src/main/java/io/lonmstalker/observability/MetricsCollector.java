@@ -1,5 +1,6 @@
 package io.lonmstalker.observability;
 
+import io.lonmstalker.tgkit.observability.Tags;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Timer;
@@ -9,6 +10,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
  * Абстракция над системой сбора метрик.
  */
 public interface MetricsCollector extends AutoCloseable {
+
     /**
      * Возвращает используемый {@link MeterRegistry}.
      */

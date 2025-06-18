@@ -21,7 +21,7 @@ import java.util.Objects;
 @Getter
 @Builder
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-public class BotImpl implements Bot {
+public final class BotImpl implements Bot {
 
     private long id;
     private volatile @Nullable User user;
@@ -58,7 +58,9 @@ public class BotImpl implements Bot {
             } else if (absSender instanceof WebHookReceiver receiver) {
                 initWebHook(receiver);
             }
+            BotRegistry.INSTANCE.register(this);
         } catch (Exception ex) {
+            BotRegistry.INSTANCE.unregister(this);
             throw new BotApiException("Error starting bot", ex);
         }
     }
@@ -161,6 +163,7 @@ public class BotImpl implements Bot {
         this.user = null;
         this.setWebhook = null;
         this.session = null;
+        BotRegistry.INSTANCE.unregister(this);
     }
 
     private void checkStarted() {

@@ -1,10 +1,11 @@
 package io.lonmstalker.observability.impl;
 
 import io.lonmstalker.observability.MetricsCollector;
-import io.lonmstalker.observability.Tags;
+import io.lonmstalker.tgkit.observability.Tags;
 import io.lonmstalker.tgkit.core.exception.BotApiException;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Tag;
 import io.micrometer.core.instrument.Timer;
 import io.micrometer.prometheusmetrics.PrometheusConfig;
 import io.micrometer.prometheusmetrics.PrometheusMeterRegistry;
@@ -30,12 +31,16 @@ public class MicrometerCollector implements MetricsCollector {
 
     @Override
     public @NonNull Timer timer(@NonNull String name, @NonNull Tags tags) {
-        return Timer.builder(name).tags(Arrays.asList(tags.items())).register(registry);
+        return Timer.builder(name)
+                .tags(map(tags))
+                .register(registry);
     }
 
     @Override
     public @NonNull Counter counter(@NonNull String name, @NonNull Tags tags) {
-        return Counter.builder(name).tags(Arrays.asList(tags.items())).register(registry);
+        return Counter.builder(name)
+                .tags(map(tags))
+                .register(registry);
     }
 
     /**
@@ -57,5 +62,13 @@ public class MicrometerCollector implements MetricsCollector {
     public void close() {
         registry.close();
         httpServer.stop();
+    }
+
+    private io.micrometer.core.instrument.Tags map(@NonNull Tags tags) {
+        return io.micrometer.core.instrument.Tags.of(
+                Arrays.stream(tags.items())
+                        .map(t -> Tag.of(t.key(), t.value()))
+                        .toList()
+        );
     }
 }

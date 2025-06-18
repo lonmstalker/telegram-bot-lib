@@ -15,6 +15,7 @@
         <module>plugin</module>
         <module>security</module>
         <module>examples</module>
+        <module>api</module>
     </modules>
 
     <properties>
@@ -80,6 +81,11 @@
                 <version>${telegrambots.version}</version>
             </dependency>
             <dependency>
+                <groupId>org.telegram</groupId>
+                <artifactId>telegrambots-meta</artifactId>
+                <version>${telegrambots.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>io.micrometer</groupId>
                 <artifactId>micrometer-core</artifactId>
                 <version>${micrometer.version}</version>
@@ -122,6 +128,11 @@
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-databind</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-annotations</artifactId>
                 <version>${jackson.version}</version>
             </dependency>
             <dependency>

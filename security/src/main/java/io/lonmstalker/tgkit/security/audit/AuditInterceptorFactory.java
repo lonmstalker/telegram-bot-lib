@@ -34,8 +34,7 @@ public final class AuditInterceptorFactory implements BotInterceptorFactory<Audi
         if (custom.converter() != null) {
             conv = newInstance(custom.converter());
         } else {
-            EnumSet<AuditField> set = EnumSet.copyOf(List.of(custom.value()));
-            conv = new UpdateAuditConverter(set); // дефолт
+            conv = new UpdateAuditConverter(); // дефолт
         }
         return new DelegatingAuditInterceptor(BotSecurityGlobalConfig.INSTANCE.audit().bus(), conv);
     }
