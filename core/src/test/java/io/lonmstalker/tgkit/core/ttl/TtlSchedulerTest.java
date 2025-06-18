@@ -1,6 +1,7 @@
 package io.lonmstalker.tgkit.core.ttl;
 
 import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
+import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.junit.jupiter.api.*;
 
@@ -11,6 +12,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class TtlSchedulerTest {
+
+    static {
+        BotCoreInitializer.init();
+    }
 
     @Test
     @DisplayName("task runs exactly once after delay")

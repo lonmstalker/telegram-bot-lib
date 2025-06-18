@@ -2,11 +2,16 @@ package io.lonmstalker.tgkit.core.i18n;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
 import org.junit.jupiter.api.Test;
 
 import java.util.Locale;
 
 public class MessageLocalizerTest {
+
+    static {
+        BotCoreInitializer.init();
+    }
 
     @Test
     void russianLocale() {

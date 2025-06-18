@@ -2,6 +2,7 @@ package io.lonmstalker.tgkit.core.matching;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
 import io.lonmstalker.tgkit.core.storage.BotRequestHolder;
 import io.lonmstalker.tgkit.core.user.BotUserInfo;
 import io.lonmstalker.tgkit.core.user.BotUserProvider;
@@ -18,6 +19,10 @@ import org.telegram.telegrambots.meta.api.objects.User;
 import java.util.Set;
 
 public class MatchersTest {
+
+    static {
+        BotCoreInitializer.init();
+    }
 
     @AfterEach
     void clear() {

@@ -6,6 +6,7 @@ import io.lonmstalker.tgkit.core.BotCommand;
 import io.lonmstalker.tgkit.core.BotRequest;
 import io.lonmstalker.tgkit.core.BotRequestType;
 import io.lonmstalker.tgkit.core.BotResponse;
+import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
 import io.lonmstalker.tgkit.core.matching.CommandMatch;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,10 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import io.lonmstalker.tgkit.core.exception.BotApiException;
 
 class BotCommandRegistryImplTest {
+
+    static {
+        BotCoreInitializer.init();
+    }
 
     @Test
     void add_and_find_commands() {

@@ -7,6 +7,7 @@ import io.lonmstalker.tgkit.core.BotRequest;
 import io.lonmstalker.tgkit.core.BotRequestType;
 import io.lonmstalker.tgkit.core.BotResponse;
 import io.lonmstalker.tgkit.core.i18n.MessageLocalizerImpl;
+import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
 import io.lonmstalker.tgkit.core.user.store.InMemoryUserKVStore;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import io.lonmstalker.tgkit.core.annotation.Arg;
@@ -26,6 +27,10 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ArgBindingTest {
+
+    static {
+        BotCoreInitializer.init();
+    }
 
     public static class Commands {
         static volatile int captured;

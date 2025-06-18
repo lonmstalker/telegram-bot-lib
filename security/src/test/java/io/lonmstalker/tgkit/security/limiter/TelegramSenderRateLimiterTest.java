@@ -1,7 +1,9 @@
 package io.lonmstalker.tgkit.security.limiter;
 
+import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
 import io.lonmstalker.tgkit.core.interceptor.BotInterceptor;
 import io.lonmstalker.tgkit.security.*;
+import io.lonmstalker.tgkit.security.init.BotSecurityInitializer;
 import io.lonmstalker.tgkit.security.ratelimit.*;
 import org.junit.jupiter.api.*;
 import org.mockito.InOrder;
@@ -26,6 +28,11 @@ class TelegramSenderRateLimiterTest {
 
     RateLimiter backend;
     RateLimitInterceptorFactory factory;
+
+    static {
+        BotCoreInitializer.init();
+        BotSecurityInitializer.init();
+    }
 
     @BeforeEach void init() throws Exception {
         handler  = getClass().getDeclaredMethod("roll");

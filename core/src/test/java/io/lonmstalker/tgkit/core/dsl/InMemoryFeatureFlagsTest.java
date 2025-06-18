@@ -1,11 +1,16 @@
 package io.lonmstalker.tgkit.core.dsl;
 
 import io.lonmstalker.tgkit.core.dsl.feature_flags.InMemoryFeatureFlags;
+import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.*;
 
 class InMemoryFeatureFlagsTest {
+
+    static {
+        BotCoreInitializer.init();
+    }
 
     @Test
     void enableChatAndUser() {

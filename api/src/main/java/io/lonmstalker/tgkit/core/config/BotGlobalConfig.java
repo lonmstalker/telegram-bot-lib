@@ -2,20 +2,16 @@ package io.lonmstalker.tgkit.core.config;
 
 import io.lonmstalker.tgkit.core.dsl.MissingIdStrategy;
 import io.lonmstalker.tgkit.core.dsl.feature_flags.FeatureFlags;
-import io.lonmstalker.tgkit.core.dsl.feature_flags.InMemoryFeatureFlags;
-import io.lonmstalker.tgkit.core.dsl.ttl.TtlSchedulerDefault;
 import io.lonmstalker.tgkit.core.event.BotEventBus;
 import io.lonmstalker.tgkit.core.parse_mode.ParseMode;
 import io.lonmstalker.tgkit.core.ttl.TtlScheduler;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.net.http.HttpClient;
-import java.time.Duration;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -48,7 +44,7 @@ public class BotGlobalConfig {
         }));
     }
 
-    public @NonNull EventGlobalConfig eventBus() {
+    public @NonNull EventGlobalConfig events() {
         return eventGlobalConfig;
     }
 
@@ -64,7 +60,6 @@ public class BotGlobalConfig {
         return this.httpGlobalConfig;
     }
 
-    @Getter
     public static class EventGlobalConfig {
         private final @NonNull AtomicReference<BotEventBus> eventBus = new AtomicReference<>();
 
@@ -73,6 +68,7 @@ public class BotGlobalConfig {
         }
 
         public @NonNull EventGlobalConfig bus(@NonNull BotEventBus eventBus) {
+            log.debug("[core-init] BotEventBus changed to {}", eventBus.getClass().getSimpleName());
             this.eventBus.set(eventBus);
             return this;
         }
@@ -85,12 +81,11 @@ public class BotGlobalConfig {
         }
     }
 
-    @Getter
     public static class HttpGlobalConfig {
-        private final @NonNull AtomicReference<@NonNull HttpClient> client =
-                new AtomicReference<>(HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(75)).build());
+        private final @NonNull AtomicReference<@NonNull HttpClient> client = new AtomicReference<>();
 
         public @NonNull HttpGlobalConfig httpClient(@NonNull HttpClient httpClient) {
+            log.debug("[core-init] HttpClient changed to {}", httpClient.getClass().getSimpleName());
             this.client.set(httpClient);
             return this;
         }
@@ -104,20 +99,23 @@ public class BotGlobalConfig {
         }
     }
 
-    @Getter
     public static class ExecutorsGlobalConfig {
-        private final @NonNull AtomicReference<@NonNull ScheduledExecutorService> scheduledExecutorService =
-                new AtomicReference<>(Executors.newScheduledThreadPool(1));
-        private final @NonNull AtomicReference<@NonNull ExecutorService> ioExecutorService =
-                new AtomicReference<>(Executors.newVirtualThreadPerTaskExecutor());
+        private final @NonNull AtomicReference<ScheduledExecutorService> scheduledExecutorService =
+                new AtomicReference<>();
+        private final @NonNull AtomicReference<ExecutorService> ioExecutorService =
+                new AtomicReference<>();
 
         public BotGlobalConfig.@NonNull ExecutorsGlobalConfig scheduledExecutorService(
                 @NonNull ScheduledExecutorService scheduledExecutorService) {
+            log.debug("[core-init] ScheduledExecutorService changed to {}",
+                    scheduledExecutorService.getClass().getSimpleName());
             this.scheduledExecutorService.set(scheduledExecutorService);
             return this;
         }
 
-        public BotGlobalConfig.@NonNull ExecutorsGlobalConfig ioExecutorService(@NonNull ExecutorService ioExecutor) {
+        public BotGlobalConfig.@NonNull ExecutorsGlobalConfig ioExecutorService(
+                @NonNull ExecutorService ioExecutor) {
+            log.debug("[core-init] ExecutorService changed to {}", ioExecutor.getClass().getSimpleName());
             this.ioExecutorService.set(ioExecutor);
             return this;
         }
@@ -136,47 +134,84 @@ public class BotGlobalConfig {
         }
     }
 
-    @Getter
     public static class DSLGlobalConfig {
-        private volatile boolean sanitize;
-        private volatile @NonNull ParseMode parseMode = ParseMode.HTML;
-        private volatile @NonNull FeatureFlags flags = new InMemoryFeatureFlags();
-        private volatile @NonNull TtlScheduler ttlScheduler = new TtlSchedulerDefault();
-        private volatile @NonNull MissingIdStrategy missingIdStrategy = MissingIdStrategy.ERROR;
+        private final AtomicBoolean sanitize = new AtomicBoolean();
+        private final @NonNull AtomicReference<FeatureFlags> flags = new AtomicReference<>();
+        private final @NonNull AtomicReference<ParseMode> parseMode = new AtomicReference<>();
+        private final @NonNull AtomicReference<TtlScheduler> ttlScheduler = new AtomicReference<>();
+        private final @NonNull AtomicReference<MissingIdStrategy> missingIdStrategy = new AtomicReference<>();
+
+        public @NonNull FeatureFlags getFeatureFlags() {
+            return this.flags.get();
+        }
+
+        public @NonNull ParseMode getParseMode() {
+            return this.parseMode.get();
+        }
+
+        public @NonNull TtlScheduler getTtlScheduler() {
+            return this.ttlScheduler.get();
+        }
+
+        public @NonNull MissingIdStrategy getMissingIdStrategy() {
+            return this.missingIdStrategy.get();
+        }
+
+        public boolean isSanitize() {
+            return this.sanitize.get();
+        }
 
         public @NonNull DSLGlobalConfig markdownV2() {
-            this.parseMode = ParseMode.MARKDOWN_V2;
+            log.debug("[core-init] MARKDOWN_V2 enabled");
+            this.parseMode.set(ParseMode.MARKDOWN_V2);
             return this;
         }
 
-        public @NonNull DSLGlobalConfig sanitizeMarkdown() {
-            this.sanitize = true;
+        public @NonNull DSLGlobalConfig markdown() {
+            log.debug("[core-init] MARKDOWN enabled");
+            this.parseMode.set(ParseMode.MARKDOWN);
             return this;
         }
 
-        public @NonNull DSLGlobalConfig unSanitizeMarkdown() {
-            this.sanitize = false;
+        public @NonNull DSLGlobalConfig html() {
+            log.debug("[core-init] HTML enabled");
+            this.parseMode.set(ParseMode.HTML);
+            return this;
+        }
+
+        public @NonNull DSLGlobalConfig sanitize() {
+            log.debug("[core-init] sanitize enabled");
+            this.sanitize.set(true);
+            return this;
+        }
+
+        public @NonNull DSLGlobalConfig noSanitize() {
+            log.debug("[core-init] sanitize disabled");
+            this.sanitize.set(false);
             return this;
         }
 
         public @NonNull DSLGlobalConfig featureFlags(@NonNull FeatureFlags flags) {
-            this.flags = flags;
+            log.debug("[core-init] FeatureFlags changed to {}", flags.getClass().getSimpleName());
+            this.flags.set(flags);
             return this;
         }
 
         public @NonNull DSLGlobalConfig missingIdStrategy(@NonNull MissingIdStrategy strategy) {
-            this.missingIdStrategy = strategy;
+            log.debug("[core-init] MissingIdStrategy changed to {}", strategy.getClass().getSimpleName());
+            this.missingIdStrategy.set(strategy);
             return this;
         }
 
         public @NonNull DSLGlobalConfig ttlScheduler(@NonNull TtlScheduler ttlScheduler) {
-            this.ttlScheduler = ttlScheduler;
+            log.debug("[core-init] TtlScheduler changed to {}", ttlScheduler.getClass().getSimpleName());
+            this.ttlScheduler.set(ttlScheduler);
             return this;
         }
 
         void close() {
             try {
-                ttlScheduler.close();
+                ttlScheduler.get().close();
             } catch (Exception ignored) {
             }
         }

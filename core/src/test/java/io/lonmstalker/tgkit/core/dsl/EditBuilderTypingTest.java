@@ -4,6 +4,7 @@ import io.lonmstalker.tgkit.core.bot.TelegramSender;
 import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
 import io.lonmstalker.tgkit.core.dsl.common.MockCtx;
 import io.lonmstalker.tgkit.core.dsl.context.DSLContext;
+import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.telegram.telegrambots.meta.api.methods.send.SendChatAction;
@@ -17,6 +18,10 @@ import static org.mockito.Mockito.times;
 
 class EditBuilderTypingTest {
 
+    static {
+        BotCoreInitializer.init();
+    }
+
     @Test
     void typingThenEditSanitized() throws TelegramApiException {
         var sender = mock(TelegramSender.class);
@@ -26,7 +31,7 @@ class EditBuilderTypingTest {
 
         DSLContext ctx = MockCtx.ctx(123L, 999L, sender);
 
-        BotGlobalConfig.INSTANCE.dsl().markdownV2().sanitizeMarkdown();
+        BotGlobalConfig.INSTANCE.dsl().markdownV2().sanitize();
 
         new EditBuilder(ctx, 42)
                 .typing(Duration.ofMillis(0))        // не ждём, но метод вызовется

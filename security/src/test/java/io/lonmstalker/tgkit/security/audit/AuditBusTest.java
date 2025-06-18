@@ -1,6 +1,8 @@
 package io.lonmstalker.tgkit.security.audit;
 
+import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
 import io.lonmstalker.tgkit.security.config.BotSecurityGlobalConfig;
+import io.lonmstalker.tgkit.security.init.BotSecurityInitializer;
 import org.awaitility.Awaitility;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,6 +20,11 @@ class AuditBusTest {
     /* отдельный executor, чтобы не мешать другим тестам + контролируем shutdown */
     private AsyncAuditBus bus;
     private ExecutorService exec;
+
+    static {
+        BotCoreInitializer.init();
+        BotSecurityInitializer.init();
+    }
 
     @BeforeEach
     void init() {

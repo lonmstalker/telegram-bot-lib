@@ -5,6 +5,7 @@ import io.lonmstalker.tgkit.core.BotService;
 import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
 import io.lonmstalker.tgkit.core.dsl.context.DSLContext;
 import io.lonmstalker.tgkit.core.dsl.feature_flags.InMemoryFeatureFlags;
+import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
 import io.lonmstalker.tgkit.core.user.BotUserInfo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,10 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class BuilderFlagTest {
+
+    static {
+        BotCoreInitializer.init();
+    }
 
     @BeforeEach
     void setup() {
@@ -41,7 +46,7 @@ class BuilderFlagTest {
     @Test
     void branchSkippedIfFlagDisabled() {
         AtomicBoolean ran = new AtomicBoolean(false);
-        BotGlobalConfig.INSTANCE.dsl().getFlags().disableChat("EXPERIMENT", 2);
+        BotGlobalConfig.INSTANCE.dsl().getFeatureFlags().disableChat("EXPERIMENT", 2);
 
         new MessageBuilder(ctx(2L), "hi")
                 .flag("EXPERIMENT", b -> ran.set(true))

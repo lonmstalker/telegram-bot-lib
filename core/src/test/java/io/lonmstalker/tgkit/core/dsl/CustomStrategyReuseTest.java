@@ -3,6 +3,7 @@ package io.lonmstalker.tgkit.core.dsl;
 import io.lonmstalker.tgkit.core.bot.TelegramSender;
 import io.lonmstalker.tgkit.core.dsl.common.MockCtx;
 import io.lonmstalker.tgkit.core.dsl.context.DSLContext;
+import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
@@ -15,6 +16,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 class CustomStrategyReuseTest {
+
+    static {
+        BotCoreInitializer.init();
+    }
 
     @Test
     void sameLambdaUsedTwice() throws TelegramApiException {

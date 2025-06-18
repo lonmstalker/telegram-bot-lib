@@ -63,11 +63,11 @@ public final class BotImpl implements Bot {
                 initWebHook(receiver);
             }
             BotRegistryImpl.INSTANCE.register(this);
-            BotGlobalConfig.INSTANCE.eventBus().getBus()
+            BotGlobalConfig.INSTANCE.events().getBus()
                     .publish(new StartStatusBotEvent(internalId(), externalId(), Instant.now(), null));
         } catch (Throwable ex) {
             BotRegistryImpl.INSTANCE.unregister(this);
-            BotGlobalConfig.INSTANCE.eventBus().getBus()
+            BotGlobalConfig.INSTANCE.events().getBus()
                     .publish(new StartStatusBotEvent(internalId(), externalId(), Instant.now(), ex));
             throw new BotApiException("Error starting bot", ex);
         }
@@ -82,10 +82,10 @@ public final class BotImpl implements Bot {
             shutdownSession();
             closeAbsSender();
             clearState();
-            BotGlobalConfig.INSTANCE.eventBus().getBus()
+            BotGlobalConfig.INSTANCE.events().getBus()
                     .publish(new StopStatusBotEvent(internalId(), externalId(), Instant.now(), null));
         } catch (Throwable ex) {
-            BotGlobalConfig.INSTANCE.eventBus().getBus()
+            BotGlobalConfig.INSTANCE.events().getBus()
                     .publish(new StopStatusBotEvent(internalId(), externalId(), Instant.now(), ex));
         }
     }

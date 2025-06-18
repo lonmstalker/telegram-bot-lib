@@ -4,6 +4,7 @@ import io.lonmstalker.tgkit.core.BotInfo;
 import io.lonmstalker.tgkit.core.BotService;
 import io.lonmstalker.tgkit.core.bot.TelegramSender;
 import io.lonmstalker.tgkit.core.dsl.context.DSLContext;
+import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
 import io.lonmstalker.tgkit.core.user.BotUserInfo;
 import org.awaitility.Awaitility;
 import org.junit.jupiter.api.*;
@@ -26,6 +27,10 @@ class DslTtlIntegrationTest {
 
     TelegramSender sender;
     DSLContext      ctx;
+
+    static {
+        BotCoreInitializer.init();
+    }
 
     @BeforeEach
     void init() {

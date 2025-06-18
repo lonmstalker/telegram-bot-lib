@@ -1,8 +1,10 @@
 package io.lonmstalker.tgkit.security.rbac;
 
 import io.lonmstalker.tgkit.core.BotRequest;
+import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
 import io.lonmstalker.tgkit.core.interceptor.BotInterceptor;
 import io.lonmstalker.tgkit.core.interceptor.BotInterceptorFactory;
+import io.lonmstalker.tgkit.security.init.BotSecurityInitializer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -24,6 +26,11 @@ public class RoleSecurityTest {
     }
 
     Method handler;
+
+    static {
+        BotCoreInitializer.init();
+        BotSecurityInitializer.init();
+    }
 
     @BeforeEach
     void init() throws Exception {

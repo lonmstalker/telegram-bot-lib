@@ -5,9 +5,11 @@ import io.lonmstalker.tgkit.core.bot.BotAdapterImpl;
 import io.lonmstalker.tgkit.core.bot.BotConfig;
 import io.lonmstalker.tgkit.core.bot.BotFactory;
 import io.lonmstalker.tgkit.core.BotAdapter;
+import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
 import io.lonmstalker.tgkit.security.BotSecurity;
 import io.lonmstalker.tgkit.security.antispam.AntiSpamInterceptor;
 import io.lonmstalker.tgkit.security.captcha.CaptchaProvider;
+import io.lonmstalker.tgkit.security.init.BotSecurityInitializer;
 import io.lonmstalker.tgkit.security.ratelimit.RateLimiter;
 
 import java.time.Duration;
@@ -15,6 +17,8 @@ import java.time.Duration;
 public class SecurityDemoApplication {
 
     public static void main(String[] args) {
+        BotCoreInitializer.init();
+        BotSecurityInitializer.init();
 
         RateLimiter rateLimiter = BotSecurity.inMemoryRateLimiter();
         CaptchaProvider captchaProvider =

@@ -2,6 +2,7 @@ package io.lonmstalker.tgkit.core.resource;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.net.httpserver.HttpServer;
+import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -23,7 +24,11 @@ class ResourceLoaderTest {
     private static final String JSON = "{\"hello\":\"world\"}";
 
     @TempDir
-    Path tmp;          // уникальная temp-директория JUnit5
+    Path tmp;
+
+    static {
+        BotCoreInitializer.init();
+    }
 
     /* ───────────────── classpath loader ──────────────────────────── */
     @Test

@@ -3,6 +3,7 @@ package io.lonmstalker.tgkit.core.bot;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
 import org.junit.jupiter.api.Test;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -14,6 +15,10 @@ import java.util.concurrent.AbstractExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class BotSessionImplTest {
+
+    static {
+        BotCoreInitializer.init();
+    }
 
     @Test
     void startAndStop() {

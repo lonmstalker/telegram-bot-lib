@@ -7,10 +7,13 @@ import io.lonmstalker.tgkit.core.bot.BotAdapterImpl;
 import io.lonmstalker.tgkit.core.bot.BotConfig;
 import io.lonmstalker.tgkit.core.bot.BotFactory;
 import io.lonmstalker.observability.ObservabilityInterceptor;
+import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
 
 public class ObservabilityDemoApplication {
 
     public static void main(String[] args) {
+        BotCoreInitializer.init();
+
         var metrics = BotObservability.micrometer(9180);
         var tracer = BotObservability.otelTracer("bot");
 
@@ -19,7 +22,6 @@ public class ObservabilityDemoApplication {
                 .build();
 
         BotAdapter adapter = BotAdapterImpl.builder()
-                .token("TOKEN")
                 .config(config)
                 .build();
         Bot bot = BotFactory.INSTANCE.from("TOKEN", config, adapter,

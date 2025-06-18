@@ -4,6 +4,7 @@ import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.read.ListAppender;
+import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -17,6 +18,10 @@ import static org.junit.jupiter.api.Assertions.*;
 public class LoggingBotInterceptorTest {
     private final Logger logger = (Logger) LoggerFactory.getLogger(LoggingBotInterceptor.class);
     private final ListAppender<ILoggingEvent> appender = new ListAppender<>();
+
+    static {
+        BotCoreInitializer.init();
+    }
 
     @AfterEach
     void tearDown() {

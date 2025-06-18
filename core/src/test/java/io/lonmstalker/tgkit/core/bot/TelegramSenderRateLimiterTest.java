@@ -1,5 +1,6 @@
 package io.lonmstalker.tgkit.core.bot;
 
+import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
@@ -9,6 +10,10 @@ import java.util.concurrent.ScheduledExecutorService;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TelegramSenderRateLimiterTest {
+
+    static {
+        BotCoreInitializer.init();
+    }
 
     @Test
     void permitsPerSecond() throws Exception {

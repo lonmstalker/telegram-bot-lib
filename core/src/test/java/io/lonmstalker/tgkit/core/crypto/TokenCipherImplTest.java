@@ -2,10 +2,15 @@ package io.lonmstalker.tgkit.core.crypto;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
 import org.junit.jupiter.api.Test;
 import io.lonmstalker.tgkit.core.exception.BotApiException;
 
 public class TokenCipherImplTest {
+
+    static {
+        BotCoreInitializer.init();
+    }
 
     @Test
     void encrypt_decrypt_roundtrip() {

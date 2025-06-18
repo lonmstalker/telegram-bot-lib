@@ -1,5 +1,7 @@
 package io.lonmstalker.tgkit.security.limiter;
 
+import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
+import io.lonmstalker.tgkit.security.init.BotSecurityInitializer;
 import io.lonmstalker.tgkit.security.ratelimit.impl.InMemoryRateLimiter;
 import io.lonmstalker.tgkit.security.ratelimit.RateLimiter;
 import org.assertj.core.api.WithAssertions;
@@ -12,6 +14,11 @@ import java.util.stream.IntStream;
 class InMemoryTelegramSenderRateLimiterTest implements WithAssertions {
     static RateLimiter newLimiter() {
         return new InMemoryRateLimiter(10_000);
+    }
+
+    static {
+        BotCoreInitializer.init();
+        BotSecurityInitializer.init();
     }
 
     /* ================================================================ *

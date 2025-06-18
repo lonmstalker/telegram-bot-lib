@@ -63,7 +63,7 @@ public final class AntiSpamInterceptor implements BotInterceptor {
         if (!flood.tryAcquire(botId + ":chat:" + chat, 20, 10) ||
                 !flood.tryAcquire(botId + ":user:" + user, 8, 10)) {
             request.service().sender().execute(captcha.question(request));
-            BotGlobalConfig.INSTANCE.eventBus().getBus()
+            BotGlobalConfig.INSTANCE.events().getBus()
                     .publish(new SecurityBotEvent(SecurityBotEvent.Type.FLOOD, Instant.now(), request));
             throw new DropUpdateException("flood");
         }
@@ -71,7 +71,7 @@ public final class AntiSpamInterceptor implements BotInterceptor {
         /* 2) Дубликаты */
         if (dup.isDuplicate(chat, txt)) {
             request.service().sender().execute(captcha.question(request));
-            BotGlobalConfig.INSTANCE.eventBus().getBus()
+            BotGlobalConfig.INSTANCE.events().getBus()
                     .publish(new SecurityBotEvent(SecurityBotEvent.Type.DUPLICATE, Instant.now(), request));
             throw new DropUpdateException("duplicate");
         }
@@ -82,7 +82,7 @@ public final class AntiSpamInterceptor implements BotInterceptor {
                 request.service().sender().execute(request.delete(msgId).build());
             }
             request.service().sender().execute(request.msgKey("link.blocked").build());
-            BotGlobalConfig.INSTANCE.eventBus().getBus()
+            BotGlobalConfig.INSTANCE.events().getBus()
                     .publish(new SecurityBotEvent(SecurityBotEvent.Type.MALICIOUS_URL, Instant.now(), request));
             throw new DropUpdateException("malicious url");
         }

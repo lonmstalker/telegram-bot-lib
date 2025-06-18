@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import io.lonmstalker.tgkit.core.BotAdapter;
 import io.lonmstalker.tgkit.core.crypto.TokenCipherImpl;
+import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
 import org.h2.jdbcx.JdbcDataSource;
 import org.junit.jupiter.api.Test;
 import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
@@ -13,6 +14,10 @@ import java.sql.Connection;
 import java.sql.Statement;
 
 public class BotFactoryTest {
+
+    static {
+        BotCoreInitializer.init();
+    }
 
     @Test
     void createFromToken() {

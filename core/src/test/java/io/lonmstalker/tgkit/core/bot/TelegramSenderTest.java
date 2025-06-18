@@ -6,9 +6,15 @@ import io.lonmstalker.tgkit.core.exception.BotApiException;
 import java.lang.reflect.Method;
 
 import java.lang.reflect.InvocationTargetException;
+
+import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
 import org.junit.jupiter.api.Test;
 
 public class TelegramSenderTest {
+
+    static {
+        BotCoreInitializer.init();
+    }
 
     @Test
     void convertException() throws Exception {

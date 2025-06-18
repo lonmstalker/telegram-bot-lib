@@ -93,7 +93,7 @@ public final class AnnotatedCommandLoader {
                 .interceptors(collectInterceptors(method))
                 .build();
 
-        BotGlobalConfig.INSTANCE.eventBus().getBus()
+        BotGlobalConfig.INSTANCE.events().getBus()
                 .publish(new RegisterCommandBotEvent(Instant.now(), method, cmd));
         registry.add(cmd);
     }

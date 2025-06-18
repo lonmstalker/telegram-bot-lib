@@ -256,7 +256,7 @@ public final class BotDSL {
             if (chatId == null) {
                 return (T) this;
             }
-            if (BotGlobalConfig.INSTANCE.dsl().getFlags().isEnabled(flag, chatId)) {
+            if (BotGlobalConfig.INSTANCE.dsl().getFeatureFlags().isEnabled(flag, chatId)) {
                 branch.accept(this);
             }
             return (T) this;
@@ -283,8 +283,8 @@ public final class BotDSL {
                 return (T) this;
             }
 
-            FeatureFlags.Variant v =
-                    BotGlobalConfig.INSTANCE.dsl().getFlags().variant(key, entityId);
+            FeatureFlags.Variant v = BotGlobalConfig.INSTANCE.dsl().getFeatureFlags()
+                    .variant(key, entityId);
 
             if (v == FeatureFlags.Variant.VARIANT) {
                 variant.accept(this);
@@ -300,7 +300,8 @@ public final class BotDSL {
                                    @NonNull Consumer<Common<T, D>> branch) {
             Long uid = ctx.userInfo().userId();
             if (uid != null &&
-                    BotGlobalConfig.INSTANCE.dsl().getFlags().isEnabledForUser(flag, uid)) {
+                    BotGlobalConfig.INSTANCE.dsl().getFeatureFlags()
+                            .isEnabledForUser(flag, uid)) {
                 branch.accept(this);
             }
             return (T) this;

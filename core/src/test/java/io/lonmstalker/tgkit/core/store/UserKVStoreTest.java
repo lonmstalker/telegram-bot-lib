@@ -1,6 +1,7 @@
 
 package io.lonmstalker.tgkit.core.store;
 
+import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
 import io.lonmstalker.tgkit.core.user.store.InMemoryUserKVStore;
 import io.lonmstalker.tgkit.core.user.store.JdbcUserKVStore;
 import io.lonmstalker.tgkit.core.user.store.ReadOnlyUserKVStore;
@@ -13,6 +14,10 @@ import java.util.Map;
 
 @SuppressWarnings("ConstantConditions")
 class UserKVStoreTest implements WithAssertions {
+
+    static {
+        BotCoreInitializer.init();
+    }
 
     /* ---------- shared test data ---------- */
     private static final long UID = 77L;

@@ -9,7 +9,7 @@ import java.util.concurrent.*;
 import java.util.function.Consumer;
 
 @Slf4j
-final class InMemoryEventBus implements BotEventBus {
+public final class InMemoryEventBus implements BotEventBus {
 
     private final Thread workingThread;
 
@@ -26,16 +26,16 @@ final class InMemoryEventBus implements BotEventBus {
     private volatile boolean alive = true;
 
     static {
-        BotGlobalConfig.INSTANCE.eventBus().bus(new InMemoryEventBus());
+        BotGlobalConfig.INSTANCE.events().bus(new InMemoryEventBus());
     }
 
-    InMemoryEventBus(@NonNull ExecutorService pool, int queueSize) {
+    public InMemoryEventBus(@NonNull ExecutorService pool, int queueSize) {
         this.pool = pool;
         this.ring = new LinkedBlockingQueue<>(queueSize);
         this.workingThread = startLoop();
     }
 
-    InMemoryEventBus() {
+    public InMemoryEventBus() {
         this(BotGlobalConfig.INSTANCE.executors().getIoExecutorService(), 1000);
     }
 
@@ -57,7 +57,7 @@ final class InMemoryEventBus implements BotEventBus {
     @Override
     @SuppressWarnings("unchecked")
     public <E extends BotEvent> @NonNull BotEventSubscription subscribe(@NonNull Class<E> type,
-                                                                                @NonNull Consumer<E> handler) {
+                                                                        @NonNull Consumer<E> handler) {
         ensureAlive();
         Sub s = new Sub(type, (Consumer<BotEvent>) handler);
         subs.computeIfAbsent(type, __ -> new CopyOnWriteArraySet<>()).add(s);

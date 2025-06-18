@@ -4,10 +4,15 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import io.lonmstalker.tgkit.core.bot.BotConfig;
 import io.lonmstalker.tgkit.core.bot.TelegramSender;
+import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
 import org.junit.jupiter.api.Test;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 public class BotRequestHolderTest {
+
+    static {
+        BotCoreInitializer.init();
+    }
 
     @Test
     void setAndGet() {

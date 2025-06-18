@@ -3,7 +3,9 @@ package io.lonmstalker.tgkit.security.antispam;
 import io.lonmstalker.tgkit.core.BotRequest;
 import io.lonmstalker.tgkit.core.BotService;
 import io.lonmstalker.tgkit.core.i18n.MessageLocalizerImpl;
+import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
 import io.lonmstalker.tgkit.security.captcha.CaptchaProvider;
+import io.lonmstalker.tgkit.security.init.BotSecurityInitializer;
 import io.lonmstalker.tgkit.security.ratelimit.RateLimiter;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.*;
@@ -29,6 +31,11 @@ class AntiSpamInterceptorTest implements WithAssertions {
     BotService bot;
 
     AntiSpamInterceptor isp;
+
+    static {
+        BotCoreInitializer.init();
+        BotSecurityInitializer.init();
+    }
 
     @BeforeEach
     void init() {
