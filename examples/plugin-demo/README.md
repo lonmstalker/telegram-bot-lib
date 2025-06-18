@@ -10,7 +10,7 @@
 
 ## Требования
 
-- Java 17+
+- Java 21+
 - Maven 3.8+
 
 ## Запуск приложения
@@ -38,24 +38,3 @@
    [Example] afterStop
    [Example] onUnload
    ```
-
-bash
-Копировать
-Редактировать
-mvn -pl app exec:java
-В консоли вы увидите примерно:
-
-csharp
-Копировать
-Редактировать
-[Example] onLoad
-[Example] start
-[Example] beforeStop
-[Example] stop
-[Example] afterStop
-[Example] onUnload
-Детали
-plugin.yml плагина лежит в корне JAR и описывает id, mainClass и SHA-256.
-
-BotPluginManager берёт все .jar из указанной папки, читает plugin.yml, загружает и запускает плагины, а при завершении
-вызывает stop() и onUnload().
