@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.net.http.HttpClient;
 import java.time.Duration;
+import java.util.concurrent.Executors;
 
 /**
  * Базовая инициализация ядра. <br/>
@@ -48,10 +49,9 @@ public class BotCoreInitializer {
 
         // ── Executors ────────────────────────────────────────────────────────
         BotGlobalConfig.INSTANCE.executors()
-                .scheduledExecutorService(java.util.concurrent
-                        .Executors.newScheduledThreadPool(2))
-                .ioExecutorService(java.util.concurrent
-                        .Executors.newVirtualThreadPerTaskExecutor());
+                .cpuExecutorService(Executors.newWorkStealingPool(2))
+                .ioExecutorService(Executors.newVirtualThreadPerTaskExecutor())
+                .scheduledExecutorService(Executors.newScheduledThreadPool(2));
 
         // ── Events ────────────────────────────────────────────────────────
         BotGlobalConfig.INSTANCE.events()

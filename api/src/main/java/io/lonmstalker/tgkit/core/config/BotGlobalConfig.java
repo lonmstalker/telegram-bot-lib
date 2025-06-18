@@ -104,6 +104,8 @@ public class BotGlobalConfig {
                 new AtomicReference<>();
         private final @NonNull AtomicReference<ExecutorService> ioExecutorService =
                 new AtomicReference<>();
+        private final @NonNull AtomicReference<ExecutorService> cpuExecutorService =
+                new AtomicReference<>();
 
         public BotGlobalConfig.@NonNull ExecutorsGlobalConfig scheduledExecutorService(
                 @NonNull ScheduledExecutorService scheduledExecutorService) {
@@ -115,8 +117,15 @@ public class BotGlobalConfig {
 
         public BotGlobalConfig.@NonNull ExecutorsGlobalConfig ioExecutorService(
                 @NonNull ExecutorService ioExecutor) {
-            log.debug("[core-init] ExecutorService changed to {}", ioExecutor.getClass().getSimpleName());
+            log.debug("[core-init] IOExecutorService changed to {}", ioExecutor.getClass().getSimpleName());
             this.ioExecutorService.set(ioExecutor);
+            return this;
+        }
+
+        public BotGlobalConfig.@NonNull ExecutorsGlobalConfig cpuExecutorService(
+                @NonNull ExecutorService cpuExecutor) {
+            log.debug("[core-init] CpuExecutorService changed to {}", cpuExecutor.getClass().getSimpleName());
+            this.cpuExecutorService.set(cpuExecutor);
             return this;
         }
 
@@ -126,6 +135,10 @@ public class BotGlobalConfig {
 
         public @NonNull ExecutorService getIoExecutorService() {
             return this.ioExecutorService.get();
+        }
+
+        public @NonNull ExecutorService getCpuExecutorService() {
+            return this.cpuExecutorService.get();
         }
 
         void close() {

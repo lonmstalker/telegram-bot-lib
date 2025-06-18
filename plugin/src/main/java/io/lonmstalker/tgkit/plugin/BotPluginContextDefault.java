@@ -36,12 +36,12 @@ public class BotPluginContextDefault implements BotPluginContext {
 
     @Override
     public @NonNull TtlScheduler scheduler() {
-        return BotGlobalConfig.INSTANCE.dsl().getTtlScheduler().get();
+        return BotGlobalConfig.INSTANCE.dsl().getTtlScheduler();
     }
 
     @Override
     public @NonNull FeatureFlags featureFlags() {
-        return BotGlobalConfig.INSTANCE.dsl().getFlags().get();
+        return BotGlobalConfig.INSTANCE.dsl().getFeatureFlags();
     }
 
     @Override

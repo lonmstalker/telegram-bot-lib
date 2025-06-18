@@ -4,21 +4,36 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
-class ChildFirstURLClassLoader extends URLClassLoader {
+/**
+ * ClassLoader с child-first стратегией и кешированием загруженных классов для ускорения lookup.
+ */
+public class ChildFirstURLClassLoader extends URLClassLoader {
+    private final Map<String, Class<?>> classCache = new ConcurrentHashMap<>();
 
-    ChildFirstURLClassLoader(@NonNull URL[] urls,
-                             @NonNull ClassLoader parent) {
+    public ChildFirstURLClassLoader(@NonNull URL[] urls, @NonNull ClassLoader parent) {
         super(urls, parent);
     }
 
     @Override
-    protected @NonNull Class<?> loadClass(@NonNull String name, boolean resolve) throws ClassNotFoundException {
+    protected Class<?> loadClass(@NonNull String name, boolean resolve) throws ClassNotFoundException {
+        // Попробовать взять из кеша
+        Class<?> cached = classCache.get(name);
+        if (cached != null) {
+            return cached;
+        }
+
         synchronized (getClassLoadingLock(name)) {
             try {
-                return findClass(name);
-            } catch (ClassNotFoundException ignore) {
-                return super.loadClass(name, resolve);
+                Class<?> cls = findClass(name);
+                classCache.put(name, cls);
+                return cls;
+            } catch (ClassNotFoundException ignored) {
+                Class<?> parentClass = super.loadClass(name, resolve);
+                classCache.put(name, parentClass);
+                return parentClass;
             }
         }
     }

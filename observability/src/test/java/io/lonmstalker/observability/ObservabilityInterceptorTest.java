@@ -18,6 +18,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@SuppressWarnings("all")
 public class ObservabilityInterceptorTest {
     private final MeterRegistry registry = new SimpleMeterRegistry();
     private MetricsCollector metrics;

@@ -2,15 +2,16 @@ package io.lonmstalker.tgkit.plugin;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
 import io.lonmstalker.tgkit.core.exception.BotApiException;
 import io.lonmstalker.tgkit.security.audit.AuditBus;
 import io.lonmstalker.tgkit.security.audit.AuditEvent;
-import lombok.Builder;
+import io.lonmstalker.tgkit.security.config.BotSecurityGlobalConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
+import javax.annotation.concurrent.ThreadSafe;
 import java.io.Closeable;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -21,26 +22,18 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.jar.JarFile;
+import java.util.zip.ZipException;
 
 import static io.lonmstalker.tgkit.plugin.BotPluginConstants.CURRENT_VERSION;
 
 /**
- * Менеджер плагинов.<br>
- * Потокобезопасен, не зависит от Spring/Guice, использует чистый JDK 21.
- *
- * <p>Поддерживает:</p>
- * <ul>
- *   <li>загрузку *.jar* из каталога (или URL) — {@link #loadAll(Path)}</li>
- *   <li>горячую перезагрузку — {@link #hotReload(String)}</li>
- *   <li>безопасное выгрузку — {@link #unload(String)}</li>
- * </ul>
- *
- * <p>Каждый плагин изолирован отдельным {@link URLClassLoader} («child-first»),
- *  что упрощает GC после {@code unload()}.</p>
+ * Менеджер плагинов: загрузка, перезагрузка, выгрузка.
  */
 @Slf4j
-@Builder
+@ThreadSafe
 public final class BotPluginManager implements AutoCloseable {
     private static final MessageDigest MESSAGE_DIGEST;
 
@@ -53,93 +46,138 @@ public final class BotPluginManager implements AutoCloseable {
     }
 
     private final AuditBus auditBus;
-    private final BotGlobalConfig cfg;
     private final ObjectMapper yaml = new ObjectMapper(new YAMLFactory());
     private final Map<String, BotPluginContainer> plugins = new ConcurrentHashMap<>();
+    private final Lock lock = new ReentrantLock();
 
+    /**
+     * Создаёт менеджер с дефолтной конфигурацией.
+     */
+    public BotPluginManager() {
+        this.auditBus = BotSecurityGlobalConfig.INSTANCE.audit().bus();
+    }
+
+    /**
+     * Сканирует каталог и загружает все JAR-плагины.
+     * Блокировка гарантирует потокобезопасность без дедлоков.
+     */
     public void loadAll(@NonNull Path dir) {
-        log.info("Scanning plugins dir: {}", dir.toAbsolutePath());
+        lock.lock();
         try {
-            if (Files.notExists(dir)) {
-                log.debug("Plugins dir {} does not exist", dir.toAbsolutePath());
+            log.info("Scanning plugins dir: {}", dir.toAbsolutePath());
+            if (!Files.isDirectory(dir)) {
+                log.warn("Plugins dir {} not found or not a directory", dir);
                 return;
             }
             try (DirectoryStream<Path> ds = Files.newDirectoryStream(dir, "*.jar")) {
                 for (Path jar : ds) {
-                    load(jar);
+                    try {
+                        loadPlugin(jar);
+                    } catch (PluginException pe) {
+                        log.warn("Skipping plugin {}: {}", jar.getFileName(), pe.getMessage());
+                        auditBus.publish(AuditEvent.securityAlert("plugin-scan",
+                                "failed load " + jar.getFileName() + ": " + pe.getMessage()));
+                    }
                 }
             }
         } catch (Exception e) {
             throw new PluginException("Cannot scan dir " + dir, e);
+        } finally {
+            lock.unlock();
         }
     }
 
+    /**
+     * Горячая перезагрузка плагина по id: сначала unload, затем load.
+     */
     public void hotReload(@NonNull String id) {
-        BotPluginContainer old = plugins.get(id);
-        if (old == null) {
-            throw new PluginException("Plugin '" + id + "' not loaded");
+        lock.lock();
+        try {
+            var old = plugins.get(id);
+            if (old == null) {
+                throw new PluginException("Plugin '" + id + "' not loaded");
+            }
+            log.info("Hot-reloading plugin {}", id);
+            Path source = old.source();
+            unload(id);
+            loadPlugin(source);
+        } finally {
+            lock.unlock();
         }
-
-        log.info("Hot-reloading plugin {}", id);
-        Path source = old.source();
-
-        unload(id);               // ① останавливаем
-        load(source);             // ② поднимаем заново
     }
 
+    /**
+     * Останавливает и выгружает плагин по id.
+     */
     public void unload(@NonNull String id) {
-        BotPluginContainer c = plugins.remove(id);
-        if (c == null) {
-            return;
-        }
+        lock.lock();
         try {
-            c.plugin().onUnload();
-
-            c.plugin().stop();
-            closeQuiet(c.classLoader());
-
-            auditBus.publish(AuditEvent.securityAlert("plugin:" + id, "unloaded"));
+            BotPluginContainer container = plugins.remove(id);
+            if (container == null) {
+                return;
+            }
+            container.plugin().onUnload();
+            container.plugin().stop();
+            closeQuiet(container.classLoader());
+            auditBus.publish(AuditEvent.securityAlert("plugin-scan", "plugin:" + id + " unloaded"));
             log.info("Plugin {} unloaded", id);
         } catch (Exception e) {
             throw new PluginException("stop() failed for " + id, e);
+        } finally {
+            lock.unlock();
         }
     }
 
+    /**
+     * Выгружает все плагины.
+     */
     @Override
     public void close() {
-        plugins.keySet().forEach(this::unload);
+        lock.lock();
+        try {
+            for (String id : plugins.keySet()) {
+                unload(id);
+            }
+        } finally {
+            lock.unlock();
+        }
     }
 
-    /* Основная точка загрузки одного JAR */
-    private void load(@NonNull Path jar) {
+    /**
+     * Основная точка загрузки одного JAR.
+     */
+    private void loadPlugin(@NonNull Path jar) {
         try {
-            BotPluginDescriptor dsc = parseDescriptor(jar);
-            checkApiCompatibility(dsc);
-            verifyHash(jar, dsc);
+            BotPluginDescriptor desc = parseDescriptor(jar);
+            checkApiCompatibility(desc);
+            verifyHash(jar, desc);
 
-            // child-first ClassLoader (delegates to parent last)
-            URLClassLoader cl = new ChildFirstURLClassLoader(
+            URLClassLoader classLoader = new ChildFirstURLClassLoader(
                     new URL[]{jar.toUri().toURL()},
                     BotPluginManager.class.getClassLoader()
             );
 
-            Class<?> main = Class.forName(dsc.mainClass(), false, cl);
-            BotPlugin plugin = (BotPlugin) main.getDeclaredConstructor().newInstance();
+            Class<?> mainClass = Class.forName(desc.mainClass(), false, classLoader);
+            BotPlugin plugin = (BotPlugin) mainClass.getDeclaredConstructor().newInstance();
 
-            BotPluginContext ctx = new BotPluginContextDefault(cl);
-            plugin.onLoad(ctx);
+            BotPluginContext context = new BotPluginContextDefault(classLoader);
+            plugin.onLoad(context);
             plugin.start();
 
-            plugins.put(dsc.id(), new BotPluginContainer(dsc, plugin, cl, jar));
-            auditBus.publish(AuditEvent.securityAlert("system",
-                    "plugin " + dsc.id() + " loaded (" + dsc.version() + ")"));
-
-            log.info("Plugin {}:{} started", dsc.id(), dsc.version());
+            plugins.put(desc.id(), new BotPluginContainer(desc, plugin, classLoader, jar));
+            auditBus.publish(AuditEvent.securityAlert("plugin-scan",
+                    "plugin:" + desc.id() + " loaded (v" + desc.version() + ")"));
+            log.info("Plugin {}:{} started", desc.id(), desc.version());
+        } catch (ZipException ze) {
+            throw new PluginException("Invalid JAR format: " + jar.getFileName(), ze);
+        } catch (PluginException pe) {
+            throw pe;
         } catch (Exception e) {
-            throw new PluginException("Failed to load plugin from " + jar, e);
+            throw new PluginException("Failed to load plugin from " + jar.getFileName(), e);
         }
     }
 
+    // парсинг plugin.yml, ZipException прокидывается
     private @NonNull BotPluginDescriptor parseDescriptor(@NonNull Path jar) throws Exception {
         try (JarFile jf = new JarFile(jar.toFile())) {
             var entry = jf.getEntry("plugin.yml");
@@ -158,14 +196,13 @@ public final class BotPluginManager implements AutoCloseable {
         }
     }
 
-    private void verifyHash(@NonNull Path jar,
-                            @NonNull BotPluginDescriptor desc) throws Exception {
+    private void verifyHash(@NonNull Path jar, @NonNull BotPluginDescriptor desc) throws Exception {
         if (desc.sha256() == null) {
-            return; // skip
+            return;
         }
-        byte[] b = Files.readAllBytes(jar);
-        String calc = bytes2hex(MESSAGE_DIGEST.digest(b));
-        if (!calc.equalsIgnoreCase(desc.sha256())) {
+        byte[] data = Files.readAllBytes(jar);
+        String checksum = bytes2hex(MESSAGE_DIGEST.digest(data));
+        if (!checksum.equalsIgnoreCase(desc.sha256())) {
             throw new PluginException("Checksum mismatch for " + jar.getFileName());
         }
     }
@@ -173,15 +210,15 @@ public final class BotPluginManager implements AutoCloseable {
     private static void closeQuiet(Closeable c) {
         try {
             c.close();
-        } catch (Exception ignore) {
+        } catch (IOException ignore) {
         }
     }
 
-    private static String bytes2hex(byte[] d) {
-        var sb = new StringBuilder();
-        for (byte b : d) {
-            var hex = Integer.toHexString(b & 0xFF);
-            sb.append(hex.length() == 1 ? "0" + hex : hex);
+    private static String bytes2hex(byte[] bytes) {
+        StringBuilder sb = new StringBuilder();
+        for (byte b : bytes) {
+            String h = Integer.toHexString(b & 0xFF);
+            sb.append(h.length() == 1 ? "0" + h : h);
         }
         return sb.toString();
     }
