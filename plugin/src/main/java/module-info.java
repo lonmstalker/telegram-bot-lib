@@ -6,5 +6,6 @@ module io.lonmstalker.tgkit.plugin {
     requires com.fasterxml.jackson.dataformat.yaml;
 
     exports io.lonmstalker.tgkit.plugin;
+    exports io.lonmstalker.tgkit.plugin.annotation;
     exports io.lonmstalker.tgkit.plugin.sort;
 }
