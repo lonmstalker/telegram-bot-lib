@@ -10,6 +10,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.generics.BotOptions;
 import org.telegram.telegrambots.meta.generics.LongPollingBot;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.AbstractExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -34,6 +35,14 @@ public class BotSessionImplTest {
         session.stop();
         assertFalse(session.isRunning());
         assertThrows(IllegalStateException.class, session::stop);
+    }
+
+    @Test
+    void networkErrorBackoff() {
+        BotSessionImpl session = new BotSessionImpl();
+        long backOff = session.handleError(new IOException("fail"), 1);
+        assertEquals(2, backOff);
+        assertEquals(30, session.handleError(new IOException("fail"), 32));
     }
 
     private static class DummyBot implements LongPollingBot {
