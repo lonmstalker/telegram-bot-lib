@@ -28,8 +28,8 @@ public final class TelegramMockServer implements AutoCloseable {
                 .addHttpListener(port, "localhost")
                 .setHandler(exchange -> {
                     exchange.startBlocking();
-                    String body = exchange.getInputStream().readAllBytes().length == 0 ? "" :
-                            new String(exchange.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+                    byte[] bytes = exchange.getInputStream().readAllBytes();
+                    String body = bytes.length == 0 ? "" : new String(bytes, StandardCharsets.UTF_8);
                     requests.add(new RecordedRequest(
                             exchange.getRequestMethod().toString(),
                             exchange.getRequestPath(),
