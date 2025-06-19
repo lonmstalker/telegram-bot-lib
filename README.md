@@ -117,7 +117,7 @@ public void quiz(BotRequest<Message> req) {
 
 ### 3 — Observability за 30 секунд
 ```java
-var metrics = MicrometerCollector.prometheus(9180);   // /prometheus
+var metrics = MicrometerCollector.prometheus(9180);   // /prometheus, сервер уже запущен
 var tracer  = OTelTracer.stdoutDev();                 // спаны в лог
 
 BotConfig cfg = BotConfig.builder()

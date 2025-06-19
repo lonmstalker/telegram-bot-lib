@@ -9,20 +9,26 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 
 /**
- * Реализация ClosableMetricsServer на базе Prometheus HTTPServer.
+ * Реализация {@link ClosableMetricsServer} на базе Prometheus {@link HTTPServer}.
+ * <p>
+ * Конструктор сразу создаёт и запускает HTTPServer, поэтому {@link #start()} оставлен
+ * пустым. Достаточно создать экземпляр этого класса и он начнёт принимать запросы на
+ * указанный порт.
+ * </p>
  */
 public class PrometheusMetricsServer implements ClosableMetricsServer {
     private final HTTPServer server;
 
     @Builder
     public PrometheusMetricsServer(int port, CollectorRegistry registry) throws IOException {
-        // Создаём сервер без автоматического запуска
+        // HTTPServer автоматически запускается внутри конструктора
         server = new HTTPServer(new InetSocketAddress(port), registry, false);
     }
 
+    /** Метод ничего не делает, так как сервер запускается в конструкторе. */
     @Override
     public void start() throws IOException {
-        // none
+        // no-op
     }
 
     @Override
