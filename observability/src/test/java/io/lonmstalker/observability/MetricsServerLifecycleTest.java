@@ -11,7 +11,6 @@ class MetricsServerLifecycleTest {
         try (var srv = PrometheusMetricsServer.builder()
                 .port(port)
                 .build()) {
-            srv.start();
            Assertions.assertFalse(isFree(port));
         }
         Assertions.assertTrue(isFree(port));
