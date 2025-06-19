@@ -174,6 +174,13 @@ mvn clean install
 mvn test
 ```
 
+Для генерации отчёта по покрытию:
+
+```bash
+mvn verify jacoco:report
+```
+Результат ищите в `target/site/jacoco/index.html`.
+
 ## 🤝 Contributing
 PR-ы и идеи приветствуются! Перед отправкой ознакомьтесь с [CONTRIBUTING.md](CONTRIBUTING.md) и [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
 
