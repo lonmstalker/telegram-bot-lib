@@ -74,6 +74,23 @@ implementation("io.lonmstalker.tgkit:tgkit-core:0.0.1-SNAPSHOT")
 ```
 </details>
 
+<details>
+<summary>TestKit</summary>
+
+```xml
+<dependency>
+    <groupId>io.lonmstalker.tgkit</groupId>
+    <artifactId>testkit</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <scope>test</scope>
+</dependency>
+```
+
+```kotlin
+testImplementation("io.lonmstalker.tgkit:testkit:0.0.1-SNAPSHOT")
+```
+</details>
+
 ### 1 — Минимальный эхо-бот
 ```java
 public class EchoCommands {
@@ -126,6 +143,19 @@ BotConfig cfg = BotConfig.builder()
 
 Bot bot = BotFactory.INSTANCE.from(token, cfg, adapter);
 
+```
+
+### 4 — Юнит-тестирование бота
+```java
+@TelegramBotTest
+class PingCommandTest {
+
+    @Test
+    void pingPong(UpdateInjector inject, Expectation expect) {
+        inject.text("/ping").from(42L);
+        expect.api("sendMessage").jsonPath("$.text", "pong");
+    }
+}
 ```
 
 ## 🛠️ Сборка и тесты
