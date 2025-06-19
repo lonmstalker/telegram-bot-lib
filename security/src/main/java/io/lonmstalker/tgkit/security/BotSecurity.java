@@ -18,8 +18,22 @@ import java.time.Duration;
 import java.util.Set;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
+/**
+ * Утилита для создания типовых компонентов безопасности: проверка на дубликаты,
+ * CAPTCHA и ограничители скорости.
+ *
+ * <p>Пример использования:
+ * <pre>{@code
+ * RateLimiter limiter = BotSecurity.inMemoryRateLimiter();
+ * AntiSpamInterceptor interceptor = BotSecurity.antiSpamInterceptor(Set.of("example.com"));
+ * }
+ * </pre>
+ */
 public final class BotSecurity {
 
+    /**
+     * Создаёт хранитель дубликатов сообщений в памяти.
+     */
     public static @NonNull DuplicateProvider inMemoryDuplicateProvider(@NonNull Duration ttl,
                                                                        long maxSize) {
         return InMemoryDuplicateProvider.builder()
@@ -28,6 +42,9 @@ public final class BotSecurity {
                 .build();
     }
 
+    /**
+     * Математическая CAPTCHA с хранением в памяти.
+     */
     public static @NonNull CaptchaProvider inMemoryCaptchaProvider(@NonNull Duration ttl,
                                                                    long maxSize) {
         return MathCaptchaProvider.builder()
@@ -39,6 +56,9 @@ public final class BotSecurity {
                 .build();
     }
 
+    /**
+     * Математическая CAPTCHA с хранением в Redis.
+     */
     public static @NonNull CaptchaProvider redisCaptchaProvider(@NonNull Duration ttl,
                                                                 @NonNull JedisPool pool) {
         return MathCaptchaProvider.builder()
@@ -50,14 +70,17 @@ public final class BotSecurity {
                 .build();
     }
 
+    /** Простейший ограничитель скорости в памяти. */
     public static @NonNull RateLimiter inMemoryRateLimiter() {
         return new InMemoryRateLimiter(1000);
     }
 
+    /** Ограничитель скорости на базе Redis. */
     public static @NonNull RateLimiter redisRateLimiter(@NonNull JedisPool pool) {
         return new RedisRateLimiter(pool);
     }
 
+    /** Упрощённый билдёр для {@link AntiSpamInterceptor}. */
     public static @NonNull AntiSpamInterceptor antiSpamInterceptor(@NonNull Set<String> badDomains) {
         return AntiSpamInterceptor.builder()
                 .badDomains(badDomains)
