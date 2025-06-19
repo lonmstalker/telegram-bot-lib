@@ -30,4 +30,22 @@ class TelegramMockServerTest {
             assertThat(recorded.body()).isEqualTo("{}");
         }
     }
+
+    @Test
+    void recordsEmptyBodyWhenNoContent() throws Exception {
+        try (TelegramMockServer server = new TelegramMockServer()) {
+            HttpClient client = HttpClient.newHttpClient();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(server.baseUrl() + "TEST/getMe"))
+                    .GET()
+                    .build();
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            assertThat(response.body()).contains("\"ok\":true");
+            RecordedRequest recorded = server.takeRequest(1, TimeUnit.SECONDS);
+            assertThat(recorded).isNotNull();
+            assertThat(recorded.method()).isEqualTo("GET");
+            assertThat(recorded.path()).endsWith("/getMe");
+            assertThat(recorded.body()).isEmpty();
+        }
+    }
 }

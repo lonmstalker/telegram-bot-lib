@@ -14,4 +14,10 @@ mvn -q checkstyle:check || {
   exit 1
 }
 
+# Run full Maven verify lifecycle
+mvn -q verify || {
+  echo "Maven verify failed. Commit aborted." >&2
+  exit 1
+}
+
 exit 0

@@ -28,6 +28,39 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+/**
+ * Сессия бота, получающая обновления через HTTP long polling и передающая их
+ * реализованному {@link LongPollingBot}.
+ *
+ * <p>Класс поддерживает два фоновых цикла:
+ * <ul>
+ *   <li>read loop отправляет запрос {@code getUpdates} и кладёт полученные обновления в очередь</li>
+ *   <li>handle loop берёт их из очереди и передаёт в бот</li>
+ * </ul>
+ * Циклы работают на переданном или стандартном executor.
+ *
+ * <p>Жизненный цикл:
+ * <ol>
+ *   <li>создайте сессию, укажите опции, токен и callback</li>
+ *   <li>однократно вызовите {@link #start()} для запуска опроса</li>
+ *   <li>завершите работу через {@link #stop()}</li>
+ * </ol>
+ *
+ * <p>Пример использования:
+ * <pre>{@code
+ * ExecutorService executor = Executors.newSingleThreadExecutor();
+ * BotSessionImpl session = new BotSessionImpl(executor, new ObjectMapper());
+ * DefaultBotOptions opts = new DefaultBotOptions();
+ * session.setOptions(opts);
+ * session.setToken("123456:ABC-DEF");
+ * session.setCallback(new MyLongPollingBot(opts));
+ * session.start();
+ * // ...
+ * session.stop();
+ * executor.shutdown();
+ * }</pre>
+ */
+
 @Slf4j
 @SuppressWarnings({"dereference.of.nullable", "argument"})
 public class BotSessionImpl implements BotSession {
@@ -141,35 +174,57 @@ public class BotSessionImpl implements BotSession {
 
     @SuppressWarnings("argument")
     private void readLoop() {
-        long backOff = 1;
-        while (running.get()) {
-            try {
-                HttpRequest request = HttpRequest.newBuilder()
-                        .uri(URI.create(buildUrl()))
-                        .timeout(Duration.ofSeconds(Objects.requireNonNull(options).getGetUpdatesTimeout() + 5))
-                        .GET()
-                        .build();
-                String body = Objects.requireNonNull(httpClient)
-                        .send(request, HttpResponse.BodyHandlers.ofString()).body();
-                GetUpdatesResponse response = mapper.readValue(body, GetUpdatesResponse.class);
-                if (response.result != null && !response.result.isEmpty()) {
-                    for (Update update : response.result) {
-                        if (update.getUpdateId() > lastUpdateId) {
-                            lastUpdateId = update.getUpdateId();
-                            updates.put(update);
-                        }
-                    }
-                }
-            } catch (IOException | InterruptedException e) {
-                log.warn("Error in readLoop: {}, backing off {}s", e.getMessage(), backOff);
-                try {
-                    TimeUnit.SECONDS.sleep(1);
-                } catch (InterruptedException ex) {
-                    Thread.currentThread().interrupt();
-                }
-                backOff = Math.min(backOff * 2, 30);
-            }
+        scheduleRead(1);
+    }
+
+    @SuppressWarnings("argument")
+    void scheduleRead(long backOff) {
+        if (!running.get()) {
+            return;
         }
+        BotGlobalConfig.INSTANCE.executors().getScheduledExecutorService()
+                .schedule(() -> sendRequest(backOff), backOff, TimeUnit.SECONDS);
+    }
+
+    @SuppressWarnings("argument")
+    private void sendRequest(long backOff) {
+        if (!running.get()) {
+            return;
+        }
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(buildUrl()))
+                .timeout(Duration.ofSeconds(Objects.requireNonNull(options).getGetUpdatesTimeout() + 5))
+                .GET()
+                .build();
+        Objects.requireNonNull(httpClient)
+                .sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                .thenApply(HttpResponse::body)
+                .thenAccept(body -> {
+                    try {
+                        GetUpdatesResponse response = mapper.readValue(body, GetUpdatesResponse.class);
+                        if (response.result != null && !response.result.isEmpty()) {
+                            for (Update update : response.result) {
+                                if (update.getUpdateId() > lastUpdateId) {
+                                    lastUpdateId = update.getUpdateId();
+                                    updates.put(update);
+                                }
+                            }
+                        }
+                        scheduleRead(1);
+                    } catch (Exception ex) {
+                        scheduleRead(handleError(ex, backOff));
+                    }
+                })
+                .exceptionally(ex -> {
+                    Throwable cause = ex.getCause() != null ? ex.getCause() : ex;
+                    scheduleRead(handleError(cause, backOff));
+                    return null;
+                });
+    }
+
+    long handleError(Throwable ex, long backOff) {
+        log.warn("Error in readLoop: {}, backing off {}s", ex.getMessage(), backOff);
+        return Math.min(backOff * 2, 30);
     }
 
     @SuppressWarnings("argument")
