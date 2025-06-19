@@ -28,6 +28,39 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+/**
+ * Сессия бота, получающая обновления через HTTP long polling и передающая их
+ * реализованному {@link LongPollingBot}.
+ *
+ * <p>Класс поддерживает два фоновых цикла:
+ * <ul>
+ *   <li>read loop отправляет запрос {@code getUpdates} и кладёт полученные обновления в очередь</li>
+ *   <li>handle loop берёт их из очереди и передаёт в бот</li>
+ * </ul>
+ * Циклы работают на переданном или стандартном executor.
+ *
+ * <p>Жизненный цикл:
+ * <ol>
+ *   <li>создайте сессию, укажите опции, токен и callback</li>
+ *   <li>однократно вызовите {@link #start()} для запуска опроса</li>
+ *   <li>завершите работу через {@link #stop()}</li>
+ * </ol>
+ *
+ * <p>Пример использования:
+ * <pre>{@code
+ * ExecutorService executor = Executors.newSingleThreadExecutor();
+ * BotSessionImpl session = new BotSessionImpl(executor, new ObjectMapper());
+ * DefaultBotOptions opts = new DefaultBotOptions();
+ * session.setOptions(opts);
+ * session.setToken("123456:ABC-DEF");
+ * session.setCallback(new MyLongPollingBot(opts));
+ * session.start();
+ * // ...
+ * session.stop();
+ * executor.shutdown();
+ * }</pre>
+ */
+
 @Slf4j
 @SuppressWarnings({"dereference.of.nullable", "argument"})
 public class BotSessionImpl implements BotSession {
