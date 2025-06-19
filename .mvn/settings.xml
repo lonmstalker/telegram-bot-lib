@@ -3,6 +3,8 @@
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.4.0
                               https://maven.apache.org/xsd/settings-1.4.0.xsd">
+
+    <!-- ваш mirror на Maven Central остаётся здесь -->
     <mirrors>
         <mirror>
             <id>central</id>
@@ -11,4 +13,48 @@
             <mirrorOf>central</mirrorOf>
         </mirror>
     </mirrors>
+
+    <!-- прокси, реально применится только если proxy.active == true -->
+    <proxies>
+        <proxy>
+            <id>corp-proxy</id>
+            <active>${proxy.active}</active>
+            <protocol>https</protocol>
+            <host>proxy</host>
+            <port>8080</port>
+            <nonProxyHosts>localhost|127.*|[::1]</nonProxyHosts>
+            <!--
+            <username>USER</username>
+            <password>PASS</password>
+            -->
+        </proxy>
+    </proxies>
+
+    <profiles>
+        <!-- Локальный профиль: proxy.active=false -->
+        <profile>
+            <id>local-no-proxy</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <proxy.active>false</proxy.active>
+            </properties>
+        </profile>
+
+        <!-- Серверный профиль: включается при env.USE_PROXY=true -->
+        <profile>
+            <id>server-with-proxy</id>
+            <activation>
+                <property>
+                    <name>env.USE_PROXY</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <properties>
+                <proxy.active>true</proxy.active>
+            </properties>
+        </profile>
+    </profiles>
+
 </settings>
