@@ -5,6 +5,11 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
+/**
+ * Шина событий бота.
+ *
+ * <p><b>Стабильность:</b> API планируется стабильным, но пока может измениться.</p>
+ */
 public interface BotEventBus {
 
     /**
