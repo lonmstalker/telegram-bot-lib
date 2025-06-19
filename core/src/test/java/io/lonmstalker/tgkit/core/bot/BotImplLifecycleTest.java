@@ -1,0 +1,99 @@
+package io.lonmstalker.tgkit.core.bot;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import io.lonmstalker.tgkit.core.BotAdapter;
+import io.lonmstalker.tgkit.core.exception.BotApiException;
+import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
+import java.io.Serializable;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.telegram.telegrambots.bots.DefaultAbsSender;
+import org.telegram.telegrambots.bots.DefaultBotOptions;
+import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.GetMe;
+import org.telegram.telegrambots.meta.api.objects.User;
+
+public class BotImplLifecycleTest {
+
+    static {
+        BotCoreInitializer.init();
+    }
+
+    private BotImpl bot;
+    private DummySender sender;
+
+    @BeforeEach
+    void setUp() {
+        BotConfig cfg = BotConfig.builder().build();
+        BotAdapter adapter = u -> null;
+        sender = new DummySender(cfg);
+        bot = BotImpl.builder()
+                .id(10L)
+                .token("TOKEN")
+                .config(cfg)
+                .absSender(sender)
+                .commandRegistry(new BotCommandRegistryImpl())
+                .build();
+    }
+
+    @Test
+    void startAndStop() throws Exception {
+        bot.start();
+        assertTrue(BotRegistryImpl.INSTANCE.getByInternalId(10L).isPresent());
+
+        User user = new User();
+        user.setId(42L);
+        user.setUserName("tester");
+        var f = BotImpl.class.getDeclaredField("user");
+        f.setAccessible(true);
+        f.set(bot, user);
+
+        assertTrue(bot.isStarted());
+        assertEquals(42L, bot.externalId());
+        assertEquals("tester", bot.username());
+
+        bot.stop();
+        assertTrue(sender.closed);
+        assertFalse(bot.isStarted());
+        assertTrue(BotRegistryImpl.INSTANCE.all().isEmpty());
+    }
+
+    @Test
+    void startTwiceThrows() throws Exception {
+        var f = BotImpl.class.getDeclaredField("user");
+        f.setAccessible(true);
+        f.set(bot, new User());
+        assertThrows(BotApiException.class, bot::start);
+    }
+
+    @Test
+    void stopWithoutStart() {
+        bot.stop();
+        assertTrue(sender.closed);
+    }
+
+    private static final class DummySender extends DefaultAbsSender {
+        boolean closed;
+
+        DummySender(DefaultBotOptions opt) {
+            super(opt, "TOKEN");
+        }
+
+        @Override
+        public <T extends Serializable, Method extends BotApiMethod<T>> T execute(Method method) {
+            if (method instanceof GetMe) {
+                User u = new User();
+                u.setId(42L);
+                u.setUserName("tester");
+                return (T) u;
+            }
+            return null;
+        }
+
+        @Override
+        public void close() {
+            closed = true;
+        }
+    }
+}
