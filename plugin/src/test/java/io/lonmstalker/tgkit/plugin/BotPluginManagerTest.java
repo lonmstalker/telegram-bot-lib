@@ -22,6 +22,7 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
 
 import static io.lonmstalker.tgkit.plugin.BotPluginConstants.CURRENT_VERSION;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.*;
 
@@ -131,6 +132,23 @@ public class BotPluginManagerTest {
         ));
     }
 
+    @Test
+    void testExecutorThreadName() throws Exception {
+        Path jar = tempDir.resolve("thread.jar");
+        createPluginJar(jar,
+                "thread",
+                String.valueOf(CURRENT_VERSION),
+                String.valueOf(CURRENT_VERSION),
+                ThreadNamePlugin.class.getName(),
+                null);
+
+        manager.loadAll(tempDir);
+        manager.unload("thread");
+
+        assertEquals("plugin-manager", ThreadNamePlugin.thread,
+                "Имя потока должно совпадать с factory value");
+    }
+
     private static void createPluginJar(Path path,
                                         String id,
                                         String version,
@@ -171,6 +189,15 @@ public class BotPluginManagerTest {
 
         @Override
         public void onUnload() {
+        }
+    }
+
+    public static class ThreadNamePlugin implements BotPlugin {
+        static volatile String thread;
+
+        @Override
+        public void stop() {
+            thread = Thread.currentThread().getName();
         }
     }
 }

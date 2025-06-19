@@ -48,7 +48,8 @@ public final class BotPluginManager implements AutoCloseable {
 
     private final Lock lock = new ReentrantLock();
     private final ObjectMapper yaml = new ObjectMapper(new YAMLFactory());
-    private final ExecutorService executor = Executors.newSingleThreadExecutor();
+    private final ExecutorService executor =
+            Executors.newSingleThreadExecutor(r -> new Thread(r, "plugin-manager"));
     private final AuditBus auditBus = BotSecurityGlobalConfig.INSTANCE.audit().bus();
     private final Map<String, BotPluginContainer> plugins = new ConcurrentHashMap<>();
 
