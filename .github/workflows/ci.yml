@@ -35,3 +35,12 @@ jobs:
 
       - name: Maven verify
         run: mvn -B -pl telegram-bot-testkit,core,observability,plugin,security,examples,api spotless:check checkstyle:check verify
+
+      - name: JaCoCo report
+        run: mvn -B jacoco:report
+
+      - name: Upload coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-report
+          path: '**/target/site/jacoco'
