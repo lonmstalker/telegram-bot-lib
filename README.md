@@ -193,3 +193,4 @@ Apache License 2.0 © 2025 TgKit Team
 ln -s ../../githooks/pre-commit .git/hooks/pre-commit
 ```
 Коммит будет прерван, если `mvn -q checkstyle:check` обнаружит нарушения.
+После успешной проверки запускается `mvn -q verify` для сборки и тестов.
