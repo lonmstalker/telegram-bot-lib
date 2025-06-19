@@ -10,6 +10,7 @@ import io.lonmstalker.tgkit.security.init.BotSecurityInitializer;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.io.TempDir;
 import org.mockito.Mockito;
 
@@ -18,6 +19,9 @@ import java.io.FileOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
 
@@ -149,6 +153,74 @@ public class BotPluginManagerTest {
                 "Имя потока должно совпадать с factory value");
     }
 
+    @Test
+    void testHotReload() throws Exception {
+        Path jar = tempDir.resolve("reload.jar");
+        createPluginJar(jar,
+                "reload",
+                "1.0",
+                String.valueOf(CURRENT_VERSION),
+                ReloadPluginV1.class.getName(),
+                null);
+
+        manager.loadAll(tempDir);
+        assertEquals("v1", System.getProperty("reload.phase"));
+
+        Mockito.reset(auditBus);
+        createPluginJar(jar,
+                "reload",
+                "2.0",
+                String.valueOf(CURRENT_VERSION),
+                ReloadPluginV2.class.getName(),
+                null);
+
+        manager.hotReload("reload");
+
+        assertEquals("v2", System.getProperty("reload.phase"));
+        verify(auditBus).publish(argThat(evt -> evt.getAction().equals("plugin:reload unloaded")));
+        verify(auditBus).publish(argThat(evt -> evt.getAction().equals("plugin:reload loaded (v2.0)")));
+    }
+
+    @Test
+    void testUnloadTimeout() throws Exception {
+        Path jar = tempDir.resolve("slow.jar");
+        createPluginJar(jar,
+                "slow",
+                String.valueOf(CURRENT_VERSION),
+                String.valueOf(CURRENT_VERSION),
+                SlowPlugin.class.getName(),
+                null);
+
+        manager.loadAll(tempDir);
+        Mockito.reset(auditBus);
+
+        long start = System.currentTimeMillis();
+        manager.unload("slow");
+        long elapsed = System.currentTimeMillis() - start;
+
+        assertTrue(elapsed < 700, "Выгрузка не должна ждать завершения stop()");
+
+        // ожидаем завершения onUnload в фоне
+        assertTrue(SlowPlugin.unloaded.await(2, TimeUnit.SECONDS),
+                "onUnload должен завершиться, даже если произошёл таймаут");
+
+        verify(auditBus).publish(argThat(evt -> evt.getAction().equals("plugin:slow unloaded")));
+    }
+
+    @Test
+    void testMissingDescriptor() throws Exception {
+        Path jar = tempDir.resolve("missing.jar");
+        try (JarOutputStream jos = new JarOutputStream(new FileOutputStream(jar.toFile()))) {
+            jos.putNextEntry(new JarEntry("dummy.txt"));
+            jos.write(new byte[] {1, 2});
+            jos.closeEntry();
+        }
+
+        manager.loadAll(tempDir);
+
+        verify(auditBus).publish(argThat(evt -> evt.getAction().contains("plugin.yml missing")));
+    }
+
     private static void createPluginJar(Path path,
                                         String id,
                                         String version,
@@ -198,6 +270,34 @@ public class BotPluginManagerTest {
         @Override
         public void stop() {
             thread = Thread.currentThread().getName();
+        }
+    }
+
+    public static class ReloadPluginV1 implements BotPlugin {
+        @Override
+        public void start() {
+            System.setProperty("reload.phase", "v1");
+        }
+    }
+
+    public static class ReloadPluginV2 implements BotPlugin {
+        @Override
+        public void start() {
+            System.setProperty("reload.phase", "v2");
+        }
+    }
+
+    public static class SlowPlugin implements BotPlugin {
+        static final CountDownLatch unloaded = new CountDownLatch(1);
+
+        @Override
+        public void stop() throws Exception {
+            Thread.sleep(600);
+        }
+
+        @Override
+        public void onUnload() {
+            unloaded.countDown();
         }
     }
 }
