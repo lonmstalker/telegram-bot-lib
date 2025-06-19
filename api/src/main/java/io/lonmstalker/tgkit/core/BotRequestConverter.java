@@ -6,6 +6,8 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 /**
  * Преобразователь {@link Update} в необходимый тип данных запроса.
  *
+ * <p><b>Стабильность:</b> API находится в стадии эксперимента и может изменяться.</p>
+ *
  * @param <T> тип результата преобразования
  */
 @FunctionalInterface

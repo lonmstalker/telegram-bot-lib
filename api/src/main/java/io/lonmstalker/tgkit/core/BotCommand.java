@@ -8,6 +8,8 @@ import org.telegram.telegrambots.meta.api.interfaces.BotApiObject;
 /**
  * Обработчик конкретной команды бота.
  *
+ * <p><b>Стабильность:</b> API считается стабильным и совместимым между версиями.</p>
+ *
  * @param <T> тип объекта Telegram API, с которым работает обработчик
  */
 public interface BotCommand<T extends BotApiObject> {
