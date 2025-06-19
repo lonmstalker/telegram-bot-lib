@@ -19,6 +19,8 @@
     </modules>
 
     <properties>
+        <revision>0.0.1-SNAPSHOT</revision>
+        <previousRevision>0.0.0</previousRevision>
         <maven.compiler.release>21</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
@@ -46,6 +48,7 @@
         <maven-surefire-plugin.version>3.5.3</maven-surefire-plugin.version>
         <maven-compiler-plugin.version>3.14.0</maven-compiler-plugin.version>
         <checkstyle-maven-plugin.version>3.6.0</checkstyle-maven-plugin.version>
+        <revapi-maven-plugin.version>0.15.1</revapi-maven-plugin.version>
 
         <!-- TEST -->
         <h2.version>2.3.232</h2.version>
@@ -277,6 +280,26 @@
                             <goal>check</goal>
                         </goals>
                         <phase>verify</phase>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.revapi</groupId>
+                <artifactId>revapi-maven-plugin</artifactId>
+                <version>${revapi-maven-plugin.version}</version>
+                <configuration>
+                    <oldArtifacts>
+                        <oldArtifact>${project.groupId}:${project.artifactId}:${previousRevision}</oldArtifact>
+                    </oldArtifacts>
+                    <newVersion>${revision}</newVersion>
+                    <failBuildOnProblems>true</failBuildOnProblems>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>
