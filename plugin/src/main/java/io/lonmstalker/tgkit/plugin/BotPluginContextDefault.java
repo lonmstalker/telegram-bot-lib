@@ -61,7 +61,7 @@ public class BotPluginContextDefault implements BotPluginContext {
 
     @Override
     public @NonNull BotRegistry registry() {
-        return BotRegistryImpl.INSTANCE;
+        return BotRegistryImpl.getInstance();
     }
 
     @Override

@@ -27,7 +27,7 @@ class TelegramSenderRateLimiterTest {
     Method handler;
 
     RateLimiter backend;
-    RateLimitInterceptorFactory factory;
+    RateLimitBotCommandFactory factory;
 
     static {
         BotCoreInitializer.init();
@@ -37,7 +37,7 @@ class TelegramSenderRateLimiterTest {
     @BeforeEach void init() throws Exception {
         handler  = getClass().getDeclaredMethod("roll");
         backend  = mock(RateLimiter.class);
-        factory  = new RateLimitInterceptorFactory(backend);
+        factory  = new RateLimitBotCommandFactory();
     }
 
     /* -------------------------------------------------------------- */
@@ -79,7 +79,7 @@ class TelegramSenderRateLimiterTest {
 
         RateLimit first = handler.getAnnotationsByType(RateLimit.class)[0];
         Assertions.assertNotNull(first);
-        Optional<BotInterceptor> i = factory.build(handler, first);
+        Optional<BotInterceptor> i = factory.apply(handler, first);
 
         assertThatThrownBy(() -> i.orElseThrow().preHandle(TestUtils.message(77, 3), Mockito.mock()))
                 .isInstanceOf(RateLimitInterceptor.RateLimitExceededException.class);

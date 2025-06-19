@@ -3,7 +3,7 @@ package io.lonmstalker.tgkit.core.matching;
 import static org.junit.jupiter.api.Assertions.*;
 
 import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
-import io.lonmstalker.tgkit.core.storage.BotRequestHolder;
+import io.lonmstalker.tgkit.core.storage.BotRequestContextHolder;
 import io.lonmstalker.tgkit.core.user.BotUserInfo;
 import io.lonmstalker.tgkit.core.user.BotUserProvider;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -26,7 +26,7 @@ public class MatchersTest {
 
     @AfterEach
     void clear() {
-        BotRequestHolder.clear();
+        BotRequestContextHolder.clear();
     }
 
     @Test
@@ -94,7 +94,7 @@ public class MatchersTest {
         Update update = new Update();
         update.setMessage(new Message());
         update.getMessage().setFrom(tgUser);
-        BotRequestHolder.setUpdate(update);
+        BotRequestContextHolder.setUpdate(update);
         UserRoleMatch<Message> match = new UserRoleMatch<>(provider, Set.of("ADMIN"));
         assertTrue(match.match(update.getMessage()));
         UserRoleMatch<Message> matchFalse = new UserRoleMatch<>(provider, Set.of("USER"));

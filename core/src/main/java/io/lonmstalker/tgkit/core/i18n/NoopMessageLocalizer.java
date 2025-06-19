@@ -33,6 +33,14 @@ public class NoopMessageLocalizer implements MessageLocalizer {
      * Возвращает переданный ключ без изменений.
      */
     @Override
+    public @NonNull String get(@NonNull MessageKey key) {
+        return key.key();
+    }
+
+    /**
+     * Возвращает переданный ключ без изменений.
+     */
+    @Override
     public @NonNull String get(@NonNull String key) {
         return key;
     }

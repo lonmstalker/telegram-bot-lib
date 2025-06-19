@@ -14,11 +14,33 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface BotHandler {
 
+    /**
+     * Идентификатор команды
+     * Дефолтное значение: генерируется автоматически
+     */
+    String id() default "";
+
+    /**
+     * Тип сообщения на вход
+     * Дефолтное значение: MESSAGE
+     */
     @NonNull BotRequestType type() default BotRequestType.MESSAGE;
 
+    /**
+     * Группировка команд для использования ботом
+     * Дефолтное значение: доступно всем
+     */
     String botGroup() default "";
 
+    /**
+     * Конвертер входящего BotRequest
+     * Дефолтное значение: возвращает BotRequest
+     */
     Class<? extends BotHandlerConverter<?>> converter() default BotHandlerConverter.Identity.class;
 
+    /**
+     * Порядок проверки команд
+     * Дефолтное значение: LAST
+     */
     int order() default BotCommandOrder.LAST;
 }

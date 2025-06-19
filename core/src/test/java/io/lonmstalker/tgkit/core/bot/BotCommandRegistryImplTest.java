@@ -7,12 +7,15 @@ import io.lonmstalker.tgkit.core.BotRequest;
 import io.lonmstalker.tgkit.core.BotRequestType;
 import io.lonmstalker.tgkit.core.BotResponse;
 import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
+import io.lonmstalker.tgkit.core.interceptor.BotInterceptor;
 import io.lonmstalker.tgkit.core.matching.CommandMatch;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.junit.jupiter.api.Test;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import io.lonmstalker.tgkit.core.exception.BotApiException;
+
+import java.util.List;
 
 class BotCommandRegistryImplTest {
 
@@ -59,6 +62,26 @@ class BotCommandRegistryImplTest {
 
         @Override
         public @NonNull CommandMatch<Message> matcher() { return data -> true; }
+
+        @Override
+        public @NonNull List<BotInterceptor> interceptors() {
+            return List.of();
+        }
+
+        @Override
+        public void setMatcher(@NonNull CommandMatch<Message> matcher) {
+
+        }
+
+        @Override
+        public void setType(@NonNull BotRequestType type) {
+
+        }
+
+        @Override
+        public void setBotGroup(@NonNull String group) {
+
+        }
 
         @Override
         public int order() { return order; }

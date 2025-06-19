@@ -3,7 +3,7 @@ package io.lonmstalker.tgkit.core.bot;
 import io.lonmstalker.tgkit.core.BotAdapter;
 import io.lonmstalker.tgkit.core.bot.BotDataSourceFactory.BotData;
 import io.lonmstalker.tgkit.core.crypto.TokenCipher;
-import io.lonmstalker.tgkit.core.loader.AnnotatedCommandLoader;
+import io.lonmstalker.tgkit.core.bot.loader.AnnotatedCommandLoader;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -20,11 +20,15 @@ public final class BotFactory {
                              @NonNull BotConfig config,
                              @NonNull BotAdapter adapter) {
         TelegramSender sender = new TelegramSender(config, token);
-        return implBuilder(token, config)
+        var bot = implBuilder(token, config)
                 .session(new BotSessionImpl())
                 .absSender(new LongPollingReceiver(config, adapter,
                         token, sender, config.getGlobalExceptionHandler()))
                 .build();
+        if (adapter instanceof BotAdapterImpl b) {
+            b.setCurrentBot(bot);
+        }
+        return bot;
     }
 
     public @NonNull Bot from(@NonNull String token,
@@ -41,11 +45,15 @@ public final class BotFactory {
                              @NonNull BotAdapter adapter,
                              @NonNull SetWebhook setWebhook) {
         TelegramSender sender = new TelegramSender(config, token);
-        return implBuilder(token, config)
+        var bot =  implBuilder(token, config)
                 .setWebhook(setWebhook)
                 .absSender(new WebHookReceiver(config, adapter, token,
                         sender, config.getGlobalExceptionHandler()))
                 .build();
+        if (adapter instanceof BotAdapterImpl b) {
+            b.setCurrentBot(bot);
+        }
+        return bot;
     }
 
     public @NonNull Bot from(@NonNull String token,

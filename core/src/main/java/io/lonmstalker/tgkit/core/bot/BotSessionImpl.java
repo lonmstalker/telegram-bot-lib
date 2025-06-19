@@ -20,7 +20,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
@@ -30,7 +29,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @Slf4j
-@SuppressWarnings("dereference.of.nullable")
+@SuppressWarnings({"dereference.of.nullable", "argument"})
 public class BotSessionImpl implements BotSession {
 
     private final AtomicBoolean running = new AtomicBoolean();
@@ -62,10 +61,9 @@ public class BotSessionImpl implements BotSession {
         if (running.get()) {
             throw new IllegalStateException("Session already running");
         }
-        if (options == null || token == null || callback == null) {
-            throw new IllegalStateException("Session not initialized");
-        }
-        running.set(true);
+        Objects.requireNonNull(options, "Options not set");
+        Objects.requireNonNull(token, "Token not set");
+        Objects.requireNonNull(callback, "Callback not set");
 
         if (options.getProxyHost() != null && !options.getProxyHost().isEmpty()) {
             this.httpClient = HttpClient.newBuilder()
@@ -80,6 +78,8 @@ public class BotSessionImpl implements BotSession {
                 : BotGlobalConfig.INSTANCE.executors().getIoExecutorService();
         executor.execute(this::readLoop);
         executor.execute(this::handleLoop);
+
+        running.set(true);
     }
 
     @Override
@@ -89,7 +89,14 @@ public class BotSessionImpl implements BotSession {
         }
         running.set(false);
         if (executor != null && providedExecutor == null) {
-            executor.shutdownNow();
+            executor.shutdown();
+            try {
+                if (!executor.awaitTermination(5, TimeUnit.SECONDS)) {
+                    executor.shutdownNow();
+                }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
             if (executor instanceof AutoCloseable closable) {
                 try {
                     closable.close();
@@ -109,7 +116,7 @@ public class BotSessionImpl implements BotSession {
     }
 
     @Override
-    public void setOptions(BotOptions options) {
+    public synchronized void setOptions(BotOptions options) {
         if (this.options != null) {
             throw new BotApiException("Options already set");
         }
@@ -117,7 +124,7 @@ public class BotSessionImpl implements BotSession {
     }
 
     @Override
-    public void setToken(String token) {
+    public synchronized void setToken(String token) {
         if (this.token != null) {
             throw new BotApiException("Token already set");
         }
@@ -125,7 +132,7 @@ public class BotSessionImpl implements BotSession {
     }
 
     @Override
-    public void setCallback(LongPollingBot callback) {
+    public synchronized void setCallback(LongPollingBot callback) {
         if (this.callback != null) {
             throw new BotApiException("Callback already set");
         }
@@ -134,6 +141,7 @@ public class BotSessionImpl implements BotSession {
 
     @SuppressWarnings("argument")
     private void readLoop() {
+        long backOff = 1;
         while (running.get()) {
             try {
                 HttpRequest request = HttpRequest.newBuilder()
@@ -148,31 +156,31 @@ public class BotSessionImpl implements BotSession {
                     for (Update update : response.result) {
                         if (update.getUpdateId() > lastUpdateId) {
                             lastUpdateId = update.getUpdateId();
+                            updates.put(update);
                         }
                     }
-                    updates.addAll(response.result);
                 }
             } catch (IOException | InterruptedException e) {
-                log.warn("Error getting updates: {}", e.getMessage());
+                log.warn("Error in readLoop: {}, backing off {}s", e.getMessage(), backOff);
                 try {
                     TimeUnit.SECONDS.sleep(1);
                 } catch (InterruptedException ex) {
                     Thread.currentThread().interrupt();
                 }
+                backOff = Math.min(backOff * 2, 30);
             }
         }
     }
 
     @SuppressWarnings("argument")
     private void handleLoop() {
-        while (running.get()) {
+        while (running.get() || !updates.isEmpty()) {
             try {
-                Update first = updates.take();
-                List<Update> batch = new ArrayList<>();
-                batch.add(first);
-                updates.drainTo(batch, Objects.requireNonNull(options).getGetUpdatesLimit() - 1);
-                Objects.requireNonNull(callback).onUpdatesReceived(batch);
-            } catch (InterruptedException e) {
+                Update u = updates.poll(1, TimeUnit.SECONDS);
+                if (u != null) {
+                    Objects.requireNonNull(callback).onUpdatesReceived(List.of(u));
+                }
+            } catch (InterruptedException ex) {
                 Thread.currentThread().interrupt();
             }
         }
@@ -180,9 +188,13 @@ public class BotSessionImpl implements BotSession {
 
     @SuppressWarnings("argument")
     private String buildUrl() {
-        return "https://api.telegram.org/bot" + token + "/getUpdates?timeout=" +
-                Objects.requireNonNull(options).getGetUpdatesTimeout() +
-                "&limit=" + options.getGetUpdatesLimit() + "&offset=" + (lastUpdateId + 1);
+        return String.format(
+                "https://api.telegram.org/bot%s/getUpdates?timeout=%d&limit=%d&offset=%d",
+                token,
+                Objects.requireNonNull(options).getGetUpdatesTimeout(),
+                options.getGetUpdatesLimit(),
+                (lastUpdateId + 1)
+        );
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)

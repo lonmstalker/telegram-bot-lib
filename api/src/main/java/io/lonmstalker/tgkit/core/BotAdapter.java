@@ -20,5 +20,5 @@ public interface BotAdapter {
      *         ответа не требуется
      */
     @Nullable
-    BotApiMethod<?> handle(@NonNull Update update);
+    BotApiMethod<?> handle(@NonNull Update update) throws Exception;
 }

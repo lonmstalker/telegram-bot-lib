@@ -21,35 +21,54 @@ public interface BotPluginContext {
     @Nullable
     <T> T getService(@NonNull Class<T> type);
 
-    /** Основной конфиг (на чтение). */
-    @NonNull BotGlobalConfig config();
+    /**
+     * Основной конфиг (на чтение).
+     */
+    @NonNull
+    BotGlobalConfig config();
 
-    /** Планировщик TTL-/cron-задач. */
+    /**
+     * Планировщик TTL-/cron-задач.
+     */
     @NonNull
     TtlScheduler scheduler();
 
-    /** Feature-flags (LaunchDarkly / Redis). */
+    /**
+     * Feature-flags (LaunchDarkly / Redis).
+     */
     @NonNull
     FeatureFlags featureFlags();
 
-    /** Централизованный Audit-шлюз. */
-    @NonNull AuditBus audit();
+    /**
+     * Централизованный Audit-шлюз.
+     */
+    @NonNull
+    AuditBus audit();
 
-    /** Храним и забираем секреты. */
+    /**
+     * Храним и забираем секреты.
+     */
     @NonNull
     SecretStore secrets();
 
-    /** Рассылка/подписка на события ядра. */
+    /**
+     * Рассылка/подписка на события ядра.
+     */
     @NonNull
     BotEventBus eventBus();
 
-    @NonNull BotRegistry registry();
+    @NonNull
+    BotRegistry registry();
 
-    /** Выделенный CPU-/I/O-executor плагина. */
+    /**
+     * Выделенный CPU-/I/O-executor плагина.
+     */
     @NonNull
     ExecutorService ioExecutor();
 
-    /** Готовый настроенный HTTP-клиент (TLS, proxy, retry). */
+    /**
+     * Готовый настроенный HTTP-клиент (TLS, proxy, retry).
+     */
     @NonNull
     HttpClient http();
 }

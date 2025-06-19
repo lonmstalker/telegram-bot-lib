@@ -1,6 +1,6 @@
 package io.lonmstalker.tgkit.core.matching;
 
-import io.lonmstalker.tgkit.core.storage.BotRequestHolder;
+import io.lonmstalker.tgkit.core.storage.BotRequestContextHolder;
 import io.lonmstalker.tgkit.core.user.BotUserInfo;
 import io.lonmstalker.tgkit.core.user.BotUserProvider;
 import java.util.Set;
@@ -23,7 +23,7 @@ public class UserRoleMatch<T extends BotApiObject> implements CommandMatch<T> {
 
     @Override
     public boolean match(@NonNull T data) {
-        Update update = BotRequestHolder.getUpdate();
+        Update update = BotRequestContextHolder.getUpdate();
         if (update == null) {
             return false;
         }

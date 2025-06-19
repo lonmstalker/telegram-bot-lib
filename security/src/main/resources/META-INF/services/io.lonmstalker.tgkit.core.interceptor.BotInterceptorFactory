@@ -1,3 +1,0 @@
-io.lonmstalker.tgkit.security.rbac.RoleInterceptorFactory
-io.lonmstalker.tgkit.security.antispam.AntiSpamInterceptorFactory
-io.lonmstalker.tgkit.security.ratelimit.RateLimitInterceptorFactory

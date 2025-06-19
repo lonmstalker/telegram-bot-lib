@@ -1,9 +1,11 @@
 package io.lonmstalker.tgkit.core;
 
+import io.lonmstalker.tgkit.core.interceptor.BotInterceptor;
 import io.lonmstalker.tgkit.core.matching.CommandMatch;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.telegram.telegrambots.meta.api.interfaces.BotApiObject;
+
+import java.util.List;
 
 /**
  * Обработчик конкретной команды бота.
@@ -12,14 +14,14 @@ import org.telegram.telegrambots.meta.api.interfaces.BotApiObject;
  *
  * @param <T> тип объекта Telegram API, с которым работает обработчик
  */
-public interface BotCommand<T extends BotApiObject> {
+public interface BotCommand<T> {
 
     /**
      * Выполняет обработку запроса пользователя.
      *
      * @param request запрос, содержащий данные об обновлении
      * @return {@link BotResponse}, который необходимо отправить пользователю,
-     *         либо {@code null}, если ответ не требуется
+     * либо {@code null}, если ответ не требуется
      */
     @Nullable
     BotResponse handle(@NonNull BotRequest<T> request);
@@ -29,14 +31,30 @@ public interface BotCommand<T extends BotApiObject> {
      *
      * @return тип запроса
      */
-    @NonNull BotRequestType type();
+    @NonNull
+    BotRequestType type();
 
     /**
-     * Определяет правила сопоставления команды с обновлением.
+     * Правило сопоставления команды с обновлением.
      *
-     * @return {@link CommandMatch} для проверки обновления
+     * @return правило (matcher)
      */
-    @NonNull CommandMatch<T> matcher();
+    @NonNull
+    CommandMatch<T> matcher();
+
+    /**
+     * Список интерсепторов команды.
+     *
+     * @return изменяемый список
+     */
+    @NonNull
+    List<BotInterceptor> interceptors();
+
+    void setMatcher(@NonNull CommandMatch<T> matcher);
+
+    void setType(@NonNull BotRequestType type);
+
+    void setBotGroup(@NonNull String group);
 
     /**
      * Группа обработчика. Используется для объединения команд.
@@ -48,11 +66,38 @@ public interface BotCommand<T extends BotApiObject> {
     }
 
     /**
-     * Порядок выполнения команды.
+     * Порядок выполнения команды (меньше — выше приоритет).
      *
-     * @return число, определяющее порядок
+     * @return целочисленный порядок
      */
     default int order() {
         return BotCommandOrder.LAST;
+    }
+
+    /**
+     * Добавляет {@link BotInterceptor} к данной команде.
+     *
+     * @param interceptor интерсептор, выполняющийся до/после handle()
+     */
+    default void addInterceptor(@NonNull BotInterceptor interceptor) {
+        interceptors().add(interceptor);
+    }
+
+    /**
+     * Краткое описание команды для help-системы.
+     *
+     * @return текст описания
+     */
+    default @NonNull String getDescription() {
+        return "";
+    }
+
+    /**
+     * Пример использования команды.
+     *
+     * @return текст-образец
+     */
+    default @NonNull String getUsage() {
+        return "";
     }
 }

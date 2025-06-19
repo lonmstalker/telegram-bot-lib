@@ -64,7 +64,7 @@ InMemoryFeatureFlags ff = new InMemoryFeatureFlags();
 ff.enableChat("NEW_MENU", 42L);   // включили фичу для чата 42
 ff.rollout("BETA_TEXT", 30);      // 30 % чатов получают вариант
 
-DslGlobalConfig.INSTANCE.featureFlags(ff);
+BotGlobalConfig.INSTANCE.dsl().featureFlags(ff);
 
 BotDSL.msg(ctx, "Hello!")
       .flag("NEW_MENU",  ctx, b -> b.keyboard(k -> k.row(Button.btn("Menu"))))
@@ -115,4 +115,4 @@ verify(sender).execute(any());
   `parseMode(ParseMode.MARKDOWN_V2).sanitize(false)` точечно на нужном сообщении.
 * **Q:** Какое дефолтное состояние у флага?  
   **A:** Флаг включен для всех, если явно не выключить для чата/пользователя,
-  также можно выключить сам флаг `DslGlobalConfig.INSTANCE.getFlags().disable("flag")`.
+  также можно выключить сам флаг `DslGlobalConfig.INSTANCE.dsl().getFlags().disable("flag")`.

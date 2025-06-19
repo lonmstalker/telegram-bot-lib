@@ -70,11 +70,11 @@ public interface Bot {
     BotCommandRegistry registry();
 
     /**
-     * Проверяет, запущен ли бот.
+     * Текущее состояние бота
      *
-     * @return {@code true}, если бот уже запущен
+     * @return состояние бота
      */
-    boolean isStarted();
+    @NonNull BotState state();
 
     /**
      * Добавляет действие, выполняемое после остановки бота.
@@ -99,6 +99,10 @@ public interface Bot {
     @NonNull
     String token();
 
+    /**
+     * Получить хранилище ботов
+     * @return хранилище ботов
+     */
     @NonNull
     BotRegistry botRegistry();
 }

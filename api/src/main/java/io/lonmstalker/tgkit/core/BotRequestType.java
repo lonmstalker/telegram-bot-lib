@@ -21,7 +21,10 @@ import org.telegram.telegrambots.meta.api.objects.reactions.MessageReactionUpdat
 @Getter
 public enum BotRequestType {
 
-    /* Сообщения в чатах */                                 // user  chat
+    /* Update на вход */                                          // user  chat
+    ANY(Update.class,                                   false, false),
+
+    /* Сообщения в чатах */
     MESSAGE               (Message.class,                true,  true),
     EDITED_MESSAGE        (Message.class,                true,  true),
 
@@ -88,6 +91,7 @@ public enum BotRequestType {
      * @param clazz класс для проверки
      * @throws BotApiException если тип не совместим
      */
+    @SuppressWarnings("argument")
     public void checkType(@NonNull Class<?> clazz) {
         if (!this.type.isAssignableFrom(clazz)) {
             throw new BotApiException(

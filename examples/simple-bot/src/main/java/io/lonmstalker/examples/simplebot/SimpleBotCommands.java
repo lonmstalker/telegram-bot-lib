@@ -3,15 +3,12 @@ package io.lonmstalker.examples.simplebot;
 import io.lonmstalker.tgkit.core.BotRequest;
 import io.lonmstalker.tgkit.core.BotResponse;
 import io.lonmstalker.tgkit.core.BotRequestType;
-import io.lonmstalker.tgkit.core.annotation.AlwaysMatch;
+import io.lonmstalker.tgkit.core.annotation.matching.AlwaysMatch;
 import io.lonmstalker.tgkit.core.annotation.BotHandler;
-import io.lonmstalker.tgkit.core.annotation.MessageContainsMatch;
-import io.lonmstalker.tgkit.core.annotation.MessageRegexMatch;
-import io.lonmstalker.tgkit.core.annotation.MessageTextMatch;
-import io.lonmstalker.tgkit.core.annotation.UserRoleMatch;
-import io.lonmstalker.tgkit.core.wizard.WizardBuilder;
-import io.lonmstalker.tgkit.core.wizard.WizardEngine;
-import io.lonmstalker.tgkit.core.wizard.WizardMeta;
+import io.lonmstalker.tgkit.core.annotation.matching.MessageContainsMatch;
+import io.lonmstalker.tgkit.core.annotation.matching.MessageRegexMatch;
+import io.lonmstalker.tgkit.core.annotation.matching.MessageTextMatch;
+import io.lonmstalker.tgkit.core.annotation.matching.UserRoleMatch;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.AnswerInlineQuery;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -22,12 +19,6 @@ import org.telegram.telegrambots.meta.api.objects.inlinequery.InlineQuery;
 import java.util.Collections;
 
 public class SimpleBotCommands {
-
-    private final WizardEngine wizard = new WizardEngine();
-    private final WizardMeta orderWizard = new WizardBuilder("order")
-            .step("wizard.name", "Введите товар:", "name", v -> !v.isBlank())
-            .step("wizard.qty", "Количество:", "qty", v -> v.matches("\\d+"))
-            .build();
 
     @BotHandler(type = BotRequestType.MESSAGE)
     @MessageTextMatch("ping")
@@ -48,22 +39,6 @@ public class SimpleBotCommands {
     public BotResponse numbers(BotRequest<Message> request) {
         SendMessage send = new SendMessage(request.data().getChatId().toString(), "numbers");
         return BotResponse.builder().method(send).build();
-    }
-
-    @BotHandler(type = BotRequestType.MESSAGE)
-    @MessageTextMatch("/order")
-    public BotResponse orderStart(BotRequest<Message> request) {
-        return wizard.handle(request, orderWizard);
-    }
-
-    @BotHandler(type = BotRequestType.MESSAGE)
-    @AlwaysMatch
-    public BotResponse orderFlow(BotRequest<Message> request) {
-        String key = request.data().getChatId() + ":" + orderWizard.id();
-        if (request.service().store().get(key) != null) {
-            return wizard.handle(request, orderWizard);
-        }
-        return null;
     }
 
     @BotHandler(type = BotRequestType.MESSAGE)

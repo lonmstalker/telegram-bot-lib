@@ -12,6 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Локализатор сообщений, аналогичный Spring MessageSource.
  */
+@SuppressWarnings("type.argument")
 public class MessageLocalizerImpl implements MessageLocalizer {
 
     // Базовое имя ResourceBundle, например "messages"
@@ -21,7 +22,7 @@ public class MessageLocalizerImpl implements MessageLocalizer {
     private final Locale defaultLocale;
 
     // ThreadLocal для хранения «текущей» локали в потоке
-    private final ThreadLocal<Locale> threadLocale;
+    private final ThreadLocal<@NonNull Locale> threadLocale;
 
     // Кеш бандлов по локали
     private final Map<Locale, ResourceBundle> bundleCache = new ConcurrentHashMap<>();
@@ -41,6 +42,7 @@ public class MessageLocalizerImpl implements MessageLocalizer {
      * @param baseName      имя бандла
      * @param defaultLocale локаль по умолчанию
      */
+    @SuppressWarnings("method.invocation")
     public MessageLocalizerImpl(@NonNull String baseName,
                                 @NonNull Locale defaultLocale) {
         this.baseName = baseName;
@@ -57,6 +59,11 @@ public class MessageLocalizerImpl implements MessageLocalizer {
 
     public void resetLocale() {
         threadLocale.set(defaultLocale);
+    }
+
+    @Override
+    public @NonNull String get(@NonNull MessageKey key) {
+        return get(key.key(), key.args());
     }
 
     @Override

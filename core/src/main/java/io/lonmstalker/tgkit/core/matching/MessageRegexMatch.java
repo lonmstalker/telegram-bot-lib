@@ -29,6 +29,7 @@ public class MessageRegexMatch implements CommandMatch<Message> {
         Matcher m = pattern.matcher(data.getText());
         boolean res = m.matches();
         if (res) {
+            // проставляет matcher для возможности извлечения аргументов из текста
             RouteContextHolder.setMatcher(m);
         }
         return res;

@@ -14,7 +14,7 @@ import java.util.List;
 
 /**
  * Runtime-cheap rate-limit guard.
- * Heavy computations delegated to {@link RateLimitInterceptorFactory}.
+ * Heavy computations delegated to {@link RateLimitBotCommandFactory}.
  */
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 public final class RateLimitInterceptor implements BotInterceptor {

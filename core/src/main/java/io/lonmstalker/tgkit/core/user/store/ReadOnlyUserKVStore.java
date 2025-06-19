@@ -10,7 +10,7 @@ public final class ReadOnlyUserKVStore implements UserKVStore {
     private final @NonNull UserKVStore delegate;
 
     @Override
-    public String get(long uid, String k) {
+    public String get(long uid, @NonNull String k) {
         return delegate.get(uid, k);
     }
 
@@ -20,12 +20,12 @@ public final class ReadOnlyUserKVStore implements UserKVStore {
     }
 
     @Override
-    public void put(long uid, String k, String v) {
+    public void put(long uid, @NonNull String k, @NonNull String v) {
         throw new UnsupportedOperationException("read-only");
     }
 
     @Override
-    public void remove(long uid, String k) {
+    public void remove(long uid, @NonNull String k) {
         throw new UnsupportedOperationException("read-only");
     }
 }

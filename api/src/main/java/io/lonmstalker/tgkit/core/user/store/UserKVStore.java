@@ -10,19 +10,16 @@ import java.util.Map;
  */
 public interface UserKVStore {
 
-    /* --- чтение --- */
     @Nullable
     String get(long userId, @NonNull String key);
 
     @NonNull
     Map<String, String> getAll(long userId);
 
-    /* --- запись / модификация --- */
     void put(long userId, @NonNull String key, @NonNull String value);
 
     void remove(long userId, @NonNull String key);
 
-    /* --- утилита --- */
     default boolean contains(long userId, @NonNull String key) {
         return get(userId, key) != null;
     }

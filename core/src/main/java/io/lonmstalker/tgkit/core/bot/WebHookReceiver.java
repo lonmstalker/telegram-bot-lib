@@ -2,6 +2,7 @@ package io.lonmstalker.tgkit.core.bot;
 
 import io.lonmstalker.tgkit.core.BotAdapter;
 import io.lonmstalker.tgkit.core.exception.BotExceptionHandler;
+import io.lonmstalker.tgkit.core.exception.BotExceptionHandlerDefault;
 import io.lonmstalker.tgkit.security.secret.SecretStore;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -44,7 +45,7 @@ class WebHookReceiver extends TelegramWebhookBot implements AutoCloseable {
         this.adapter = adapter;
         this.globalExceptionHandler = globalExceptionHandler != null
                 ? globalExceptionHandler
-                : (update, ex) -> log.error("onUpdate with error: ", ex);
+                : BotExceptionHandlerDefault.INSTANCE;
         if (adapter instanceof BotAdapterImpl b) {
             b.setSender(sender);
         }
@@ -61,8 +62,7 @@ class WebHookReceiver extends TelegramWebhookBot implements AutoCloseable {
         try {
             return adapter.handle(update);
         } catch (Exception e) {
-            globalExceptionHandler.handle(update, e);
-            return null;
+            return globalExceptionHandler.handle(update, e);
         }
     }
 

@@ -2,7 +2,7 @@ package io.lonmstalker.tgkit.core.dsl;
 
 import io.lonmstalker.tgkit.core.dsl.context.DSLContext;
 import io.lonmstalker.tgkit.core.exception.BotApiException;
-import io.lonmstalker.tgkit.core.storage.BotRequestHolder;
+import io.lonmstalker.tgkit.core.storage.BotRequestContextHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,9 +20,9 @@ public interface MissingIdStrategy {
      * --- Готовые стратегии ---
      */
     MissingIdStrategy ERROR = (name, u) -> {
-        throw new BotApiException(name + " is required but null in update: " + BotRequestHolder.getRequestId());
+        throw new BotApiException(name + " is required but null in update: " + BotRequestContextHolder.getRequestId());
     };
     MissingIdStrategy WARN = (name, u) -> LOG.warn("{} is null in update {}", name,
-            BotRequestHolder.getRequestId());
+            BotRequestContextHolder.getRequestId());
     MissingIdStrategy IGNORE = (name, u) -> { /* ничего */ };
 }

@@ -11,8 +11,9 @@ import java.lang.annotation.Target;
 @Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Arg {
+
     /** Имя именованной regex-группы из ближайшего матчера. */
-    @NonNull String value();
+    @NonNull String value() default "";
 
     /** Обязательность; для примитивов по умолчанию false запрещён. */
     boolean required() default true;
@@ -21,5 +22,5 @@ public @interface Arg {
     String defaultValue() default "";
 
     /** Пользовательский конвертер; Identity = авто-выбор по типу. */
-    Class<? extends BotArgumentConverter<?>> converter() default BotArgumentConverter.Identity.class;
+    Class<? extends BotArgumentConverter<?, ?>> converter() default BotArgumentConverter.UpdateConverter.class;
 }

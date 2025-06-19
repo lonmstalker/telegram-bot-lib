@@ -17,16 +17,24 @@ import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 import org.telegram.telegrambots.meta.api.objects.User;
 
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
+
 
 @Slf4j
 @Getter
 @Builder
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
+@SuppressWarnings({"dereference.of.nullable", "argument"})
 public final class BotImpl implements Bot {
 
+    private final AtomicReference<BotState> state = new AtomicReference<>(BotState.NEW);
+    private final @NonNull List<BotCompleteAction> completeActions = new CopyOnWriteArrayList<>();
     private long id;
     private volatile @Nullable User user;
     private @Nullable SetWebhook setWebhook;
@@ -37,7 +45,7 @@ public final class BotImpl implements Bot {
     private @Nullable BotSessionImpl session;
 
     @Builder.Default
-    private @NonNull List<BotCompleteAction> completeActions = new ArrayList<>();
+    private long onCompletedActionTimeoutMs = 10_000;
 
     @Override
     public long internalId() {
@@ -62,11 +70,12 @@ public final class BotImpl implements Bot {
             } else if (absSender instanceof WebHookReceiver receiver) {
                 initWebHook(receiver);
             }
-            BotRegistryImpl.INSTANCE.register(this);
+            BotRegistryImpl.getInstance().register(this);
             BotGlobalConfig.INSTANCE.events().getBus()
                     .publish(new StartStatusBotEvent(internalId(), externalId(), Instant.now(), null));
+            state.set(BotState.RUNNING);
         } catch (Throwable ex) {
-            BotRegistryImpl.INSTANCE.unregister(this);
+            BotRegistryImpl.getInstance().unregister(this);
             BotGlobalConfig.INSTANCE.events().getBus()
                     .publish(new StartStatusBotEvent(internalId(), externalId(), Instant.now(), ex));
             throw new BotApiException("Error starting bot", ex);
@@ -87,6 +96,9 @@ public final class BotImpl implements Bot {
         } catch (Throwable ex) {
             BotGlobalConfig.INSTANCE.events().getBus()
                     .publish(new StopStatusBotEvent(internalId(), externalId(), Instant.now(), ex));
+            throw new BotApiException("Error stopping bot", ex);
+        } finally {
+            state.set(BotState.STOPPED);
         }
     }
 
@@ -103,8 +115,8 @@ public final class BotImpl implements Bot {
     }
 
     @Override
-    public boolean isStarted() {
-        return user != null;
+    public @NonNull BotState state() {
+        return state.get();
     }
 
     @Override
@@ -124,7 +136,7 @@ public final class BotImpl implements Bot {
 
     @Override
     public @NonNull BotRegistry botRegistry() {
-        return BotRegistryImpl.INSTANCE;
+        return BotRegistryImpl.getInstance();
     }
 
     private void initLongPolling(@NonNull LongPollingReceiver receiver) throws Exception {
@@ -150,11 +162,19 @@ public final class BotImpl implements Bot {
     }
 
     private void runCompleteActions() {
-        for (BotCompleteAction action : completeActions) {
-            try {
-                action.complete();
-            } catch (Exception e) {
-                log.error("Complete action error", e);
+        try (ExecutorService executor = Executors.newSingleThreadExecutor()) {
+            for (BotCompleteAction action : completeActions) {
+                try {
+                    executor.submit(() -> {
+                        try {
+                            action.complete();
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
+                        }
+                    }).get(onCompletedActionTimeoutMs, TimeUnit.MILLISECONDS);
+                } catch (Exception e) {
+                    log.error("Complete action error", e);
+                }
             }
         }
     }
@@ -183,7 +203,7 @@ public final class BotImpl implements Bot {
         this.user = null;
         this.setWebhook = null;
         this.session = null;
-        BotRegistryImpl.INSTANCE.unregister(this);
+        BotRegistryImpl.getInstance().unregister(this);
     }
 
     private void checkStarted() {

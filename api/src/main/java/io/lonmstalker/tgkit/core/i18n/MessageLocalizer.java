@@ -22,6 +22,12 @@ public interface MessageLocalizer {
      * Получить локализованную строку по ключу.
      * Если ключ не найден, возвращается сам ключ.
      */
+    @NonNull String get(@NonNull MessageKey key);
+
+    /**
+     * Получить локализованную строку по ключу.
+     * Если ключ не найден, возвращается сам ключ.
+     */
     @NonNull String get(@NonNull String key);
 
     /**
