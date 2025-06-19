@@ -16,6 +16,7 @@
         <module>security</module>
         <module>examples</module>
         <module>api</module>
+        <module>telegram-bot-testkit</module>
     </modules>
 
     <properties>
@@ -40,6 +41,7 @@
         <jedis.version>6.0.0</jedis.version>
         <http-simple-client.version>0.16.0</http-simple-client.version>
         <netty.version>4.2.2.Final</netty.version>
+        <undertow.version>2.3.9.Final</undertow.version>
         <vault.version>6.2.0</vault.version>
 
         <!-- PLUGINS -->
@@ -155,6 +157,11 @@
                 <groupId>io.netty</groupId>
                 <artifactId>netty-transport</artifactId>
                 <version>${netty.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.undertow</groupId>
+                <artifactId>undertow-core</artifactId>
+                <version>${undertow.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.github.jopenlibs</groupId>
