@@ -19,6 +19,8 @@
     </modules>
 
     <properties>
+        <revision>0.0.1-SNAPSHOT</revision>
+        <previousRevision>0.0.0</previousRevision>
         <maven.compiler.release>21</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
@@ -47,6 +49,8 @@
         <maven-compiler-plugin.version>3.14.0</maven-compiler-plugin.version>
         <checkstyle-maven-plugin.version>3.6.0</checkstyle-maven-plugin.version>
         <spotless-maven-plugin.version>2.44.5</spotless-maven-plugin.version>
+        <revapi.version>0.28.2</revapi.version>
+        <revapi-maven-plugin.version>0.15.1</revapi-maven-plugin.version>
 
         <!-- TEST -->
         <h2.version>2.3.232</h2.version>
@@ -295,6 +299,32 @@
                     <execution>
                         <id>format</id>
                         <phase>process-sources</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.revapi</groupId>
+                <artifactId>revapi-maven-plugin</artifactId>
+                <version>${revapi-maven-plugin.version}</version>
+                <configuration>
+                    <oldVersion>${previousRevision}</oldVersion>
+                    <newVersion>${revision}</newVersion>
+                    <failSeverity>breaking</failSeverity>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.revapi</groupId>
+                        <artifactId>revapi-java</artifactId>
+                        <version>${revapi.version}</version>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <id>check-api</id>
+                        <phase>verify</phase>
                         <goals>
                             <goal>check</goal>
                         </goals>
