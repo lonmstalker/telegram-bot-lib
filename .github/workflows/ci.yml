@@ -33,5 +33,5 @@ jobs:
           distribution: temurin
           java-version: 21
 
-      - name: Maven test
-        run: mvn -B verify
+      - name: Maven verify
+        run: mvn -B spotless:check checkstyle:check verify
