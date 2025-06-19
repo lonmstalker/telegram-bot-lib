@@ -31,10 +31,10 @@
    ```
 4. В консоли вы увидите примерно:
    ```
-   [Example] onLoad
-   [Example] start
-   [Example] beforeStop
-   [Example] stop
-   [Example] afterStop
-   [Example] onUnload
+   INFO  ExamplePlugin - onLoad
+   INFO  ExamplePlugin - start
+   INFO  ExamplePlugin - beforeStop
+   INFO  ExamplePlugin - stop
+   INFO  ExamplePlugin - afterStop
+   INFO  ExamplePlugin - onUnload
    ```
