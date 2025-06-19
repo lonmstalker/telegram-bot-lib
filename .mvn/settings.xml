@@ -1,77 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+<settings xmlns="http://maven.apache.org/SETTINGS/1.4.0"
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
-                              http://maven.apache.org/xsd/settings-1.0.0.xsd">
-
-    <!-- Личные настройки пользователя -->
-    <localRepository>${user.home}/.m2/repository</localRepository>
-    <interactiveMode>true</interactiveMode>
-    <usePluginRegistry>false</usePluginRegistry>
-
-    <!-- Зеркала репозиториев -->
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.4.0
+                              https://maven.apache.org/xsd/settings-1.4.0.xsd">
     <mirrors>
-        <!-- IPv6-mirror для Maven Central -->
-        <mirror>
-            <id>central-ipv6</id>
-            <name>Fastly IPv6 mirror of Maven Central</name>
-            <url>https://central.ipv6.maven.org/maven2/</url>
-            <mirrorOf>central</mirrorOf>
-        </mirror>
         <mirror>
             <id>central</id>
-            <name>Maven Central (HTTPS)</name>
+            <name>Maven Central (IPv4)</name>
             <url>https://repo.maven.apache.org/maven2/</url>
             <mirrorOf>central</mirrorOf>
         </mirror>
     </mirrors>
-
-    <!-- Прокси, если нужен -->
-    <!--
-    <proxies>
-      <proxy>
-        <id>example-proxy</id>
-        <active>true</active>
-        <protocol>http</protocol>
-        <host>proxy.example.com</host>
-        <port>8080</port>
-        <username>user</username>
-        <password>pass</password>
-        <nonProxyHosts>local.net|some.host.com</nonProxyHosts>
-      </proxy>
-    </proxies>
-    -->
-
-    <!-- Серверы для deploy -->
-    <!--
-    <servers>
-      <server>
-        <id>your-repo</id>
-        <username>deploy-user</username>
-        <password>deploy-pass</password>
-      </server>
-    </servers>
-    -->
-
-    <!-- Профили (при необходимости) -->
-    <!--
-    <profiles>
-      <profile>
-        <id>ipv6-central</id>
-        <repositories>
-          <repository>
-            <id>central-ipv6</id>
-            <url>https://central.ipv6.maven.org/maven2/</url>
-            <releases><enabled>true</enabled></releases>
-            <snapshots><enabled>false</enabled></snapshots>
-          </repository>
-        </repositories>
-      </profile>
-    </profiles>
-
-    <activeProfiles>
-      <activeProfile>ipv6-central</activeProfile>
-    </activeProfiles>
-    -->
-
 </settings>
