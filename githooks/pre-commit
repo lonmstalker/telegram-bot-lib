@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+# Automatically format and check code before committing.
+# Runs Spotless to apply formatting and Checkstyle for code style checks.
+
+set -e
+
+# Format code using Spotless
+mvn -q spotless:apply
+
+# Run Checkstyle; if it fails, abort the commit
+mvn -q checkstyle:check || {
+  echo "Checkstyle violations detected. Commit aborted." >&2
+  exit 1
+}
+
+exit 0
