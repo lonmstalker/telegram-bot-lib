@@ -94,6 +94,7 @@ telegram-bot-lib/
 | telegram-bot-core     | 21          | telegram.bot.core  | public             | ≥ 90 %    | Revapi, NullAway |
 | telegram-bot-testkit  | 21          | —                  | incubating         | ≥ 95 %    | JUnit 5         |
 | telegram-bot-plugins  | 21          | разные             | incubating         | ≥ 80 %    | SPI loader      |
+| validator             | 21          | io.lonmstalker.tgkit.validator | public     | ≥ 90 %    | —               |
 
 ## 8. Проверка качества ✅
 
