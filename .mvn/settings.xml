@@ -42,12 +42,12 @@
             </properties>
         </profile>
 
-        <!-- Серверный профиль: включается при env.USE_PROXY=true -->
+        <!-- Серверный профиль: включается при env.MVN_USE_PROXY=true -->
         <profile>
             <id>server-with-proxy</id>
             <activation>
                 <property>
-                    <name>env.USE_PROXY</name>
+                    <name>env.MVN_USE_PROXY</name>
                     <value>true</value>
                 </property>
             </activation>
