@@ -173,7 +173,7 @@ public class BotAdapterImpl implements BotAdapter, AutoCloseable {
     }
 
     private void checkStarted() {
-        if (currentBot != null && BotState.RUNNING == currentBot.state()) {
+        if (currentBot == null || currentBot.state() != BotState.RUNNING) {
             throw new IllegalStateException("Bot adapter not started");
         }
     }
