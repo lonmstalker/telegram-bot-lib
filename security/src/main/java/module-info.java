@@ -4,6 +4,8 @@ module io.lonmstalker.tgkit.security {
   requires com.github.benmanes.caffeine;
   requires io.github.jopenlibs.vault.java.driver;
   requires jedis;
+  requires static lombok;
+  requires static org.checkerframework.checker.qual;
 
   exports io.lonmstalker.tgkit.security;
   exports io.lonmstalker.tgkit.security.antispam;

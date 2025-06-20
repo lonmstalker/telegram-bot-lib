@@ -1,5 +1,8 @@
 module io.lonmstalker.tgkit.api {
-  requires transitive org.telegram.telegrambots;
+  requires transitive telegrambots;
+  requires telegrambots.meta;
+  requires static lombok;
+  requires static org.checkerframework.checker.qual;
 
   exports io.lonmstalker.tgkit.core;
   exports io.lonmstalker.tgkit.core.annotation;

@@ -19,7 +19,7 @@
         </dependency>
         <dependency>
             <groupId>io.lonmstalker.tgkit</groupId>
-            <artifactId>testkit</artifactId>
+            <artifactId>telegram-bot-testkit</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>

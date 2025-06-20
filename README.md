@@ -80,14 +80,14 @@ implementation("io.lonmstalker.tgkit:tgkit-core:0.0.1-SNAPSHOT")
 ```xml
 <dependency>
     <groupId>io.lonmstalker.tgkit</groupId>
-    <artifactId>testkit</artifactId>
+    <artifactId>telegram-bot-testkit</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <scope>test</scope>
 </dependency>
 ```
 
 ```kotlin
-testImplementation("io.lonmstalker.tgkit:testkit:0.0.1-SNAPSHOT")
+testImplementation("io.lonmstalker.tgkit:telegram-bot-testkit:0.0.1-SNAPSHOT")
 ```
 </details>
 

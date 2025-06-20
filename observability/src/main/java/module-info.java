@@ -7,6 +7,8 @@ module io.lonmstalker.tgkit.observability {
   requires ch.qos.logback.classic;
   requires io.micrometer.registry.prometheus;
   requires io.prometheus.simpleclient_httpserver;
+  requires static lombok;
+  requires static org.checkerframework.checker.qual;
 
   exports io.lonmstalker.observability;
   exports io.lonmstalker.observability.impl to
