@@ -208,6 +208,14 @@ export MAVEN_OPTS="-Dhttps.proxyHost=proxy -Dhttps.proxyPort=8080 \
 ```
 Результат ищите в `target/site/jacoco/index.html`.
 
+Для локального сканирования зависимостей на уязвимости:
+
+```bash
+./mvnw verify
+```
+Отчёты появятся в `target/dependency-check-report.html` и
+`target/dependency-check-report.sarif`.
+
 ## 🤝 Contributing
 PR-ы и идеи приветствуются! Перед отправкой ознакомьтесь с [CONTRIBUTING.md](CONTRIBUTING.md) и [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
 
