@@ -38,6 +38,16 @@ public class TokenCipherImplTest {
   }
 
   @Test
+  void encrypt_decrypt_roundtrip_256bit_key() {
+    var cipher = new TokenCipherImpl("0123456789abcdef0123456789abcdef");
+    var original = "myToken";
+    var encrypted = cipher.encrypt(original);
+    assertNotEquals(original, encrypted, "encrypted text should differ");
+    var decrypted = cipher.decrypt(encrypted);
+    assertEquals(original, decrypted);
+  }
+
+  @Test
   void decrypt_invalid_data_throws() {
     var cipher = new TokenCipherImpl("secretkey123456");
     assertThrows(BotApiException.class, () -> cipher.decrypt("boom"));
