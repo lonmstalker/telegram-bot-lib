@@ -42,6 +42,14 @@ public final class BotCoreInitializer {
 
   private static volatile boolean started;
 
+  /**
+   * Удобная статическая обёртка. Вызывает {@link #init()} один раз и не
+   * требует явного создания экземпляра.
+   */
+  public static void init() {
+    new BotCoreInitializer().init();
+  }
+
   public synchronized void init() {
     if (started) {
       log.warn(
@@ -65,11 +73,16 @@ public final class BotCoreInitializer {
         .httpClient(HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(30)).build());
 
     // ── Executors ────────────────────────────────────────────────────────
+    int cpuSize = BotGlobalConfig.INSTANCE.executors().cpuPoolSize();
+    int schedSize = BotGlobalConfig.INSTANCE.executors().scheduledPoolSize();
+
     BotGlobalConfig.INSTANCE
         .executors()
-        .cpuExecutorService(Executors.newWorkStealingPool(2))
+        .cpuExecutorService(
+            Executors.newFixedThreadPool(cpuSize, Thread.ofVirtual().factory()))
         .ioExecutorService(Executors.newVirtualThreadPerTaskExecutor())
-        .scheduledExecutorService(Executors.newScheduledThreadPool(2));
+        .scheduledExecutorService(
+            Executors.newScheduledThreadPool(schedSize, Thread.ofVirtual().factory()));
 
     // ── Events ────────────────────────────────────────────────────────
     BotGlobalConfig.INSTANCE.events().bus(new InMemoryEventBus());
