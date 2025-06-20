@@ -18,7 +18,15 @@ package io.lonmstalker.tgkit.core.matching;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
-/** Matcher that checks message text equality. */
+/**
+ * Сравнивает текст сообщения с заданной строкой.
+ *
+ * <p>Пример:
+ * <pre>{@code
+ * CommandMatch<Message> match = new MessageTextMatch("/start");
+ * }
+ * </pre>
+ */
 public class MessageTextMatch implements CommandMatch<Message> {
 
   private final String text;

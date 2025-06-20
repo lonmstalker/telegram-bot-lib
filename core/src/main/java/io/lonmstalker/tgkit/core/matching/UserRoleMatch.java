@@ -23,7 +23,15 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.interfaces.BotApiObject;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-/** Matcher that checks user roles using {@link BotUserProvider}. */
+/**
+ * Проверяет роль пользователя с помощью {@link BotUserProvider}.
+ *
+ * <p>Пример:
+ * <pre>{@code
+ * CommandMatch<?> match = new UserRoleMatch<>(provider, Set.of("ADMIN"));
+ * }
+ * </pre>
+ */
 public class UserRoleMatch<T extends BotApiObject> implements CommandMatch<T> {
 
   private final BotUserProvider provider;

@@ -25,6 +25,16 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
+/**
+ * Стандартная реализация {@link TtlScheduler} на базе {@link ScheduledExecutorService}.
+ *
+ * <p>Пример использования:
+ * <pre>{@code
+ * TtlScheduler scheduler = new TtlSchedulerDefault();
+ * scheduler.schedule(task, Duration.ofSeconds(10), policy);
+ * }
+ * </pre>
+ */
 public class TtlSchedulerDefault implements TtlScheduler {
   private final Map<DeleteTask, RetryRunner> live = new ConcurrentHashMap<>();
 

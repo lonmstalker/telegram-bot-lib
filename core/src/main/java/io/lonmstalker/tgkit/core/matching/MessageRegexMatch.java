@@ -21,7 +21,15 @@ import java.util.regex.Pattern;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
-/** Matcher that checks a message text against a regular expression. */
+/**
+ * Проверяет текст сообщения по регулярному выражению.
+ *
+ * <p>Пример:
+ * <pre>{@code
+ * CommandMatch<Message> match = new MessageRegexMatch("\\d+");
+ * }
+ * </pre>
+ */
 public class MessageRegexMatch implements CommandMatch<Message> {
 
   private final Pattern pattern;

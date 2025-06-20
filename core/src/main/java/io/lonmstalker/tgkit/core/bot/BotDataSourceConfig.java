@@ -19,6 +19,18 @@ import javax.sql.DataSource;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+/**
+ * Настройки подключения и необязательный {@link BotConfig} для работы с данными конкретного бота.
+ *
+ * <p>Пример:
+ * <pre>{@code
+ * BotDataSourceConfig cfg = BotDataSourceConfig.builder()
+ *     .dataSource(ds)
+ *     .botConfig(botCfg)
+ *     .build();
+ * }
+ * </pre>
+ */
 public class BotDataSourceConfig {
   private @Nullable BotConfig botConfig;
   private @NonNull DataSource dataSource;

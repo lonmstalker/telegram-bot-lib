@@ -18,7 +18,11 @@ package io.lonmstalker.tgkit.core.matching;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.interfaces.BotApiObject;
 
-/** Matcher that always returns {@code true}. */
+/**
+ * Матчер, который всегда возвращает {@code true}.
+ *
+ * <p>Используйте, когда нужно принять любое сообщение.
+ */
 public class AlwaysMatch<T extends BotApiObject> implements CommandMatch<T> {
 
   @Override
