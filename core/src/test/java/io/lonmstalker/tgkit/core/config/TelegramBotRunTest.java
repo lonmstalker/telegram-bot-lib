@@ -15,11 +15,11 @@
  */
 package io.lonmstalker.tgkit.core.config;
 
+import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.lonmstalker.tgkit.core.TelegramBot;
 import io.lonmstalker.tgkit.core.bot.Bot;
-import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
 import io.lonmstalker.tgkit.testkit.TelegramMockServer;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -32,7 +32,7 @@ class TelegramBotRunTest {
   @TempDir Path tmp;
 
   static {
-    BotCoreInitializer.init();
+    TestBotBootstrap.initOnce();
   }
 
   @Test

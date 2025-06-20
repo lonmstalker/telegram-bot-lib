@@ -15,12 +15,12 @@
  */
 package io.lonmstalker.tgkit.security.rbac;
 
+import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.when;
 
 import io.lonmstalker.tgkit.core.BotRequest;
-import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
 import io.lonmstalker.tgkit.core.interceptor.BotInterceptor;
 import io.lonmstalker.tgkit.core.loader.BotCommandFactory;
 import io.lonmstalker.tgkit.security.init.BotSecurityInitializer;
@@ -41,7 +41,7 @@ public class RoleSecurityTest {
   Method handler;
 
   static {
-    BotCoreInitializer.init();
+    TestBotBootstrap.initOnce();
     BotSecurityInitializer.init();
   }
 

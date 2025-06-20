@@ -15,9 +15,9 @@
  */
 package io.lonmstalker.tgkit.core.matching;
 
+import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
 import static org.junit.jupiter.api.Assertions.*;
 
-import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
 import io.lonmstalker.tgkit.core.storage.BotRequestContextHolder;
 import io.lonmstalker.tgkit.core.user.BotUserInfo;
 import io.lonmstalker.tgkit.core.user.BotUserProvider;
@@ -35,7 +35,7 @@ import org.telegram.telegrambots.meta.api.objects.User;
 public class MatchersTest {
 
   static {
-    BotCoreInitializer.init();
+    TestBotBootstrap.initOnce();
   }
 
   @AfterEach

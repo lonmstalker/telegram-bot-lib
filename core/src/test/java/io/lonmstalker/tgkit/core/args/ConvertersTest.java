@@ -15,17 +15,17 @@
  */
 package io.lonmstalker.tgkit.core.args;
 
+import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
 import static org.junit.jupiter.api.Assertions.*;
 
 import io.lonmstalker.tgkit.core.exception.BotApiException;
-import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
 import java.math.BigDecimal;
 import org.junit.jupiter.api.Test;
 
 public class ConvertersTest {
 
   static {
-    BotCoreInitializer.init();
+    TestBotBootstrap.initOnce();
   }
 
   enum Color {

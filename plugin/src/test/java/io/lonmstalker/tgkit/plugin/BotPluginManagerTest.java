@@ -15,6 +15,7 @@
  */
 package io.lonmstalker.tgkit.plugin;
 
+import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
 import static io.lonmstalker.tgkit.plugin.internal.BotPluginConstants.CURRENT_VERSION;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.argThat;
@@ -22,7 +23,6 @@ import static org.mockito.Mockito.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
 import io.lonmstalker.tgkit.plugin.internal.BotPluginDescriptor;
 import io.lonmstalker.tgkit.security.audit.AuditBus;
 import io.lonmstalker.tgkit.security.audit.AuditEvent;
@@ -54,7 +54,7 @@ public class BotPluginManagerTest {
   private BotPluginManager manager;
 
   static {
-    BotCoreInitializer.init();
+    TestBotBootstrap.initOnce();
     BotSecurityInitializer.init();
   }
 

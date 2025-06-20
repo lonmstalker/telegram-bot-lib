@@ -15,13 +15,13 @@
  */
 package io.lonmstalker.tgkit.core.resource;
 
+import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.net.httpserver.HttpServer;
-import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
 import java.io.*;
 import java.net.*;
 import java.nio.file.*;
@@ -40,7 +40,7 @@ class ResourceLoaderTest {
   @TempDir Path tmp;
 
   static {
-    BotCoreInitializer.init();
+    TestBotBootstrap.initOnce();
   }
 
   /* ───────────────── classpath loader ──────────────────────────── */

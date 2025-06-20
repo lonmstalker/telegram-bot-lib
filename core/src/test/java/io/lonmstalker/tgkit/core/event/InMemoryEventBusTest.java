@@ -15,11 +15,11 @@
  */
 package io.lonmstalker.tgkit.core.event;
 
+import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import io.lonmstalker.tgkit.core.event.impl.StartStatusBotEvent;
-import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +31,7 @@ import org.junit.jupiter.api.Test;
 class InMemoryEventBusTest {
 
   static {
-    BotCoreInitializer.init();
+    TestBotBootstrap.initOnce();
   }
 
   @Test

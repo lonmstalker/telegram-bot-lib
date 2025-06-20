@@ -15,12 +15,12 @@
  */
 package io.lonmstalker.tgkit.security.limiter;
 
+import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
-import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
 import io.lonmstalker.tgkit.core.interceptor.BotInterceptor;
 import io.lonmstalker.tgkit.security.*;
 import io.lonmstalker.tgkit.security.init.BotSecurityInitializer;
@@ -44,7 +44,7 @@ class TelegramSenderRateLimiterTest {
   RateLimitBotCommandFactory factory;
 
   static {
-    BotCoreInitializer.init();
+    TestBotBootstrap.initOnce();
     BotSecurityInitializer.init();
   }
 

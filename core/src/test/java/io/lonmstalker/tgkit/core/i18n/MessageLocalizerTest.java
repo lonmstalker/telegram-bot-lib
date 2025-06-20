@@ -15,16 +15,16 @@
  */
 package io.lonmstalker.tgkit.core.i18n;
 
+import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
 import java.util.Locale;
 import org.junit.jupiter.api.Test;
 
 public class MessageLocalizerTest {
 
   static {
-    BotCoreInitializer.init();
+    TestBotBootstrap.initOnce();
   }
 
   @Test

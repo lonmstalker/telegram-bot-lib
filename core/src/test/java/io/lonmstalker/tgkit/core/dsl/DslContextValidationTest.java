@@ -15,6 +15,7 @@
  */
 package io.lonmstalker.tgkit.core.dsl;
 
+import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -22,14 +23,13 @@ import io.lonmstalker.tgkit.core.BotInfo;
 import io.lonmstalker.tgkit.core.BotService;
 import io.lonmstalker.tgkit.core.dsl.context.DSLContext.SimpleDSLContext;
 import io.lonmstalker.tgkit.core.exception.BotApiException;
-import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
 import io.lonmstalker.tgkit.core.user.BotUserInfo;
 import org.junit.jupiter.api.Test;
 
 class DslContextValidationTest {
 
   static {
-    BotCoreInitializer.init();
+    TestBotBootstrap.initOnce();
   }
 
   @Test

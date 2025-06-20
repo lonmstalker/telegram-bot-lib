@@ -15,11 +15,11 @@
  */
 package io.lonmstalker.tgkit.core.bot;
 
+import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
 import static org.junit.jupiter.api.Assertions.*;
 
 import io.lonmstalker.tgkit.core.BotAdapter;
 import io.lonmstalker.tgkit.core.crypto.TokenCipherImpl;
-import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
 import java.sql.Connection;
 import java.sql.Statement;
 import javax.sql.DataSource;
@@ -30,7 +30,7 @@ import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 public class BotFactoryTest {
 
   static {
-    BotCoreInitializer.init();
+    TestBotBootstrap.initOnce();
   }
 
   @Test
