@@ -27,6 +27,9 @@ public final class RateLimitInterceptor implements BotInterceptor {
   private final List<Meta> metas;
 
   @Override
+  /**
+   * Проверяет превышение лимитов и бросает исключение при необходимости.
+   */
   public void preHandle(@NonNull Update upd, @NonNull BotRequest<?> request) {
     Long uid = UpdateUtils.resolveUserId(upd);
     Long chat = UpdateUtils.resolveChatId(upd);

@@ -52,6 +52,14 @@ public final class BotDataSourceFactory {
     return value;
   }
 
+  /**
+   * Читает параметры бота из DataSource.
+   *
+   * @param dataSource источник данных
+   * @param id идентификатор в БД
+   * @param cipher дешифратор токена
+   * @return параметры бота
+   */
   @SuppressWarnings("argument")
   public @NonNull BotData load(
       @NonNull DataSource dataSource, long id, @NonNull TokenCipher cipher) {

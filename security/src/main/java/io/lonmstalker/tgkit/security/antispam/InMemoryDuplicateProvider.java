@@ -39,6 +39,9 @@ public class InMemoryDuplicateProvider implements DuplicateProvider {
   }
 
   @Override
+  /**
+   * Проверяет текст на повтор в рамках чата.
+   */
   public boolean isDuplicate(long chat, @NonNull String text) {
     int h = text.hashCode();
     return !Objects.requireNonNull(cache.get(chat, __ -> ConcurrentHashMap.newKeySet())).add(h);

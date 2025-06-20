@@ -8,11 +8,33 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 
+/**
+ * Фабрика создания {@link Bot} из разных источников данных.
+ *
+ * <p>Типичный способ инициализации:
+ *
+ * <pre>{@code
+ * Bot bot = BotFactory.INSTANCE.from(
+ *         token,
+ *         BotConfig.builder().build(),
+ *         update -> null,
+ *         "com.example.bot");
+ * bot.start();
+ * }</pre>
+ */
 public final class BotFactory {
   private BotFactory() {}
   public static final BotFactory INSTANCE = new BotFactory();
   private final AtomicLong nextId = new AtomicLong();
 
+  /**
+   * Создаёт бота с long polling.
+   *
+   * @param token токен BotFather
+   * @param config конфигурация бота
+   * @param adapter адаптер для обработки обновлений
+   * @return запущенный бот
+   */
   public @NonNull Bot from(
       @NonNull String token, @NonNull BotConfig config, @NonNull BotAdapter adapter) {
     TelegramSender sender = new TelegramSender(config, token);
@@ -29,6 +51,9 @@ public final class BotFactory {
     return bot;
   }
 
+  /**
+   * Создаёт бота и сканирует указанные пакеты на предмет команд.
+   */
   public @NonNull Bot from(
       @NonNull String token,
       @NonNull BotConfig config,
@@ -39,6 +64,9 @@ public final class BotFactory {
     return bot;
   }
 
+  /**
+   * Создаёт бота в режиме webhook.
+   */
   public @NonNull Bot from(
       @NonNull String token,
       @NonNull BotConfig config,
@@ -58,6 +86,9 @@ public final class BotFactory {
     return bot;
   }
 
+  /**
+   * Webhook-биржа с автоподключением команд из пакетов.
+   */
   public @NonNull Bot from(
       @NonNull String token,
       @NonNull BotConfig config,
@@ -69,6 +100,9 @@ public final class BotFactory {
     return bot;
   }
 
+  /**
+   * Загружает конфигурацию бота из внешнего источника.
+   */
   public @NonNull Bot from(
       long botId,
       @NonNull BotDataSourceConfig config,
@@ -90,6 +124,9 @@ public final class BotFactory {
     return from(data.token(), cfg, adapter);
   }
 
+  /**
+   * Загружает конфигурацию из источника и сканирует пакеты.
+   */
   public @NonNull Bot from(
       long botId,
       @NonNull BotDataSourceConfig config,
