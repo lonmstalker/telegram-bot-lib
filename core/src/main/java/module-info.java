@@ -10,6 +10,7 @@ module io.lonmstalker.tgkit.core {
   requires com.fasterxml.jackson.dataformat.yaml;
   requires com.h2database;
   requires org.reflections;
+  requires jedis;
   requires io.netty.transport;
 
   exports io.lonmstalker.tgkit.core.bot;
