@@ -51,3 +51,16 @@ SecurityGlobalConfig.INSTANCE
         .audit(a -> a.bus(KafkaAuditBus.create("sec-events")));
 
 ```
+
+### SecretStore с HashiCorp Vault
+
+```bash
+export VAULT_TOKEN=***
+# переопределить URL Vault
+export VAULT_ADDR=https://vault.example.com:8200
+```
+
+```java
+SecretStore secrets = new VaultSecretStore();
+secrets.get("bot-token");
+```

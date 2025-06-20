@@ -44,6 +44,19 @@ public final class TestUtils {
     }
   }
 
+  public static void setEnv(String key, String value) {
+    try {
+      var env = System.getenv();
+      Field m = env.getClass().getDeclaredField("m");
+      m.setAccessible(true);
+      @SuppressWarnings("unchecked")
+      var map = (java.util.Map<String, String>) m.get(env);
+      if (value == null) map.remove(key); else map.put(key, value);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+  }
+
   public static Update message(long chat, long user) {
     Update u = new Update();
     Message m = new Message();

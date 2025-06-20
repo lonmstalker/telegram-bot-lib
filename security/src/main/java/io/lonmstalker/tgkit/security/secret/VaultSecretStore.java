@@ -29,10 +29,11 @@ public final class VaultSecretStore implements SecretStore {
   private transient Vault vault;
 
   public VaultSecretStore() {
-    this(
-        new VaultConfig()
-            .token(System.getenv("VAULT_TOKEN"))
-            .address(System.getenv().getOrDefault("VAULT_ADDR", "http://localhost:8200")));
+    String addr = System.getenv("VAULT_ADDR");
+    if (addr == null) {
+      addr = "https://localhost:8200";
+    }
+    this(new VaultConfig().token(System.getenv("VAULT_TOKEN")).address(addr));
   }
 
   public VaultSecretStore(@NonNull VaultConfig config) {
