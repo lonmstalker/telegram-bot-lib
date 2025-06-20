@@ -1,5 +1,13 @@
 module io.lonmstalker.tgkit.api {
-  requires transitive org.telegram.telegrambots;
+  requires transitive telegrambots;
+  requires transitive telegrambots.meta;
+  requires transitive org.slf4j;
+  requires transitive java.net.http;
+  requires transitive org.apache.httpcomponents.httpclient;
+  requires transitive org.apache.httpcomponents.httpcore;
+  requires static lombok;
+  requires static com.fasterxml.jackson.annotation;
+  requires static org.checkerframework.checker.qual;
 
   exports io.lonmstalker.tgkit.core;
   exports io.lonmstalker.tgkit.core.annotation;
@@ -25,7 +33,8 @@ module io.lonmstalker.tgkit.api {
   exports io.lonmstalker.tgkit.core.user;
   exports io.lonmstalker.tgkit.core.user.store;
   exports io.lonmstalker.tgkit.core.wizard;
-  exports io.lonmstalker.tgkit.core.wizard.annotation;
+  exports io.lonmstalker.tgkit.core.validator;
+  exports io.lonmstalker.tgkit.core.annotation.wizard;
   exports io.lonmstalker.tgkit.observability;
   exports io.lonmstalker.tgkit.plugin;
   exports io.lonmstalker.tgkit.security.antispam;
