@@ -6,16 +6,16 @@
 set -e
 
 # Format code using Spotless
-mvn -q spotless:apply
+./mvnw -q spotless:apply
 
 # Run Checkstyle; if it fails, abort the commit
-mvn -q checkstyle:check || {
+./mvnw -q checkstyle:check || {
   echo "Checkstyle violations detected. Commit aborted." >&2
   exit 1
 }
 
 # Run full Maven verify lifecycle
-mvn -q verify || {
+./mvnw -q verify || {
   echo "Maven verify failed. Commit aborted." >&2
   exit 1
 }

@@ -8,7 +8,7 @@
 | SemVer + Revapi-gate   | Ломаем public API — только при `MAJOR++`.                           |
 | Null-Safety            | NullAway без предупреждений — сборка падает при выявленных null-рискax. |
 | Покрытие ≥ 90 %        | JaCoCo на модуль и монорепо; property-based tests приветствуются.   |
-| CI-green first         | Любой PR обязан проходить `mvn spotless:apply verify`.              |
+| CI-green first         | Любой PR обязан проходить `./mvnw spotless:apply verify`.              |
 | Док-Driven             | Каждый новый public-класс ⇢ JavaDoc + пример использования.         |
 
 ## 2. Структура репозитория 📂
@@ -43,7 +43,7 @@ telegram-bot-lib/
 2. BuilderAgent вносит изменения → создаёт Pull Request.
 3. TestAgent добавляет/обновляет тесты (если Builder не покрыл ≥ 90 %).
 4. LinterAgent гарантирует нулевые нарушения стиля.
-5. CI (`mvn spotless:apply verify`) должен «позеленеть».
+5. CI (`./mvnw spotless:apply verify`) должен «позеленеть».
 6. ReviewerAgent оставляет минимум 2 замечания или одобряет.
 7. ReleaseAgent при необходимости увеличивает версию и обновляет лог.
 
@@ -98,7 +98,7 @@ telegram-bot-lib/
 
 ## 8. Проверка качества ✅
 
-- `mvn spotless:apply verify` должен проходить без WARNING.
+- `./mvnw spotless:apply verify` должен проходить без WARNING.
 - В среде Codex перед запуском Maven экспортируйте переменные прокси:
 
 ```bash
@@ -109,7 +109,7 @@ export MAVEN_OPTS="-Dhttps.proxyHost=proxy -Dhttps.proxyPort=8080 \
 -Djava.net.preferIPv4Stack=true -Dfile.encoding=UTF-8"
 ```
 Без них сборка может завершиться ошибкой «Network is unreachable».
-- `mvn -pl :telegram-bot-core -q test-compile` не выводит NullAway ошибок.
+- `./mvnw -pl :telegram-bot-core -q test-compile` не выводит NullAway ошибок.
 - `java -jar telegram-bot-core/target/*-full.jar --dry-run` — старт ≤ 1 с.
 - `revapi:check` — 0 breaking-changes при неизменённом MAJOR.
 
