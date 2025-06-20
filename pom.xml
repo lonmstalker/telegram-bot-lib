@@ -46,6 +46,8 @@
         <undertow.version>2.3.9.Final</undertow.version>
         <vault.version>6.2.0</vault.version>
         <tika.version>3.2.0</tika.version>
+        <guava.version>33.4.8-jre</guava.version>
+        <language.detector.version>0.6</language.detector.version>
 
         <!-- PLUGINS -->
         <checkerframework.version>3.49.4</checkerframework.version>
@@ -182,6 +184,16 @@
                 <groupId>org.apache.tika</groupId>
                 <artifactId>tika-langdetect-optimaize</artifactId>
                 <version>${tika.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.optimaize.languagedetector</groupId>
+                <artifactId>language-detector</artifactId>
+                <version>${language.detector.version}</version>
             </dependency>
 
             <!-- CHECKS -->
