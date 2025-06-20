@@ -3,10 +3,13 @@ package io.lonmstalker.tgkit.security.audit;
 import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
 import io.lonmstalker.tgkit.core.exception.BotApiException;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
 
 /**
@@ -18,9 +21,12 @@ import java.util.function.Consumer;
  */
 public class AsyncAuditBus implements AuditBus {
 
+    private static final Logger log = LoggerFactory.getLogger(AsyncAuditBus.class);
+
     private final BlockingQueue<AuditEvent> queue;
     private final AtomicBoolean isClosed = new AtomicBoolean(false);
     private final List<Consumer<AuditEvent>> subscribers = new CopyOnWriteArrayList<>();
+    private final AtomicLong dropped = new AtomicLong();
 
     /**
      * Создаёт bus на указанном executore.
@@ -40,7 +46,10 @@ public class AsyncAuditBus implements AuditBus {
 
     @Override
     public void publish(@NonNull AuditEvent event) {
-        queue.offer(event);
+        if (!queue.offer(event)) {
+            long total = dropped.incrementAndGet();
+            log.warn("[audit] queue full: dropped={} lastAction={}", total, event.getAction());
+        }
     }
 
     @Override
@@ -56,6 +65,13 @@ public class AsyncAuditBus implements AuditBus {
     @Override
     public @NonNull List<Consumer<AuditEvent>> getSubscribers() {
         return subscribers;
+    }
+
+    /**
+     * Возвращает количество событий, отброшенных из-за переполнения очереди.
+     */
+    public long droppedCount() {
+        return dropped.get();
     }
 
     /* ────────────────── internal ────────────────── */
