@@ -2,18 +2,49 @@ package io.lonmstalker.tgkit.security.limiter;
 
 import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
 import io.lonmstalker.tgkit.security.init.BotSecurityInitializer;
-import io.lonmstalker.tgkit.security.ratelimit.impl.InMemoryRateLimiter;
 import io.lonmstalker.tgkit.security.ratelimit.RateLimiter;
+import io.lonmstalker.tgkit.security.ratelimit.impl.InMemoryRateLimiter;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 
+import java.time.Clock;
 import java.time.Duration;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.concurrent.*;
 import java.util.stream.IntStream;
 
 class InMemoryTelegramSenderRateLimiterTest implements WithAssertions {
     static RateLimiter newLimiter() {
         return new InMemoryRateLimiter(10_000);
+    }
+
+    static RateLimiter newLimiter(Clock clock) {
+        return new InMemoryRateLimiter(10_000, clock);
+    }
+
+    private static final class FakeClock extends Clock {
+        private Instant now = Instant.EPOCH;
+
+        @Override
+        public ZoneId getZone() {
+            return ZoneOffset.UTC;
+        }
+
+        @Override
+        public Clock withZone(@SuppressWarnings("unused") ZoneId zone) {
+            return this;
+        }
+
+        @Override
+        public Instant instant() {
+            return now;
+        }
+
+        void advance(Duration duration) {
+            now = now.plus(duration);
+        }
     }
 
     static {
@@ -39,16 +70,17 @@ class InMemoryTelegramSenderRateLimiterTest implements WithAssertions {
     /* ================================================================ *
      * 2)  counter resets on next window                                 *
      * ================================================================ */
-    @Test void counterResetsAfterWindow() throws Exception {
-        var rl   = newLimiter();
+    @Test void counterResetsAfterWindow() {
+        FakeClock clock = new FakeClock();
+        var rl = newLimiter(clock);
         String k = "cmd:bar:global";
 
         // permits =1, window=1s
         assertThat(rl.tryAcquire(k, 1, 1)).isTrue();
         assertThat(rl.tryAcquire(k, 1, 1)).isFalse();
 
-        Thread.sleep(Duration.ofMillis(1100).toMillis());   // rollover
-        assertThat(rl.tryAcquire(k, 1, 1)).isTrue();        // allowed again
+        clock.advance(Duration.ofMillis(1100));
+        assertThat(rl.tryAcquire(k, 1, 1)).isTrue(); // allowed again
     }
 
     /* ================================================================ *
