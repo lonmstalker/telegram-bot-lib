@@ -7,6 +7,7 @@ import io.lonmstalker.tgkit.observability.Span;
 import io.lonmstalker.tgkit.observability.Tag;
 import io.lonmstalker.tgkit.observability.Tags;
 import io.lonmstalker.tgkit.observability.Tracer;
+import io.lonmstalker.tgkit.core.update.UpdateUtils;
 import io.micrometer.core.instrument.Timer;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -62,7 +63,7 @@ public class ObservabilityInterceptor implements BotInterceptor {
                                 @Nullable BotRequest<?> request,
                                 @Nullable BotResponse response,
                                 @Nullable Exception ex) {
-        Tags tags = Tags.of(Tag.of("type", String.valueOf(update.hasMessage())));
+        Tags tags = Tags.of(Tag.of("type", UpdateUtils.getType(update).name()));
         Timer.Sample s = SAMPLE.get();
         if (s != null) {
             s.stop(metrics.timer("update_latency_ms", tags));
