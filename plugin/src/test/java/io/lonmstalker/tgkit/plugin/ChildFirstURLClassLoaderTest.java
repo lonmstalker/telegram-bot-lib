@@ -2,6 +2,7 @@ package io.lonmstalker.tgkit.plugin;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import io.lonmstalker.tgkit.plugin.internal.ChildFirstURLClassLoader;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Files;
