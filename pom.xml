@@ -21,8 +21,9 @@
         <module>validator</module>
         <module>boot</module>
         <module>codec</module>
-        <module>doc-openapi</module>
-        <module>telegram-doc-to-openapi</module>
+        <module>doc2oas</module>
+        <module>generator-runtime</module>
+        <module>integration-tests</module>
     </modules>
 
     <properties>
