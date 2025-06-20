@@ -155,6 +155,8 @@ public class BotGlobalConfig {
         new AtomicReference<>();
     private final @NonNull AtomicReference<ExecutorService> cpuExecutorService =
         new AtomicReference<>();
+    private final AtomicReference<Integer> scheduledPoolSize = new AtomicReference<>(2);
+    private final AtomicReference<Integer> cpuPoolSize = new AtomicReference<>(2);
 
     public BotGlobalConfig.@NonNull ExecutorsGlobalConfig scheduledExecutorService(
         @NonNull ScheduledExecutorService scheduledExecutorService) {
@@ -179,6 +181,40 @@ public class BotGlobalConfig {
           "[core-init] CpuExecutorService changed to {}", cpuExecutor.getClass().getSimpleName());
       this.cpuExecutorService.set(cpuExecutor);
       return this;
+    }
+
+    /**
+     * Размер пула для CPU-задач. Используется при инициализации
+     * {@link java.util.concurrent.ExecutorService} c виртуальными потоками.
+     *
+     * @param size желаемое количество потоков
+     * @return конфигурация executors
+     */
+    public BotGlobalConfig.@NonNull ExecutorsGlobalConfig cpuPoolSize(int size) {
+      this.cpuPoolSize.set(size);
+      return this;
+    }
+
+    /**
+     * Размер пула планировщика. Определяет количество виртуальных потоков в
+     * {@link java.util.concurrent.ScheduledExecutorService}.
+     *
+     * @param size желаемое количество потоков
+     * @return конфигурация executors
+     */
+    public BotGlobalConfig.@NonNull ExecutorsGlobalConfig scheduledPoolSize(int size) {
+      this.scheduledPoolSize.set(size);
+      return this;
+    }
+
+    /** Возвращает размер пула для CPU-задач. */
+    public int cpuPoolSize() {
+      return this.cpuPoolSize.get();
+    }
+
+    /** Возвращает размер пула планировщика. */
+    public int scheduledPoolSize() {
+      return this.scheduledPoolSize.get();
     }
 
     public @NonNull ScheduledExecutorService getScheduledExecutorService() {
