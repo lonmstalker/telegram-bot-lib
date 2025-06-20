@@ -10,6 +10,7 @@ import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.slf4j.MDC;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -61,10 +62,15 @@ public class ObservabilityInterceptorTest {
         interceptor.preHandle(update, Mockito.mock());
         assertEquals("1", MDC.get("updateId"));
         interceptor.afterCompletion(update, Mockito.mock(), null, null);
+        ArgumentCaptor<Tags> tagsCaptor = ArgumentCaptor.forClass(Tags.class);
         verify(tracer).start(eq("update"), any(Tags.class));
         verify(span).close();
+        verify(metrics).timer(eq("update_latency_ms"), tagsCaptor.capture());
         verify(metrics, atLeastOnce()).counter(eq("updates_total"), any());
-        verify(metrics).timer(eq("update_latency_ms"), any());
+        Tags tags = tagsCaptor.getValue();
+        assertNotNull(tags);
+        assertEquals("type", tags.items()[0].key());
+        assertEquals("MESSAGE", tags.items()[0].value());
         assertNull(MDC.get("updateId"));
     }
 
@@ -74,8 +80,11 @@ public class ObservabilityInterceptorTest {
         interceptor.preHandle(update, Mockito.mock());
         RuntimeException ex = new RuntimeException("boom");
         interceptor.afterCompletion(update, Mockito.mock(), null, ex);
+        ArgumentCaptor<Tags> tagsCaptor = ArgumentCaptor.forClass(Tags.class);
         verify(span).setError(ex);
         verify(counter, atLeastOnce()).increment();
-        verify(metrics).timer(eq("update_latency_ms"), any());
+        verify(metrics).timer(eq("update_latency_ms"), tagsCaptor.capture());
+        Tags tags = tagsCaptor.getValue();
+        assertEquals("MESSAGE", tags.items()[0].value());
     }
 }
