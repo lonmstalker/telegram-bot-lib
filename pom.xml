@@ -34,33 +34,34 @@
         <!-- LIBS -->
         <slf4j.version>2.0.17</slf4j.version>
         <okhttp.version>4.12.0</okhttp.version>
-        <jackson.version>2.19.0</jackson.version>
+        <jackson.version>2.19.1</jackson.version>
         <prometheus.version>1.15.0</prometheus.version>
-        <commons.lang3.version>3.17.0</commons.lang3.version>
+        <commons.lang3.version>3.14.0</commons.lang3.version>
         <telegrambots.version>6.9.7.1</telegrambots.version>
-        <micrometer.version>1.13.0</micrometer.version>
+        <micrometer.version>1.13.3</micrometer.version>
         <opentelemetry.version>1.38.0</opentelemetry.version>
         <logback.version>1.5.6</logback.version>
         <reflections.version>0.10.2</reflections.version>
-        <caffeine.version>3.2.1</caffeine.version>
+        <caffeine.version>3.2.0</caffeine.version>
         <jedis.version>6.0.0</jedis.version>
         <http-simple-client.version>0.16.0</http-simple-client.version>
-        <netty.version>4.2.2.Final</netty.version>
-        <undertow.version>2.3.9.Final</undertow.version>
+        <netty.version>4.2.10.Final</netty.version>
+        <undertow.version>2.3.18.Final</undertow.version>
         <vault.version>6.2.0</vault.version>
         <tika.version>3.2.0</tika.version>
         <jetty.version>12.0.22</jetty.version>
         <jakarta.servlet.version>6.0.0</jakarta.servlet.version>
         <guava.version>33.4.8-jre</guava.version>
         <language.detector.version>0.6</language.detector.version>
-        <spring.boot.version>3.2.5</spring.boot.version>
+        <spring.boot.version>3.5.3</spring.boot.version>
         <dsljson.version>1.10.2</dsljson.version>
         <jmh.version>1.37</jmh.version>
 
         <!-- PLUGINS -->
         <checkerframework.version>3.49.4</checkerframework.version>
-        <maven-shade-plugin.version>3.5.0</maven-shade-plugin.version>
-        <maven-surefire-plugin.version>3.5.3</maven-surefire-plugin.version>
+        <maven-shade-plugin.version>3.5.1</maven-shade-plugin.version>
+        <maven-surefire-plugin.version>3.5.0</maven-surefire-plugin.version>
+        <pitest-maven-plugin.version>1.19.5</pitest-maven-plugin.version>
         <maven-compiler-plugin.version>3.14.0</maven-compiler-plugin.version>
         <checkstyle-maven-plugin.version>3.6.0</checkstyle-maven-plugin.version>
         <checkstyle.version>10.25.0</checkstyle.version>
@@ -70,7 +71,7 @@
         <jacoco-maven-plugin.version>0.8.13</jacoco-maven-plugin.version>
         <dependency-check-maven-plugin.version>12.1.3</dependency-check-maven-plugin.version>
         <nullaway.version>0.12.7</nullaway.version>
-        <errorprone-maven-plugin.version>2.30.1</errorprone-maven-plugin.version>
+        <errorprone-maven-plugin.version>2.38.0</errorprone-maven-plugin.version>
         <exec-maven-plugin.version>3.1.0</exec-maven-plugin.version>
 
         <!-- TEST -->
@@ -297,11 +298,67 @@
     </dependencyManagement>
 
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${maven-compiler-plugin.version}</version>
+                    <configuration>
+                        <release>21</release>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${maven-surefire-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>${jacoco-maven-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-checkstyle-plugin</artifactId>
+                    <version>${checkstyle-maven-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>com.diffplug.spotless</groupId>
+                    <artifactId>spotless-maven-plugin</artifactId>
+                    <version>${spotless-maven-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>com.google.errorprone</groupId>
+                    <artifactId>error-prone-maven-plugin</artifactId>
+                    <version>${errorprone-maven-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <goals><goal>check</goal></goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.revapi</groupId>
+                    <artifactId>revapi-maven-plugin</artifactId>
+                    <version>${revapi-maven-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.owasp</groupId>
+                    <artifactId>dependency-check-maven</artifactId>
+                    <version>${dependency-check-maven-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.pitest</groupId>
+                    <artifactId>pitest-maven</artifactId>
+                    <version>${pitest-maven-plugin.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven-compiler-plugin.version}</version>
                 <configuration>
                     <fork>true</fork>
                     <showWarnings>true</showWarnings>
@@ -352,12 +409,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>${maven-surefire-plugin.version}</version>
             </plugin>
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>${jacoco-maven-plugin.version}</version>
                 <executions>
                     <execution>
                         <id>prepare-agent</id>
@@ -392,7 +447,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>${checkstyle-maven-plugin.version}</version>
                 <dependencies>
                     <dependency>
                         <groupId>com.puppycrawl.tools</groupId>
@@ -417,7 +471,6 @@
             <plugin>
                 <groupId>com.diffplug.spotless</groupId>
                 <artifactId>spotless-maven-plugin</artifactId>
-                <version>${spotless-maven-plugin.version}</version>
                 <configuration>
                     <java>
                         <googleJavaFormat />
@@ -438,9 +491,8 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>net.ltgt.errorprone</groupId>
-                <artifactId>errorprone-maven-plugin</artifactId>
-                <version>${errorprone-maven-plugin.version}</version>
+                <groupId>com.google.errorprone</groupId>
+                <artifactId>error-prone-maven-plugin</artifactId>
                 <executions>
                     <execution>
                         <phase>compile</phase>
@@ -469,7 +521,6 @@
             <plugin>
                 <groupId>org.revapi</groupId>
                 <artifactId>revapi-maven-plugin</artifactId>
-                <version>${revapi-maven-plugin.version}</version>
                 <configuration>
                     <oldVersion>${previousRevision}</oldVersion>
                     <newVersion>${revision}</newVersion>
@@ -495,7 +546,6 @@
             <plugin>
                 <groupId>org.owasp</groupId>
                 <artifactId>dependency-check-maven</artifactId>
-                <version>${dependency-check-maven-plugin.version}</version>
                 <configuration>
                     <formats>HTML,SARIF</formats>
                     <failBuildOnCVSS>7</failBuildOnCVSS>
