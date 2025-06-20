@@ -6,6 +6,6 @@ import java.lang.annotation.*;
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Repeatable(RequiresRoles.class)
 public @interface RequiresRole {
-    /** Одна или несколько ролей; достаточно совпадения любой. */
-    String[] value();
+  /** Одна или несколько ролей; достаточно совпадения любой. */
+  String[] value();
 }

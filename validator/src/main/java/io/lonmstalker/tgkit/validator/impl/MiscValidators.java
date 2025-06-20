@@ -2,6 +2,8 @@ package io.lonmstalker.tgkit.validator.impl;
 
 import io.lonmstalker.tgkit.core.i18n.MessageKey;
 import io.lonmstalker.tgkit.core.validator.Validator;
+import java.util.Objects;
+import java.util.Set;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -10,80 +12,71 @@ import org.telegram.telegrambots.meta.api.objects.games.Animation;
 import org.telegram.telegrambots.meta.api.objects.games.Game;
 import org.telegram.telegrambots.meta.api.objects.stickers.Sticker;
 
-import java.util.Objects;
-import java.util.Set;
-
 /**
- * Бизнес-валидации для Telegram-объектов, рассчитанные на
- * проверку содержательных правил: разрешённых наборов,
- * максимальных продолжительностей, максимального размера и т.п.
+ * Бизнес-валидации для Telegram-объектов, рассчитанные на проверку содержательных правил:
+ * разрешённых наборов, максимальных продолжительностей, максимального размера и т.п.
  *
- * <p>Предполагается, что fileId всегда приходит от Telegram, поэтому
- * его наличие не проверяется здесь.</p>
+ * <p>Предполагается, что fileId всегда приходит от Telegram, поэтому его наличие не проверяется
+ * здесь.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class MiscValidators {
 
-    /**
-     * Стикер должен принадлежать одному из разрешённых наборов.
-     *
-     * @param allowedSets набор имён допустимых sticker_set_name
-     */
-    public static Validator<@NonNull Sticker> allowedStickerSets(@NonNull Set<String> allowedSets) {
-        Objects.requireNonNull(allowedSets, "allowedSets");
-        return Validator.of(
-                sticker -> sticker.getSetName() != null
-                        && allowedSets.contains(sticker.getSetName()),
-                MessageKey.of("error.sticker.notAllowedSet")
-        );
-    }
+  /**
+   * Стикер должен принадлежать одному из разрешённых наборов.
+   *
+   * @param allowedSets набор имён допустимых sticker_set_name
+   */
+  public static Validator<@NonNull Sticker> allowedStickerSets(@NonNull Set<String> allowedSets) {
+    Objects.requireNonNull(allowedSets, "allowedSets");
+    return Validator.of(
+        sticker -> sticker.getSetName() != null && allowedSets.contains(sticker.getSetName()),
+        MessageKey.of("error.sticker.notAllowedSet"));
+  }
 
-    /**
-     * Анимация (GIF) не должна превышать указанной продолжительности.
-     *
-     * @param maxDurationSec максимально допустимая длина анимации в секундах
-     */
-    public static Validator<@NonNull Animation> maxAnimationDuration(int maxDurationSec) {
-        return Validator.of(
-                anim -> anim.getDuration() <= maxDurationSec,
-                MessageKey.of("error.animation.tooLong", maxDurationSec)
-        );
-    }
+  /**
+   * Анимация (GIF) не должна превышать указанной продолжительности.
+   *
+   * @param maxDurationSec максимально допустимая длина анимации в секундах
+   */
+  public static Validator<@NonNull Animation> maxAnimationDuration(int maxDurationSec) {
+    return Validator.of(
+        anim -> anim.getDuration() <= maxDurationSec,
+        MessageKey.of("error.animation.tooLong", maxDurationSec));
+  }
 
-    /**
-     * Игра должна иметь короткое имя из списка разрешённых.
-     *
-     * @param allowedShortNames множество допустимых game_short_name
-     */
-    public static Validator<@NonNull Game> allowedGameShortNames(@NonNull Set<String> allowedShortNames) {
-        Objects.requireNonNull(allowedShortNames, "allowedShortNames");
-        return Validator.of(
-                game -> allowedShortNames.contains(game.getTitle()),
-                MessageKey.of("error.game.notAllowed")
-        );
-    }
+  /**
+   * Игра должна иметь короткое имя из списка разрешённых.
+   *
+   * @param allowedShortNames множество допустимых game_short_name
+   */
+  public static Validator<@NonNull Game> allowedGameShortNames(
+      @NonNull Set<String> allowedShortNames) {
+    Objects.requireNonNull(allowedShortNames, "allowedShortNames");
+    return Validator.of(
+        game -> allowedShortNames.contains(game.getTitle()),
+        MessageKey.of("error.game.notAllowed"));
+  }
 
-    /**
-     * Видео-заметка (video_note) не должна превышать указанной длительности.
-     *
-     * @param maxDurationSec максимально допустимая длительность видео-заметки
-     */
-    public static Validator<@NonNull VideoNote> maxVideoNoteDuration(int maxDurationSec) {
-        return Validator.of(
-                vn -> vn.getDuration() != null && vn.getDuration() <= maxDurationSec,
-                MessageKey.of("error.videonote.tooLong", maxDurationSec)
-        );
-    }
+  /**
+   * Видео-заметка (video_note) не должна превышать указанной длительности.
+   *
+   * @param maxDurationSec максимально допустимая длительность видео-заметки
+   */
+  public static Validator<@NonNull VideoNote> maxVideoNoteDuration(int maxDurationSec) {
+    return Validator.of(
+        vn -> vn.getDuration() != null && vn.getDuration() <= maxDurationSec,
+        MessageKey.of("error.videonote.tooLong", maxDurationSec));
+  }
 
-    /**
-     * Голосовое сообщение (voice) не должно превышать указанной длительности.
-     *
-     * @param maxDurationSec максимально допустимая длительность в секундах
-     */
-    public static Validator<@NonNull Voice> maxVoiceDuration(int maxDurationSec) {
-        return Validator.of(
-                voice -> voice.getDuration() != null && voice.getDuration() <= maxDurationSec,
-                MessageKey.of("error.voice.tooLong", maxDurationSec)
-        );
-    }
+  /**
+   * Голосовое сообщение (voice) не должно превышать указанной длительности.
+   *
+   * @param maxDurationSec максимально допустимая длительность в секундах
+   */
+  public static Validator<@NonNull Voice> maxVoiceDuration(int maxDurationSec) {
+    return Validator.of(
+        voice -> voice.getDuration() != null && voice.getDuration() <= maxDurationSec,
+        MessageKey.of("error.voice.tooLong", maxDurationSec));
+  }
 }

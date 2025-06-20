@@ -1,6 +1,5 @@
 package io.lonmstalker.tgkit.core.dsl.validator;
 
-
 import java.util.List;
 
 /* Вспомогательный record для опросов */

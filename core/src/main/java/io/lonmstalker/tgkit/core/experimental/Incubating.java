@@ -9,8 +9,8 @@ import java.lang.annotation.Target;
 /**
  * Помечает API как экспериментальный.
  *
- * <p>Элементы, аннотированные {@code @Incubating}, могут измениться или быть удалены
- * без предупреждения.
+ * <p>Элементы, аннотированные {@code @Incubating}, могут измениться или быть удалены без
+ * предупреждения.
  *
  * <p>Пример использования:
  *
@@ -20,11 +20,9 @@ import java.lang.annotation.Target;
  *
  * @Incubating
  * public void experimentalMethod() { }
- * }
- * </pre>
+ * }</pre>
  */
 @Documented
 @Retention(RetentionPolicy.CLASS)
 @Target({ElementType.TYPE, ElementType.METHOD})
-public @interface Incubating {
-}
+public @interface Incubating {}

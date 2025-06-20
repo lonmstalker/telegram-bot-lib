@@ -9,13 +9,13 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 /**
  * Сервисы для работы команд
  *
- * @param store       хранилище пользовательского состояния
- * @param sender      объект для отправки сообщений Telegram
+ * @param store хранилище пользовательского состояния
+ * @param sender объект для отправки сообщений Telegram
  * @param userKVStore объект для хранения дополнительной информации пользователя
- * @param localizer   сервис локализации сообщений
+ * @param localizer сервис локализации сообщений
  */
-public record BotService(@NonNull StateStore store,
-                         @NonNull TelegramSender sender,
-                         @NonNull UserKVStore userKVStore,
-                         @NonNull MessageLocalizer localizer) {
-}
+public record BotService(
+    @NonNull StateStore store,
+    @NonNull TelegramSender sender,
+    @NonNull UserKVStore userKVStore,
+    @NonNull MessageLocalizer localizer) {}

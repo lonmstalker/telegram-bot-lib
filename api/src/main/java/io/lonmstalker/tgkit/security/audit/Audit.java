@@ -8,5 +8,5 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Audit {
-    Class<? extends AuditConverter> converter() default AuditConverter.class;
+  Class<? extends AuditConverter> converter() default AuditConverter.class;
 }

@@ -1,4 +1,3 @@
 package io.lonmstalker.tgkit.core.event;
 
-public interface BotEventSubscription {
-}
+public interface BotEventSubscription {}

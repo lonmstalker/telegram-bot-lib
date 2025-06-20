@@ -9,48 +9,62 @@ import io.lonmstalker.tgkit.core.BotResponse;
 import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
 import io.lonmstalker.tgkit.plugin.BotPlugin;
 import io.lonmstalker.tgkit.plugin.BotPluginContext;
+import java.util.concurrent.atomic.AtomicBoolean;
 import org.junit.jupiter.api.Test;
 import org.telegram.telegrambots.meta.api.interfaces.BotApiObject;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
 public class BotBuilderTest {
 
-    static {
-        BotCoreInitializer.init();
+  static {
+    BotCoreInitializer.init();
+  }
+
+  @io.lonmstalker.tgkit.core.annotation.BotCommand
+  public static class TestCommand implements BotCommand<BotApiObject> {
+    @Override
+    public BotResponse handle(BotRequest<BotApiObject> request) {
+      return null;
     }
 
-    @io.lonmstalker.tgkit.core.annotation.BotCommand
-    public static class TestCommand implements BotCommand<BotApiObject> {
-        @Override public BotResponse handle(BotRequest<BotApiObject> request) { return null; }
-        @Override public BotRequestType type() { return BotRequestType.MESSAGE; }
-        @Override public io.lonmstalker.tgkit.core.matching.CommandMatch<BotApiObject> matcher() { return u -> true; }
+    @Override
+    public BotRequestType type() {
+      return BotRequestType.MESSAGE;
     }
 
-    @io.lonmstalker.tgkit.plugin.annotation.BotPlugin
-    public static class TestPlugin implements BotPlugin {
-        static final AtomicBoolean started = new AtomicBoolean();
-        @Override public void onLoad(BotPluginContext ctx) { }
-        @Override public void start() { started.set(true); }
+    @Override
+    public io.lonmstalker.tgkit.core.matching.CommandMatch<BotApiObject> matcher() {
+      return u -> true;
     }
+  }
 
-    @Test
-    void startRegistersCommandAndPlugin() {
-        BotBuilder.BotBuilderImpl builder = BotBuilder.builder()
-                .token("T")
-                .withPolling()
-                .scan(TestCommand.class.getPackageName());
+  @io.lonmstalker.tgkit.plugin.annotation.BotPlugin
+  public static class TestPlugin implements BotPlugin {
+    static final AtomicBoolean started = new AtomicBoolean();
 
-        Bot bot = builder.start();
+    @Override
+    public void onLoad(BotPluginContext ctx) {}
 
-        assertNotNull(bot.registry().find(BotRequestType.MESSAGE, "", new BotApiObject() {}));
-        assertTrue(TestPlugin.started.get());
+    @Override
+    public void start() {
+      started.set(true);
     }
+  }
 
-    @Test
-    void startIsIdempotent() {
-        BotBuilder.BotBuilderImpl builder = BotBuilder.builder().token("T").withPolling();
-        builder.start();
-        assertThrows(IllegalStateException.class, builder::start);
-    }
+  @Test
+  void startRegistersCommandAndPlugin() {
+    BotBuilder.BotBuilderImpl builder =
+        BotBuilder.builder().token("T").withPolling().scan(TestCommand.class.getPackageName());
+
+    Bot bot = builder.start();
+
+    assertNotNull(bot.registry().find(BotRequestType.MESSAGE, "", new BotApiObject() {}));
+    assertTrue(TestPlugin.started.get());
+  }
+
+  @Test
+  void startIsIdempotent() {
+    BotBuilder.BotBuilderImpl builder = BotBuilder.builder().token("T").withPolling();
+    builder.start();
+    assertThrows(IllegalStateException.class, builder::start);
+  }
 }

@@ -3,15 +3,14 @@ package io.lonmstalker.tgkit.core.wizard;
 import io.lonmstalker.tgkit.core.BotRequest;
 import io.lonmstalker.tgkit.core.i18n.MessageKey;
 import io.lonmstalker.tgkit.core.validator.Validator;
-import java.util.Objects;
-import org.checkerframework.checker.nullness.qual.NonNull;
-
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Описатель одного шага wizard’а.
@@ -22,237 +21,236 @@ import java.util.function.Predicate;
  */
 public class StepDefinition<M, I, O> {
 
-    /** Builder для {@link StepDefinition}. */
-    public static final class Builder<M, I, O> {
-        private String id;
-        private List<Validator<O>> validators = new ArrayList<>();
-        private List<MessageKey> questionKeys = new ArrayList<>();
-        private Function<BotRequest<?>, I> parser;
-        private Validator<BotRequest<?>> typeValidator;
-        private BiConsumer<M, O> setter;
-        private boolean canBack = true;
-        private BiConsumer<BotRequest<?>, M> onBack;
-        private boolean canSkip = false;
-        private BiConsumer<BotRequest<?>, M> onSkip;
-        private boolean canCancel = true;
-        private BiConsumer<BotRequest<?>, M> onCancel;
-        private Function<M, String> nextSupplier = m -> null;
-        private Duration timeout;
-        private MessageKey reminderKey;
-        private Predicate<M> preFinishChecker;
-        private String preFinishFailStepId;
+  /** Builder для {@link StepDefinition}. */
+  public static final class Builder<M, I, O> {
+    private String id;
+    private List<Validator<O>> validators = new ArrayList<>();
+    private List<MessageKey> questionKeys = new ArrayList<>();
+    private Function<BotRequest<?>, I> parser;
+    private Validator<BotRequest<?>> typeValidator;
+    private BiConsumer<M, O> setter;
+    private boolean canBack = true;
+    private BiConsumer<BotRequest<?>, M> onBack;
+    private boolean canSkip = false;
+    private BiConsumer<BotRequest<?>, M> onSkip;
+    private boolean canCancel = true;
+    private BiConsumer<BotRequest<?>, M> onCancel;
+    private Function<M, String> nextSupplier = m -> null;
+    private Duration timeout;
+    private MessageKey reminderKey;
+    private Predicate<M> preFinishChecker;
+    private String preFinishFailStepId;
 
-        /** Устанавливает идентификатор шага. */
-        public Builder<M, I, O> id(@NonNull String id) {
-            this.id = id;
-            return this;
-        }
-
-        /** Собирает объект {@link StepDefinition}. */
-        public StepDefinition<M, I, O> build() {
-            return new StepDefinition<>(this);
-        }
+    /** Устанавливает идентификатор шага. */
+    public Builder<M, I, O> id(@NonNull String id) {
+      this.id = id;
+      return this;
     }
 
-    /** Возвращает новый builder. */
-    public static <M, I, O> Builder<M, I, O> builder() {
-        return new Builder<>();
+    /** Собирает объект {@link StepDefinition}. */
+    public StepDefinition<M, I, O> build() {
+      return new StepDefinition<>(this);
     }
+  }
 
-    private StepDefinition(Builder<M, I, O> b) {
-        this.id = Objects.requireNonNull(b.id, "id");
-        this.validators.addAll(b.validators);
-        this.questionKeys.addAll(b.questionKeys);
-        this.parser = b.parser;
-        this.typeValidator = b.typeValidator;
-        this.setter = b.setter;
-        this.canBack = b.canBack;
-        this.onBack = b.onBack;
-        this.canSkip = b.canSkip;
-        this.onSkip = b.onSkip;
-        this.canCancel = b.canCancel;
-        this.onCancel = b.onCancel;
-        this.nextSupplier = b.nextSupplier;
-        this.timeout = b.timeout;
-        this.reminderKey = b.reminderKey;
-        this.preFinishChecker = b.preFinishChecker;
-        this.preFinishFailStepId = b.preFinishFailStepId;
-    }
+  /** Возвращает новый builder. */
+  public static <M, I, O> Builder<M, I, O> builder() {
+    return new Builder<>();
+  }
 
-    /** Уникальный идентификатор шага. */
-    final @NonNull String id;
+  private StepDefinition(Builder<M, I, O> b) {
+    this.id = Objects.requireNonNull(b.id, "id");
+    this.validators.addAll(b.validators);
+    this.questionKeys.addAll(b.questionKeys);
+    this.parser = b.parser;
+    this.typeValidator = b.typeValidator;
+    this.setter = b.setter;
+    this.canBack = b.canBack;
+    this.onBack = b.onBack;
+    this.canSkip = b.canSkip;
+    this.onSkip = b.onSkip;
+    this.canCancel = b.canCancel;
+    this.onCancel = b.onCancel;
+    this.nextSupplier = b.nextSupplier;
+    this.timeout = b.timeout;
+    this.reminderKey = b.reminderKey;
+    this.preFinishChecker = b.preFinishChecker;
+    this.preFinishFailStepId = b.preFinishFailStepId;
+  }
 
-    /** Список валидаторов выходного значения. */
-    final List<Validator<O>> validators = new ArrayList<>();
+  /** Уникальный идентификатор шага. */
+  final @NonNull String id;
 
-    /** Один (или несколько) MessageKey’ей: A/B-варианты вопроса. */
-    final List<MessageKey> questionKeys = new ArrayList<>();
+  /** Список валидаторов выходного значения. */
+  final List<Validator<O>> validators = new ArrayList<>();
 
-    /** Парсер из BotRequest→I. */
-    Function<BotRequest<?>, I> parser;
+  /** Один (или несколько) MessageKey’ей: A/B-варианты вопроса. */
+  final List<MessageKey> questionKeys = new ArrayList<>();
 
-    /** Проверка типа запроса до парсинга. */
-    Validator<BotRequest<?>> typeValidator;
+  /** Парсер из BotRequest→I. */
+  Function<BotRequest<?>, I> parser;
 
-    /** Сеттер: сохраняет O в модель M. */
-    BiConsumer<M, O> setter;
+  /** Проверка типа запроса до парсинга. */
+  Validator<BotRequest<?>> typeValidator;
 
-    /** Разрешено ли вернуться назад. */
-    boolean canBack = true;
+  /** Сеттер: сохраняет O в модель M. */
+  BiConsumer<M, O> setter;
 
-    /** Хук при нажатии «назад». */
-    BiConsumer<BotRequest<?>, M> onBack;
+  /** Разрешено ли вернуться назад. */
+  boolean canBack = true;
 
-    /** Разрешено ли пропустить шаг. */
-    boolean canSkip = false;
+  /** Хук при нажатии «назад». */
+  BiConsumer<BotRequest<?>, M> onBack;
 
-    /** Хук при пропуске. */
-    BiConsumer<BotRequest<?>, M> onSkip;
+  /** Разрешено ли пропустить шаг. */
+  boolean canSkip = false;
 
-    /** Разрешено ли отменить сессию. */
-    boolean canCancel = true;
+  /** Хук при пропуске. */
+  BiConsumer<BotRequest<?>, M> onSkip;
 
-    /** Хук при отмене. */
-    BiConsumer<BotRequest<?>, M> onCancel;
+  /** Разрешено ли отменить сессию. */
+  boolean canCancel = true;
 
-    /** Бизнес-логика ветвления: по model+ответу выдаёт следующий stepId. */
-    Function<M, String> nextSupplier = m -> null;
+  /** Хук при отмене. */
+  BiConsumer<BotRequest<?>, M> onCancel;
 
-    /** Таймаут до напоминания. */
-    Duration timeout;
+  /** Бизнес-логика ветвления: по model+ответу выдаёт следующий stepId. */
+  Function<M, String> nextSupplier = m -> null;
 
-    /** Сообщение-напоминание, если таймаут исчерпан. */
-    MessageKey reminderKey;
+  /** Таймаут до напоминания. */
+  Duration timeout;
 
-    /** Pre–finish проверка перед завершением сценария. */
-    Predicate<M> preFinishChecker;
+  /** Сообщение-напоминание, если таймаут исчерпан. */
+  MessageKey reminderKey;
 
-    /** Куда перейти, если pre–finishChecker вернул false. */
-    String preFinishFailStepId;
+  /** Pre–finish проверка перед завершением сценария. */
+  Predicate<M> preFinishChecker;
 
-    // ----- getters -----
-    public @NonNull String getId() {
-        return id;
-    }
+  /** Куда перейти, если pre–finishChecker вернул false. */
+  String preFinishFailStepId;
 
-    public List<Validator<O>> getValidators() {
-        return validators;
-    }
+  // ----- getters -----
+  public @NonNull String getId() {
+    return id;
+  }
 
-    public List<MessageKey> getQuestionKeys() {
-        return questionKeys;
-    }
+  public List<Validator<O>> getValidators() {
+    return validators;
+  }
 
-    public Function<BotRequest<?>, I> getParser() {
-        return parser;
-    }
+  public List<MessageKey> getQuestionKeys() {
+    return questionKeys;
+  }
 
-    public void setParser(Function<BotRequest<?>, I> parser) {
-        this.parser = parser;
-    }
+  public Function<BotRequest<?>, I> getParser() {
+    return parser;
+  }
 
-    public Validator<BotRequest<?>> getTypeValidator() {
-        return typeValidator;
-    }
+  public void setParser(Function<BotRequest<?>, I> parser) {
+    this.parser = parser;
+  }
 
-    public void setTypeValidator(Validator<BotRequest<?>> typeValidator) {
-        this.typeValidator = typeValidator;
-    }
+  public Validator<BotRequest<?>> getTypeValidator() {
+    return typeValidator;
+  }
 
-    public BiConsumer<M, O> getSetter() {
-        return setter;
-    }
+  public void setTypeValidator(Validator<BotRequest<?>> typeValidator) {
+    this.typeValidator = typeValidator;
+  }
 
-    public void setSetter(BiConsumer<M, O> setter) {
-        this.setter = setter;
-    }
+  public BiConsumer<M, O> getSetter() {
+    return setter;
+  }
 
-    public boolean isCanBack() {
-        return canBack;
-    }
+  public void setSetter(BiConsumer<M, O> setter) {
+    this.setter = setter;
+  }
 
-    public void setCanBack(boolean canBack) {
-        this.canBack = canBack;
-    }
+  public boolean isCanBack() {
+    return canBack;
+  }
 
-    public BiConsumer<BotRequest<?>, M> getOnBack() {
-        return onBack;
-    }
+  public void setCanBack(boolean canBack) {
+    this.canBack = canBack;
+  }
 
-    public void setOnBack(BiConsumer<BotRequest<?>, M> onBack) {
-        this.onBack = onBack;
-    }
+  public BiConsumer<BotRequest<?>, M> getOnBack() {
+    return onBack;
+  }
 
-    public boolean isCanSkip() {
-        return canSkip;
-    }
+  public void setOnBack(BiConsumer<BotRequest<?>, M> onBack) {
+    this.onBack = onBack;
+  }
 
-    public void setCanSkip(boolean canSkip) {
-        this.canSkip = canSkip;
-    }
+  public boolean isCanSkip() {
+    return canSkip;
+  }
 
-    public BiConsumer<BotRequest<?>, M> getOnSkip() {
-        return onSkip;
-    }
+  public void setCanSkip(boolean canSkip) {
+    this.canSkip = canSkip;
+  }
 
-    public void setOnSkip(BiConsumer<BotRequest<?>, M> onSkip) {
-        this.onSkip = onSkip;
-    }
+  public BiConsumer<BotRequest<?>, M> getOnSkip() {
+    return onSkip;
+  }
 
-    public boolean isCanCancel() {
-        return canCancel;
-    }
+  public void setOnSkip(BiConsumer<BotRequest<?>, M> onSkip) {
+    this.onSkip = onSkip;
+  }
 
-    public void setCanCancel(boolean canCancel) {
-        this.canCancel = canCancel;
-    }
+  public boolean isCanCancel() {
+    return canCancel;
+  }
 
-    public BiConsumer<BotRequest<?>, M> getOnCancel() {
-        return onCancel;
-    }
+  public void setCanCancel(boolean canCancel) {
+    this.canCancel = canCancel;
+  }
 
-    public void setOnCancel(BiConsumer<BotRequest<?>, M> onCancel) {
-        this.onCancel = onCancel;
-    }
+  public BiConsumer<BotRequest<?>, M> getOnCancel() {
+    return onCancel;
+  }
 
-    public Function<M, String> getNextSupplier() {
-        return nextSupplier;
-    }
+  public void setOnCancel(BiConsumer<BotRequest<?>, M> onCancel) {
+    this.onCancel = onCancel;
+  }
 
-    public void setNextSupplier(Function<M, String> nextSupplier) {
-        this.nextSupplier = nextSupplier;
-    }
+  public Function<M, String> getNextSupplier() {
+    return nextSupplier;
+  }
 
-    public Duration getTimeout() {
-        return timeout;
-    }
+  public void setNextSupplier(Function<M, String> nextSupplier) {
+    this.nextSupplier = nextSupplier;
+  }
 
-    public void setTimeout(Duration timeout) {
-        this.timeout = timeout;
-    }
+  public Duration getTimeout() {
+    return timeout;
+  }
 
-    public MessageKey getReminderKey() {
-        return reminderKey;
-    }
+  public void setTimeout(Duration timeout) {
+    this.timeout = timeout;
+  }
 
-    public void setReminderKey(MessageKey reminderKey) {
-        this.reminderKey = reminderKey;
-    }
+  public MessageKey getReminderKey() {
+    return reminderKey;
+  }
 
-    public Predicate<M> getPreFinishChecker() {
-        return preFinishChecker;
-    }
+  public void setReminderKey(MessageKey reminderKey) {
+    this.reminderKey = reminderKey;
+  }
 
-    public void setPreFinishChecker(Predicate<M> preFinishChecker) {
-        this.preFinishChecker = preFinishChecker;
-    }
+  public Predicate<M> getPreFinishChecker() {
+    return preFinishChecker;
+  }
 
-    public String getPreFinishFailStepId() {
-        return preFinishFailStepId;
-    }
+  public void setPreFinishChecker(Predicate<M> preFinishChecker) {
+    this.preFinishChecker = preFinishChecker;
+  }
 
-    public void setPreFinishFailStepId(String preFinishFailStepId) {
-        this.preFinishFailStepId = preFinishFailStepId;
-    }
+  public String getPreFinishFailStepId() {
+    return preFinishFailStepId;
+  }
+
+  public void setPreFinishFailStepId(String preFinishFailStepId) {
+    this.preFinishFailStepId = preFinishFailStepId;
+  }
 }
-

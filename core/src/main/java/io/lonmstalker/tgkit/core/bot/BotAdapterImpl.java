@@ -7,12 +7,17 @@ import io.lonmstalker.tgkit.core.i18n.NoopMessageLocalizer;
 import io.lonmstalker.tgkit.core.interceptor.BotInterceptor;
 import io.lonmstalker.tgkit.core.state.InMemoryStateStore;
 import io.lonmstalker.tgkit.core.storage.BotRequestContextHolder;
+import io.lonmstalker.tgkit.core.update.UpdateUtils;
 import io.lonmstalker.tgkit.core.user.BotUserInfo;
 import io.lonmstalker.tgkit.core.user.BotUserProvider;
-import io.lonmstalker.tgkit.core.update.UpdateUtils;
 import io.lonmstalker.tgkit.core.user.SimpleUserProvider;
 import io.lonmstalker.tgkit.core.user.store.InMemoryUserKVStore;
 import io.lonmstalker.tgkit.core.user.store.UserKVStore;
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
+import java.util.concurrent.CopyOnWriteArrayList;
 import lombok.Builder;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -24,157 +29,148 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
-import java.util.concurrent.CopyOnWriteArrayList;
-
 /**
- * Адаптер входящих Update → BotRequest → BotCommand → BotResponse.
- * Поддерживает DOS-защиту через {@link RateLimitInterceptor} из security.
- * Для web-hook запросов вызывается синхронно, при long-polling — в пуле.
+ * Адаптер входящих Update → BotRequest → BotCommand → BotResponse. Поддерживает DOS-защиту через
+ * {@link RateLimitInterceptor} из security. Для web-hook запросов вызывается синхронно, при
+ * long-polling — в пуле.
  */
 @Slf4j
 public class BotAdapterImpl implements BotAdapter, AutoCloseable {
-    private static final BotRequestConverter<BotApiObject> DEFAULT_CONVERTER = new BotRequestConverterImpl();
+  private static final BotRequestConverter<BotApiObject> DEFAULT_CONVERTER =
+      new BotRequestConverterImpl();
 
-    private final @NonNull BotInfo botInfo;
-    private final @NonNull BotConfig config;
-    private final @NonNull BotService service;
-    private final @NonNull BotCommandRegistry registry;
-    private final @NonNull BotUserProvider userProvider;
-    private final @NonNull BotRequestConverter<BotApiObject> converter;
-    private final @NonNull List<BotInterceptor> interceptors = new CopyOnWriteArrayList<>();
+  private final @NonNull BotInfo botInfo;
+  private final @NonNull BotConfig config;
+  private final @NonNull BotService service;
+  private final @NonNull BotCommandRegistry registry;
+  private final @NonNull BotUserProvider userProvider;
+  private final @NonNull BotRequestConverter<BotApiObject> converter;
+  private final @NonNull List<BotInterceptor> interceptors = new CopyOnWriteArrayList<>();
 
-    @Setter
-    private @Nullable Bot currentBot;
+  @Setter private @Nullable Bot currentBot;
 
-    @Setter
-    private @Nullable TelegramSender sender;
+  @Setter private @Nullable TelegramSender sender;
 
-    @Builder
-    public BotAdapterImpl(long internalId,
-                          @Nullable BotConfig config,
-                          @NonNull TelegramSender sender,
-                          @Nullable UserKVStore userKVStore,
-                          @Nullable BotUserProvider userProvider,
-                          @Nullable BotCommandRegistry registry,
-                          @Nullable List<BotInterceptor> interceptors,
-                          @Nullable MessageLocalizer messageLocalizer) {
-        if (interceptors != null) {
-            this.interceptors.addAll(interceptors);
+  @Builder
+  public BotAdapterImpl(
+      long internalId,
+      @Nullable BotConfig config,
+      @NonNull TelegramSender sender,
+      @Nullable UserKVStore userKVStore,
+      @Nullable BotUserProvider userProvider,
+      @Nullable BotCommandRegistry registry,
+      @Nullable List<BotInterceptor> interceptors,
+      @Nullable MessageLocalizer messageLocalizer) {
+    if (interceptors != null) {
+      this.interceptors.addAll(interceptors);
+    }
+    this.sender = sender;
+    this.config = config != null ? config : BotConfig.builder().build();
+    this.registry = registry != null ? registry : new BotCommandRegistryImpl();
+    this.userProvider = userProvider != null ? userProvider : new SimpleUserProvider();
+    this.converter = DEFAULT_CONVERTER;
+    this.botInfo = new BotInfo(internalId);
+    this.service =
+        new BotService(
+            this.config.getStore() != null ? this.config.getStore() : new InMemoryStateStore(),
+            sender,
+            userKVStore == null ? new InMemoryUserKVStore() : userKVStore,
+            messageLocalizer != null ? messageLocalizer : new NoopMessageLocalizer());
+  }
+
+  @Override
+  public BotApiMethod<?> handle(@NonNull Update update) throws Exception {
+    checkStarted();
+
+    BotApiMethod<?> reply;
+    Exception error = null;
+    Pair<BotResponse, BotRequest<?>> result = null;
+
+    try {
+      BotRequestContextHolder.init(
+          update, Objects.requireNonNull(currentBot), Objects.requireNonNull(sender));
+
+      result = doHandle(update);
+      reply = result != null ? result.getLeft().getMethod() : null;
+    } catch (Exception ex) {
+      error = ex;
+      throw ex;
+    } finally {
+      for (BotInterceptor interceptor : interceptors) {
+        if (result != null) {
+          interceptor.afterCompletion(update, result.getValue(), result.getKey(), error);
+        } else {
+          interceptor.afterCompletion(update, null, null, error);
         }
-        this.sender = sender;
-        this.config = config != null ? config : BotConfig.builder().build();
-        this.registry = registry != null ? registry : new BotCommandRegistryImpl();
-        this.userProvider = userProvider != null ? userProvider : new SimpleUserProvider();
-        this.converter = DEFAULT_CONVERTER;
-        this.botInfo = new BotInfo(internalId);
-        this.service = new BotService(
-                this.config.getStore() != null
-                        ? this.config.getStore()
-                        : new InMemoryStateStore(),
-                sender,
-                userKVStore == null ? new InMemoryUserKVStore() : userKVStore,
-                messageLocalizer != null ? messageLocalizer : new NoopMessageLocalizer()
-        );
+      }
+      BotRequestContextHolder.clear();
+      RouteContextHolder.clear();
+      service.localizer().resetLocale();
     }
 
-    @Override
-    public BotApiMethod<?> handle(@NonNull Update update) throws Exception {
-        checkStarted();
+    return reply;
+  }
 
-        BotApiMethod<?> reply;
-        Exception error = null;
-        Pair<BotResponse, BotRequest<?>> result = null;
+  private @Nullable Pair<BotResponse, BotRequest<?>> doHandle(@NonNull Update update) {
+    BotRequestType type = UpdateUtils.getType(update);
+    BotApiObject data = converter.convert(update, type);
 
-        try {
-            BotRequestContextHolder.init(update,
-                    Objects.requireNonNull(currentBot), Objects.requireNonNull(sender));
+    BotUserInfo user = userProvider.resolve(update);
+    Locale locale = resolveLocale(update, user);
 
-            result = doHandle(update);
-            reply = result != null ? result.getLeft().getMethod() : null;
-        } catch (Exception ex) {
-            error = ex;
-            throw ex;
-        } finally {
-            for (BotInterceptor interceptor : interceptors) {
-                if (result != null) {
-                    interceptor.afterCompletion(update, result.getValue(), result.getKey(), error);
-                } else {
-                    interceptor.afterCompletion(update, null, null, error);
-                }
-            }
-            BotRequestContextHolder.clear();
-            RouteContextHolder.clear();
-            service.localizer().resetLocale();
-        }
+    service.localizer().setLocale(locale);
+    BotRequest<BotApiObject> request =
+        new BotRequest<>(
+            update.getUpdateId(),
+            data,
+            locale,
+            UpdateUtils.resolveMessageId(update),
+            botInfo,
+            user,
+            service,
+            type);
 
-        return reply;
+    interceptors.forEach(i -> i.preHandle(update, request));
+    BotCommand<BotApiObject> command = registry.find(type, config.getBotGroup(), data);
+    if (command == null) {
+      return null;
     }
 
-    private @Nullable Pair<BotResponse, BotRequest<?>> doHandle(@NonNull Update update) {
-        BotRequestType type = UpdateUtils.getType(update);
-        BotApiObject data = converter.convert(update, type);
+    var result = command.handle(request);
+    interceptors.forEach(i -> i.postHandle(update, request));
 
-        BotUserInfo user = userProvider.resolve(update);
-        Locale locale = resolveLocale(update, user);
+    return Pair.of(result, request);
+  }
 
-        service.localizer().setLocale(locale);
-        BotRequest<BotApiObject> request = new BotRequest<>(
-                update.getUpdateId(),
-                data,
-                locale,
-                UpdateUtils.resolveMessageId(update),
-                botInfo,
-                user,
-                service,
-                type
-        );
-
-        interceptors.forEach(i -> i.preHandle(update, request));
-        BotCommand<BotApiObject> command = registry.find(type, config.getBotGroup(), data);
-        if (command == null) {
-            return null;
-        }
-
-        var result = command.handle(request);
-        interceptors.forEach(i -> i.postHandle(update, request));
-
-        return Pair.of(result, request);
+  private @NonNull Locale resolveLocale(@NonNull Update update, @NonNull BotUserInfo user) {
+    Locale locale = user.locale();
+    if (locale != null) {
+      return locale;
     }
-
-    private @NonNull Locale resolveLocale(@NonNull Update update,
-                                          @NonNull BotUserInfo user) {
-        Locale locale = user.locale();
-        if (locale != null) {
-            return locale;
-        }
-        User tgUser = null;
-        try {
-            tgUser = UpdateUtils.getUser(update);
-        } catch (Exception ignored) {
-            // no telegram user
-        }
-        if (tgUser != null && tgUser.getLanguageCode() != null && !tgUser.getLanguageCode().isBlank()) {
-            return Locale.forLanguageTag(tgUser.getLanguageCode());
-        }
-        return config.getLocale();
+    User tgUser = null;
+    try {
+      tgUser = UpdateUtils.getUser(update);
+    } catch (Exception ignored) {
+      // no telegram user
     }
-
-    @Override
-    public void close() throws IOException {
-        try {
-            Objects.requireNonNull(sender).close();
-        } catch (Exception e) {
-            log.warn("Error closing sender", e);
-        }
+    if (tgUser != null && tgUser.getLanguageCode() != null && !tgUser.getLanguageCode().isBlank()) {
+      return Locale.forLanguageTag(tgUser.getLanguageCode());
     }
+    return config.getLocale();
+  }
 
-    private void checkStarted() {
-        if (currentBot == null || currentBot.state() != BotState.RUNNING) {
-            throw new IllegalStateException("Bot adapter not started");
-        }
+  @Override
+  public void close() throws IOException {
+    try {
+      Objects.requireNonNull(sender).close();
+    } catch (Exception e) {
+      log.warn("Error closing sender", e);
     }
+  }
+
+  private void checkStarted() {
+    if (currentBot == null || currentBot.state() != BotState.RUNNING) {
+      throw new IllegalStateException("Bot adapter not started");
+    }
+  }
 }

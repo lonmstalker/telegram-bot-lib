@@ -1,49 +1,46 @@
 package io.lonmstalker.tgkit.core.dsl;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.*;
+
 import io.lonmstalker.tgkit.core.bot.TelegramSender;
 import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
 import io.lonmstalker.tgkit.core.dsl.common.MockCtx;
 import io.lonmstalker.tgkit.core.dsl.context.DSLContext;
 import io.lonmstalker.tgkit.core.dsl.feature_flags.InMemoryFeatureFlags;
 import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Predicate;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Predicate;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
-
 class ConditionalBranchesTest {
 
-    static {
-        BotCoreInitializer.init();
-    }
+  static {
+    BotCoreInitializer.init();
+  }
 
-    @Test
-    void nestedConditionsRunOnce() {
-        TelegramSender sender = mock(TelegramSender.class);
-        doReturn(null)
-                .when(sender)
-                .execute(Mockito.<PartialBotApiMethod<?>>any());
+  @Test
+  void nestedConditionsRunOnce() {
+    TelegramSender sender = mock(TelegramSender.class);
+    doReturn(null).when(sender).execute(Mockito.<PartialBotApiMethod<?>>any());
 
-        InMemoryFeatureFlags ff = new InMemoryFeatureFlags();
-        ff.enableChat("BETA", 1L);
-        BotGlobalConfig.INSTANCE.dsl().featureFlags(ff);
+    InMemoryFeatureFlags ff = new InMemoryFeatureFlags();
+    ff.enableChat("BETA", 1L);
+    BotGlobalConfig.INSTANCE.dsl().featureFlags(ff);
 
-        DSLContext ctx = MockCtx.ctx(1L, 2L, sender);
+    DSLContext ctx = MockCtx.ctx(1L, 2L, sender);
 
-        AtomicInteger counter = new AtomicInteger();
-        Predicate<DSLContext> cond = c -> true;
+    AtomicInteger counter = new AtomicInteger();
+    Predicate<DSLContext> cond = c -> true;
 
-        new MessageBuilder(ctx, "hi")
-                .when(cond, b -> counter.incrementAndGet())
-                .onlyAdmin(b -> counter.incrementAndGet())
-                .flag("BETA", b -> counter.incrementAndGet())
-                .send();
+    new MessageBuilder(ctx, "hi")
+        .when(cond, b -> counter.incrementAndGet())
+        .onlyAdmin(b -> counter.incrementAndGet())
+        .flag("BETA", b -> counter.incrementAndGet())
+        .send();
 
-        assertThat(counter).hasValue(3);      // каждая ветка ровно раз
-    }
+    assertThat(counter).hasValue(3); // каждая ветка ровно раз
+  }
 }

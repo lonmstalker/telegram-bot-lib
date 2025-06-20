@@ -5,8 +5,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 public interface StateStore {
 
-    @Nullable
-    String get(@NonNull String chatId);
+  @Nullable String get(@NonNull String chatId);
 
-    void set(@NonNull String chatId, @NonNull String value);
+  void set(@NonNull String chatId, @NonNull String value);
 }
