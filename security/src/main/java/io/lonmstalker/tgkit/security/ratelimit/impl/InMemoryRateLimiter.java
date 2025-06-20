@@ -5,6 +5,8 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 import io.lonmstalker.tgkit.security.ratelimit.RateLimiter;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
+import java.time.Clock;
+
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
@@ -42,19 +44,29 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public final class InMemoryRateLimiter implements RateLimiter {
 
-    /**
-     * value = AtomicLong counter for the current window
-     */
+    /** value = AtomicLong counter for the current window. */
     private final Cache<String, AtomicLong> buckets;
+
+    private final Clock clock;
 
     /**
      * @param maxBuckets максимальное количество бакетов
      *                   (≈ ключей) в кэше. Ограничивает потребление RAM.
      */
     public InMemoryRateLimiter(long maxBuckets) {
+        this(maxBuckets, Clock.systemUTC());
+    }
+
+    /**
+     * @param maxBuckets максимальное количество бакетов
+     *                   (≈ ключей) в кэше. Ограничивает потребление RAM.
+     * @param clock      источник времени для расчёта окон
+     */
+    public InMemoryRateLimiter(long maxBuckets, @NonNull Clock clock) {
+        this.clock = clock;
         this.buckets = Caffeine.newBuilder()
                 .maximumSize(maxBuckets)
-                .expireAfterWrite(2, TimeUnit.DAYS)     // windows are short; 2 days more than enough
+                .expireAfterWrite(2, TimeUnit.DAYS) // windows are short; 2 days more than enough
                 .build();
     }
 
@@ -68,7 +80,7 @@ public final class InMemoryRateLimiter implements RateLimiter {
      */
     @Override
     public boolean tryAcquire(@NonNull String key, int permits, int seconds) {
-        long window = (System.currentTimeMillis() / 1000) / seconds;
+        long window = (clock.millis() / 1000) / seconds;
         String bucketKey = key + ':' + window;
 
         /* lock-free counter */
