@@ -1,36 +1,33 @@
 package io.lonmstalker.tgkit.core.ttl;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-
 import java.time.Duration;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 public interface TtlPolicy {
 
-    int maxRetries();
+  int maxRetries();
 
-    @NonNull
-    Duration initialBackOff();
+  @NonNull Duration initialBackOff();
 
-    @NonNull
-    Duration maxBackOff();
+  @NonNull Duration maxBackOff();
 
-    static TtlPolicy defaults() {
-        return new TtlPolicy() {
+  static TtlPolicy defaults() {
+    return new TtlPolicy() {
 
-            @Override
-            public int maxRetries() {
-                return 7;
-            }
+      @Override
+      public int maxRetries() {
+        return 7;
+      }
 
-            @Override
-            public @NonNull Duration initialBackOff() {
-                return Duration.ofSeconds(2);
-            }
+      @Override
+      public @NonNull Duration initialBackOff() {
+        return Duration.ofSeconds(2);
+      }
 
-            @Override
-            public @NonNull Duration maxBackOff() {
-                return Duration.ofSeconds(5);
-            }
-        };
-    }
+      @Override
+      public @NonNull Duration maxBackOff() {
+        return Duration.ofSeconds(5);
+      }
+    };
+  }
 }

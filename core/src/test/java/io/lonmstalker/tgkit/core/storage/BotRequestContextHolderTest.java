@@ -10,30 +10,29 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 public class BotRequestContextHolderTest {
 
-    static {
-        BotCoreInitializer.init();
-    }
+  static {
+    BotCoreInitializer.init();
+  }
 
-    @Test
-    void setAndGet() {
-        Update u = new Update();
-        TelegramSender sender = new TelegramSender(BotConfig.builder().build(), "token") {
-        };
-        BotRequestContextHolder.setUpdate(u);
-        BotRequestContextHolder.setSender(sender);
+  @Test
+  void setAndGet() {
+    Update u = new Update();
+    TelegramSender sender = new TelegramSender(BotConfig.builder().build(), "token") {};
+    BotRequestContextHolder.setUpdate(u);
+    BotRequestContextHolder.setSender(sender);
 
-        assertEquals(u, BotRequestContextHolder.getUpdate());
-        assertEquals(sender, BotRequestContextHolder.getSender());
-        assertEquals(u, BotRequestContextHolder.getUpdateNotNull());
-        assertEquals(sender, BotRequestContextHolder.getSenderNotNull());
-    }
+    assertEquals(u, BotRequestContextHolder.getUpdate());
+    assertEquals(sender, BotRequestContextHolder.getSender());
+    assertEquals(u, BotRequestContextHolder.getUpdateNotNull());
+    assertEquals(sender, BotRequestContextHolder.getSenderNotNull());
+  }
 
-    @Test
-    void clearAndExceptions() {
-        BotRequestContextHolder.clear();
-        assertNull(BotRequestContextHolder.getUpdate());
-        assertNull(BotRequestContextHolder.getSender());
-        assertThrows(RuntimeException.class, BotRequestContextHolder::getUpdateNotNull);
-        assertThrows(RuntimeException.class, BotRequestContextHolder::getSenderNotNull);
-    }
+  @Test
+  void clearAndExceptions() {
+    BotRequestContextHolder.clear();
+    assertNull(BotRequestContextHolder.getUpdate());
+    assertNull(BotRequestContextHolder.getSender());
+    assertThrows(RuntimeException.class, BotRequestContextHolder::getUpdateNotNull);
+    assertThrows(RuntimeException.class, BotRequestContextHolder::getSenderNotNull);
+  }
 }

@@ -8,6 +8,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface MessageTextMatch {
-    String value();
-    boolean ignoreCase() default false;
+  String value();
+
+  boolean ignoreCase() default false;
 }

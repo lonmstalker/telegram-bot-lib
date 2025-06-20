@@ -5,5 +5,4 @@ package io.lonmstalker.tgkit.core;
  *
  * @param internalId внутренний идентификатор бота
  */
-public record BotInfo(long internalId) {
-}
+public record BotInfo(long internalId) {}

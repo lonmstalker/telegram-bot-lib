@@ -9,6 +9,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface UserRoleMatch {
-    Class<? extends BotUserProvider> provider();
-    String[] roles();
+  Class<? extends BotUserProvider> provider();
+
+  String[] roles();
 }

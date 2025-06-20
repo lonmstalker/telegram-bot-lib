@@ -13,6 +13,10 @@ import io.lonmstalker.tgkit.core.exception.BotApiException;
 import io.lonmstalker.tgkit.core.interceptor.BotInterceptor;
 import io.lonmstalker.tgkit.core.matching.CommandMatch;
 import io.lonmstalker.tgkit.core.storage.BotRequestContextHolder;
+import java.lang.reflect.Method;
+import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.CopyOnWriteArrayList;
 import lombok.AccessLevel;
 import lombok.Builder;
 import org.apache.commons.lang3.StringUtils;
@@ -21,169 +25,155 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.telegram.telegrambots.meta.api.interfaces.BotApiObject;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import java.lang.reflect.Method;
-import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.CopyOnWriteArrayList;
-
 /**
- * Адаптер одного метода-хендлера, извлекающий аргументы,
- * конвертирующий запрос и вызывающий рефлективно целевой метод.
+ * Адаптер одного метода-хендлера, извлекающий аргументы, конвертирующий запрос и вызывающий
+ * рефлективно целевой метод.
  */
 @Builder(access = AccessLevel.PACKAGE)
 class InternalCommandAdapter implements BotCommand<BotApiObject> {
 
-    /**
-     * Порядок выполнения команды.
-     */
-    private final int order;
-    /**
-     * Метаданные параметров метода.
-     */
-    private final ParamInfo[] params;
-    /**
-     * Сам метод-хендлер.
-     */
-    private final @NonNull Method method;
-    /**
-     * Инстанс класса, содержащего метод.
-     */
-    private final @NonNull Object instance;
-    /**
-     * Группа команд (botGroup).
-     */
-    private volatile @NonNull String botGroup;
-    /**
-     * Тип запроса (MESSAGE, CALLBACK_QUERY и т.п.).
-     */
-    private volatile @NonNull BotRequestType type;
-    /**
-     * Конвертер BotRequest → нужный для метода тип.
-     */
-    private volatile @NonNull BotHandlerConverter<Object> converter;
-    /**
-     * Правило матчинга команды.
-     */
-    private volatile @NonNull CommandMatch<? extends BotApiObject> commandMatch;
-    /**
-     * Интерсепторы до/после вызова метода.
-     */
-    private final @NonNull List<BotInterceptor> interceptors = new CopyOnWriteArrayList<>();
+  /** Порядок выполнения команды. */
+  private final int order;
 
-    @Override
-    @SuppressWarnings("argument")
-    public @Nullable BotResponse handle(@NonNull BotRequest<BotApiObject> request) {
-        Update update = BotRequestContextHolder.getUpdateNotNull();
+  /** Метаданные параметров метода. */
+  private final ParamInfo[] params;
 
-        // preHandle
-        for (BotInterceptor i : interceptors) {
-            i.preHandle(update, request);
+  /** Сам метод-хендлер. */
+  private final @NonNull Method method;
+
+  /** Инстанс класса, содержащего метод. */
+  private final @NonNull Object instance;
+
+  /** Группа команд (botGroup). */
+  private volatile @NonNull String botGroup;
+
+  /** Тип запроса (MESSAGE, CALLBACK_QUERY и т.п.). */
+  private volatile @NonNull BotRequestType type;
+
+  /** Конвертер BotRequest → нужный для метода тип. */
+  private volatile @NonNull BotHandlerConverter<Object> converter;
+
+  /** Правило матчинга команды. */
+  private volatile @NonNull CommandMatch<? extends BotApiObject> commandMatch;
+
+  /** Интерсепторы до/после вызова метода. */
+  private final @NonNull List<BotInterceptor> interceptors = new CopyOnWriteArrayList<>();
+
+  @Override
+  @SuppressWarnings("argument")
+  public @Nullable BotResponse handle(@NonNull BotRequest<BotApiObject> request) {
+    Update update = BotRequestContextHolder.getUpdateNotNull();
+
+    // preHandle
+    for (BotInterceptor i : interceptors) {
+      i.preHandle(update, request);
+    }
+
+    Object converted = converter.convert(request);
+    Object[] args = new Object[params.length];
+    for (int i = 0; i < params.length; i++) {
+      ParamInfo pi = params[i];
+      if (pi.request()) {
+        args[i] = converted;
+      } else if (pi.update()) {
+        args[i] = update;
+      } else {
+        // Arg-параметр
+        String raw = null;
+        Arg arg = Objects.requireNonNull(pi.arg());
+        var matcher = RouteContextHolder.getMatcher();
+        if (matcher != null) {
+          try {
+            raw = matcher.group(arg.value());
+          } catch (IllegalArgumentException ignored) {
+          }
         }
-
-        Object converted = converter.convert(request);
-        Object[] args = new Object[params.length];
-        for (int i = 0; i < params.length; i++) {
-            ParamInfo pi = params[i];
-            if (pi.request()) {
-                args[i] = converted;
-            } else if (pi.update()) {
-                args[i] = update;
-            } else {
-                // Arg-параметр
-                String raw = null;
-                Arg arg = Objects.requireNonNull(pi.arg());
-                var matcher = RouteContextHolder.getMatcher();
-                if (matcher != null) {
-                    try {
-                        raw = matcher.group(arg.value());
-                    } catch (IllegalArgumentException ignored) {
-                    }
-                }
-                if (StringUtils.isEmpty(raw) && !arg.required()) {
-                    raw = arg.defaultValue();
-                }
-                if (raw == null || raw.isEmpty()) {
-                    throw new BotApiException("Required arg missing: " + arg.value());
-                }
-                Context<Object> ctx = new Context<>(request, matcher);
-                args[i] = Objects.requireNonNull(pi.converter().convert(raw, ctx));
-            }
+        if (StringUtils.isEmpty(raw) && !arg.required()) {
+          raw = arg.defaultValue();
         }
-
-        BotResponse response;
-        try {
-            Object res = method.invoke(instance, args);
-            if (res == null) {
-                triggerAfterCompletion(update, request, null, null);
-                return null;
-            }
-            if (!(res instanceof BotResponse)) {
-                throw new BotApiException("Handler must return BotResponse");
-            }
-            response = (BotResponse) res;
-            triggerAfterCompletion(update, request, response, null);
-            return response;
-        } catch (Exception e) {
-            triggerAfterCompletion(update, request, null, e);
-            throw new BotApiException("Handler invocation error", e);
+        if (raw == null || raw.isEmpty()) {
+          throw new BotApiException("Required arg missing: " + arg.value());
         }
+        Context<Object> ctx = new Context<>(request, matcher);
+        args[i] = Objects.requireNonNull(pi.converter().convert(raw, ctx));
+      }
     }
 
-    private void triggerAfterCompletion(@NonNull Update update,
-                                        @NonNull BotRequest<BotApiObject> request,
-                                        @Nullable BotResponse response,
-                                        @Nullable Exception exception) {
-        for (BotInterceptor i : interceptors) {
-            try {
-                i.afterCompletion(update, request, response, exception);
-            } catch (Exception ignored) {
-            }
-        }
+    BotResponse response;
+    try {
+      Object res = method.invoke(instance, args);
+      if (res == null) {
+        triggerAfterCompletion(update, request, null, null);
+        return null;
+      }
+      if (!(res instanceof BotResponse)) {
+        throw new BotApiException("Handler must return BotResponse");
+      }
+      response = (BotResponse) res;
+      triggerAfterCompletion(update, request, response, null);
+      return response;
+    } catch (Exception e) {
+      triggerAfterCompletion(update, request, null, e);
+      throw new BotApiException("Handler invocation error", e);
     }
+  }
 
-    @Override
-    public @NonNull BotRequestType type() {
-        return type;
+  private void triggerAfterCompletion(
+      @NonNull Update update,
+      @NonNull BotRequest<BotApiObject> request,
+      @Nullable BotResponse response,
+      @Nullable Exception exception) {
+    for (BotInterceptor i : interceptors) {
+      try {
+        i.afterCompletion(update, request, response, exception);
+      } catch (Exception ignored) {
+      }
     }
+  }
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public @NonNull CommandMatch<BotApiObject> matcher() {
-        return (CommandMatch<BotApiObject>) commandMatch;
-    }
+  @Override
+  public @NonNull BotRequestType type() {
+    return type;
+  }
 
-    @Override
-    public @NonNull List<BotInterceptor> interceptors() {
-        return List.copyOf(interceptors);
-    }
+  @Override
+  @SuppressWarnings("unchecked")
+  public @NonNull CommandMatch<BotApiObject> matcher() {
+    return (CommandMatch<BotApiObject>) commandMatch;
+  }
 
-    @Override
-    public void setMatcher(@NonNull CommandMatch<BotApiObject> matcher) {
-        this.commandMatch = matcher;
-    }
+  @Override
+  public @NonNull List<BotInterceptor> interceptors() {
+    return List.copyOf(interceptors);
+  }
 
-    @Override
-    public void setType(@NonNull BotRequestType type) {
-        this.type = type;
-    }
+  @Override
+  public void setMatcher(@NonNull CommandMatch<BotApiObject> matcher) {
+    this.commandMatch = matcher;
+  }
 
-    @Override
-    public void setBotGroup(@NonNull String group) {
-        this.botGroup = group;
-    }
+  @Override
+  public void setType(@NonNull BotRequestType type) {
+    this.type = type;
+  }
 
-    @Override
-    public void addInterceptor(@NonNull BotInterceptor interceptor) {
-        interceptors.add(interceptor);
-    }
+  @Override
+  public void setBotGroup(@NonNull String group) {
+    this.botGroup = group;
+  }
 
-    @Override
-    public @NonNull String botGroup() {
-        return botGroup;
-    }
+  @Override
+  public void addInterceptor(@NonNull BotInterceptor interceptor) {
+    interceptors.add(interceptor);
+  }
 
-    @Override
-    public int order() {
-        return order;
-    }
+  @Override
+  public @NonNull String botGroup() {
+    return botGroup;
+  }
+
+  @Override
+  public int order() {
+    return order;
+  }
 }

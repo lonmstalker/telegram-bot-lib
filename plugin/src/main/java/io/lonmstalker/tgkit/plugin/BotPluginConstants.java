@@ -8,14 +8,14 @@ import lombok.NoArgsConstructor;
  * Набор констант, используемых системой плагинов.
  *
  * <p>Пример использования:
+ *
  * <pre>{@code
  * if (descriptor.api() > BotPluginConstants.CURRENT_VERSION) {
  *     throw new UnsupportedOperationException();
  * }
- * }
- * </pre>
+ * }</pre>
  */
 public class BotPluginConstants {
-    /** Текущая поддерживаемая версия API плагинов. */
-    public static final Double CURRENT_VERSION = 0.1;
+  /** Текущая поддерживаемая версия API плагинов. */
+  public static final Double CURRENT_VERSION = 0.1;
 }

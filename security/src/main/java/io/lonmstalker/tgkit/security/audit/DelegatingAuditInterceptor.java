@@ -12,24 +12,29 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 final class DelegatingAuditInterceptor implements BotInterceptor {
 
-    private final @NonNull AuditBus auditBus;
-    private final @NonNull AuditConverter conv;
+  private final @NonNull AuditBus auditBus;
+  private final @NonNull AuditConverter conv;
 
-    @Override
-    public void preHandle(@NonNull Update u, @NonNull BotRequest<?> request) {
-        publish(conv, u);
-    }
+  @Override
+  public void preHandle(@NonNull Update u, @NonNull BotRequest<?> request) {
+    publish(conv, u);
+  }
 
-    @Override
-    public void postHandle(@NonNull Update u, @NonNull BotRequest<?> request) {/*no-op*/}
+  @Override
+  public void postHandle(@NonNull Update u, @NonNull BotRequest<?> request) {
+    /*no-op*/
+  }
 
-    @Override
-    public void afterCompletion(@NonNull Update u,
-                                @Nullable BotRequest<?> req,
-                                @Nullable BotResponse r,
-                                @Nullable Exception ex) {/*no-op*/}
+  @Override
+  public void afterCompletion(
+      @NonNull Update u,
+      @Nullable BotRequest<?> req,
+      @Nullable BotResponse r,
+      @Nullable Exception ex) {
+    /*no-op*/
+  }
 
-    private void publish(@NonNull AuditConverter c, @NonNull Update update) {
-        auditBus.publish(c.convert(update));
-    }
+  private void publish(@NonNull AuditConverter c, @NonNull Update update) {
+    auditBus.publish(c.convert(update));
+  }
 }

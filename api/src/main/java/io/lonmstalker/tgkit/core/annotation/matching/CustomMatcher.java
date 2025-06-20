@@ -9,5 +9,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface CustomMatcher {
-    Class<? extends CommandMatch<?>> value();
+  Class<? extends CommandMatch<?>> value();
 }

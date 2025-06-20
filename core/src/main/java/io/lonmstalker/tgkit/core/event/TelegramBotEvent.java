@@ -2,11 +2,11 @@ package io.lonmstalker.tgkit.core.event;
 
 import java.time.Instant;
 
-public interface TelegramBotEvent extends BotEvent{
+public interface TelegramBotEvent extends BotEvent {
 
-    long botInternalId();
+  long botInternalId();
 
-    long botExternalId();
+  long botExternalId();
 
-    Instant timestamp();
+  Instant timestamp();
 }
