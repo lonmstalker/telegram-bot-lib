@@ -19,6 +19,7 @@
         <module>testkit</module>
         <module>webhook</module>
         <module>validator</module>
+        <module>boot</module>
     </modules>
 
     <properties>
@@ -50,6 +51,7 @@
         <jakarta.servlet.version>6.0.0</jakarta.servlet.version>
         <guava.version>33.4.8-jre</guava.version>
         <language.detector.version>0.6</language.detector.version>
+        <spring.boot.version>3.2.5</spring.boot.version>
 
         <!-- PLUGINS -->
         <checkerframework.version>3.49.4</checkerframework.version>
@@ -209,6 +211,22 @@
                 <groupId>com.optimaize.languagedetector</groupId>
                 <artifactId>language-detector</artifactId>
                 <version>${language.detector.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot</artifactId>
+                <version>${spring.boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-autoconfigure</artifactId>
+                <version>${spring.boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-test</artifactId>
+                <version>${spring.boot.version}</version>
+                <scope>test</scope>
             </dependency>
 
             <!-- CHECKS -->
