@@ -107,7 +107,7 @@ class LongPollingReceiver extends TelegramLongPollingBot implements AutoCloseabl
       try {
         ((AutoCloseable) adapter).close();
       } catch (Exception e) {
-        // ignored
+        log.warn("Error closing adapter", e);
       }
     }
   }

@@ -104,7 +104,7 @@ class WebHookReceiver extends TelegramWebhookBot implements AutoCloseable {
       try {
         ((AutoCloseable) adapter).close();
       } catch (Exception e) {
-        // ignored
+        log.warn("Error closing adapter", e);
       }
     }
   }
