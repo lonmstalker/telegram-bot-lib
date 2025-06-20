@@ -2,7 +2,6 @@ module io.lonmstalker.tgkit.validator {
   requires io.lonmstalker.tgkit.api;
   requires telegrambots;
   requires telegrambots.meta;
-  requires static lombok;
   requires static org.checkerframework.checker.qual;
   requires language.detector;
   requires org.apache.tika.langdetect.optimaize;

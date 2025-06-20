@@ -18,11 +18,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.commons.lang3.tuple.Pair;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.meta.api.interfaces.BotApiObject;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -169,16 +169,30 @@ public class BotAdapterImpl implements BotAdapter, AutoCloseable {
       error = ex;
       throw ex;
     } finally {
+      Exception afterCompletionError = null;
       for (BotInterceptor interceptor : interceptors) {
-        if (result != null) {
-          interceptor.afterCompletion(update, result.getValue(), result.getKey(), error);
-        } else {
-          interceptor.afterCompletion(update, null, null, error);
+        try {
+          if (result != null) {
+            interceptor.afterCompletion(update, result.getValue(), result.getKey(), error);
+          } else {
+            interceptor.afterCompletion(update, null, null, error);
+          }
+        } catch (Exception ex) {
+          if (error != null) {
+            error.addSuppressed(ex);
+          } else if (afterCompletionError == null) {
+            afterCompletionError = ex;
+          } else {
+            afterCompletionError.addSuppressed(ex);
+          }
         }
       }
       BotRequestContextHolder.clear();
       RouteContextHolder.clear();
       service.localizer().resetLocale();
+      if (error == null && afterCompletionError != null) {
+        throw afterCompletionError;
+      }
     }
 
     return reply;
