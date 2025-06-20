@@ -5,16 +5,14 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Реестр активных Bot’ов с хранением WeakReference, чтобы при аварийном незакрытии они не держали
  * память.
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class BotRegistryImpl implements BotRegistry {
+  private BotRegistryImpl() {}
 
   private static final BotRegistryImpl INSTANCE = new BotRegistryImpl();
   private final Map<Long, WeakReference<Bot>> byInternal = new ConcurrentHashMap<>();

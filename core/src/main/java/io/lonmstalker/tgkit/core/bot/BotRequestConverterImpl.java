@@ -6,7 +6,7 @@ import io.lonmstalker.tgkit.core.exception.BotApiException;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.function.Function;
-import lombok.NonNull;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.interfaces.BotApiObject;
 import org.telegram.telegrambots.meta.api.objects.Update;
 

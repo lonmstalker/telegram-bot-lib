@@ -4,13 +4,12 @@ import io.lonmstalker.tgkit.core.BotRequest;
 import io.lonmstalker.tgkit.core.reflection.ReflectionUtils;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import lombok.experimental.UtilityClass;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 /** Утилитарный реестр, где хранятся все кастомные BotArgumentConverter. */
-@UtilityClass
 public final class Converters {
+  private Converters() {}
   private static final Map<Class<?>, BotArgumentConverter<?, ?>> BY_TYPE =
       new ConcurrentHashMap<>();
   private static final Map<Class<?>, BotArgumentConverter<?, ?>> BY_CLASS =

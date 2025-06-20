@@ -9,11 +9,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
-import lombok.experimental.UtilityClass;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-@UtilityClass
-public class Loaders {
+public final class Loaders {
+  private Loaders() {}
 
   public @NonNull ResourceLoader load(@NonNull String path) {
     if (path.startsWith("classpath:")) {

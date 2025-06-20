@@ -1,14 +1,12 @@
 package io.lonmstalker.tgkit.core.validator;
 
 import io.lonmstalker.tgkit.core.i18n.MessageKey;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 /** Валидаторы содержимого {@link Message Telegram-сообщения}. */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class MessageValidators {
+  private MessageValidators() {}
 
   public static @NonNull Validator<Message> hasText() {
     return Validator.of(

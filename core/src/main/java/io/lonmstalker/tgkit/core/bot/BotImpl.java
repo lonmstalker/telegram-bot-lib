@@ -12,11 +12,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.telegram.telegrambots.bots.DefaultAbsSender;
@@ -24,13 +21,104 @@ import org.telegram.telegrambots.meta.api.methods.GetMe;
 import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 import org.telegram.telegrambots.meta.api.objects.User;
 
-@Slf4j
-@Getter
-@Builder
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
 @SuppressWarnings({"dereference.of.nullable", "argument"})
 public final class BotImpl implements Bot {
+  private static final Logger log = LoggerFactory.getLogger(BotImpl.class);
 
+  private BotImpl(
+      long id,
+      @Nullable User user,
+      @Nullable SetWebhook setWebhook,
+      @NonNull String token,
+      @NonNull BotConfig config,
+      @NonNull DefaultAbsSender absSender,
+      @NonNull BotCommandRegistry commandRegistry,
+      @Nullable BotSessionImpl session,
+      long onCompletedActionTimeoutMs) {
+    this.id = id;
+    this.user = user;
+    this.setWebhook = setWebhook;
+    this.token = token;
+    this.config = config;
+    this.absSender = absSender;
+    this.commandRegistry = commandRegistry;
+    this.session = session;
+    this.onCompletedActionTimeoutMs = onCompletedActionTimeoutMs;
+  }
+
+  public static Builder builder() {
+    return new Builder();
+  }
+
+  public static class Builder {
+    private long id;
+    private User user;
+    private SetWebhook setWebhook;
+    private String token;
+    private BotConfig config;
+    private DefaultAbsSender absSender;
+    private BotCommandRegistry commandRegistry;
+    private BotSessionImpl session;
+    private long onCompletedActionTimeoutMs = 10_000;
+
+    public Builder id(long id) {
+      this.id = id;
+      return this;
+    }
+
+    public Builder user(@Nullable User user) {
+      this.user = user;
+      return this;
+    }
+
+    public Builder setWebhook(@Nullable SetWebhook setWebhook) {
+      this.setWebhook = setWebhook;
+      return this;
+    }
+
+    public Builder token(@NonNull String token) {
+      this.token = token;
+      return this;
+    }
+
+    public Builder config(@NonNull BotConfig config) {
+      this.config = config;
+      return this;
+    }
+
+    public Builder absSender(@NonNull DefaultAbsSender absSender) {
+      this.absSender = absSender;
+      return this;
+    }
+
+    public Builder commandRegistry(@NonNull BotCommandRegistry registry) {
+      this.commandRegistry = registry;
+      return this;
+    }
+
+    public Builder session(@Nullable BotSessionImpl session) {
+      this.session = session;
+      return this;
+    }
+
+    public Builder onCompletedActionTimeoutMs(long timeout) {
+      this.onCompletedActionTimeoutMs = timeout;
+      return this;
+    }
+
+    public BotImpl build() {
+      return new BotImpl(
+          id,
+          user,
+          setWebhook,
+          token,
+          config,
+          absSender,
+          commandRegistry,
+          session,
+          onCompletedActionTimeoutMs);
+    }
+  }
   private final AtomicReference<BotState> state = new AtomicReference<>(BotState.NEW);
   private final @NonNull List<BotCompleteAction> completeActions = new CopyOnWriteArrayList<>();
   private long id;
@@ -42,7 +130,51 @@ public final class BotImpl implements Bot {
   private @NonNull BotCommandRegistry commandRegistry;
   private @Nullable BotSessionImpl session;
 
-  @Builder.Default private long onCompletedActionTimeoutMs = 10_000;
+  private long onCompletedActionTimeoutMs = 10_000;
+
+  public AtomicReference<BotState> getState() {
+    return state;
+  }
+
+  public List<BotCompleteAction> getCompleteActions() {
+    return completeActions;
+  }
+
+  public long getId() {
+    return id;
+  }
+
+  public @Nullable User getUser() {
+    return user;
+  }
+
+  public @Nullable SetWebhook getSetWebhook() {
+    return setWebhook;
+  }
+
+  public @NonNull String getToken() {
+    return token;
+  }
+
+  public @NonNull BotConfig getConfig() {
+    return config;
+  }
+
+  public @NonNull DefaultAbsSender getAbsSender() {
+    return absSender;
+  }
+
+  public @NonNull BotCommandRegistry getCommandRegistry() {
+    return commandRegistry;
+  }
+
+  public @Nullable BotSessionImpl getSession() {
+    return session;
+  }
+
+  public long getOnCompletedActionTimeoutMs() {
+    return onCompletedActionTimeoutMs;
+  }
 
   @Override
   public long internalId() {

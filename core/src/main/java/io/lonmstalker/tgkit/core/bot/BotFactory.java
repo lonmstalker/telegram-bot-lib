@@ -5,13 +5,11 @@ import io.lonmstalker.tgkit.core.bot.BotDataSourceFactory.BotData;
 import io.lonmstalker.tgkit.core.bot.loader.AnnotatedCommandLoader;
 import io.lonmstalker.tgkit.core.crypto.TokenCipher;
 import java.util.concurrent.atomic.AtomicLong;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class BotFactory {
+  private BotFactory() {}
   public static final BotFactory INSTANCE = new BotFactory();
   private final AtomicLong nextId = new AtomicLong();
 

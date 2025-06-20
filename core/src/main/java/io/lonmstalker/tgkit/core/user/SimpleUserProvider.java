@@ -2,7 +2,6 @@ package io.lonmstalker.tgkit.core.user;
 
 import io.lonmstalker.tgkit.core.update.UpdateUtils;
 import java.util.Set;
-import lombok.AllArgsConstructor;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -16,10 +15,14 @@ public class SimpleUserProvider implements BotUserProvider {
     return new SimpleBotUserInfo(userId, chatId);
   }
 
-  @AllArgsConstructor
   static class SimpleBotUserInfo implements BotUserInfo {
     private @Nullable Long userId;
     private @Nullable Long chatId;
+
+    SimpleBotUserInfo(@Nullable Long userId, @Nullable Long chatId) {
+      this.userId = userId;
+      this.chatId = chatId;
+    }
 
     @Override
     public @Nullable Long chatId() {

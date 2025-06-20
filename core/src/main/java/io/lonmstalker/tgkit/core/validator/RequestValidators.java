@@ -4,12 +4,10 @@ import io.lonmstalker.tgkit.core.BotRequest;
 import io.lonmstalker.tgkit.core.BotRequestType;
 import io.lonmstalker.tgkit.core.exception.ValidationException;
 import io.lonmstalker.tgkit.core.i18n.MessageKey;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
 /** Утилиты для валидации свойств {@link BotRequest}. */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class RequestValidators {
+  private RequestValidators() {}
 
   /**
    * Валидатор, проверяющий, что тип запроса совпадает с ожидаемым.

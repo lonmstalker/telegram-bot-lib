@@ -7,7 +7,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
-import lombok.Getter;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
@@ -20,10 +19,14 @@ import org.checkerframework.checker.nullness.qual.NonNull;
  */
 public abstract class Wizard<M> {
 
-  @Getter private final String id;
+  private final String id;
   private final Supplier<M> factory;
   private BiConsumer<BotRequest<?>, M> onComplete;
   private final List<StepDefinition<M, ?, ?>> steps = new ArrayList<>();
+
+  public String getId() {
+    return id;
+  }
 
   /**
    * Конструктор.
