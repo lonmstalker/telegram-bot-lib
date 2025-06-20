@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
-import lombok.Builder;
 
 /** Описатель плагина, маппится из plugin.yml и обратно. */
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
@@ -42,7 +41,6 @@ public final class BotPluginDescriptor {
   @JsonProperty("sha256")
   private final String sha256;
 
-  @Builder
   @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
   public BotPluginDescriptor(
       @JsonProperty("id") String id,
@@ -67,6 +65,94 @@ public final class BotPluginDescriptor {
     this.minCoreVersion = minCoreVersion;
     this.requires = requires != null ? requires : List.of();
     this.sha256 = sha256;
+  }
+
+  public static Builder builder() {
+    return new Builder();
+  }
+
+  public static final class Builder {
+    private String id;
+    private String name;
+    private String version;
+    private String api;
+    private String mainClass;
+    private String author;
+    private String description;
+    private String license;
+    private String minCoreVersion;
+    private List<String> requires;
+    private String sha256;
+
+    public Builder id(String id) {
+      this.id = id;
+      return this;
+    }
+
+    public Builder name(String name) {
+      this.name = name;
+      return this;
+    }
+
+    public Builder version(String version) {
+      this.version = version;
+      return this;
+    }
+
+    public Builder api(String api) {
+      this.api = api;
+      return this;
+    }
+
+    public Builder mainClass(String mainClass) {
+      this.mainClass = mainClass;
+      return this;
+    }
+
+    public Builder author(String author) {
+      this.author = author;
+      return this;
+    }
+
+    public Builder description(String description) {
+      this.description = description;
+      return this;
+    }
+
+    public Builder license(String license) {
+      this.license = license;
+      return this;
+    }
+
+    public Builder minCoreVersion(String minCoreVersion) {
+      this.minCoreVersion = minCoreVersion;
+      return this;
+    }
+
+    public Builder requires(List<String> requires) {
+      this.requires = requires;
+      return this;
+    }
+
+    public Builder sha256(String sha256) {
+      this.sha256 = sha256;
+      return this;
+    }
+
+    public BotPluginDescriptor build() {
+      return new BotPluginDescriptor(
+          id,
+          name,
+          version,
+          api,
+          mainClass,
+          author,
+          description,
+          license,
+          minCoreVersion,
+          requires,
+          sha256);
+    }
   }
 
   public String id() {

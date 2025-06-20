@@ -3,13 +3,11 @@ package io.lonmstalker.tgkit.plugin.sort;
 import io.lonmstalker.tgkit.plugin.PluginException;
 import java.util.*;
 import java.util.function.Function;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 /** Утилита для топологической сортировки по зависимостям. */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class TopoSorter {
+  private TopoSorter() {}
 
   /**
    * Выполняет topological sort.
