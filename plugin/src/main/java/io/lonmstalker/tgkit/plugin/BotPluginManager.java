@@ -26,14 +26,15 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.jar.JarFile;
 import java.util.zip.ZipException;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Менеджер плагинов: загрузка, перезагрузка, выгрузка с учётом зависимостей и graceful shutdown.
  */
-@Slf4j
 public final class BotPluginManager implements AutoCloseable {
+  private static final Logger log = LoggerFactory.getLogger(BotPluginManager.class);
   private static final MessageDigest MESSAGE_DIGEST;
   private static final long SHUTDOWN_TIMEOUT_MS = 500;
   private static final Version SUPPORTED_API_VERSION =

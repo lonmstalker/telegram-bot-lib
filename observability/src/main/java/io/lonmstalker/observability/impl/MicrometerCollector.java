@@ -12,14 +12,18 @@ import io.micrometer.prometheusmetrics.PrometheusMeterRegistry;
 import io.prometheus.client.CollectorRegistry;
 import java.io.IOException;
 import java.util.Arrays;
-import lombok.AllArgsConstructor;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 /** Реализация {@link MetricsCollector} на базе Micrometer. */
-@AllArgsConstructor
 public class MicrometerCollector implements MetricsCollector {
   private final MeterRegistry registry;
   private final PrometheusMetricsServer httpServer;
+
+  public MicrometerCollector(
+      @NonNull MeterRegistry registry, @NonNull PrometheusMetricsServer httpServer) {
+    this.registry = registry;
+    this.httpServer = httpServer;
+  }
 
   @Override
   public @NonNull MeterRegistry registry() {

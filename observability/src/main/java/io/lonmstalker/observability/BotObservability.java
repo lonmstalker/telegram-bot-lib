@@ -7,11 +7,8 @@ import io.lonmstalker.observability.impl.OTelTracer;
 import io.lonmstalker.tgkit.observability.Tracer;
 import io.micrometer.prometheusmetrics.PrometheusConfig;
 import java.util.Arrays;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 /**
  * Фабрика компонентов наблюдаемости: трейсеры и сборщики метрик.
  *
@@ -23,6 +20,8 @@ import lombok.NonNull;
  * }</pre>
  */
 public final class BotObservability {
+
+  private BotObservability() {}
 
   /** Возвращает {@link Tracer}, который ничего не делает. */
   public static @NonNull Tracer noopTracer() {

@@ -1,13 +1,12 @@
 package io.lonmstalker.observability;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.slf4j.MDC;
 
 /** Утилитарный класс для работы с MDC при логировании. */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class LogContext {
+
+  private LogContext() {}
 
   /**
    * Помещает значение в контекст логирования.
