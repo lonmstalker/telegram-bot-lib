@@ -25,7 +25,6 @@ module io.lonmstalker.tgkit.api {
   exports io.lonmstalker.tgkit.core.user;
   exports io.lonmstalker.tgkit.core.user.store;
   exports io.lonmstalker.tgkit.core.wizard;
-  exports io.lonmstalker.tgkit.core.wizard.annotation;
   exports io.lonmstalker.tgkit.observability;
   exports io.lonmstalker.tgkit.plugin;
   exports io.lonmstalker.tgkit.security.antispam;
