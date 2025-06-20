@@ -263,3 +263,4 @@ ln -s ../../githooks/pre-commit .git/hooks/pre-commit
 ```
 Коммит будет прерван, если `./mvnw -q checkstyle:check` обнаружит нарушения.
 После успешной проверки запускается `./mvnw -q verify` для сборки и тестов.
+* [doc2oas](doc2oas/README.md) — генерация OpenAPI и SDK
