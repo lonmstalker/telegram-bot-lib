@@ -29,7 +29,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 public final class Loaders {
   private Loaders() {}
 
-  public @NonNull ResourceLoader load(@NonNull String path) {
+  public static @NonNull ResourceLoader load(@NonNull String path) {
     if (path.startsWith("classpath:")) {
       return classpath(path.replace("classpath:", ""));
     }
@@ -37,7 +37,7 @@ public final class Loaders {
       return file(Path.of(path.replace("file:", "")));
     }
     if (path.startsWith("http://") || path.startsWith("https://")) {
-      return url(URI.create(path.replace("http://", "").replace("https://", "")));
+      return url(URI.create(path));
     }
     if (path.startsWith("jar:")) {
       String[] split = path.replace("jar:", "").split("!");
