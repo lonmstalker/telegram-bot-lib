@@ -39,6 +39,7 @@ import org.telegram.telegrambots.meta.api.objects.User;
 @SuppressWarnings({"dereference.of.nullable", "argument"})
 public final class BotImpl implements Bot {
   private static final Logger log = LoggerFactory.getLogger(BotImpl.class);
+  private static final long DEFAULT_ACTION_TIMEOUT_MS = 10_000L;
 
   private BotImpl(
       long id,
@@ -74,7 +75,7 @@ public final class BotImpl implements Bot {
     private DefaultAbsSender absSender;
     private BotCommandRegistry commandRegistry;
     private BotSessionImpl session;
-    private long onCompletedActionTimeoutMs = 10_000;
+    private long onCompletedActionTimeoutMs = DEFAULT_ACTION_TIMEOUT_MS;
 
     public Builder id(long id) {
       this.id = id;
@@ -98,6 +99,9 @@ public final class BotImpl implements Bot {
 
     public Builder config(@NonNull BotConfig config) {
       this.config = config;
+      if (this.onCompletedActionTimeoutMs == DEFAULT_ACTION_TIMEOUT_MS) {
+        this.onCompletedActionTimeoutMs = config.getOnCompletedActionTimeoutMs();
+      }
       return this;
     }
 
@@ -146,7 +150,7 @@ public final class BotImpl implements Bot {
   private @NonNull BotCommandRegistry commandRegistry;
   private @Nullable BotSessionImpl session;
 
-  private long onCompletedActionTimeoutMs = 10_000;
+  private long onCompletedActionTimeoutMs = DEFAULT_ACTION_TIMEOUT_MS;
 
   public AtomicReference<BotState> getState() {
     return state;

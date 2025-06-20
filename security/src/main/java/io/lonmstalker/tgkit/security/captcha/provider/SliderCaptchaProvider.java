@@ -15,7 +15,7 @@
  */
 package io.lonmstalker.tgkit.security.captcha.provider;
 
-import static java.util.Collections.*;
+import static java.util.Collections.synchronizedMap;
 
 import io.lonmstalker.tgkit.core.BotRequest;
 import io.lonmstalker.tgkit.core.dsl.Button;

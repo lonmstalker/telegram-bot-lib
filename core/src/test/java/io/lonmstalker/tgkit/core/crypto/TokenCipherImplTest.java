@@ -52,4 +52,17 @@ public class TokenCipherImplTest {
     var cipher = new TokenCipherImpl("secretkey123456");
     assertThrows(BotApiException.class, () -> cipher.decrypt("boom"));
   }
+
+  @Test
+  void encrypt_returns_different_values_each_time() {
+    var cipher = new TokenCipherImpl("secretkey123456");
+    var token = "repeat";
+
+    var first = cipher.encrypt(token);
+    var second = cipher.encrypt(token);
+
+    assertNotEquals(first, second, "IV must ensure unique ciphertext");
+    assertEquals(token, cipher.decrypt(first));
+    assertEquals(token, cipher.decrypt(second));
+  }
 }

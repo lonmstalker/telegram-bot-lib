@@ -39,6 +39,18 @@ title %0
 @REM enable echoing by setting MAVEN_BATCH_ECHO to 'on'
 @if "%MAVEN_BATCH_ECHO%" == "on"  echo %MAVEN_BATCH_ECHO%
 
+REM ——— прокси-логика для mvnw.cmd —————————————
+IF "%MVN_USE_PROXY%"=="true" (
+  REM если MAVEN_OPTS уже задана, дополняем
+  IF DEFINED MAVEN_OPTS (
+    set MAVEN_OPTS=%MAVEN_OPTS% -Dhttps.proxyHost=proxy -Dhttps.proxyPort=8080 -Dhttp.proxyHost=proxy -Dhttp.proxyPort=8080 -Djava.net.preferIPv4Stack=true -Dfile.encoding=UTF-8
+  ) ELSE (
+    set MAVEN_OPTS=-Dhttps.proxyHost=proxy -Dhttps.proxyPort=8080 -Dhttp.proxyHost=proxy -Dhttp.proxyPort=8080 -Djava.net.preferIPv4Stack=true -Dfile.encoding=UTF-8
+  )
+  echo [mvnw.cmd] Proxy enabled: MAVEN_OPTS=%MAVEN_OPTS%
+)
+REM ——————————————————————————————————————————
+
 @REM set %HOME% to equivalent of $HOME
 if "%HOME%" == "" (set "HOME=%HOMEDRIVE%%HOMEPATH%")
 

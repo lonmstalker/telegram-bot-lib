@@ -21,6 +21,8 @@ import io.lonmstalker.tgkit.core.event.BotEventBus;
 import io.lonmstalker.tgkit.core.parse_mode.ParseMode;
 import io.lonmstalker.tgkit.core.ttl.TtlScheduler;
 import io.lonmstalker.tgkit.webhook.WebhookServer;
+import io.lonmstalker.observability.MetricsCollector;
+import io.lonmstalker.observability.impl.NoOpMetricsCollector;
 import java.net.http.HttpClient;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.net.InetSocketAddress;
@@ -47,6 +49,7 @@ public class BotGlobalConfig {
   private final @NonNull EventGlobalConfig eventGlobalConfig;
   private final @NonNull ExecutorsGlobalConfig executorsGlobalConfig;
   private final @NonNull WebhookGlobalConfig webhookGlobalConfig;
+  private final @NonNull ObservabilityGlobalConfig observabilityGlobalConfig;
 
   private BotGlobalConfig() {
     this.executorsGlobalConfig = new ExecutorsGlobalConfig();
@@ -55,6 +58,7 @@ public class BotGlobalConfig {
     this.httpGlobalConfig = new HttpGlobalConfig();
     this.eventGlobalConfig = new EventGlobalConfig();
     this.webhookGlobalConfig = new WebhookGlobalConfig();
+    this.observabilityGlobalConfig = new ObservabilityGlobalConfig();
 
     Runtime.getRuntime()
         .addShutdownHook(
@@ -65,6 +69,7 @@ public class BotGlobalConfig {
                   webhookGlobalConfig.close();
                   dslGlobalConfig.close();
                   executorsGlobalConfig.close();
+                  observabilityGlobalConfig.close();
                 }));
   }
 
@@ -86,6 +91,10 @@ public class BotGlobalConfig {
 
   public @NonNull WebhookGlobalConfig webhook() {
     return this.webhookGlobalConfig;
+  }
+
+  public @NonNull ObservabilityGlobalConfig observability() {
+    return this.observabilityGlobalConfig;
   }
 
   public static class EventGlobalConfig {
@@ -155,6 +164,8 @@ public class BotGlobalConfig {
         new AtomicReference<>();
     private final @NonNull AtomicReference<ExecutorService> cpuExecutorService =
         new AtomicReference<>();
+    private final AtomicReference<Integer> scheduledPoolSize = new AtomicReference<>(2);
+    private final AtomicReference<Integer> cpuPoolSize = new AtomicReference<>(2);
 
     public BotGlobalConfig.@NonNull ExecutorsGlobalConfig scheduledExecutorService(
         @NonNull ScheduledExecutorService scheduledExecutorService) {
@@ -179,6 +190,40 @@ public class BotGlobalConfig {
           "[core-init] CpuExecutorService changed to {}", cpuExecutor.getClass().getSimpleName());
       this.cpuExecutorService.set(cpuExecutor);
       return this;
+    }
+
+    /**
+     * Размер пула для CPU-задач. Используется при инициализации
+     * {@link java.util.concurrent.ExecutorService} c виртуальными потоками.
+     *
+     * @param size желаемое количество потоков
+     * @return конфигурация executors
+     */
+    public BotGlobalConfig.@NonNull ExecutorsGlobalConfig cpuPoolSize(int size) {
+      this.cpuPoolSize.set(size);
+      return this;
+    }
+
+    /**
+     * Размер пула планировщика. Определяет количество виртуальных потоков в
+     * {@link java.util.concurrent.ScheduledExecutorService}.
+     *
+     * @param size желаемое количество потоков
+     * @return конфигурация executors
+     */
+    public BotGlobalConfig.@NonNull ExecutorsGlobalConfig scheduledPoolSize(int size) {
+      this.scheduledPoolSize.set(size);
+      return this;
+    }
+
+    /** Возвращает размер пула для CPU-задач. */
+    public int cpuPoolSize() {
+      return this.cpuPoolSize.get();
+    }
+
+    /** Возвращает размер пула планировщика. */
+    public int scheduledPoolSize() {
+      return this.scheduledPoolSize.get();
     }
 
     public @NonNull ScheduledExecutorService getScheduledExecutorService() {
@@ -335,6 +380,31 @@ public class BotGlobalConfig {
           srv.close();
         } catch (Exception ignored) {
         }
+      }
+    }
+  }
+
+  public static class ObservabilityGlobalConfig {
+    private final AtomicReference<MetricsCollector> collector =
+        new AtomicReference<>(new NoOpMetricsCollector());
+
+    public @NonNull MetricsCollector getCollector() {
+      return collector.get();
+    }
+
+    public BotGlobalConfig.@NonNull ObservabilityGlobalConfig collector(
+        @NonNull MetricsCollector metricsCollector) {
+      log.debug(
+          "[core-init] MetricsCollector changed to {}",
+          metricsCollector.getClass().getSimpleName());
+      collector.set(metricsCollector);
+      return this;
+    }
+
+    void close() {
+      try {
+        collector.get().close();
+      } catch (Exception ignored) {
       }
     }
   }

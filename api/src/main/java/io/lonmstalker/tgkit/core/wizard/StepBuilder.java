@@ -23,7 +23,10 @@ import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.telegram.telegrambots.meta.api.objects.*;
+import org.telegram.telegrambots.meta.api.objects.Location;
+import org.telegram.telegrambots.meta.api.objects.PhotoSize;
+import org.telegram.telegrambots.meta.api.objects.Video;
+import org.telegram.telegrambots.meta.api.objects.VideoNote;
 
 /**
  * Построитель одного шага сценария: задаёт вопрос, парсит ввод, валидирует, сохраняет в модель и

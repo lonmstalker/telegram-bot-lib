@@ -21,10 +21,8 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
 import org.telegram.telegrambots.bots.DefaultAbsSender;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
@@ -38,7 +36,10 @@ import org.telegram.telegrambots.meta.api.methods.send.SendSticker;
 import org.telegram.telegrambots.meta.api.methods.send.SendVideo;
 import org.telegram.telegrambots.meta.api.methods.send.SendVideoNote;
 import org.telegram.telegrambots.meta.api.methods.send.SendVoice;
-import org.telegram.telegrambots.meta.api.methods.stickers.*;
+import org.telegram.telegrambots.meta.api.methods.stickers.AddStickerToSet;
+import org.telegram.telegrambots.meta.api.methods.stickers.CreateNewStickerSet;
+import org.telegram.telegrambots.meta.api.methods.stickers.SetStickerSetThumbnail;
+import org.telegram.telegrambots.meta.api.methods.stickers.UploadStickerFile;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageMedia;
 import org.telegram.telegrambots.meta.api.objects.File;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -58,20 +59,13 @@ import org.telegram.telegrambots.meta.updateshandlers.SentCallback;
  */
 public class TelegramSender extends DefaultAbsSender implements AutoCloseable {
   private final BackOff backOff;
-  private final TelegramSenderRateLimiter telegramSenderRateLimiter;
+  private final GuavaRateLimiterWrapper telegramSenderRateLimiter;
   private final ExecutorService executor;
 
   public TelegramSender(@NonNull BotConfig options, @NonNull String botToken) {
-    this(options, botToken, null);
-  }
-
-  public TelegramSender(
-      @NonNull BotConfig options,
-      @NonNull String botToken,
-      @Nullable ScheduledExecutorService scheduler) {
     super(options, botToken);
     this.telegramSenderRateLimiter =
-        new TelegramSenderRateLimiter(options.getRequestsPerSecond(), scheduler);
+        new GuavaRateLimiterWrapper(options.getRequestsPerSecond());
     this.executor = BotGlobalConfig.INSTANCE.executors().getIoExecutorService();
     BackOff tmp = options.getBackOff();
     if (tmp == null) {

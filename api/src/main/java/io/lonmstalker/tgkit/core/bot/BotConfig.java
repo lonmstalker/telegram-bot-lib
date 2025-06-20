@@ -49,8 +49,10 @@ public class BotConfig extends DefaultBotOptions {
   private @Nullable BotExceptionHandler globalExceptionHandler;
   private int requestsPerSecond;
   private int updateQueueCapacity;
+  private long onCompletedActionTimeoutMs;
 
   public static final int DEFAULT_UPDATE_QUEUE_CAPACITY = 1000;
+  public static final long DEFAULT_ON_COMPLETED_ACTION_TIMEOUT_MS = 10_000L;
 
   @SuppressWarnings({"argument", "method.invocation"})
   private BotConfig(
@@ -72,7 +74,8 @@ public class BotConfig extends DefaultBotOptions {
       @Nullable List<String> allowedUpdates,
       @Nullable Integer getUpdatesTimeout,
       @Nullable Integer getUpdatesLimit,
-      @Nullable Integer updateQueueCapacity) {
+      @Nullable Integer updateQueueCapacity,
+      @Nullable Long onCompletedActionTimeoutMs) {
     this.store = store;
     this.globalExceptionHandler = globalExceptionHandler;
     this.globalInterceptors = globalInterceptors == null ? new ArrayList<>() : globalInterceptors;
@@ -81,6 +84,10 @@ public class BotConfig extends DefaultBotOptions {
     this.requestsPerSecond = requestsPerSecond != null ? requestsPerSecond : 30;
     this.updateQueueCapacity =
         updateQueueCapacity != null ? updateQueueCapacity : DEFAULT_UPDATE_QUEUE_CAPACITY;
+    this.onCompletedActionTimeoutMs =
+        onCompletedActionTimeoutMs != null
+            ? onCompletedActionTimeoutMs
+            : DEFAULT_ON_COMPLETED_ACTION_TIMEOUT_MS;
 
     this.setProxyHost(proxyHost);
     this.setAllowedUpdates(allowedUpdates);
@@ -152,6 +159,14 @@ public class BotConfig extends DefaultBotOptions {
     this.updateQueueCapacity = updateQueueCapacity;
   }
 
+  public long getOnCompletedActionTimeoutMs() {
+    return onCompletedActionTimeoutMs;
+  }
+
+  public void setOnCompletedActionTimeoutMs(long onCompletedActionTimeoutMs) {
+    this.onCompletedActionTimeoutMs = onCompletedActionTimeoutMs;
+  }
+
   public static Builder builder() {
     return new Builder();
   }
@@ -176,6 +191,7 @@ public class BotConfig extends DefaultBotOptions {
     private Integer getUpdatesTimeout;
     private Integer getUpdatesLimit;
     private Integer updateQueueCapacity;
+    private Long onCompletedActionTimeoutMs;
 
     public Builder globalExceptionHandler(BotExceptionHandler handler) {
       this.globalExceptionHandler = handler;
@@ -277,6 +293,11 @@ public class BotConfig extends DefaultBotOptions {
       return this;
     }
 
+    public Builder onCompletedActionTimeoutMs(Long onCompletedActionTimeoutMs) {
+      this.onCompletedActionTimeoutMs = onCompletedActionTimeoutMs;
+      return this;
+    }
+
     public BotConfig build() {
       return new BotConfig(
           globalExceptionHandler,
@@ -297,7 +318,8 @@ public class BotConfig extends DefaultBotOptions {
           allowedUpdates,
           getUpdatesTimeout,
           getUpdatesLimit,
-          updateQueueCapacity);
+          updateQueueCapacity,
+          onCompletedActionTimeoutMs);
     }
   }
 }

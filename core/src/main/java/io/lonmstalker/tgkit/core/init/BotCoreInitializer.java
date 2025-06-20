@@ -24,6 +24,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.net.http.HttpClient;
 import java.time.Duration;
 import java.util.concurrent.Executors;
+import io.lonmstalker.observability.impl.NoOpMetricsCollector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,6 +43,14 @@ public final class BotCoreInitializer {
   private BotCoreInitializer() {}
 
   private static volatile boolean started;
+
+  /**
+   * Удобная статическая обёртка. Вызывает {@link #init()} один раз и не
+   * требует явного создания экземпляра.
+   */
+  public static void init() {
+    new BotCoreInitializer().init();
+  }
 
   public synchronized void init() {
     if (started) {
@@ -67,11 +76,20 @@ public final class BotCoreInitializer {
     BotGlobalConfig.INSTANCE.http().httpClient(httpClient).mapper(mapper);
 
     // ── Executors ────────────────────────────────────────────────────────
+    int cpuSize = BotGlobalConfig.INSTANCE.executors().cpuPoolSize();
+    int schedSize = BotGlobalConfig.INSTANCE.executors().scheduledPoolSize();
+
     BotGlobalConfig.INSTANCE
         .executors()
-        .cpuExecutorService(Executors.newWorkStealingPool(2))
+        .cpuExecutorService(
+            Executors.newFixedThreadPool(cpuSize, Thread.ofVirtual().factory()))
         .ioExecutorService(Executors.newVirtualThreadPerTaskExecutor())
-        .scheduledExecutorService(Executors.newScheduledThreadPool(2));
+        .scheduledExecutorService(
+            Executors.newScheduledThreadPool(schedSize, Thread.ofVirtual().factory()));
+
+    BotGlobalConfig.INSTANCE
+        .observability()
+        .collector(new NoOpMetricsCollector());
 
     // ── Events ────────────────────────────────────────────────────────
     BotGlobalConfig.INSTANCE.events().bus(new InMemoryEventBus());
