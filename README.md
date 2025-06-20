@@ -228,6 +228,13 @@ export MAVEN_OPTS="-Dhttps.proxyHost=proxy -Dhttps.proxyPort=8080 \
 Отчёты появятся в `target/dependency-check-report.html` и
 `target/dependency-check-report.sarif`.
 
+### Бенчмарки
+Для запуска JMH-бенчмарков:
+
+```bash
+./mvnw -Pbenchmarks -pl benchmarks test
+```
+
 ## 🤝 Contributing
 PR-ы и идеи приветствуются! Перед отправкой ознакомьтесь с [CONTRIBUTING.md](CONTRIBUTING.md) и [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
 
