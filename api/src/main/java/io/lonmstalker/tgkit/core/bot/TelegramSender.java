@@ -43,6 +43,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 import org.telegram.telegrambots.meta.generics.BackOff;
 import org.telegram.telegrambots.meta.updateshandlers.SentCallback;
+import io.lonmstalker.tgkit.core.bot.GuavaRateLimiterWrapper;
 
 /**
  * Обёртка над TelegramBots API с поддержкой лимита запросов и повторов.
@@ -56,7 +57,7 @@ import org.telegram.telegrambots.meta.updateshandlers.SentCallback;
  */
 public class TelegramSender extends DefaultAbsSender implements AutoCloseable {
   private final BackOff backOff;
-  private final TelegramSenderRateLimiter telegramSenderRateLimiter;
+  private final GuavaRateLimiterWrapper rateLimiter;
 
   public TelegramSender(@NonNull BotConfig options, @NonNull String botToken) {
     this(options, botToken, null);
@@ -65,10 +66,9 @@ public class TelegramSender extends DefaultAbsSender implements AutoCloseable {
   public TelegramSender(
       @NonNull BotConfig options,
       @NonNull String botToken,
-      @Nullable ScheduledExecutorService scheduler) {
+      @SuppressWarnings("unused") @Nullable ScheduledExecutorService scheduler) {
     super(options, botToken);
-    this.telegramSenderRateLimiter =
-        new TelegramSenderRateLimiter(options.getRequestsPerSecond(), scheduler);
+    this.rateLimiter = new GuavaRateLimiterWrapper(options.getRequestsPerSecond());
     BackOff tmp = options.getBackOff();
     if (tmp == null) {
       tmp = new ExponentialBackOff();
@@ -274,7 +274,7 @@ public class TelegramSender extends DefaultAbsSender implements AutoCloseable {
   private <T> T executeWithRetry(@NonNull RuntimeExceptionExecutor<T> executor) {
     while (true) {
       try {
-        telegramSenderRateLimiter.acquire();
+        rateLimiter.acquire();
         T result = withConvertException(executor);
         backOff.reset();
         return result;
@@ -328,6 +328,6 @@ public class TelegramSender extends DefaultAbsSender implements AutoCloseable {
 
   @Override
   public void close() {
-    telegramSenderRateLimiter.close();
+    rateLimiter.close();
   }
 }

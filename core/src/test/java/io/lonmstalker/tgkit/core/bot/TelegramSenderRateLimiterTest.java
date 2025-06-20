@@ -18,9 +18,9 @@ package io.lonmstalker.tgkit.core.bot;
 import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.lang.reflect.Field;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 import org.junit.jupiter.api.Test;
 
 class TelegramSenderRateLimiterTest {
@@ -30,25 +30,38 @@ class TelegramSenderRateLimiterTest {
   }
 
   @Test
-  void permitsPerSecond() throws Exception {
-    TelegramSenderRateLimiter limiter = new TelegramSenderRateLimiter(2);
+  void permitsPerSecond() {
+    GuavaRateLimiterWrapper limiter = new GuavaRateLimiterWrapper(2);
     long start = System.currentTimeMillis();
     limiter.acquire();
     limiter.acquire();
     limiter.acquire();
     long elapsed = System.currentTimeMillis() - start;
     assertTrue(elapsed >= 1000);
-    limiter.close();
-    Field field = TelegramSenderRateLimiter.class.getDeclaredField("scheduler");
-    field.setAccessible(true);
   }
 
   @Test
-  void externalSchedulerNotClosed() {
-    ScheduledExecutorService external = Executors.newSingleThreadScheduledExecutor();
-    TelegramSenderRateLimiter limiter = new TelegramSenderRateLimiter(1, external);
-    limiter.close();
-    assertFalse(external.isShutdown());
-    external.shutdownNow();
+  void independentLimiters() throws Exception {
+    GuavaRateLimiterWrapper first = new GuavaRateLimiterWrapper(1);
+    GuavaRateLimiterWrapper second = new GuavaRateLimiterWrapper(1);
+    ExecutorService pool = Executors.newFixedThreadPool(2);
+    CountDownLatch done = new CountDownLatch(2);
+    long start = System.currentTimeMillis();
+    pool.execute(
+        () -> {
+          first.acquire();
+          first.acquire();
+          done.countDown();
+        });
+    pool.execute(
+        () -> {
+          second.acquire();
+          second.acquire();
+          done.countDown();
+        });
+    done.await();
+    long elapsed = System.currentTimeMillis() - start;
+    assertTrue(elapsed >= 1000 && elapsed < 1500);
+    pool.shutdownNow();
   }
 }
