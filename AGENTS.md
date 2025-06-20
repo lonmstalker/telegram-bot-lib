@@ -99,6 +99,16 @@ telegram-bot-lib/
 ## 8. Проверка качества ✅
 
 - `mvn spotless:apply verify` должен проходить без WARNING.
+- В среде Codex перед запуском Maven экспортируйте переменные прокси:
+
+```bash
+export http_proxy=http://proxy:8080
+export https_proxy=http://proxy:8080
+export MAVEN_OPTS="-Dhttps.proxyHost=proxy -Dhttps.proxyPort=8080 \
+-Dhttp.proxyHost=proxy -Dhttp.proxyPort=8080 \
+-Djava.net.preferIPv4Stack=true -Dfile.encoding=UTF-8"
+```
+Без них сборка может завершиться ошибкой «Network is unreachable».
 - `mvn -pl :telegram-bot-core -q test-compile` не выводит NullAway ошибок.
 - `java -jar telegram-bot-core/target/*-full.jar --dry-run` — старт ≤ 1 с.
 - `revapi:check` — 0 breaking-changes при неизменённом MAJOR.
