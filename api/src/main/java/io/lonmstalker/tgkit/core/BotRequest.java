@@ -15,7 +15,15 @@
  */
 package io.lonmstalker.tgkit.core;
 
-import io.lonmstalker.tgkit.core.dsl.*;
+import io.lonmstalker.tgkit.core.dsl.BotDSL;
+import io.lonmstalker.tgkit.core.dsl.DeleteBuilder;
+import io.lonmstalker.tgkit.core.dsl.EditBuilder;
+import io.lonmstalker.tgkit.core.dsl.InlineResultBuilder;
+import io.lonmstalker.tgkit.core.dsl.MediaGroupBuilder;
+import io.lonmstalker.tgkit.core.dsl.MessageBuilder;
+import io.lonmstalker.tgkit.core.dsl.PhotoBuilder;
+import io.lonmstalker.tgkit.core.dsl.PollBuilder;
+import io.lonmstalker.tgkit.core.dsl.QuizBuilder;
 import io.lonmstalker.tgkit.core.exception.BotApiException;
 import io.lonmstalker.tgkit.core.user.BotUserInfo;
 import java.util.Locale;
