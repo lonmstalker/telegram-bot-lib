@@ -9,6 +9,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import ch.qos.logback.classic.Logger;
+import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.core.read.ListAppender;
+import org.slf4j.LoggerFactory;
 import java.time.Duration;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
@@ -20,6 +24,8 @@ class AuditBusTest {
     /* отдельный executor, чтобы не мешать другим тестам + контролируем shutdown */
     private AsyncAuditBus bus;
     private ExecutorService exec;
+    private final Logger logger = (Logger) LoggerFactory.getLogger(AsyncAuditBus.class);
+    private final ListAppender<ILoggingEvent> appender = new ListAppender<>();
 
     static {
         BotCoreInitializer.init();
@@ -35,6 +41,7 @@ class AuditBusTest {
     @AfterEach
     void tearDown() {
         exec.shutdownNow();
+        logger.detachAppender(appender);
     }
 
     /* ------------------------------------------------------------------ */
@@ -109,5 +116,35 @@ class AuditBusTest {
 
         Awaitility.await().atMost(200, TimeUnit.MILLISECONDS)
                 .untilAsserted(() -> assertThat(counter.get()).isEqualTo(1));
+    }
+
+    @Test
+    @DisplayName("очередь заполнена: событие отбрасывается и логируется")
+    void dropOnFullBuffer() {
+        logger.addAppender(appender);
+        appender.start();
+
+        bus.close();
+        bus = new AsyncAuditBus(exec, 1);
+        AtomicInteger delivered = new AtomicInteger();
+        bus.subscribe(ev -> {
+            delivered.incrementAndGet();
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException ignored) {
+                Thread.currentThread().interrupt();
+            }
+        });
+
+        bus.publish(AuditEvent.userAction(1, "first"));
+        bus.publish(AuditEvent.userAction(1, "second"));
+
+        Awaitility.await().atMost(Duration.ofMillis(300))
+                .untilAsserted(() -> assertThat(delivered.get()).isEqualTo(1));
+
+        assertThat(bus.droppedCount()).isEqualTo(1);
+        assertThat(appender.list).hasSize(1);
+
+        logger.detachAppender(appender);
     }
 }
