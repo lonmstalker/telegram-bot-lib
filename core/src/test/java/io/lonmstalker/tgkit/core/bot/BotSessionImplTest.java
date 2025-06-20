@@ -40,7 +40,7 @@ public class BotSessionImplTest {
   void startAndStop() {
     NoopExecutor executor = new NoopExecutor();
     BotSessionImpl session =
-        new BotSessionImpl(executor, new ObjectMapper(), BotConfig.DEFAULT_UPDATE_QUEUE_CAPACITY);
+        new BotSessionImpl(executor, null, BotConfig.DEFAULT_UPDATE_QUEUE_CAPACITY);
     DefaultBotOptions options = new DefaultBotOptions();
     session.setOptions(options);
     session.setToken("TOKEN");
@@ -63,7 +63,7 @@ public class BotSessionImplTest {
 
   @Test
   void rejectOnOverflow() throws Exception {
-    BotSessionImpl session = new BotSessionImpl(null, new ObjectMapper(), 2);
+    BotSessionImpl session = new BotSessionImpl(null, null, 2);
     var field = BotSessionImpl.class.getDeclaredField("updates");
     field.setAccessible(true);
     @SuppressWarnings("unchecked")
