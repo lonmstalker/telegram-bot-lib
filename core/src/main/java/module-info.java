@@ -14,6 +14,7 @@ module io.lonmstalker.tgkit.core {
   requires io.netty.transport;
 
   exports io.lonmstalker.tgkit.core.bot;
+  exports io.lonmstalker.tgkit.core;
   exports io.lonmstalker.tgkit.core.config;
   exports io.lonmstalker.tgkit.core.crypto;
   exports io.lonmstalker.tgkit.core.event;
