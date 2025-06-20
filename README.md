@@ -162,6 +162,19 @@ class PingCommandTest {
 
 Минимальные требования: Java 21 и установленный Maven.
 
+В среде Codex перед запуском Maven экспортируйте переменные прокси:
+
+```bash
+export http_proxy=http://proxy:8080
+export https_proxy=http://proxy:8080
+export MAVEN_OPTS="-Dhttps.proxyHost=proxy -Dhttps.proxyPort=8080 \
+-Dhttp.proxyHost=proxy -Dhttp.proxyPort=8080 \
+-Djava.net.preferIPv4Stack=true -Dfile.encoding=UTF-8"
+```
+
+Без них сборка может завершиться ошибкой «Network is unreachable».
+
+
 Сборка всех модулей выполняется командой:
 
 ```bash
