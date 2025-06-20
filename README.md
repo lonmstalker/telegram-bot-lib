@@ -190,22 +190,24 @@ export MAVEN_OPTS="-Dhttps.proxyHost=proxy -Dhttps.proxyPort=8080 \
 Без них сборка может завершиться ошибкой «Network is unreachable».
 
 
+Для запуска Maven не требуется предварительная установка: в репозиторий входит Maven Wrapper. Сборку лучше пускать через `./mvnw`.
+
 Сборка всех модулей выполняется командой:
 
 ```bash
-mvn clean install
+./mvnw clean install
 ```
 
 Для запуска только тестов используйте:
 
 ```bash
-mvn test
+./mvnw test
 ```
 
 Для генерации отчёта по покрытию:
 
 ```bash
-mvn verify jacoco:report
+./mvnw verify jacoco:report
 ```
 Результат ищите в `target/site/jacoco/index.html`.
 
@@ -220,5 +222,5 @@ Apache License 2.0 © 2025 TgKit Team
 ```bash
 ln -s ../../githooks/pre-commit .git/hooks/pre-commit
 ```
-Коммит будет прерван, если `mvn -q checkstyle:check` обнаружит нарушения.
-После успешной проверки запускается `mvn -q verify` для сборки и тестов.
+Коммит будет прерван, если `./mvnw -q checkstyle:check` обнаружит нарушения.
+После успешной проверки запускается `./mvnw -q verify` для сборки и тестов.
