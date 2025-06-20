@@ -28,8 +28,8 @@ import java.lang.reflect.*;
 import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
-import lombok.experimental.UtilityClass;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
@@ -38,9 +38,9 @@ import org.telegram.telegrambots.meta.api.interfaces.BotApiObject;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 /** Utility to scan packages for {@link BotHandler} methods. */
-@Slf4j
-@UtilityClass
 public final class AnnotatedCommandLoader {
+  private static final Logger log = LoggerFactory.getLogger(AnnotatedCommandLoader.class);
+  private AnnotatedCommandLoader() {}
   private static final List<BotCommandFactory<?>> FACTORIES = new CopyOnWriteArrayList<>();
 
   static {

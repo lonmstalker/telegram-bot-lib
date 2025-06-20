@@ -8,8 +8,8 @@ import io.lonmstalker.tgkit.core.event.InMemoryEventBus;
 import java.net.http.HttpClient;
 import java.time.Duration;
 import java.util.concurrent.Executors;
-import lombok.experimental.UtilityClass;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Базовая инициализация ядра. <br>
@@ -19,9 +19,10 @@ import lombok.extern.slf4j.Slf4j;
  * <p>👉 Не обязательно использовать этот класс — конфиг можно править вручную. Но он наглядно
  * демонстрирует, как корректно обновлять глобальное состояние.
  */
-@Slf4j
-@UtilityClass
-public class BotCoreInitializer {
+public final class BotCoreInitializer {
+
+  private static final Logger log = LoggerFactory.getLogger(BotCoreInitializer.class);
+  private BotCoreInitializer() {}
 
   private static volatile boolean started;
 

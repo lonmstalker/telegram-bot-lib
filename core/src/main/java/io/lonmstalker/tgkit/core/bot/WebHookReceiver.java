@@ -6,8 +6,8 @@ import io.lonmstalker.tgkit.core.BotAdapter;
 import io.lonmstalker.tgkit.core.exception.BotExceptionHandler;
 import io.lonmstalker.tgkit.core.exception.BotExceptionHandlerDefault;
 import io.lonmstalker.tgkit.security.secret.SecretStore;
-import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -15,14 +15,18 @@ import org.telegram.telegrambots.bots.TelegramWebhookBot;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-@Slf4j
 class WebHookReceiver extends TelegramWebhookBot implements AutoCloseable {
+  private static final Logger log = LoggerFactory.getLogger(WebHookReceiver.class);
   private final @NonNull String token;
   private final @NonNull BotAdapter adapter;
   private final @NonNull TelegramSender sender;
   private final @NonNull BotExceptionHandler globalExceptionHandler;
 
-  @Setter private @Nullable String username;
+  private @Nullable String username;
+
+  void setUsername(@Nullable String username) {
+    this.username = username;
+  }
 
   public WebHookReceiver(
       @NonNull BotConfig options,

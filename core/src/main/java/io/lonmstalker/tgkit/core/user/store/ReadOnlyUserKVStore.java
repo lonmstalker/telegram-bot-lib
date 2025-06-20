@@ -1,12 +1,14 @@
 package io.lonmstalker.tgkit.core.user.store;
 
 import java.util.Map;
-import lombok.RequiredArgsConstructor;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-@RequiredArgsConstructor
 public final class ReadOnlyUserKVStore implements UserKVStore {
   private final @NonNull UserKVStore delegate;
+
+  public ReadOnlyUserKVStore(@NonNull UserKVStore delegate) {
+    this.delegate = delegate;
+  }
 
   @Override
   public String get(long uid, @NonNull String k) {

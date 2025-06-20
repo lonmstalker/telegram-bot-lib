@@ -18,9 +18,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
-import lombok.Builder;
-import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.commons.lang3.tuple.Pair;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -34,8 +33,8 @@ import org.telegram.telegrambots.meta.api.objects.User;
  * {@link RateLimitInterceptor} из security. Для web-hook запросов вызывается синхронно, при
  * long-polling — в пуле.
  */
-@Slf4j
 public class BotAdapterImpl implements BotAdapter, AutoCloseable {
+  private static final Logger log = LoggerFactory.getLogger(BotAdapterImpl.class);
   private static final BotRequestConverter<BotApiObject> DEFAULT_CONVERTER =
       new BotRequestConverterImpl();
 
@@ -47,11 +46,85 @@ public class BotAdapterImpl implements BotAdapter, AutoCloseable {
   private final @NonNull BotRequestConverter<BotApiObject> converter;
   private final @NonNull List<BotInterceptor> interceptors = new CopyOnWriteArrayList<>();
 
-  @Setter private @Nullable Bot currentBot;
+  private @Nullable Bot currentBot;
 
-  @Setter private @Nullable TelegramSender sender;
+  private @Nullable TelegramSender sender;
 
-  @Builder
+  static Builder builder() {
+    return new Builder();
+  }
+
+  static class Builder {
+    private long internalId;
+    private BotConfig config;
+    private TelegramSender sender;
+    private UserKVStore userKVStore;
+    private BotUserProvider userProvider;
+    private BotCommandRegistry registry;
+    private List<BotInterceptor> interceptors;
+    private MessageLocalizer messageLocalizer;
+
+    Builder internalId(long internalId) {
+      this.internalId = internalId;
+      return this;
+    }
+
+    Builder config(@Nullable BotConfig config) {
+      this.config = config;
+      return this;
+    }
+
+    Builder sender(@NonNull TelegramSender sender) {
+      this.sender = sender;
+      return this;
+    }
+
+    Builder userKVStore(@Nullable UserKVStore userKVStore) {
+      this.userKVStore = userKVStore;
+      return this;
+    }
+
+    Builder userProvider(@Nullable BotUserProvider userProvider) {
+      this.userProvider = userProvider;
+      return this;
+    }
+
+    Builder registry(@Nullable BotCommandRegistry registry) {
+      this.registry = registry;
+      return this;
+    }
+
+    Builder interceptors(@Nullable List<BotInterceptor> interceptors) {
+      this.interceptors = interceptors;
+      return this;
+    }
+
+    Builder messageLocalizer(@Nullable MessageLocalizer localizer) {
+      this.messageLocalizer = localizer;
+      return this;
+    }
+
+    BotAdapterImpl build() {
+      return new BotAdapterImpl(
+          internalId,
+          config,
+          sender,
+          userKVStore,
+          userProvider,
+          registry,
+          interceptors,
+          messageLocalizer);
+    }
+  }
+
+  void setCurrentBot(@Nullable Bot bot) {
+    this.currentBot = bot;
+  }
+
+  void setSender(@Nullable TelegramSender sender) {
+    this.sender = sender;
+  }
+
   public BotAdapterImpl(
       long internalId,
       @Nullable BotConfig config,

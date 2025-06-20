@@ -6,12 +6,11 @@ import java.lang.invoke.MethodType;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ReflectionUtils {
+  private ReflectionUtils() {}
 
   /** Создаёт экземпляр указанного класса, учитывая возможный метод getInstance(). */
   @SuppressWarnings({"return", "unchecked", "argument"})

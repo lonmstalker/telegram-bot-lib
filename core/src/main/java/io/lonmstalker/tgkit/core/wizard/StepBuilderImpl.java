@@ -11,8 +11,6 @@ import java.time.Duration;
 import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -31,8 +29,11 @@ import org.telegram.telegrambots.meta.api.objects.VideoNote;
  * <br>
  * &nbsp;• <em>content-validator</em> — бизнес-ограничения (размер, разрешение и т.д.).
  */
-@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 final class StepBuilderImpl<M, I, O> implements StepBuilder<M, I, O> {
+
+  StepBuilderImpl(@NonNull StepDefinition<M, I, O> def) {
+    this.def = def;
+  }
 
   private final @NonNull StepDefinition<M, I, O> def;
 

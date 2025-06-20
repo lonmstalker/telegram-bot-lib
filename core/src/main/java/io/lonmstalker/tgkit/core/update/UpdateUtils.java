@@ -8,16 +8,15 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import lombok.experimental.UtilityClass;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.api.objects.boost.ChatBoostUpdated;
 
-@UtilityClass
 @SuppressWarnings({"method.invocation", "argument", "type.anno.before.modifier", "return"})
-public class UpdateUtils {
+public final class UpdateUtils {
+  private UpdateUtils() {}
 
   /** Таблица, сопоставляющая условие из Update типу запроса. */
   private static final Map<Predicate<Update>, BotRequestType> TYPE_MAP =

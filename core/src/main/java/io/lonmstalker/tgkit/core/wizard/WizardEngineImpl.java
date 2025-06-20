@@ -10,9 +10,8 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.time.Instant;
 import java.util.*;
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -32,9 +31,10 @@ import org.telegram.telegrambots.meta.api.objects.Update;
  *       step по sessionId.
  * </ol>
  */
-@Slf4j
-@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
+
 public final class WizardEngineImpl implements WizardEngine {
+
+  private static final Logger log = LoggerFactory.getLogger(WizardEngineImpl.class);
 
   private final @NonNull BotCommandRegistry commandRegistry;
   private final @NonNull StateStore stateStore;
@@ -46,6 +46,15 @@ public final class WizardEngineImpl implements WizardEngine {
 
   /** wizardId → Wizard<?> */
   private final Map<String, Wizard<?>> wizardMap = new HashMap<>();
+
+  WizardEngineImpl(
+      @NonNull BotCommandRegistry commandRegistry,
+      @NonNull StateStore stateStore,
+      @NonNull WizardStepRunner stepRunner) {
+    this.commandRegistry = commandRegistry;
+    this.stateStore = stateStore;
+    this.stepRunner = stepRunner;
+  }
 
   @Override
   public void register(@NonNull Wizard<?> wizard) {

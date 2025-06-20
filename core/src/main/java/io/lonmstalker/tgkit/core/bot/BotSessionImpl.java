@@ -18,7 +18,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -62,9 +63,9 @@ import org.telegram.telegrambots.meta.generics.LongPollingBot;
  * executor.shutdown();
  * }</pre>
  */
-@Slf4j
 @SuppressWarnings({"dereference.of.nullable", "argument"})
 public class BotSessionImpl implements BotSession {
+  private static final Logger log = LoggerFactory.getLogger(BotSessionImpl.class);
 
   private final AtomicBoolean running = new AtomicBoolean();
   private final BlockingQueue<Update> updates = new LinkedBlockingQueue<>();
