@@ -32,4 +32,5 @@ module io.lonmstalker.tgkit.security {
       io.lonmstalker.tgkit.plugin;
   exports io.lonmstalker.tgkit.security.rbac;
   exports io.lonmstalker.tgkit.security.secret;
+  exports io.lonmstalker.tgkit.security.config;
 }
