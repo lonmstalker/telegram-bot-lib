@@ -33,6 +33,19 @@
 #   MAVEN_SKIP_RC - flag to disable loading of mavenrc files
 # ----------------------------------------------------------------------------
 
+# —————— прокси для Maven, если MVN_USE_PROXY=true ——————
+if [ "${MVN_USE_PROXY}" = "true" ]; then
+  MAVEN_OPTS="${MAVEN_OPTS:-} \
+-Dhttps.proxyHost=proxy \
+-Dhttps.proxyPort=8080 \
+-Dhttp.proxyHost=proxy \
+-Dhttp.proxyPort=8080 \
+-Djava.net.preferIPv4Stack=true \
+-Dfile.encoding=UTF-8"
+  export MAVEN_OPTS
+  echo "[mvnw] Proxy enabled: MAVEN_OPTS=${MAVEN_OPTS}"
+fi
+
 if [ -z "$MAVEN_SKIP_RC" ]; then
 
   if [ -f /usr/local/etc/mavenrc ]; then
