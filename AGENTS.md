@@ -95,6 +95,8 @@ telegram-bot-lib/
 | testkit  | 21          | —                  | incubating         | ≥ 95 %    | JUnit 5         |
 | telegram-bot-plugins  | 21          | разные             | incubating         | ≥ 80 %    | SPI loader      |
 | validator             | 21          | io.lonmstalker.tgkit.validator | public     | ≥ 90 %    | —               |
+| json-codec-spi        | 21          | io.lonmstalker.tgkit.json.spi | incubating | ≥ 90 %    | —               |
+| json-codec-dsljson    | 21          | —                  | incubating         | ≥ 90 %    | SPI loader      |
 
 ## 8. Проверка качества ✅
 

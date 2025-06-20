@@ -16,6 +16,7 @@
         <module>security</module>
         <module>examples</module>
         <module>api</module>
+        <module>codec</module>
         <module>testkit</module>
         <module>webhook</module>
         <module>validator</module>
