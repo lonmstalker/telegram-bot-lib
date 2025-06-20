@@ -16,7 +16,7 @@
 ```
 telegram-bot-lib/
 ├─ telegram-bot-core/          # Основная библиотека (JPMS module `telegram.bot.core`)
-├─ telegram-bot-testkit/       # JUnit-заглушка Telegram + вспомогательные DSL
+├─ testkit/       # JUnit-заглушка Telegram + вспомогательные DSL
 ├─ telegram-bot-plugins/       # Плагины reference (Weather, Polls…)
 ├─ telegram-bot-samples/       # Полноценные demo-боты
 └─ pom.xml                     # Parent (enforcer, Revapi, Spotless, JaCoCo)
@@ -67,7 +67,7 @@ telegram-bot-lib/
 ### 6.2 TestAgent (покрытие для Wizard):
 
 ```makefile
-Контекст: telegram-bot-testkit.
+Контекст: testkit.
 Задача: написать property-based тест, проверяющий, что Wizard всегда
 переходит в FINAL_STEP после 3 шагов, независимо от входа.
 Результат: только diff-патчи.
@@ -92,7 +92,7 @@ telegram-bot-lib/
 | Модуль                | Java-версия | JPMS-имя           | Public API уровень | Покрытие  | Особые плагины |
 |-----------------------|-------------|--------------------|--------------------|-----------|----------------|
 | telegram-bot-core     | 21          | telegram.bot.core  | public             | ≥ 90 %    | Revapi, NullAway |
-| telegram-bot-testkit  | 21          | —                  | incubating         | ≥ 95 %    | JUnit 5         |
+| testkit  | 21          | —                  | incubating         | ≥ 95 %    | JUnit 5         |
 | telegram-bot-plugins  | 21          | разные             | incubating         | ≥ 80 %    | SPI loader      |
 | validator             | 21          | io.lonmstalker.tgkit.validator | public     | ≥ 90 %    | —               |
 
@@ -128,7 +128,7 @@ export MAVEN_OPTS="-Dhttps.proxyHost=proxy -Dhttps.proxyPort=8080 \
 **A:** Да, Checkstyle настроен на обязательность.
 
 **Q:** Как протестировать Webhook?
-**A:** Через `TelegramMockServer` из `telegram-bot-testkit`
+**A:** Через `TelegramMockServer` из `testkit`
 
 ```java
 @TelegramBotTest

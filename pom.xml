@@ -16,7 +16,7 @@
         <module>security</module>
         <module>examples</module>
         <module>api</module>
-        <module>telegram-bot-testkit</module>
+        <module>testkit</module>
         <module>validator</module>
     </modules>
 
