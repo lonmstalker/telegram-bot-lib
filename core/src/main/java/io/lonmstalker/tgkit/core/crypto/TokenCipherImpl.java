@@ -42,6 +42,7 @@ public class TokenCipherImpl implements TokenCipher {
   private static final String TRANSFORMATION = "AES/GCM/NoPadding";
   private static final int IV_LENGTH = 12;
   private static final int TAG_LENGTH = 128;
+  private static final SecureRandom RNG = new SecureRandom();
 
   private final SecretKeySpec key;
 
@@ -58,7 +59,7 @@ public class TokenCipherImpl implements TokenCipher {
   public @NonNull String encrypt(@NonNull String token) {
     try {
       byte[] iv = new byte[IV_LENGTH];
-      new SecureRandom().nextBytes(iv);
+      RNG.nextBytes(iv);
 
       Cipher cipher = Cipher.getInstance(TRANSFORMATION);
       cipher.init(Cipher.ENCRYPT_MODE, this.key, new GCMParameterSpec(TAG_LENGTH, iv));
