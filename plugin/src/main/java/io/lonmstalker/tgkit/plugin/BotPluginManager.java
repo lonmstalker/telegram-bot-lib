@@ -7,6 +7,7 @@ import io.lonmstalker.tgkit.plugin.sort.TopoSorter;
 import io.lonmstalker.tgkit.security.audit.AuditBus;
 import io.lonmstalker.tgkit.security.audit.AuditEvent;
 import io.lonmstalker.tgkit.security.config.BotSecurityGlobalConfig;
+import com.github.zafarkhaja.semver.Version;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
@@ -37,6 +38,8 @@ import static io.lonmstalker.tgkit.plugin.BotPluginConstants.CURRENT_VERSION;
 public final class BotPluginManager implements AutoCloseable {
     private static final MessageDigest MESSAGE_DIGEST;
     private static final long SHUTDOWN_TIMEOUT_MS = 500;
+    private static final Version SUPPORTED_API_VERSION =
+            Version.valueOf(String.format("%.1f.0", CURRENT_VERSION));
 
     static {
         try {
@@ -233,9 +236,24 @@ public final class BotPluginManager implements AutoCloseable {
     }
 
     private void checkApiCompatibility(BotPluginDescriptor desc) {
-        if (Double.parseDouble(desc.api()) > CURRENT_VERSION) {
-            throw new PluginException("Plugin " + desc.id() + " requires API " + desc.api());
+        try {
+            Version pluginApi = Version.valueOf(normalizeVersion(desc.api()));
+            if (pluginApi.greaterThan(SUPPORTED_API_VERSION)) {
+                throw new PluginException("Plugin " + desc.id() + " requires API " + desc.api());
+            }
+        } catch (IllegalArgumentException ex) {
+            throw new PluginException("Invalid API version: " + desc.api(), ex);
         }
+    }
+
+    private static String normalizeVersion(String version) {
+        if (version.chars().filter(ch -> ch == '.').count() == 1) {
+            return version + ".0";
+        }
+        if (!version.contains(".")) {
+            return version + ".0.0";
+        }
+        return version;
     }
 
     private void verifyHash(Path jar, BotPluginDescriptor desc) throws IOException {

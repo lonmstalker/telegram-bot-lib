@@ -99,13 +99,13 @@ public class BotPluginManagerTest {
     }
 
     @Test
-    void testApiCompatibility() throws Exception {
-        // плагин с несовместимым api
+    void testApiVersionAboveSupported() throws Exception {
+        // плагин требует более новую версию API
         Path jar = tempDir.resolve("ver.jar");
         createPluginJar(jar,
                 "id",
                 String.valueOf(CURRENT_VERSION),
-                "9.9",
+                "1.0.0",
                 TestPlugin.class.getName(),
                 null);
 
@@ -133,6 +133,24 @@ public class BotPluginManagerTest {
         verify(auditBus).publish(argThat((AuditEvent evt) ->
                 "plugin-scan".equals(evt.getActor()) &&
                         evt.getAction().contains("Checksum mismatch")
+        ));
+    }
+
+    @Test
+    void testApiInvalidFormat() throws Exception {
+        Path jar = tempDir.resolve("badapi.jar");
+        createPluginJar(jar,
+                "bad",
+                String.valueOf(CURRENT_VERSION),
+                "one.two",
+                TestPlugin.class.getName(),
+                null);
+
+        manager.loadAll(tempDir);
+
+        verify(auditBus).publish(argThat((AuditEvent evt) ->
+                "plugin-scan".equals(evt.getActor()) &&
+                        evt.getAction().contains("Invalid API version")
         ));
     }
 
