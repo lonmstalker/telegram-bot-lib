@@ -54,7 +54,7 @@ public class BotHandlerProcessor extends AbstractProcessor {
                     if (!processingEnv.getTypeUtils().isSameType(paramErased, botRequestErased)) {
                         error(String.format(
                                 "Неаннотированные параметры должны иметь тип %s, вы передали %s",
-                                processingEnv.getTypeUtils(), p.asType()
+                                botRequest, p.asType()
                         ), p);
                     }
                 } else if (arg.value().isEmpty()) {
