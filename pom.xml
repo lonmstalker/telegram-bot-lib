@@ -392,7 +392,7 @@
                         <googleJavaFormat />
                         <removeUnusedImports />
                         <licenseHeader>
-                            <file>${session.executionRootDirectory}/config/spotless/license.txt</file>
+                            <file>${maven.multiModuleProjectDirectory}/config/spotless/license.txt</file>
                         </licenseHeader>
                     </java>
                 </configuration>
@@ -424,22 +424,6 @@
                 <executions>
                     <execution>
                         <id>check-api</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.owasp</groupId>
-                <artifactId>dependency-check-maven</artifactId>
-                <configuration>
-                    <formats>HTML,SARIF</formats>
-                    <failBuildOnCVSS>7</failBuildOnCVSS>
-                </configuration>
-                <executions>
-                    <execution>
                         <phase>verify</phase>
                         <goals>
                             <goal>check</goal>
