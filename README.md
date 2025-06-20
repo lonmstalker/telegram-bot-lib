@@ -116,7 +116,7 @@ bot.start();          // smart Webhook ↔︎ Polling
 ### 2 — Работа с StateStore
 ```java
 BotConfig cfg = BotConfig.builder()
-        .store(new InMemoryStateStore())    // или new RedisStateStore(new JedisPool("localhost", 6379))
+        .store(new JdbcStateStore(dataSource))    // также доступен RedisStateStore
         .build();
 
 Bot bot = BotFactory.INSTANCE.from(token, cfg, adapter);

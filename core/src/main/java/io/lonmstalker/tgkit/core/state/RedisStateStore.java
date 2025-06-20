@@ -5,9 +5,9 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import redis.clients.jedis.JedisPool;
 
 /**
- * StateStore implementation backed by Redis via {@link JedisPool}.
+ * Хранилище состояний, использующее Redis через {@link JedisPool}.
  *
- * <h3>Пример подключения</h3>
+ * <p>Пример подключения:
  *
  * <pre>{@code
  * JedisPool pool = new JedisPool("redis.example", 6379);

@@ -40,6 +40,7 @@
         <reflections.version>0.10.2</reflections.version>
         <caffeine.version>3.2.1</caffeine.version>
         <jedis.version>6.0.0</jedis.version>
+        <embedded.redis.version>0.7.2</embedded.redis.version>
         <http-simple-client.version>0.16.0</http-simple-client.version>
         <netty.version>4.2.2.Final</netty.version>
         <undertow.version>2.3.9.Final</undertow.version>
@@ -224,6 +225,12 @@
                 <groupId>com.google.testing.compile</groupId>
                 <artifactId>compile-testing</artifactId>
                 <version>${compile.testing.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>it.ozimov</groupId>
+                <artifactId>embedded-redis</artifactId>
+                <version>${embedded.redis.version}</version>
                 <scope>test</scope>
             </dependency>
         </dependencies>
