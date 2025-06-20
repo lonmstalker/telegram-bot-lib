@@ -15,11 +15,11 @@
  */
 package io.lonmstalker.tgkit.core.bot;
 
+import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
 import static org.junit.jupiter.api.Assertions.*;
 
 import io.lonmstalker.tgkit.core.crypto.TokenCipherImpl;
 import io.lonmstalker.tgkit.core.exception.BotApiException;
-import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
 import java.sql.Connection;
 import java.sql.Statement;
 import javax.sql.DataSource;
@@ -31,7 +31,7 @@ public class BotDataSourceFactoryTest {
   private DataSource ds;
 
   static {
-    BotCoreInitializer.init();
+    TestBotBootstrap.initOnce();
   }
 
   @BeforeEach

@@ -15,10 +15,10 @@
  */
 package io.lonmstalker.tgkit.core.bot;
 
+import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.AbstractExecutorService;
@@ -33,7 +33,7 @@ import org.telegram.telegrambots.meta.generics.LongPollingBot;
 public class BotSessionImplTest {
 
   static {
-    BotCoreInitializer.init();
+    TestBotBootstrap.initOnce();
   }
 
   @Test

@@ -15,6 +15,7 @@
  */
 package io.lonmstalker.tgkit.core.bot;
 
+import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
 import static org.junit.jupiter.api.Assertions.*;
 
 import io.lonmstalker.tgkit.core.BotCommand;
@@ -22,7 +23,6 @@ import io.lonmstalker.tgkit.core.BotRequest;
 import io.lonmstalker.tgkit.core.BotRequestType;
 import io.lonmstalker.tgkit.core.BotResponse;
 import io.lonmstalker.tgkit.core.exception.BotApiException;
-import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
 import io.lonmstalker.tgkit.core.interceptor.BotInterceptor;
 import io.lonmstalker.tgkit.core.matching.CommandMatch;
 import java.util.List;
@@ -34,7 +34,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 class BotCommandRegistryImplTest {
 
   static {
-    BotCoreInitializer.init();
+    TestBotBootstrap.initOnce();
   }
 
   @Test

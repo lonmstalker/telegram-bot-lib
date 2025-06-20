@@ -15,6 +15,7 @@
  */
 package io.lonmstalker.observability;
 
+import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -31,7 +32,6 @@ import io.lonmstalker.tgkit.core.bot.BotConfig;
 import io.lonmstalker.tgkit.core.bot.BotRegistryImpl;
 import io.lonmstalker.tgkit.core.bot.BotState;
 import io.lonmstalker.tgkit.core.bot.TelegramSender;
-import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
 import io.lonmstalker.tgkit.core.interceptor.BotInterceptor;
 import io.lonmstalker.tgkit.core.storage.BotRequestContextHolder;
 import io.lonmstalker.tgkit.observability.Span;
@@ -62,7 +62,7 @@ public class BotAdapterCleanupTest {
 
   @BeforeAll
   static void initCore() {
-    BotCoreInitializer.init();
+    TestBotBootstrap.initOnce();
   }
 
   @BeforeEach

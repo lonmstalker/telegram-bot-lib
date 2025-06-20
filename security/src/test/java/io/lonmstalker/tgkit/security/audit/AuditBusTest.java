@@ -15,12 +15,12 @@
  */
 package io.lonmstalker.tgkit.security.audit;
 
+import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
 import static org.assertj.core.api.Assertions.*;
 
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.read.ListAppender;
-import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
 import io.lonmstalker.tgkit.security.config.BotSecurityGlobalConfig;
 import io.lonmstalker.tgkit.security.init.BotSecurityInitializer;
 import java.time.Duration;
@@ -42,7 +42,7 @@ class AuditBusTest {
   private final ListAppender<ILoggingEvent> appender = new ListAppender<>();
 
   static {
-    BotCoreInitializer.init();
+    TestBotBootstrap.initOnce();
     BotSecurityInitializer.init();
   }
 

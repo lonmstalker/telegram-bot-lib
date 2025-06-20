@@ -15,6 +15,7 @@
  */
 package io.lonmstalker.tgkit.core.args;
 
+import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
 import static org.junit.jupiter.api.Assertions.*;
 
 import io.lonmstalker.tgkit.core.*;
@@ -29,7 +30,6 @@ import io.lonmstalker.tgkit.core.bot.BotConfig;
 import io.lonmstalker.tgkit.core.bot.TelegramSender;
 import io.lonmstalker.tgkit.core.bot.loader.AnnotatedCommandLoader;
 import io.lonmstalker.tgkit.core.i18n.MessageLocalizerImpl;
-import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
 import io.lonmstalker.tgkit.core.state.InMemoryStateStore;
 import io.lonmstalker.tgkit.core.user.BotUserInfo;
 import io.lonmstalker.tgkit.core.user.store.InMemoryUserKVStore;
@@ -43,7 +43,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 public class ArgBindingTest {
 
   static {
-    BotCoreInitializer.init();
+    TestBotBootstrap.initOnce();
   }
 
   public static class Commands {

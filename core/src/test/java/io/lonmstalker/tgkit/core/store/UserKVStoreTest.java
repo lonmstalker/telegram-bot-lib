@@ -15,7 +15,7 @@
  */
 package io.lonmstalker.tgkit.core.store;
 
-import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
+import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
 import io.lonmstalker.tgkit.core.user.store.InMemoryUserKVStore;
 import io.lonmstalker.tgkit.core.user.store.JdbcUserKVStore;
 import io.lonmstalker.tgkit.core.user.store.ReadOnlyUserKVStore;
@@ -29,7 +29,7 @@ import org.junit.jupiter.api.*;
 class UserKVStoreTest implements WithAssertions {
 
   static {
-    BotCoreInitializer.init();
+    TestBotBootstrap.initOnce();
   }
 
   /* ---------- shared test data ---------- */

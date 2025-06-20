@@ -1,5 +1,6 @@
 package io.lonmstalker.tgkit.webhook;
 
+import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,7 +13,6 @@ import io.lonmstalker.tgkit.core.bot.BotAdapterImpl;
 import io.lonmstalker.tgkit.core.bot.BotConfig;
 import io.lonmstalker.tgkit.core.bot.BotFactory;
 import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
-import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
 import io.lonmstalker.tgkit.core.matching.CommandMatch;
 import io.lonmstalker.tgkit.testkit.RecordedRequest;
 import io.lonmstalker.tgkit.testkit.TelegramMockServer;
@@ -36,7 +36,7 @@ class WebhookServerTest {
   @Test
   void dispatchesUpdateToBotAndAddsHsts() throws Exception {
     BotGlobalConfig.INSTANCE.webhook().engine(WebhookServer.Engine.JETTY).port(0).secret("SECRET");
-    BotCoreInitializer.init();
+    TestBotBootstrap.initOnce();
     WebhookServer server = BotGlobalConfig.INSTANCE.webhook().server();
     try (TelegramMockServer tgServer = new TelegramMockServer()) {
       tgServer.enqueue("{\"ok\":true,\"result\":{\"id\":1,\"is_bot\":true,\"username\":\"bot\"}}");
@@ -91,7 +91,7 @@ class WebhookServerTest {
   @Test
   void rejectsRequestWithWrongToken() throws Exception {
     BotGlobalConfig.INSTANCE.webhook().engine(WebhookServer.Engine.JETTY).port(0).secret("SECRET");
-    BotCoreInitializer.init();
+    TestBotBootstrap.initOnce();
     WebhookServer server = BotGlobalConfig.INSTANCE.webhook().server();
     try (TelegramMockServer tgServer = new TelegramMockServer()) {
       tgServer.enqueue("{\"ok\":true,\"result\":{\"id\":1,\"is_bot\":true,\"username\":\"bot\"}}");

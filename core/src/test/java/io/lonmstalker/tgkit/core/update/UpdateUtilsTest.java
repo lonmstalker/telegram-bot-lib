@@ -15,19 +15,19 @@
  */
 package io.lonmstalker.tgkit.core.update;
 
+import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import io.lonmstalker.tgkit.core.BotRequestType;
 import io.lonmstalker.tgkit.core.exception.BotApiException;
-import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
 import org.junit.jupiter.api.Test;
 import org.telegram.telegrambots.meta.api.objects.*;
 
 public class UpdateUtilsTest {
 
   static {
-    BotCoreInitializer.init();
+    TestBotBootstrap.initOnce();
   }
 
   @Test

@@ -15,6 +15,7 @@
  */
 package io.lonmstalker.tgkit.security.antispam;
 
+import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
@@ -22,7 +23,6 @@ import static org.mockito.Mockito.*;
 import io.lonmstalker.tgkit.core.BotRequest;
 import io.lonmstalker.tgkit.core.BotService;
 import io.lonmstalker.tgkit.core.i18n.MessageLocalizerImpl;
-import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
 import io.lonmstalker.tgkit.security.captcha.CaptchaProvider;
 import io.lonmstalker.tgkit.security.init.BotSecurityInitializer;
 import io.lonmstalker.tgkit.security.ratelimit.RateLimiter;
@@ -47,7 +47,7 @@ class AntiSpamInterceptorTest implements WithAssertions {
   AntiSpamInterceptor isp;
 
   static {
-    BotCoreInitializer.init();
+    TestBotBootstrap.initOnce();
     BotSecurityInitializer.init();
   }
 

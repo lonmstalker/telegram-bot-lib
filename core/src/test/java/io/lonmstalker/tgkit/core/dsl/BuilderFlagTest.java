@@ -15,6 +15,7 @@
  */
 package io.lonmstalker.tgkit.core.dsl;
 
+import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -24,7 +25,6 @@ import io.lonmstalker.tgkit.core.BotService;
 import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
 import io.lonmstalker.tgkit.core.dsl.context.DSLContext;
 import io.lonmstalker.tgkit.core.dsl.feature_flags.InMemoryFeatureFlags;
-import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
 import io.lonmstalker.tgkit.core.user.BotUserInfo;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -34,7 +34,7 @@ import org.junit.jupiter.api.Test;
 class BuilderFlagTest {
 
   static {
-    BotCoreInitializer.init();
+    TestBotBootstrap.initOnce();
   }
 
   @BeforeEach

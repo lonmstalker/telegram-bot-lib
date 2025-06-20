@@ -15,11 +15,11 @@
  */
 package io.lonmstalker.tgkit.core.bot;
 
+import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
 import static org.junit.jupiter.api.Assertions.*;
 
 import io.lonmstalker.tgkit.core.BotAdapter;
 import io.lonmstalker.tgkit.core.exception.BotApiException;
-import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
 import java.io.Serializable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,7 +32,7 @@ import org.telegram.telegrambots.meta.api.objects.User;
 public class BotImplLifecycleTest {
 
   static {
-    BotCoreInitializer.init();
+    TestBotBootstrap.initOnce();
   }
 
   private BotImpl bot;

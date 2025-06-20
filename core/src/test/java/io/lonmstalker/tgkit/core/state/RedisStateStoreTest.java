@@ -15,9 +15,9 @@
  */
 package io.lonmstalker.tgkit.core.state;
 
+import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
 import static org.mockito.Mockito.*;
 
-import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,7 +26,7 @@ import redis.clients.jedis.JedisPool;
 
 class RedisStateStoreTest implements WithAssertions {
   static {
-    BotCoreInitializer.init();
+    TestBotBootstrap.initOnce();
   }
 
   private JedisPool pool;

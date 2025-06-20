@@ -15,6 +15,7 @@
  */
 package io.lonmstalker.tgkit.core.dsl;
 
+import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -22,7 +23,6 @@ import io.lonmstalker.tgkit.core.BotInfo;
 import io.lonmstalker.tgkit.core.BotService;
 import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
 import io.lonmstalker.tgkit.core.dsl.context.DSLContext;
-import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
 import io.lonmstalker.tgkit.core.parse_mode.ParseMode;
 import io.lonmstalker.tgkit.core.user.BotUserInfo;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,7 +34,7 @@ class MessageBuilderTest {
   private DSLContext ctx;
 
   static {
-    BotCoreInitializer.init();
+    TestBotBootstrap.initOnce();
   }
 
   @BeforeEach
