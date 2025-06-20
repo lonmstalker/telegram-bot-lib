@@ -2,8 +2,6 @@ package io.lonmstalker.tgkit.validator.impl;
 
 import io.lonmstalker.tgkit.core.i18n.MessageKey;
 import io.lonmstalker.tgkit.core.validator.Validator;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.objects.payments.Invoice;
 
@@ -12,8 +10,9 @@ import org.telegram.telegrambots.meta.api.objects.payments.Invoice;
  *
  * <p>Проверяют корректность суммы и формат валюты.
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class PaymentValidators {
+
+  private PaymentValidators() {}
 
   private static final long MAX_CENTS = 1_000_000L; // $10 000
 

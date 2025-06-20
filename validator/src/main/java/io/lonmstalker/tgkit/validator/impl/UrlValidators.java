@@ -5,8 +5,6 @@ import io.lonmstalker.tgkit.core.validator.Validator;
 import io.lonmstalker.tgkit.validator.moderation.ContentModerationService;
 import java.net.URI;
 import java.util.ServiceLoader;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
@@ -14,8 +12,9 @@ import org.checkerframework.checker.nullness.qual.NonNull;
  *
  * <p>Проверяют синтаксис URI и безопасность через Safe Browsing.
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class UrlValidators {
+
+  private UrlValidators() {}
 
   private static final ContentModerationService MOD =
       ServiceLoader.load(ContentModerationService.class).findFirst().orElse(null);

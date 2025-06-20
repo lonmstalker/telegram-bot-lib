@@ -4,8 +4,6 @@ import io.lonmstalker.tgkit.core.i18n.MessageKey;
 import io.lonmstalker.tgkit.core.validator.Validator;
 import java.util.Objects;
 import java.util.Set;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.objects.*;
 import org.telegram.telegrambots.meta.api.objects.games.Animation;
@@ -19,8 +17,9 @@ import org.telegram.telegrambots.meta.api.objects.stickers.Sticker;
  * <p>Предполагается, что fileId всегда приходит от Telegram, поэтому его наличие не проверяется
  * здесь.
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class MiscValidators {
+
+  private MiscValidators() {}
 
   /**
    * Стикер должен принадлежать одному из разрешённых наборов.

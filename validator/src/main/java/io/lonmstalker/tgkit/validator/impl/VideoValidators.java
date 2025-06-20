@@ -4,8 +4,6 @@ import io.lonmstalker.tgkit.core.i18n.MessageKey;
 import io.lonmstalker.tgkit.core.validator.Validator;
 import io.lonmstalker.tgkit.validator.moderation.ContentModerationService;
 import java.util.ServiceLoader;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.objects.Video;
 
@@ -14,8 +12,9 @@ import org.telegram.telegrambots.meta.api.objects.Video;
  *
  * <p>Проверяют размер, продолжительность и SafeSearch.
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class VideoValidators {
+
+  private VideoValidators() {}
 
   private static final ContentModerationService MOD =
       ServiceLoader.load(ContentModerationService.class).findFirst().orElse(null);
