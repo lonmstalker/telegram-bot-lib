@@ -40,7 +40,7 @@
 ```xml
 <dependency>
     <groupId>io.lonmstalker.tgkit</groupId>
-    <artifactId>tgkit-core</artifactId>
+    <artifactId>core</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 </dependency>
 
@@ -54,7 +54,7 @@
 ...
     <path>
         <groupId>io.lonmstalker.tgkit</groupId>
-        <artifactId>tgkit-core</artifactId>
+        <artifactId>core</artifactId>
         <version>${project.version}</version>
     </path>
 ...
@@ -70,7 +70,7 @@
 <summary>Gradle Kotlin DSL</summary>
 
 ```kotlin 
-implementation("io.lonmstalker.tgkit:tgkit-core:0.0.1-SNAPSHOT")
+implementation("io.lonmstalker.tgkit:core:0.0.1-SNAPSHOT")
 ```
 </details>
 
