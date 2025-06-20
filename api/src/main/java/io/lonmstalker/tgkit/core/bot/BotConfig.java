@@ -27,18 +27,17 @@ import org.apache.http.protocol.HttpContext;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
-import org.telegram.telegrambots.bots.DefaultBotOptions.ProxyType;
 import org.telegram.telegrambots.meta.generics.BackOff;
 
 /**
  * Конфигурация бота и отправки сообщений через {@link TelegramSender}.
  *
  * <p>Пример использования:
+ *
  * <pre>{@code
  * BotConfig cfg = BotConfig.builder().build();
  * cfg.setRequestsPerSecond(30);
- * }
- * </pre>
+ * }</pre>
  */
 public class BotConfig extends DefaultBotOptions {
   private static final String BASE_URL = "https://api.telegram.org/bot";

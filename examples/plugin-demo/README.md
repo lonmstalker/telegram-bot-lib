@@ -19,7 +19,7 @@
    ```shell 
    cd ../..
    pwd
-   ./mvnw clean package -DskipTests -DskipCheckerFramework=true
+   mvn clean package -DskipTests -DskipCheckerFramework=true
    ```
 2. Убедитесь, что JAR плагина лежит в plugin-example/target:
    ```shell

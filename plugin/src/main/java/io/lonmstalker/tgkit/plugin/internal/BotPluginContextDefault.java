@@ -30,7 +30,8 @@ import java.util.concurrent.ExecutorService;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
- * Стандартная реализация {@link BotPluginContext}, предоставляющая сервисы через {@link ServiceLoader}.
+ * Стандартная реализация {@link BotPluginContext}, предоставляющая сервисы через {@link
+ * ServiceLoader}.
  */
 public class BotPluginContextDefault implements BotPluginContext {
   private final ClassLoader cl;

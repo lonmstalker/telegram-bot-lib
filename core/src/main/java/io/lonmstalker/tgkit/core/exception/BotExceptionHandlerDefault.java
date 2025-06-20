@@ -28,10 +28,10 @@ import org.telegram.telegrambots.meta.api.objects.Update;
  * Простейший {@link BotExceptionHandler}: логирует ошибку и отправляет стандартный ответ.
  *
  * <p>Пример:
+ *
  * <pre>{@code
  * BotExceptionHandler handler = BotExceptionHandlerDefault.INSTANCE;
- * }
- * </pre>
+ * }</pre>
  */
 public class BotExceptionHandlerDefault implements BotExceptionHandler {
   private static final Logger log = LoggerFactory.getLogger(BotExceptionHandlerDefault.class);

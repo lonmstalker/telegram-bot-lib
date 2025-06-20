@@ -15,10 +15,9 @@
  */
 package io.lonmstalker.tgkit.core.bot;
 
-import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
 import static org.junit.jupiter.api.Assertions.*;
 
-import io.lonmstalker.tgkit.core.bot.GuavaRateLimiterWrapper;
+import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
 import org.junit.jupiter.api.Test;
 
 class TelegramSenderRateLimiterTest {
@@ -38,7 +37,6 @@ class TelegramSenderRateLimiterTest {
     assertTrue(elapsed >= 1000);
     limiter.close();
   }
-
 
   @Test
   void independentLimiters() {

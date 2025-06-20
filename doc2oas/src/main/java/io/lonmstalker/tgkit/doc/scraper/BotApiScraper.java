@@ -1,22 +1,35 @@
+/*
+ * Copyright 2025 TgKit Team
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package io.lonmstalker.tgkit.doc.scraper;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 
-/**
- * Скачивает официальную документацию Telegram Bot API и парсит её как HTML.
- */
+/** Скачивает официальную документацию Telegram Bot API и парсит её как HTML. */
 public class BotApiScraper extends JsoupDocScraper {
-  private static final URI DEFAULT_URI = URI.create(
-      System.getProperty("tg.doc.baseUri", "https://core.telegram.org/bots/api"));
+  private static final URI DEFAULT_URI =
+      URI.create(System.getProperty("tg.doc.baseUri", "https://core.telegram.org/bots/api"));
 
   private final HttpClient client;
   private final URI uri;
@@ -59,7 +72,8 @@ public class BotApiScraper extends JsoupDocScraper {
     }
 
     try {
-      HttpResponse<InputStream> resp = client.send(builder.build(), HttpResponse.BodyHandlers.ofInputStream());
+      HttpResponse<InputStream> resp =
+          client.send(builder.build(), HttpResponse.BodyHandlers.ofInputStream());
       if (resp.statusCode() == 304 && Files.exists(htmlFile)) {
         try (InputStream stream = Files.newInputStream(htmlFile)) {
           return scrape(stream);
@@ -73,12 +87,15 @@ public class BotApiScraper extends JsoupDocScraper {
       try (InputStream body = resp.body()) {
         Files.copy(body, htmlFile, StandardCopyOption.REPLACE_EXISTING);
       }
-      resp.headers().firstValue("ETag").ifPresent(etag -> {
-        try {
-          Files.writeString(etagFile, etag);
-        } catch (IOException ignored) {
-        }
-      });
+      resp.headers()
+          .firstValue("ETag")
+          .ifPresent(
+              etag -> {
+                try {
+                  Files.writeString(etagFile, etag);
+                } catch (IOException ignored) {
+                }
+              });
 
       try (InputStream stream = Files.newInputStream(htmlFile)) {
         return scrape(stream);

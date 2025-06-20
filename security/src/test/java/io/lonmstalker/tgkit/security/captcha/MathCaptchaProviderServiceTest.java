@@ -15,7 +15,6 @@
  */
 package io.lonmstalker.tgkit.security.captcha;
 
-import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
@@ -28,6 +27,7 @@ import io.lonmstalker.tgkit.core.user.store.UserKVStore;
 import io.lonmstalker.tgkit.security.TestUtils;
 import io.lonmstalker.tgkit.security.captcha.provider.MathCaptchaProvider;
 import io.lonmstalker.tgkit.security.init.BotSecurityInitializer;
+import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
 import java.time.Duration;
 import java.util.Locale;
 import java.util.Set;

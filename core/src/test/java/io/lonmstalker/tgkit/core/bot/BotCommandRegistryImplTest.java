@@ -15,7 +15,6 @@
  */
 package io.lonmstalker.tgkit.core.bot;
 
-import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
 import static org.junit.jupiter.api.Assertions.*;
 
 import io.lonmstalker.tgkit.core.BotCommand;
@@ -25,6 +24,7 @@ import io.lonmstalker.tgkit.core.BotResponse;
 import io.lonmstalker.tgkit.core.exception.BotApiException;
 import io.lonmstalker.tgkit.core.interceptor.BotInterceptor;
 import io.lonmstalker.tgkit.core.matching.CommandMatch;
+import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
 import java.util.List;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.junit.jupiter.api.Test;

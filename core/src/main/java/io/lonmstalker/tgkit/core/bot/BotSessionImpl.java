@@ -17,8 +17,12 @@ package io.lonmstalker.tgkit.core.bot;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.lonmstalker.observability.MetricsCollector;
 import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
 import io.lonmstalker.tgkit.core.exception.BotApiException;
+import io.lonmstalker.tgkit.observability.Tags;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.Gauge;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -41,10 +45,6 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.generics.BotOptions;
 import org.telegram.telegrambots.meta.generics.BotSession;
 import org.telegram.telegrambots.meta.generics.LongPollingBot;
-import io.lonmstalker.observability.MetricsCollector;
-import io.lonmstalker.tgkit.observability.Tags;
-import io.micrometer.core.instrument.Counter;
-import io.micrometer.core.instrument.Gauge;
 
 /**
  * Сессия бота, получающая обновления через HTTP long polling и передающая их реализованному {@link
@@ -160,9 +160,7 @@ public class BotSessionImpl implements BotSession {
     Objects.requireNonNull(callback, "Callback not set");
 
     this.httpClient =
-        BotGlobalConfig.INSTANCE
-            .http()
-            .getClient(options.getProxyHost(), options.getProxyPort());
+        BotGlobalConfig.INSTANCE.http().getClient(options.getProxyHost(), options.getProxyPort());
 
     this.executor =
         providedExecutor != null

@@ -51,11 +51,11 @@ import org.telegram.telegrambots.meta.updateshandlers.SentCallback;
  * Обёртка над TelegramBots API с поддержкой лимита запросов и повторов.
  *
  * <p>Пример:
+ *
  * <pre>{@code
  * TelegramSender sender = new TelegramSender(cfg, token);
  * sender.execute(SendMessage.builder().chatId("42").text("hi").build());
- * }
- * </pre>
+ * }</pre>
  */
 public class TelegramSender extends DefaultAbsSender implements AutoCloseable {
   private final BackOff backOff;
@@ -64,8 +64,7 @@ public class TelegramSender extends DefaultAbsSender implements AutoCloseable {
 
   public TelegramSender(@NonNull BotConfig options, @NonNull String botToken) {
     super(options, botToken);
-    this.telegramSenderRateLimiter =
-        new GuavaRateLimiterWrapper(options.getRequestsPerSecond());
+    this.telegramSenderRateLimiter = new GuavaRateLimiterWrapper(options.getRequestsPerSecond());
     this.executor = BotGlobalConfig.INSTANCE.executors().getIoExecutorService();
     BackOff tmp = options.getBackOff();
     if (tmp == null) {

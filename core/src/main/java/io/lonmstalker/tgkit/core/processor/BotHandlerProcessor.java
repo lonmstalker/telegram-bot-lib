@@ -38,6 +38,7 @@ import javax.tools.Diagnostic;
  * Аннотационный процессор, проверяющий методы {@link BotHandler} во время компиляции.
  *
  * <p>Пример:
+ *
  * <pre>{@code
  * class MyBot {
  *   @BotHandler
@@ -45,8 +46,7 @@ import javax.tools.Diagnostic;
  *     return new BotResponse();
  *   }
  * }
- * }
- * </pre>
+ * }</pre>
  */
 @SupportedSourceVersion(SourceVersion.RELEASE_21)
 @SupportedAnnotationTypes("io.lonmstalker.tgkit.core.annotation.BotHandler")

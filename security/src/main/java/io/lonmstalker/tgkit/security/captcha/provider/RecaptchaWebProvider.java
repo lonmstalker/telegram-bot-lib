@@ -17,9 +17,9 @@ package io.lonmstalker.tgkit.security.captcha.provider;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.lonmstalker.tgkit.core.BotRequest;
+import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
 import io.lonmstalker.tgkit.core.dsl.Button;
 import io.lonmstalker.tgkit.core.exception.BotApiException;
-import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
 import io.lonmstalker.tgkit.security.captcha.CaptchaProvider;
 import io.lonmstalker.tgkit.security.secret.SecretStore;
 import java.net.URI;
@@ -57,10 +57,7 @@ public final class RecaptchaWebProvider implements CaptchaProvider {
       throw new IllegalArgumentException("recaptcha secret required");
     }
 
-    this.httpClient =
-        httpClient != null
-            ? httpClient
-            : BotGlobalConfig.INSTANCE.http().getClient();
+    this.httpClient = httpClient != null ? httpClient : BotGlobalConfig.INSTANCE.http().getClient();
     this.secretKey =
         secretKey != null
             ? secretKey
@@ -69,8 +66,7 @@ public final class RecaptchaWebProvider implements CaptchaProvider {
                 .orElseThrow(() -> new IllegalArgumentException("recaptcha site key required"));
 
     this.domain = domain;
-    this.mapper =
-        mapper != null ? mapper : BotGlobalConfig.INSTANCE.http().getMapper();
+    this.mapper = mapper != null ? mapper : BotGlobalConfig.INSTANCE.http().getMapper();
     this.verifyUrl =
         verifyUrl != null ? verifyUrl : "https://www.google.com/recaptcha/api/siteverify";
   }

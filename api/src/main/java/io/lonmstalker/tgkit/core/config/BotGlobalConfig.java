@@ -15,18 +15,18 @@
  */
 package io.lonmstalker.tgkit.core.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.lonmstalker.observability.MetricsCollector;
+import io.lonmstalker.observability.impl.NoOpMetricsCollector;
 import io.lonmstalker.tgkit.core.dsl.MissingIdStrategy;
 import io.lonmstalker.tgkit.core.dsl.feature_flags.FeatureFlags;
 import io.lonmstalker.tgkit.core.event.BotEventBus;
 import io.lonmstalker.tgkit.core.parse_mode.ParseMode;
 import io.lonmstalker.tgkit.core.ttl.TtlScheduler;
 import io.lonmstalker.tgkit.webhook.WebhookServer;
-import io.lonmstalker.observability.MetricsCollector;
-import io.lonmstalker.observability.impl.NoOpMetricsCollector;
-import java.net.http.HttpClient;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.net.InetSocketAddress;
 import java.net.ProxySelector;
+import java.net.http.HttpClient;
 import java.time.Duration;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ScheduledExecutorService;
@@ -193,8 +193,8 @@ public class BotGlobalConfig {
     }
 
     /**
-     * Размер пула для CPU-задач. Используется при инициализации
-     * {@link java.util.concurrent.ExecutorService} c виртуальными потоками.
+     * Размер пула для CPU-задач. Используется при инициализации {@link
+     * java.util.concurrent.ExecutorService} c виртуальными потоками.
      *
      * @param size желаемое количество потоков
      * @return конфигурация executors
@@ -205,8 +205,8 @@ public class BotGlobalConfig {
     }
 
     /**
-     * Размер пула планировщика. Определяет количество виртуальных потоков в
-     * {@link java.util.concurrent.ScheduledExecutorService}.
+     * Размер пула планировщика. Определяет количество виртуальных потоков в {@link
+     * java.util.concurrent.ScheduledExecutorService}.
      *
      * @param size желаемое количество потоков
      * @return конфигурация executors

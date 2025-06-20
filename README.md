@@ -6,27 +6,27 @@
 
 ## ✨ Особенности
 
-| ✔️ | Возможность                           | Описание |
-|----|---------------------------------------|----------|
-| ✅ | **Middleware-конвейер**               | Гибкая `Interceptor`-цепочка по образцу Spring Web / gRPC |
-| ✅ | **Аннотационные хендлеры**            | `@BotHandler`, `@MessageRegexMatch`, `@Arg`, compile-time-проверка |
-| ✅ | **Rate-limit & Retry**                | Авто-back-off при 429/5xx, лимиты per-user/chat |
-| ✅ | **Pluggable StateStore**              | In-memory → Redis → JDBC переключается одной строкой |
-| ✅ | **Webhook ⇆ Polling auto-failover**   | Метод `serveHybrid()` сам решает, что сейчас живо |
-| 🟡 | Инструменты тестирования              | Record/Replay JSON-`Update`, JUnit-rule `@BotTest` |
-| ✅ | [Метрики / трейсы / логи](observability/README.md) | Micrometer + OpenTelemetry + SLF4J/MDC |
-| ✅ | **Плагинная архитектура**             | Отдельный модуль `plugin` с `ServiceLoader`, hot-reload и системой разрешений |
-| 🟡 | [Security-bundle](security/README.md) | Rate-limit, inline-CAPTCHA, ACL и Spring Boot-стартер |
-| 🟡 | Расширенный форматтер                 | Markdown V2 / HTML, media-group, шаблоны FreeMarker |
-| 🟡 | Версионирование API                   | Сканер Bot API, генерация миграционных отчётов |
-| 🟡 | Data-validation                       | `@Range`, `@Pattern`, собственные `Converter<?>` |
-| 🟡 | Inline-Query / Web-App                | Fluent-DSL + кеширование `file_id` |
-| 🟡 | CLI / Admin-бот                       | `/stats`, `/broadcast`, `bot-cli` |
-| 🟡 | Авто-документация                     | HTML-страница OpenAPI-стиля |
-| 🟡 | Media-streaming                       | NIO-upload, резюмирование больших файлов |
-| ✅ | **Шифрование токена**                 | `TokenCipher` (AES-GCM, ключ 16/32 байта) |
-| ✅ | **Локализация**                       | ICU4J plural-rules, `localizer().get("key")` |
-| ✅ | **Поддержка БД**                      | H2, PostgreSQL, MySQL, Oracle (драйвер — внешне) |
+| ✔️ | Возможность                                        | Описание                                                                      |
+|----|----------------------------------------------------|-------------------------------------------------------------------------------|
+| ✅  | **Middleware-конвейер**                            | Гибкая `Interceptor`-цепочка по образцу Spring Web / gRPC                     |
+| ✅  | **Аннотационные хендлеры**                         | `@BotHandler`, `@MessageRegexMatch`, `@Arg`, compile-time-проверка            |
+| ✅  | **Rate-limit & Retry**                             | Авто-back-off при 429/5xx, лимиты per-user/chat                               |
+| ✅  | **Pluggable StateStore**                           | In-memory → Redis → JDBC переключается одной строкой                          |
+| ✅  | **Webhook ⇆ Polling auto-failover**                | Метод `serveHybrid()` сам решает, что сейчас живо                             |
+| 🟡 | Инструменты тестирования                           | Record/Replay JSON-`Update`, JUnit-rule `@BotTest`                            |
+| ✅  | [Метрики / трейсы / логи](observability/README.md) | Micrometer + OpenTelemetry + SLF4J/MDC                                        |
+| ✅  | **Плагинная архитектура**                          | Отдельный модуль `plugin` с `ServiceLoader`, hot-reload и системой разрешений |
+| 🟡 | [Security-bundle](security/README.md)              | Rate-limit, inline-CAPTCHA, ACL и Spring Boot-стартер                         |
+| 🟡 | Расширенный форматтер                              | Markdown V2 / HTML, media-group, шаблоны FreeMarker                           |
+| 🟡 | Версионирование API                                | Сканер Bot API, генерация миграционных отчётов                                |
+| 🟡 | Data-validation                                    | `@Range`, `@Pattern`, собственные `Converter<?>`                              |
+| 🟡 | Inline-Query / Web-App                             | Fluent-DSL + кеширование `file_id`                                            |
+| 🟡 | CLI / Admin-бот                                    | `/stats`, `/broadcast`, `bot-cli`                                             |
+| 🟡 | Авто-документация                                  | HTML-страница OpenAPI-стиля                                                   |
+| 🟡 | Media-streaming                                    | NIO-upload, резюмирование больших файлов                                      |
+| ✅  | **Шифрование токена**                              | `TokenCipher` (AES-GCM, ключ 16/32 байта)                                     |
+| ✅  | **Локализация**                                    | ICU4J plural-rules, `localizer().get("key")`                                  |
+| ✅  | **Поддержка БД**                                   | H2, PostgreSQL, MySQL, Oracle (драйвер — внешне)                              |
 
 🟡 — функция доступна в отдельном модуле; статус следите в Issues/Projects.
 
@@ -65,6 +65,7 @@
 ...
 </plugin>
 ```
+
 </details> 
 <details>
 <summary>Gradle Kotlin DSL</summary>
@@ -72,6 +73,7 @@
 ```kotlin 
 implementation("io.lonmstalker.tgkit:core:0.0.1-SNAPSHOT")
 ```
+
 </details>
 
 <details>
@@ -89,6 +91,7 @@ implementation("io.lonmstalker.tgkit:core:0.0.1-SNAPSHOT")
 ```kotlin
 testImplementation("io.lonmstalker.tgkit:testkit:0.0.1-SNAPSHOT")
 ```
+
 </details>
 
 <details>
@@ -101,9 +104,11 @@ testImplementation("io.lonmstalker.tgkit:testkit:0.0.1-SNAPSHOT")
     <version>0.0.1-SNAPSHOT</version>
 </dependency>
 ```
+
 </details>
 
 ### 1 — Минимальный эхо-бот
+
 ```java
 public class EchoCommands {
 
@@ -122,6 +127,7 @@ TelegramBot.run(Path.of("bot.yaml"));
 ```
 
 ### 2 — Работа с StateStore
+
 ```java
 JedisPool pool = new JedisPool("localhost", 6379);
 BotConfig cfg = BotConfig.builder()
@@ -142,6 +148,7 @@ public void quiz(BotRequest<Message> req) {
 ```
 
 ### 3 — Observability за 30 секунд
+
 ```java
 var metrics = MicrometerCollector.prometheus(9180);   // /prometheus, сервер уже запущен
 var tracer  = OTelTracer.stdoutDev();                 // спаны в лог
@@ -155,6 +162,7 @@ TelegramBot.run(Path.of("bot.yaml"));
 ```
 
 ### 4 — Юнит-тестирование бота
+
 ```java
 @TelegramBotTest
 class PingCommandTest {
@@ -168,6 +176,7 @@ class PingCommandTest {
 ```
 
 ### 5 — Безопасность и наблюдаемость
+
 ```java
 MetricsCollector metrics = BotObservability.micrometer(9180);
 Tracer tracer = BotObservability.otelTracer("sample-bot");
@@ -183,6 +192,7 @@ bot.start();
 ```
 
 ### 6 — Инициализация ядра и virtual threads
+
 ```java
 BotGlobalConfig.INSTANCE
         .executors()
@@ -209,47 +219,47 @@ export MAVEN_OPTS="-Dhttps.proxyHost=proxy -Dhttps.proxyPort=8080 \
 -Djava.net.preferIPv4Stack=true -Dfile.encoding=UTF-8"
 ```
 
-Без них сборка может завершиться ошибкой «Network is unreachable».
-
-
-Для запуска Maven не требуется предварительная установка: в репозиторий входит Maven Wrapper. Сборку лучше пускать через `./mvnw`.
-
 Сборка всех модулей выполняется командой:
 
 ```bash
-./mvnw clean install
+mvn clean install
 ```
 
 Для запуска только тестов используйте:
 
 ```bash
-./mvnw test
+mvn test
 ```
 
 Для генерации отчёта по покрытию:
 
 ```bash
-./mvnw verify jacoco:report
+mvn verify jacoco:report
 ```
+
 Результат ищите в `target/site/jacoco/index.html`.
 
 Для локального сканирования зависимостей на уязвимости:
 
 ```bash
-./mvnw verify
+mvn verify
 ```
+
 Отчёты появятся в `target/dependency-check-report.html` и
 `target/dependency-check-report.sarif`.
 
 ### Бенчмарки
+
 Для запуска JMH-бенчмарков:
 
 ```bash
-./mvnw -Pbenchmarks -pl benchmarks test
+mvn -Pbenchmarks -pl benchmarks test
 ```
 
 ## 🤝 Contributing
-PR-ы и идеи приветствуются! Перед отправкой ознакомьтесь с [CONTRIBUTING.md](CONTRIBUTING.md) и [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
+
+PR-ы и идеи приветствуются! Перед отправкой ознакомьтесь с [CONTRIBUTING.md](CONTRIBUTING.md)
+и [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
 
 ⚖️ Лицензия
 Apache License 2.0 © 2025 TgKit Team
@@ -257,10 +267,14 @@ Apache License 2.0 © 2025 TgKit Team
 История изменений — в [CHANGELOG.md](CHANGELOG.md).
 
 ### Pre-commit hook
+
 Для автоматического форматирования и проверки стиля перед коммитом подключите локальный хук:
+
 ```bash
 ln -s ../../githooks/pre-commit .git/hooks/pre-commit
 ```
-Коммит будет прерван, если `./mvnw -q checkstyle:check` обнаружит нарушения.
-После успешной проверки запускается `./mvnw -q verify` для сборки и тестов.
+
+Коммит будет прерван, если `mvn -q checkstyle:check` обнаружит нарушения.
+После успешной проверки запускается `mvn -q verify` для сборки и тестов.
+
 * [doc2oas](doc2oas/README.md) — генерация OpenAPI и SDK

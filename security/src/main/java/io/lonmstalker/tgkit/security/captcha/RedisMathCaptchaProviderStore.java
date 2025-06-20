@@ -23,10 +23,10 @@ import redis.clients.jedis.JedisPool;
  * Хранит ответы каптч в Redis с ограничением времени жизни.
  *
  * <p>Пример:
+ *
  * <pre>{@code
  * MathCaptchaProviderStore store = new RedisMathCaptchaProviderStore(pool);
- * }
- * </pre>
+ * }</pre>
  */
 public class RedisMathCaptchaProviderStore implements MathCaptchaProviderStore {
   private final JedisPool pool;

@@ -25,10 +25,10 @@ import org.telegram.telegrambots.meta.api.objects.Message;
  * Проверяет текст сообщения по регулярному выражению.
  *
  * <p>Пример:
+ *
  * <pre>{@code
  * CommandMatch<Message> match = new MessageRegexMatch("\\d+");
- * }
- * </pre>
+ * }</pre>
  */
 public class MessageRegexMatch implements CommandMatch<Message> {
 

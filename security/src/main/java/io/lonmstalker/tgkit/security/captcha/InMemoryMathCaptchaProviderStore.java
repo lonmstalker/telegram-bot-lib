@@ -24,10 +24,10 @@ import org.checkerframework.checker.nullness.qual.NonNull;
  * Хранилище каптч в памяти, использующее кэш Caffeine.
  *
  * <p>Пример:
+ *
  * <pre>{@code
  * MathCaptchaProviderStore store = new InMemoryMathCaptchaProviderStore(Duration.ofMinutes(2), 1000);
- * }
- * </pre>
+ * }</pre>
  */
 public class InMemoryMathCaptchaProviderStore implements MathCaptchaProviderStore {
   private final Cache<Long, Integer> cache;

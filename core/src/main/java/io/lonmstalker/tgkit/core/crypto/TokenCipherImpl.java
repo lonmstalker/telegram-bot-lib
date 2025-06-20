@@ -29,12 +29,12 @@ import org.checkerframework.checker.nullness.qual.NonNull;
  * Реализация {@link TokenCipher} с алгоритмом AES/GCM.
  *
  * <p>Пример:
+ *
  * <pre>{@code
  * TokenCipher cipher = new TokenCipherImpl("secret".getBytes());
  * String enc = cipher.encrypt("token");
  * String dec = cipher.decrypt(enc);
- * }
- * </pre>
+ * }</pre>
  */
 public class TokenCipherImpl implements TokenCipher {
 

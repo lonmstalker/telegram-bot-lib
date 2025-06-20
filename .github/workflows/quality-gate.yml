@@ -27,10 +27,7 @@ jobs:
       - name: Verify and analyze
         shell: bash
         run: |
-          export http_proxy=http://proxy:8080
-          export https_proxy=http://proxy:8080
-          export MAVEN_OPTS="-Dhttps.proxyHost=proxy -Dhttps.proxyPort=8080 -Dhttp.proxyHost=proxy -Dhttp.proxyPort=8080 -Djava.net.preferIPv4Stack=true -Dfile.encoding=UTF-8"
-          ./mvnw -B --no-transfer-progress \
+          mvn -B --no-transfer-progress \
             spotless:check checkstyle:check verify \
             com.github.spotbugs:spotbugs-maven-plugin:4.7.3.5:spotbugs \
             dependency-check:aggregate \
@@ -93,10 +90,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         run: |
-          export http_proxy=http://proxy:8080
-          export https_proxy=http://proxy:8080
-          export MAVEN_OPTS="-Dhttps.proxyHost=proxy -Dhttps.proxyPort=8080 -Dhttp.proxyHost=proxy -Dhttp.proxyPort=8080 -Djava.net.preferIPv4Stack=true -Dfile.encoding=UTF-8"
-          ./mvnw -B --no-transfer-progress sonar:sonar \
+          mvn -B --no-transfer-progress sonar:sonar \
             -Dsonar.login=$SONAR_TOKEN \
             -Dsonar.host.url=$SONAR_HOST_URL
 

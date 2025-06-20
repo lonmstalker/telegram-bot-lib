@@ -27,10 +27,10 @@ import org.telegram.telegrambots.meta.api.objects.Update;
  * Проверяет роль пользователя с помощью {@link BotUserProvider}.
  *
  * <p>Пример:
+ *
  * <pre>{@code
  * CommandMatch<?> match = new UserRoleMatch<>(provider, Set.of("ADMIN"));
- * }
- * </pre>
+ * }</pre>
  */
 public class UserRoleMatch<T extends BotApiObject> implements CommandMatch<T> {
 

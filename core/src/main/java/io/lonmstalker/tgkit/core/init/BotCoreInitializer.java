@@ -15,16 +15,16 @@
  */
 package io.lonmstalker.tgkit.core.init;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.lonmstalker.observability.impl.NoOpMetricsCollector;
 import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
 import io.lonmstalker.tgkit.core.dsl.MissingIdStrategy;
 import io.lonmstalker.tgkit.core.dsl.feature_flags.InMemoryFeatureFlags;
 import io.lonmstalker.tgkit.core.dsl.ttl.TtlSchedulerDefault;
 import io.lonmstalker.tgkit.core.event.InMemoryEventBus;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.net.http.HttpClient;
 import java.time.Duration;
 import java.util.concurrent.Executors;
-import io.lonmstalker.observability.impl.NoOpMetricsCollector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,8 +45,8 @@ public final class BotCoreInitializer {
   private static volatile boolean started;
 
   /**
-   * Удобная статическая обёртка. Вызывает {@link #init()} один раз и не
-   * требует явного создания экземпляра.
+   * Удобная статическая обёртка. Вызывает {@link #init()} один раз и не требует явного создания
+   * экземпляра.
    */
   public static void init() {
     new BotCoreInitializer().init();
@@ -70,8 +70,7 @@ public final class BotCoreInitializer {
         .missingIdStrategy(MissingIdStrategy.ERROR);
 
     // ── HTTP и сериализация ─────────────────────────────────────────────
-    HttpClient httpClient =
-        HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(30)).build();
+    HttpClient httpClient = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(30)).build();
     ObjectMapper mapper = new ObjectMapper();
     BotGlobalConfig.INSTANCE.http().httpClient(httpClient).mapper(mapper);
 
@@ -81,15 +80,12 @@ public final class BotCoreInitializer {
 
     BotGlobalConfig.INSTANCE
         .executors()
-        .cpuExecutorService(
-            Executors.newFixedThreadPool(cpuSize, Thread.ofVirtual().factory()))
+        .cpuExecutorService(Executors.newFixedThreadPool(cpuSize, Thread.ofVirtual().factory()))
         .ioExecutorService(Executors.newVirtualThreadPerTaskExecutor())
         .scheduledExecutorService(
             Executors.newScheduledThreadPool(schedSize, Thread.ofVirtual().factory()));
 
-    BotGlobalConfig.INSTANCE
-        .observability()
-        .collector(new NoOpMetricsCollector());
+    BotGlobalConfig.INSTANCE.observability().collector(new NoOpMetricsCollector());
 
     // ── Events ────────────────────────────────────────────────────────
     BotGlobalConfig.INSTANCE.events().bus(new InMemoryEventBus());

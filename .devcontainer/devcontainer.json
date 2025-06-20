@@ -1,13 +1,13 @@
 {
-    "name": "tgkit-java-dev",
-    "features": {
-        "ghcr.io/devcontainers/features/java:1": {
-            "version": "21",
-            "installMaven": true
-        }
-    },
-    "mounts": [
-        "source=${localEnv:HOME}/.m2,target=/root/.m2,type=bind"
-    ],
-    "postCreateCommand": "./mvnw -version"
+  "name": "tgkit-java-dev",
+  "features": {
+    "ghcr.io/devcontainers/features/java:1": {
+      "version": "21",
+      "installMaven": true
+    }
+  },
+  "mounts": [
+    "source=${localEnv:HOME}/.m2,target=/root/.m2,type=bind"
+  ],
+  "postCreateCommand": "mvn -version"
 }

@@ -51,7 +51,8 @@ public final class TestUtils {
       m.setAccessible(true);
       @SuppressWarnings("unchecked")
       var map = (java.util.Map<String, String>) m.get(env);
-      if (value == null) map.remove(key); else map.put(key, value);
+      if (value == null) map.remove(key);
+      else map.put(key, value);
     } catch (Exception e) {
       throw new RuntimeException(e);
     }

@@ -24,11 +24,11 @@ import redis.clients.jedis.JedisPool;
  * Реализация {@link StateStore} на Redis через простые операции GET/SET.
  *
  * <p>Пример:
+ *
  * <pre>{@code
  * JedisPool pool = new JedisPool("localhost", 6379);
  * StateStore store = new RedisStateStore(pool);
- * }
- * </pre>
+ * }</pre>
  */
 public class RedisStateStore implements StateStore {
 

@@ -15,7 +15,6 @@
  */
 package io.lonmstalker.tgkit.security.limiter;
 
-import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.eq;
@@ -25,6 +24,7 @@ import io.lonmstalker.tgkit.core.interceptor.BotInterceptor;
 import io.lonmstalker.tgkit.security.*;
 import io.lonmstalker.tgkit.security.init.BotSecurityInitializer;
 import io.lonmstalker.tgkit.security.ratelimit.*;
+import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
 import java.lang.reflect.Method;
 import java.util.Optional;
 import org.junit.jupiter.api.*;

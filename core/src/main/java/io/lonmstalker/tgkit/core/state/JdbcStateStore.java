@@ -27,10 +27,10 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  * Реализация {@link StateStore} на JDBC, хранящая состояние в таблице {@code bot_state}.
  *
  * <p>Пример:
+ *
  * <pre>{@code
  * StateStore store = new JdbcStateStore(dataSource);
- * }
- * </pre>
+ * }</pre>
  */
 public class JdbcStateStore implements StateStore {
   private static final String CREATE_TABLE =

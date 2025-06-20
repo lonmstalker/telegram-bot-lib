@@ -1,3 +1,18 @@
+/*
+ * Copyright 2025 TgKit Team
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package io.lonmstalker.tgkit.security.config;
 
 import io.lonmstalker.tgkit.security.antispam.DuplicateProvider;
@@ -11,7 +26,8 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Глобальная конфигурация модуля безопасности.
- * <p>Позволяет подменять реализации во время работы или тестов.</p>
+ *
+ * <p>Позволяет подменять реализации во время работы или тестов.
  *
  * <pre>{@code
  * BotSecurityGlobalConfig.INSTANCE.secrets()
@@ -114,8 +130,7 @@ public final class BotSecurityGlobalConfig {
 
   /** Настройки антиспама. */
   public static final class AntiSpamGlobalConfig {
-    private final AtomicReference<DuplicateProvider> duplicateProvider =
-        new AtomicReference<>();
+    private final AtomicReference<DuplicateProvider> duplicateProvider = new AtomicReference<>();
     private final AtomicReference<Set<String>> blacklist = new AtomicReference<>(Set.of());
 
     public DuplicateProvider duplicateProvider() {

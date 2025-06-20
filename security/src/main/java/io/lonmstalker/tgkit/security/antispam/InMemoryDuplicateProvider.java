@@ -27,13 +27,13 @@ import org.checkerframework.checker.nullness.qual.NonNull;
  * Проверяет дубликаты сообщений, используя кэш в памяти.
  *
  * <p>Пример создания через builder:
+ *
  * <pre>{@code
  * DuplicateProvider provider = InMemoryDuplicateProvider.builder()
  *     .ttl(Duration.ofMinutes(1))
  *     .maxSize(1000)
  *     .build();
- * }
- * </pre>
+ * }</pre>
  */
 public class InMemoryDuplicateProvider implements DuplicateProvider {
   private final Cache<Long, Set<Integer>> cache;

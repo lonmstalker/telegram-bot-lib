@@ -1,6 +1,6 @@
 name: Build & Security-Scan
 
-on: [push, pull_request]
+on: [ push, pull_request ]
 
 jobs:
   build:
@@ -34,10 +34,10 @@ jobs:
           java-version: 21
 
       - name: Maven verify
-        run: ./mvnw -B -pl testkit,core,observability,plugin,security,examples,api spotless:check checkstyle:check verify
+        run: mvn -B -pl testkit,core,observability,plugin,security,examples,api spotless:check checkstyle:check verify
 
       - name: JaCoCo report
-        run: ./mvnw -B jacoco:report
+        run: mvn -B jacoco:report
 
       - name: Upload coverage
         uses: actions/upload-artifact@v4

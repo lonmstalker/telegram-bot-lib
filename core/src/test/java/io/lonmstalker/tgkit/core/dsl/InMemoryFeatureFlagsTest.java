@@ -15,10 +15,10 @@
  */
 package io.lonmstalker.tgkit.core.dsl;
 
-import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
 import static org.assertj.core.api.Assertions.*;
 
 import io.lonmstalker.tgkit.core.dsl.feature_flags.InMemoryFeatureFlags;
+import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
 import org.junit.jupiter.api.Test;
 
 class InMemoryFeatureFlagsTest {

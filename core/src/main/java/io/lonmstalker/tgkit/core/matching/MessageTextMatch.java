@@ -22,10 +22,10 @@ import org.telegram.telegrambots.meta.api.objects.Message;
  * Сравнивает текст сообщения с заданной строкой.
  *
  * <p>Пример:
+ *
  * <pre>{@code
  * CommandMatch<Message> match = new MessageTextMatch("/start");
- * }
- * </pre>
+ * }</pre>
  */
 public class MessageTextMatch implements CommandMatch<Message> {
 

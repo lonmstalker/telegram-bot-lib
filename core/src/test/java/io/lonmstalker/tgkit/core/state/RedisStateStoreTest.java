@@ -15,9 +15,9 @@
  */
 package io.lonmstalker.tgkit.core.state;
 
-import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
 import static org.mockito.Mockito.*;
 
+import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -22,10 +22,10 @@ import org.telegram.telegrambots.meta.api.objects.Message;
  * Проверяет, содержит ли текст сообщения указанный фрагмент.
  *
  * <p>Пример:
+ *
  * <pre>{@code
  * CommandMatch<Message> match = new MessageContainsMatch("hello", true);
- * }
- * </pre>
+ * }</pre>
  */
 public class MessageContainsMatch implements CommandMatch<Message> {
 
