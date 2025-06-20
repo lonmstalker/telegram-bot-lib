@@ -19,6 +19,7 @@
         <module>testkit</module>
         <module>webhook</module>
         <module>validator</module>
+        <module>json-codec-spi</module>
     </modules>
 
     <properties>
