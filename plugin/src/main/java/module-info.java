@@ -7,5 +7,6 @@ module io.lonmstalker.tgkit.plugin {
 
   exports io.lonmstalker.tgkit.plugin;
   exports io.lonmstalker.tgkit.plugin.annotation;
-  exports io.lonmstalker.tgkit.plugin.sort;
+  exports io.lonmstalker.tgkit.plugin.internal to
+      io.lonmstalker.tgkit.core;
 }

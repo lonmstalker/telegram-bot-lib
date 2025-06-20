@@ -6,7 +6,7 @@ import io.lonmstalker.tgkit.core.annotation.CheckReturnValue;
 import io.lonmstalker.tgkit.core.loader.ClasspathScanner;
 import io.lonmstalker.tgkit.plugin.BotPlugin;
 import io.lonmstalker.tgkit.plugin.BotPluginContext;
-import io.lonmstalker.tgkit.plugin.BotPluginContextDefault;
+import io.lonmstalker.tgkit.plugin.internal.BotPluginContextDefault;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;

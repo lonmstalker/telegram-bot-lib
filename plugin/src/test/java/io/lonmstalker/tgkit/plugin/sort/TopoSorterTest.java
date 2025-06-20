@@ -1,4 +1,4 @@
-package io.lonmstalker.tgkit.plugin.sort;
+package io.lonmstalker.tgkit.plugin.internal.sort;
 
 import static org.junit.jupiter.api.Assertions.*;
 
