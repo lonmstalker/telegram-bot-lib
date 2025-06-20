@@ -1,7 +1,6 @@
 package io.lonmstalker.tgkit.core;
 
 import io.lonmstalker.tgkit.core.exception.BotApiException;
-import lombok.Getter;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.objects.*;
 import org.telegram.telegrambots.meta.api.objects.boost.ChatBoostUpdated;
@@ -18,7 +17,6 @@ import org.telegram.telegrambots.meta.api.objects.reactions.MessageReactionUpdat
  * Перечень поддерживаемых типов обновлений Telegram + сведения, обязателен ли userId / chatId для
  * данного события.
  */
-@Getter
 public enum BotRequestType {
 
   /* Update на вход */
@@ -102,5 +100,17 @@ public enum BotRequestType {
       throw new BotApiException(
           "%s is not a %s".formatted(clazz.getCanonicalName(), this.type.getSimpleName()));
     }
+  }
+
+  public @NonNull Class<?> getType() {
+    return type;
+  }
+
+  public boolean isHasUserId() {
+    return hasUserId;
+  }
+
+  public boolean isHasChatId() {
+    return hasChatId;
   }
 }
