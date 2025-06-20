@@ -34,7 +34,7 @@ jobs:
           java-version: 21
 
       - name: Maven verify
-        run: mvn -B -pl telegram-bot-testkit,core,observability,plugin,security,examples,api spotless:check checkstyle:check verify
+        run: mvn -B -pl testkit,core,observability,plugin,security,examples,api spotless:check checkstyle:check verify
 
       - name: JaCoCo report
         run: mvn -B jacoco:report

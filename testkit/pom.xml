@@ -9,7 +9,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>telegram-bot-testkit</artifactId>
+    <artifactId>testkit</artifactId>
 
     <dependencies>
         <dependency>
