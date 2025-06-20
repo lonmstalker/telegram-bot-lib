@@ -16,8 +16,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
@@ -26,9 +24,9 @@ import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 /** Точка входа в DSL ответа бота. */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @SuppressWarnings("initialization.fields.uninitialized")
 public final class BotDSL {
+  private BotDSL() {}
 
   /** Конфигурирует глобальные параметры. */
   public static void config(@NonNull Consumer<BotGlobalConfig> cfg) {

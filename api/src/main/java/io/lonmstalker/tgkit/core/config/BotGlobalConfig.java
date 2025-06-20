@@ -10,12 +10,13 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 /** Настройки по умолчанию для BotResponse. */
-@Slf4j
 public class BotGlobalConfig {
+  private static final Logger log = LoggerFactory.getLogger(BotGlobalConfig.class);
 
   /** Глобальная конфигурация. */
   public static final BotGlobalConfig INSTANCE = new BotGlobalConfig();

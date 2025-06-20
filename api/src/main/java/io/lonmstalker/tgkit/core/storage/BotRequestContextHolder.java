@@ -4,14 +4,12 @@ import io.lonmstalker.tgkit.core.bot.Bot;
 import io.lonmstalker.tgkit.core.bot.TelegramSender;
 import io.lonmstalker.tgkit.core.exception.BotApiException;
 import java.util.Optional;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class BotRequestContextHolder {
+  private BotRequestContextHolder() {}
   private static final ThreadLocal<@Nullable Update> UPDATE = new ThreadLocal<>();
   private static final ThreadLocal<@Nullable Bot> CURRENT_BOT = new ThreadLocal<>();
   private static final ThreadLocal<@Nullable String> REQUEST_ID = new ThreadLocal<>();

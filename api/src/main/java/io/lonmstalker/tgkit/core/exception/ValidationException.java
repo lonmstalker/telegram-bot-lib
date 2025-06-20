@@ -1,7 +1,6 @@
 package io.lonmstalker.tgkit.core.exception;
 
 import io.lonmstalker.tgkit.core.i18n.MessageKey;
-import lombok.Getter;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
@@ -10,7 +9,6 @@ import org.checkerframework.checker.nullness.qual.NonNull;
  * <p>Содержит {@link MessageKey} — ключ для вывода пользователю локализованного сообщения об
  * ошибке.
  */
-@Getter
 public class ValidationException extends RuntimeException {
 
   private final MessageKey errorKey;
@@ -29,5 +27,9 @@ public class ValidationException extends RuntimeException {
 
   public static @NonNull ValidationException of(@NonNull String errorKey) {
     return new ValidationException(new MessageKey(errorKey));
+  }
+
+  public MessageKey getErrorKey() {
+    return errorKey;
   }
 }

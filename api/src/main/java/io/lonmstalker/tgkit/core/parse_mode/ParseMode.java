@@ -1,6 +1,5 @@
 package io.lonmstalker.tgkit.core.parse_mode;
 
-import lombok.Getter;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 public enum ParseMode {
@@ -15,7 +14,11 @@ public enum ParseMode {
   // экранируются _*[]()~\>#+-=|{}.!
   MARKDOWN_V2(org.telegram.telegrambots.meta.api.methods.ParseMode.MARKDOWNV2);
 
-  @Getter private final String mode;
+  private final String mode;
+
+  public String getMode() {
+    return mode;
+  }
 
   ParseMode(String mode) {
     this.mode = mode;

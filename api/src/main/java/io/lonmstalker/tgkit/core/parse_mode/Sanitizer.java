@@ -1,16 +1,14 @@
 package io.lonmstalker.tgkit.core.parse_mode;
 
 import java.util.regex.Pattern;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Утилитный класс для экранирования спецсимволов в разных форматах: HTML, Markdown и MarkdownV2
  * (для Telegram Bot API).
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Sanitizer {
+  private Sanitizer() {}
 
   // Используем regex для одновременного экранирования
   private static final Pattern MARKDOWN2_PATTERN = Pattern.compile("([_*\\[\\]()~`>#+\\-=|{}.!])");
