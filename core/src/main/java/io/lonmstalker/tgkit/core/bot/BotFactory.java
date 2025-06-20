@@ -56,7 +56,7 @@ public final class BotFactory {
     TelegramSender sender = new TelegramSender(config, token);
     var bot =
         implBuilder(token, config)
-            .session(new BotSessionImpl())
+            .session(new BotSessionImpl(null, null, config.getUpdateQueueCapacity()))
             .absSender(
                 new LongPollingReceiver(
                     config, adapter, token, sender, config.getGlobalExceptionHandler()))

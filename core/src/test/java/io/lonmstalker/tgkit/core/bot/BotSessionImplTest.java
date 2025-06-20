@@ -22,6 +22,7 @@ import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.AbstractExecutorService;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.Test;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
@@ -38,7 +39,8 @@ public class BotSessionImplTest {
   @Test
   void startAndStop() {
     NoopExecutor executor = new NoopExecutor();
-    BotSessionImpl session = new BotSessionImpl(executor, new ObjectMapper());
+    BotSessionImpl session =
+        new BotSessionImpl(executor, new ObjectMapper(), BotConfig.DEFAULT_UPDATE_QUEUE_CAPACITY);
     DefaultBotOptions options = new DefaultBotOptions();
     session.setOptions(options);
     session.setToken("TOKEN");
@@ -57,6 +59,30 @@ public class BotSessionImplTest {
     long backOff = session.handleError(new IOException("fail"), 1);
     assertEquals(2, backOff);
     assertEquals(30, session.handleError(new IOException("fail"), 32));
+  }
+
+  @Test
+  void rejectOnOverflow() throws Exception {
+    BotSessionImpl session = new BotSessionImpl(null, new ObjectMapper(), 2);
+    var field = BotSessionImpl.class.getDeclaredField("updates");
+    field.setAccessible(true);
+    @SuppressWarnings("unchecked")
+    var queue = (BlockingQueue<Update>) field.get(session);
+    Update u1 = new Update();
+    u1.setUpdateId(1);
+    Update u2 = new Update();
+    u2.setUpdateId(2);
+    Update u3 = new Update();
+    u3.setUpdateId(3);
+
+    assertTrue(session.enqueueUpdate(u1));
+    assertTrue(session.enqueueUpdate(u2));
+    assertFalse(session.enqueueUpdate(u3));
+
+    assertEquals(2, queue.size());
+    assertTrue(queue.contains(u1));
+    assertTrue(queue.contains(u2));
+    assertFalse(queue.contains(u3));
   }
 
   private static class DummyBot implements LongPollingBot {

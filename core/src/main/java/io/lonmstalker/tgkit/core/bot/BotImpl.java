@@ -295,7 +295,7 @@ public final class BotImpl implements Bot {
   private void initLongPolling(@NonNull LongPollingReceiver receiver) throws Exception {
     receiver.clearWebhook();
     if (this.session == null) {
-      this.session = new BotSessionImpl();
+      this.session = new BotSessionImpl(null, null, config.getUpdateQueueCapacity());
     }
     this.session.setOptions(config);
     this.session.setToken(token);

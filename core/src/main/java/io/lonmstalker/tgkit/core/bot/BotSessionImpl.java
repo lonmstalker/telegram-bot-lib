@@ -19,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
 import io.lonmstalker.tgkit.core.exception.BotApiException;
+import java.io.InputStream;
 import java.net.InetSocketAddress;
 import java.net.ProxySelector;
 import java.net.URI;
@@ -81,9 +82,11 @@ import org.telegram.telegrambots.meta.generics.LongPollingBot;
 @SuppressWarnings({"dereference.of.nullable", "argument"})
 public class BotSessionImpl implements BotSession {
   private static final Logger log = LoggerFactory.getLogger(BotSessionImpl.class);
+  private static final long ENQUEUE_TIMEOUT_MS = 100L;
 
   private final AtomicBoolean running = new AtomicBoolean();
-  private final BlockingQueue<Update> updates = new LinkedBlockingQueue<>();
+  private final BlockingQueue<Update> updates;
+  private final int queueCapacity;
 
   private final ObjectMapper mapper;
   private final @Nullable ExecutorService providedExecutor;
@@ -97,12 +100,42 @@ public class BotSessionImpl implements BotSession {
   private int lastUpdateId;
 
   public BotSessionImpl() {
-    this(null, null);
+    this(null, null, BotConfig.DEFAULT_UPDATE_QUEUE_CAPACITY);
   }
 
   public BotSessionImpl(@Nullable ExecutorService executor, @Nullable ObjectMapper mapper) {
+    this(executor, mapper, BotConfig.DEFAULT_UPDATE_QUEUE_CAPACITY);
+  }
+
+  public BotSessionImpl(
+      @Nullable ExecutorService executor, @Nullable ObjectMapper mapper, int queueCapacity) {
     this.providedExecutor = executor;
     this.mapper = mapper != null ? mapper : new ObjectMapper();
+    this.queueCapacity = queueCapacity;
+    this.updates = new LinkedBlockingQueue<>(queueCapacity);
+  }
+
+  /**
+   * Добавляет обновление в очередь, ожидая освободившееся место не дольше {@code
+   * ENQUEUE_TIMEOUT_MS} миллисекунд.
+   *
+   * @param update обновление Telegram
+   * @return {@code true}, если событие помещено в очередь, иначе {@code false}
+   */
+  boolean enqueueUpdate(Update update) {
+    try {
+      if (updates.offer(update, ENQUEUE_TIMEOUT_MS, TimeUnit.MILLISECONDS)) {
+        return true;
+      }
+      log.warn(
+          "updates queue full ({}), unable to enqueue after {}ms",
+          queueCapacity,
+          ENQUEUE_TIMEOUT_MS);
+      return false;
+    } catch (InterruptedException ex) {
+      Thread.currentThread().interrupt();
+      return false;
+    }
   }
 
   @Override
@@ -220,17 +253,17 @@ public class BotSessionImpl implements BotSession {
             .GET()
             .build();
     Objects.requireNonNull(httpClient)
-        .sendAsync(request, HttpResponse.BodyHandlers.ofString())
+        .sendAsync(request, HttpResponse.BodyHandlers.ofInputStream())
         .thenApply(HttpResponse::body)
         .thenAccept(
-            body -> {
-              try {
-                GetUpdatesResponse response = mapper.readValue(body, GetUpdatesResponse.class);
+            stream -> {
+              try (InputStream input = stream) {
+                GetUpdatesResponse response = mapper.readValue(input, GetUpdatesResponse.class);
                 if (response.result != null && !response.result.isEmpty()) {
                   for (Update update : response.result) {
                     if (update.getUpdateId() > lastUpdateId) {
                       lastUpdateId = update.getUpdateId();
-                      updates.put(update);
+                      enqueueUpdate(update);
                     }
                   }
                 }
