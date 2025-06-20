@@ -95,6 +95,7 @@ telegram-bot-lib/
 | testkit  | 21          | —                  | incubating         | ≥ 95 %    | JUnit 5         |
 | telegram-bot-plugins  | 21          | разные             | incubating         | ≥ 80 %    | SPI loader      |
 | validator             | 21          | io.lonmstalker.tgkit.validator | public     | ≥ 90 %    | —               |
+| boot                  | 21          | io.lonmstalker.tgkit.boot | incubating     | ≥ 90 %    | Spring Boot |
 
 ## 8. Проверка качества ✅
 

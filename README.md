@@ -91,6 +91,18 @@ testImplementation("io.lonmstalker.tgkit:testkit:0.0.1-SNAPSHOT")
 ```
 </details>
 
+<details>
+<summary>Spring Boot</summary>
+
+```xml
+<dependency>
+    <groupId>io.lonmstalker.tgkit</groupId>
+    <artifactId>boot</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+</dependency>
+```
+</details>
+
 ### 1 — Минимальный эхо-бот
 ```java
 public class EchoCommands {
