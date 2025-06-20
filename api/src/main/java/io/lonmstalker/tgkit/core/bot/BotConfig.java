@@ -23,6 +23,9 @@ public class BotConfig extends DefaultBotOptions {
   private @NonNull List<BotInterceptor> globalInterceptors;
   private @Nullable BotExceptionHandler globalExceptionHandler;
   private int requestsPerSecond;
+  private int updateQueueCapacity;
+
+  public static final int DEFAULT_UPDATE_QUEUE_CAPACITY = 1000;
 
   @SuppressWarnings({"argument", "method.invocation"})
   private BotConfig(
@@ -43,13 +46,16 @@ public class BotConfig extends DefaultBotOptions {
       @Nullable Integer maxWebhookConnections,
       @Nullable List<String> allowedUpdates,
       @Nullable Integer getUpdatesTimeout,
-      @Nullable Integer getUpdatesLimit) {
+      @Nullable Integer getUpdatesLimit,
+      @Nullable Integer updateQueueCapacity) {
     this.store = store;
     this.globalExceptionHandler = globalExceptionHandler;
     this.globalInterceptors = globalInterceptors == null ? new ArrayList<>() : globalInterceptors;
     this.locale = locale != null ? locale : Locale.getDefault();
     this.botGroup = botGroup != null ? botGroup : "";
     this.requestsPerSecond = requestsPerSecond != null ? requestsPerSecond : 30;
+    this.updateQueueCapacity =
+        updateQueueCapacity != null ? updateQueueCapacity : DEFAULT_UPDATE_QUEUE_CAPACITY;
 
     this.setProxyHost(proxyHost);
     this.setAllowedUpdates(allowedUpdates);
@@ -113,6 +119,14 @@ public class BotConfig extends DefaultBotOptions {
     this.requestsPerSecond = requestsPerSecond;
   }
 
+  public int getUpdateQueueCapacity() {
+    return updateQueueCapacity;
+  }
+
+  public void setUpdateQueueCapacity(int updateQueueCapacity) {
+    this.updateQueueCapacity = updateQueueCapacity;
+  }
+
   public static Builder builder() {
     return new Builder();
   }
@@ -136,6 +150,7 @@ public class BotConfig extends DefaultBotOptions {
     private List<String> allowedUpdates;
     private Integer getUpdatesTimeout;
     private Integer getUpdatesLimit;
+    private Integer updateQueueCapacity;
 
     public Builder globalExceptionHandler(BotExceptionHandler handler) {
       this.globalExceptionHandler = handler;
@@ -232,6 +247,11 @@ public class BotConfig extends DefaultBotOptions {
       return this;
     }
 
+    public Builder updateQueueCapacity(Integer updateQueueCapacity) {
+      this.updateQueueCapacity = updateQueueCapacity;
+      return this;
+    }
+
     public BotConfig build() {
       return new BotConfig(
           globalExceptionHandler,
@@ -251,7 +271,8 @@ public class BotConfig extends DefaultBotOptions {
           maxWebhookConnections,
           allowedUpdates,
           getUpdatesTimeout,
-          getUpdatesLimit);
+          getUpdatesLimit,
+          updateQueueCapacity);
     }
   }
 }

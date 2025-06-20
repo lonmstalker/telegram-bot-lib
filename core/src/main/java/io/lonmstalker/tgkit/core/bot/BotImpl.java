@@ -12,10 +12,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.bots.DefaultAbsSender;
 import org.telegram.telegrambots.meta.api.methods.GetMe;
 import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
@@ -119,6 +119,7 @@ public final class BotImpl implements Bot {
           onCompletedActionTimeoutMs);
     }
   }
+
   private final AtomicReference<BotState> state = new AtomicReference<>(BotState.NEW);
   private final @NonNull List<BotCompleteAction> completeActions = new CopyOnWriteArrayList<>();
   private long id;
@@ -279,7 +280,7 @@ public final class BotImpl implements Bot {
   private void initLongPolling(@NonNull LongPollingReceiver receiver) throws Exception {
     receiver.clearWebhook();
     if (this.session == null) {
-      this.session = new BotSessionImpl();
+      this.session = new BotSessionImpl(null, null, config.getUpdateQueueCapacity());
     }
     this.session.setOptions(config);
     this.session.setToken(token);

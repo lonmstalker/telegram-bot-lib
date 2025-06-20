@@ -10,6 +10,7 @@ import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 
 public final class BotFactory {
   private BotFactory() {}
+
   public static final BotFactory INSTANCE = new BotFactory();
   private final AtomicLong nextId = new AtomicLong();
 
@@ -18,7 +19,7 @@ public final class BotFactory {
     TelegramSender sender = new TelegramSender(config, token);
     var bot =
         implBuilder(token, config)
-            .session(new BotSessionImpl())
+            .session(new BotSessionImpl(null, null, config.getUpdateQueueCapacity()))
             .absSender(
                 new LongPollingReceiver(
                     config, adapter, token, sender, config.getGlobalExceptionHandler()))
