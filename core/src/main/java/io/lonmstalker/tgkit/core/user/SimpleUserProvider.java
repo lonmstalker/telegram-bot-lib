@@ -21,6 +21,9 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+/**
+ * Простая реализация {@link BotUserProvider}, вытягивающая идентификаторы пользователя и чата из {@link Update}.
+ */
 public class SimpleUserProvider implements BotUserProvider {
 
   @Override

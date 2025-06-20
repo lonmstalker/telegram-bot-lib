@@ -25,6 +25,17 @@ import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
+/**
+ * Реализация {@link TokenCipher} с алгоритмом AES/GCM.
+ *
+ * <p>Пример:
+ * <pre>{@code
+ * TokenCipher cipher = new TokenCipherImpl("secret".getBytes());
+ * String enc = cipher.encrypt("token");
+ * String dec = cipher.decrypt(enc);
+ * }
+ * </pre>
+ */
 public class TokenCipherImpl implements TokenCipher {
 
   private static final String ALGORITHM = "AES";

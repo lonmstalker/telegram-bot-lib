@@ -20,6 +20,16 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+/**
+ * Простейшее потокобезопасное хранилище {@link StateStore} на базе {@link ConcurrentHashMap}.
+ *
+ * <p>Пример:
+ * <pre>{@code
+ * StateStore store = new InMemoryStateStore();
+ * store.set("42", "step1");
+ * }
+ * </pre>
+ */
 public class InMemoryStateStore implements StateStore {
   private final Map<String, String> store = new ConcurrentHashMap<>();
 

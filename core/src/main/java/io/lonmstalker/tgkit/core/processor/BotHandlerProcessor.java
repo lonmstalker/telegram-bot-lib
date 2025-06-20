@@ -34,6 +34,20 @@ import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.TypeMirror;
 import javax.tools.Diagnostic;
 
+/**
+ * Аннотационный процессор, проверяющий методы {@link BotHandler} во время компиляции.
+ *
+ * <p>Пример:
+ * <pre>{@code
+ * class MyBot {
+ *   @BotHandler
+ *   BotResponse onUpdate(BotRequest<?> req) {
+ *     return new BotResponse();
+ *   }
+ * }
+ * }
+ * </pre>
+ */
 @SupportedSourceVersion(SourceVersion.RELEASE_21)
 @SupportedAnnotationTypes("io.lonmstalker.tgkit.core.annotation.BotHandler")
 public class BotHandlerProcessor extends AbstractProcessor {

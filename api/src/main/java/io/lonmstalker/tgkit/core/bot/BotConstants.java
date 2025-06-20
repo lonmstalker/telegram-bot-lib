@@ -15,6 +15,7 @@
  */
 package io.lonmstalker.tgkit.core.bot;
 
+/** Служебные константы бот-фреймворка. */
 public class BotConstants {
   private BotConstants() {}
 

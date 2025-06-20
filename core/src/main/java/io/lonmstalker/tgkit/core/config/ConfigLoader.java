@@ -24,6 +24,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
+/**
+ * Утилита для загрузки конфигураций YAML/JSON и маппинга их на POJO-классы.
+ *
+ * <p>Пример:
+ * <pre>{@code
+ * ConfigLoader loader = new ConfigLoader();
+ * MyCfg cfg = loader.as("config.yml", MyCfg.class);
+ * }
+ * </pre>
+ */
 public class ConfigLoader {
 
   private static final ObjectMapper YAML = new ObjectMapper(new YAMLFactory());

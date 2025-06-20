@@ -21,14 +21,14 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
 /**
- * Redis-based implementation of {@link StateStore}.
+ * Реализация {@link StateStore} на Redis через простые операции GET/SET.
  *
- * <p>Uses simple GET/SET operations. Example usage:
- *
+ * <p>Пример:
  * <pre>{@code
  * JedisPool pool = new JedisPool("localhost", 6379);
  * StateStore store = new RedisStateStore(pool);
- * }</pre>
+ * }
+ * </pre>
  */
 public class RedisStateStore implements StateStore {
 

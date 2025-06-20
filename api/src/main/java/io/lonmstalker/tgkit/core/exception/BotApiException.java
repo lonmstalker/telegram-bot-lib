@@ -15,6 +15,7 @@
  */
 package io.lonmstalker.tgkit.core.exception;
 
+/** Базовый класс исключений, возникающих при обращении к API Telegram. */
 public class BotApiException extends RuntimeException {
 
   public BotApiException(String message) {

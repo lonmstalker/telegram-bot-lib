@@ -19,6 +19,15 @@ import java.time.Duration;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import redis.clients.jedis.JedisPool;
 
+/**
+ * Хранит ответы каптч в Redis с ограничением времени жизни.
+ *
+ * <p>Пример:
+ * <pre>{@code
+ * MathCaptchaProviderStore store = new RedisMathCaptchaProviderStore(pool);
+ * }
+ * </pre>
+ */
 public class RedisMathCaptchaProviderStore implements MathCaptchaProviderStore {
   private final JedisPool pool;
 

@@ -15,6 +15,7 @@
  */
 package io.lonmstalker.tgkit.core.exception;
 
+/** Общий тип исключений, связанных с работой бота. */
 public class BotException extends RuntimeException {
   public BotException(String message) {
     super(message);

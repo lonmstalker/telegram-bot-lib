@@ -18,7 +18,15 @@ package io.lonmstalker.tgkit.core.matching;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
-/** Matcher that checks if a message text contains a substring. */
+/**
+ * Проверяет, содержит ли текст сообщения указанный фрагмент.
+ *
+ * <p>Пример:
+ * <pre>{@code
+ * CommandMatch<Message> match = new MessageContainsMatch("hello", true);
+ * }
+ * </pre>
+ */
 public class MessageContainsMatch implements CommandMatch<Message> {
 
   private final String text;

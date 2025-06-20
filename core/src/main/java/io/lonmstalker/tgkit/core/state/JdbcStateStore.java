@@ -23,6 +23,15 @@ import javax.sql.DataSource;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+/**
+ * Реализация {@link StateStore} на JDBC, хранящая состояние в таблице {@code bot_state}.
+ *
+ * <p>Пример:
+ * <pre>{@code
+ * StateStore store = new JdbcStateStore(dataSource);
+ * }
+ * </pre>
+ */
 public class JdbcStateStore implements StateStore {
   private static final String CREATE_TABLE =
       "CREATE TABLE IF NOT EXISTS bot_state(chat_id VARCHAR PRIMARY KEY, value VARCHAR)";
