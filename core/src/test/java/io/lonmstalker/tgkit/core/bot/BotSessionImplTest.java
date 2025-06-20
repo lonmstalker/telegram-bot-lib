@@ -17,6 +17,9 @@ package io.lonmstalker.tgkit.core.bot;
 
 import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
 import static org.junit.jupiter.api.Assertions.*;
+import io.lonmstalker.observability.BotObservability;
+import io.lonmstalker.observability.MetricsCollector;
+import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
@@ -83,6 +86,23 @@ public class BotSessionImplTest {
     assertTrue(queue.contains(u1));
     assertTrue(queue.contains(u2));
     assertFalse(queue.contains(u3));
+  }
+
+  @Test
+  void metricsRecordedOnReject() {
+    MetricsCollector mc = BotObservability.micrometer(0);
+    BotGlobalConfig.INSTANCE.observability().collector(mc);
+    BotSessionImpl session = new BotSessionImpl(null, null, 1);
+    Update u1 = new Update();
+    u1.setUpdateId(1);
+    Update u2 = new Update();
+    u2.setUpdateId(2);
+
+    assertTrue(session.enqueueUpdate(u1));
+    assertFalse(session.enqueueUpdate(u2));
+
+    assertEquals(1.0, mc.registry().find("updates_dropped_total").counter().count());
+    assertEquals(1.0, mc.registry().find("updates_queue_size").gauge().value());
   }
 
   private static class DummyBot implements LongPollingBot {
