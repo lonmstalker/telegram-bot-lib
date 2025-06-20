@@ -348,7 +348,22 @@
                     <java>
                         <googleJavaFormat />
                         <removeUnusedImports />
+                        <licenseHeader>
+                            <file>${maven.multiModuleProjectDirectory}/config/license-header.txt</file>
+                            <delimiter>package|module</delimiter>
+                        </licenseHeader>
                     </java>
+                    <formats>
+                        <format>
+                            <includes>
+                                <include>**/module-info.java</include>
+                            </includes>
+                            <licenseHeader>
+                                <file>${maven.multiModuleProjectDirectory}/config/license-header.txt</file>
+                                <delimiter>module</delimiter>
+                            </licenseHeader>
+                        </format>
+                    </formats>
                 </configuration>
                 <executions>
                     <execution>
