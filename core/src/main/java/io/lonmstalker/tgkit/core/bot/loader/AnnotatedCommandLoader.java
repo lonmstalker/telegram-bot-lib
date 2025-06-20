@@ -1,3 +1,18 @@
+/*
+ * Copyright 2025 TgKit Team
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package io.lonmstalker.tgkit.core.bot.loader;
 
 import static io.lonmstalker.tgkit.core.reflection.ReflectionUtils.newInstance;
@@ -28,19 +43,21 @@ import java.lang.reflect.*;
 import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
 import org.reflections.util.ConfigurationBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.meta.api.interfaces.BotApiObject;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 /** Utility to scan packages for {@link BotHandler} methods. */
 public final class AnnotatedCommandLoader {
   private static final Logger log = LoggerFactory.getLogger(AnnotatedCommandLoader.class);
+
   private AnnotatedCommandLoader() {}
+
   private static final List<BotCommandFactory<?>> FACTORIES = new CopyOnWriteArrayList<>();
 
   static {

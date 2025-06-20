@@ -357,6 +357,9 @@
                     <java>
                         <googleJavaFormat />
                         <removeUnusedImports />
+                        <licenseHeader>
+                            <file>${session.executionRootDirectory}/config/spotless/license.txt</file>
+                        </licenseHeader>
                     </java>
                 </configuration>
                 <executions>
