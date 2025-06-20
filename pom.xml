@@ -73,6 +73,7 @@
         <nullaway.version>0.12.7</nullaway.version>
         <errorprone-maven-plugin.version>2.38.0</errorprone-maven-plugin.version>
         <exec-maven-plugin.version>3.1.0</exec-maven-plugin.version>
+        <spotbugs-maven-plugin.version>4.9.5</spotbugs-maven-plugin.version>
 
         <!-- TEST -->
         <h2.version>2.3.232</h2.version>
@@ -353,6 +354,11 @@
                     <artifactId>pitest-maven</artifactId>
                     <version>${pitest-maven-plugin.version}</version>
                 </plugin>
+                <plugin>
+                    <groupId>com.github.spotbugs</groupId>
+                    <artifactId>spotbugs-maven-plugin</artifactId>
+                    <version>${spotbugs-maven-plugin.version}</version>
+                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
@@ -626,6 +632,33 @@
                                 <exclude>**/*Test.java</exclude>
                             </excludes>
                         </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>strict</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.github.spotbugs</groupId>
+                        <artifactId>spotbugs-maven-plugin</artifactId>
+                        <configuration>
+                            <effort>Max</effort>
+                            <threshold>High</threshold>
+                            <failOnError>true</failOnError>
+                            <xmlOutput>true</xmlOutput>
+                            <htmlOutput>true</htmlOutput>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>spotbugs</goal>
+                                    <goal>check</goal>
+                                </goals>
+                            </execution>
+                        </executions>
                     </plugin>
                 </plugins>
             </build>

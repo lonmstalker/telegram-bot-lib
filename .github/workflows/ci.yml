@@ -34,7 +34,7 @@ jobs:
           java-version: 21
 
       - name: Maven verify
-        run: ./mvnw -B -pl testkit,core,observability,plugin,security,examples,api spotless:check checkstyle:check verify
+        run: ./mvnw -B -Pstrict -pl testkit,core,observability,plugin,security,examples,api spotless:check checkstyle:check verify
 
       - name: JaCoCo report
         run: ./mvnw -B jacoco:report
@@ -44,3 +44,8 @@ jobs:
         with:
           name: jacoco-report
           path: '**/target/site/jacoco'
+      - name: Upload SpotBugs
+        uses: actions/upload-artifact@v4
+        with:
+          name: spotbugs-report
+          path: '**/target/spotbugs*'
