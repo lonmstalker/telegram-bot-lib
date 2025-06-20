@@ -37,6 +37,11 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.github.zafarkhaja</groupId>
+            <artifactId>java-semver</artifactId>
+            <version>${java-semver.version}</version>
+        </dependency>
 
         <!-- TEST -->
         <dependency>
