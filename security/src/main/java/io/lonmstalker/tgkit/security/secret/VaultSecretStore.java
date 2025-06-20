@@ -17,11 +17,20 @@ package io.lonmstalker.tgkit.security.secret;
 
 import io.github.jopenlibs.vault.Vault;
 import io.github.jopenlibs.vault.VaultConfig;
+import io.lonmstalker.tgkit.security.config.BotSecurityGlobalConfig;
 import java.util.Optional;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Хранилище секретов, использующее HashiCorp Vault.
+ *
+ * <pre>{@code
+ * VaultSecretStore store = new VaultSecretStore();
+ * Optional<String> token = store.get("bot-token");
+ * }</pre>
+ */
 public final class VaultSecretStore implements SecretStore {
 
   private static final Logger log = LoggerFactory.getLogger(VaultSecretStore.class);
@@ -29,20 +38,37 @@ public final class VaultSecretStore implements SecretStore {
   private transient Vault vault;
 
   public VaultSecretStore() {
-    String addr = System.getenv("VAULT_ADDR");
-    if (addr == null) {
-      addr = "https://localhost:8200";
-    }
-    this(new VaultConfig().token(System.getenv("VAULT_TOKEN")).address(addr));
+    this(new VaultConfig());
   }
 
   public VaultSecretStore(@NonNull VaultConfig config) {
-    if (config.getToken() == null)
-      throw new IllegalStateException("VAULT_TOKEN env missing for VaultSecretStore");
+    String token =
+        config.getToken() != null
+            ? config.getToken()
+            : BotSecurityGlobalConfig.INSTANCE.secrets().token();
+    if (token == null) {
+      token = System.getenv("VAULT_TOKEN");
+    }
+
+    String addr =
+        config.getAddress() != null
+            ? config.getAddress()
+            : BotSecurityGlobalConfig.INSTANCE.secrets().address();
+    if (addr == null) {
+      addr = System.getenv("VAULT_ADDR");
+    }
+    if (addr == null) {
+      addr = "https://localhost:8200";
+    }
+
+    if (token == null) {
+      throw new IllegalStateException(
+          "Vault token missing: configure BotSecurityGlobalConfig.INSTANCE.secrets().token() or VAULT_TOKEN env");
+    }
 
     try {
-      vault = Vault.create(config);
-      log.info("VaultSecretStore connected to {}", config.getAddress());
+      vault = Vault.create(config.token(token).address(addr));
+      log.info("VaultSecretStore connected to {}", addr);
     } catch (Exception e) {
       throw new RuntimeException("Cannot init Vault client", e);
     }
