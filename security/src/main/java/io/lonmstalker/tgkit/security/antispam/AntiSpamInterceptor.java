@@ -92,6 +92,9 @@ public final class AntiSpamInterceptor implements BotInterceptor {
 
   /* === preHandle ======================================================= */
   @Override
+  /**
+   * Основная логика спам-фильтра: flood, дубликаты и плохие ссылки.
+   */
   public void preHandle(@NonNull Update upd, @NonNull BotRequest<?> request) {
 
     Message msg = upd.getMessage();

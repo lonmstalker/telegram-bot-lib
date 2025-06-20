@@ -37,6 +37,9 @@ class BotRequestConverterImpl implements BotRequestConverter<BotApiObject> {
     registry.put(BotRequestType.REMOVED_CHAT_BOOST, Update::getRemovedChatBoost);
   }
 
+  /**
+   * Извлекает из {@link Update} нужный объект Bot API.
+   */
   @Override
   public @NonNull BotApiObject convert(@NonNull Update update, @NonNull BotRequestType type) {
     Function<Update, BotApiObject> fn = registry.get(type);

@@ -158,6 +158,21 @@ class PingCommandTest {
 }
 ```
 
+### 5 — Безопасность и наблюдаемость
+```java
+MetricsCollector metrics = BotObservability.micrometer(9180);
+Tracer tracer = BotObservability.otelTracer("sample-bot");
+AntiSpamInterceptor guard = BotSecurity.antiSpamInterceptor(Set.of("spam.com"));
+
+BotConfig cfg = BotConfig.builder()
+        .globalInterceptor(new ObservabilityInterceptor(metrics, tracer))
+        .globalInterceptor(guard)
+        .build();
+
+Bot bot = BotFactory.INSTANCE.from(token, cfg, update -> null);
+bot.start();
+```
+
 ## 🛠️ Сборка и тесты
 
 Минимальные требования: Java 21 и установленный Maven.

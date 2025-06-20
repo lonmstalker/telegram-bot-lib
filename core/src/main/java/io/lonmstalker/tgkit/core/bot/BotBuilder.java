@@ -64,6 +64,11 @@ public final class BotBuilder {
       return this;
     }
 
+    /**
+     * Создаёт и запускает бота.
+     *
+     * @return инициализированный бот
+     */
     @CheckReturnValue
     public synchronized @NonNull Bot start() {
       if (started) {
