@@ -10,17 +10,19 @@ import io.lonmstalker.tgkit.security.ratelimit.impl.InMemoryRateLimiter;
 import io.lonmstalker.tgkit.security.secret.EnvSecretStore;
 import java.time.Duration;
 import java.util.Set;
-import lombok.experimental.UtilityClass;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.commons.lang3.Range;
 
 /**
  * Базовая инициализация security-модуля.<br>
  * Аналогично {@link io.lonmstalker.tgkit.core.init.BotCoreInitializer}.
  */
-@Slf4j
-@UtilityClass
-public class BotSecurityInitializer {
+public final class BotSecurityInitializer {
+
+  private static final Logger log = LoggerFactory.getLogger(BotSecurityInitializer.class);
+
+  private BotSecurityInitializer() {}
 
   private static volatile boolean started;
 

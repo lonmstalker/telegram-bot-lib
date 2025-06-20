@@ -18,7 +18,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.WeakHashMap;
 import javax.imageio.ImageIO;
-import lombok.SneakyThrows;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
@@ -72,7 +71,6 @@ public final class SliderCaptchaProvider implements CaptchaProvider {
   }
 
   /* — helpers — */
-  @SneakyThrows
   private static BufferedImage cutPiece(BufferedImage src, int x) {
     int w = 60, h = 60, y = 50;
     BufferedImage dst = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);

@@ -5,8 +5,6 @@ import io.lonmstalker.tgkit.core.BotResponse;
 import io.lonmstalker.tgkit.core.interceptor.BotInterceptor;
 import io.lonmstalker.tgkit.core.update.UpdateUtils;
 import java.util.List;
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -15,8 +13,12 @@ import org.telegram.telegrambots.meta.api.objects.Update;
  * Runtime-cheap rate-limit guard. Heavy computations delegated to {@link
  * RateLimitBotCommandFactory}.
  */
-@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 public final class RateLimitInterceptor implements BotInterceptor {
+
+  RateLimitInterceptor(RateLimiter backend, List<Meta> metas) {
+    this.backend = backend;
+    this.metas = metas;
+  }
 
   /** immutable meta per annotation */
   record Meta(LimiterKey key, int permits, int seconds, String prefix) {}

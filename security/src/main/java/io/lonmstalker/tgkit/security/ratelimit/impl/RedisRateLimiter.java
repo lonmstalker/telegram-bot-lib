@@ -1,7 +1,6 @@
 package io.lonmstalker.tgkit.security.ratelimit.impl;
 
 import io.lonmstalker.tgkit.security.ratelimit.RateLimiter;
-import lombok.RequiredArgsConstructor;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -45,11 +44,14 @@ import redis.clients.jedis.JedisPool;
  * RateLimiterBackend limiter = new RedisRateLimiter(pool);
  * }</pre>
  */
-@RequiredArgsConstructor
 public final class RedisRateLimiter implements RateLimiter {
 
   /** Jedis connection pool, injected by DI framework. */
   private final JedisPool pool;
+
+  public RedisRateLimiter(@NonNull JedisPool pool) {
+    this.pool = pool;
+  }
 
   /*───────────────────────────────────────────────────────────────*
    *  Atomic Lua (INCR + optional EXPIRE)                           *

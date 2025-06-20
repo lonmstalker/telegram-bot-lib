@@ -3,11 +3,13 @@ package io.lonmstalker.tgkit.security.secret;
 import io.github.jopenlibs.vault.Vault;
 import io.github.jopenlibs.vault.VaultConfig;
 import java.util.Optional;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-@Slf4j
 public final class VaultSecretStore implements SecretStore {
+
+  private static final Logger log = LoggerFactory.getLogger(VaultSecretStore.class);
 
   private transient Vault vault;
 

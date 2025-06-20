@@ -7,12 +7,13 @@ import io.lonmstalker.tgkit.core.reflection.ReflectionUtils;
 import io.lonmstalker.tgkit.security.config.BotSecurityGlobalConfig;
 import java.lang.reflect.*;
 import java.util.*;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-@Slf4j
 public final class AuditBotCommandFactory implements BotCommandFactory<Audit> {
+  private static final Logger log = LoggerFactory.getLogger(AuditBotCommandFactory.class);
   private static final AuditConverter DEFAULT = new UpdateAuditConverter();
 
   @Override
