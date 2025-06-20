@@ -7,9 +7,8 @@ import io.lonmstalker.tgkit.core.interceptor.BotInterceptor;
 import io.lonmstalker.tgkit.security.captcha.CaptchaProvider;
 import io.lonmstalker.tgkit.security.event.SecurityBotEvent;
 import io.lonmstalker.tgkit.security.ratelimit.RateLimiter;
-import lombok.Builder;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -32,10 +31,10 @@ import java.util.regex.Pattern;
  *   <li>При срабатывании триггера выдаёт CAPTCHA вместо команды</li>
  * </ul>
  */
-@Slf4j
-@Builder
-@RequiredArgsConstructor
 public final class AntiSpamInterceptor implements BotInterceptor {
+
+    private static final Logger log =
+            LoggerFactory.getLogger(AntiSpamInterceptor.class);
 
     private static final Pattern URL_RE =
             Pattern.compile("(https?://[\\w\\-.]+)", Pattern.CASE_INSENSITIVE);
@@ -44,6 +43,54 @@ public final class AntiSpamInterceptor implements BotInterceptor {
     private final RateLimiter flood;
     private final CaptchaProvider captcha;
     private final Set<String> badDomains;               // конфиг-файл
+
+    public AntiSpamInterceptor(@NonNull DuplicateProvider dup,
+                               @NonNull RateLimiter flood,
+                               @NonNull CaptchaProvider captcha,
+                               @NonNull Set<String> badDomains) {
+        this.dup = Objects.requireNonNull(dup);
+        this.flood = Objects.requireNonNull(flood);
+        this.captcha = Objects.requireNonNull(captcha);
+        this.badDomains = Objects.requireNonNull(badDomains);
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static final class Builder {
+        private DuplicateProvider dup;
+        private RateLimiter flood;
+        private CaptchaProvider captcha;
+        private Set<String> badDomains;
+
+        private Builder() {
+        }
+
+        public Builder dup(@NonNull DuplicateProvider dup) {
+            this.dup = dup;
+            return this;
+        }
+
+        public Builder flood(@NonNull RateLimiter flood) {
+            this.flood = flood;
+            return this;
+        }
+
+        public Builder captcha(@NonNull CaptchaProvider captcha) {
+            this.captcha = captcha;
+            return this;
+        }
+
+        public Builder badDomains(@NonNull Set<String> badDomains) {
+            this.badDomains = badDomains;
+            return this;
+        }
+
+        public AntiSpamInterceptor build() {
+            return new AntiSpamInterceptor(dup, flood, captcha, badDomains);
+        }
+    }
 
     /* === preHandle ======================================================= */
     @Override
