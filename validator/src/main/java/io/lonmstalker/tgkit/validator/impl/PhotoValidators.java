@@ -5,8 +5,6 @@ import io.lonmstalker.tgkit.core.validator.Validator;
 import io.lonmstalker.tgkit.validator.moderation.ContentModerationService;
 import java.util.List;
 import java.util.ServiceLoader;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.objects.PhotoSize;
 
@@ -15,8 +13,9 @@ import org.telegram.telegrambots.meta.api.objects.PhotoSize;
  *
  * <p>Проверяют общий размер, минимальное разрешение и SafeSearch.
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class PhotoValidators {
+
+  private PhotoValidators() {}
 
   private static final ContentModerationService MOD =
       ServiceLoader.load(ContentModerationService.class).findFirst().orElse(null);

@@ -5,8 +5,6 @@ import io.lonmstalker.tgkit.core.validator.Validator;
 import io.lonmstalker.tgkit.validator.moderation.ContentModerationService;
 import java.util.ServiceLoader;
 import java.util.Set;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.objects.Document;
 
@@ -15,8 +13,9 @@ import org.telegram.telegrambots.meta.api.objects.Document;
  *
  * <p>Проверяют размер, MIME-тип и DLP/Cloud-модерацию содержимого.
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class DocumentValidators {
+
+  private DocumentValidators() {}
 
   private static final Set<String> ALLOWED_MIME =
       Set.of(

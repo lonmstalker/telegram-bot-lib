@@ -3,8 +3,6 @@ package io.lonmstalker.tgkit.validator.impl;
 import io.lonmstalker.tgkit.core.i18n.MessageKey;
 import io.lonmstalker.tgkit.core.validator.Validator;
 import java.util.List;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.objects.polls.Poll;
 
@@ -13,8 +11,9 @@ import org.telegram.telegrambots.meta.api.objects.polls.Poll;
  *
  * <p>Проверяют количество вариантов и длину текста каждого варианта.
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class PollValidators {
+
+  private PollValidators() {}
 
   private static final int MIN_OPTS = 2, MAX_OPTS = 10, MAX_TEXT = 100;
 

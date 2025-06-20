@@ -16,14 +16,13 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 /** Валидации, выходящие за рамки базовых: спам-фильтры, дата/время, ссылки, валюты и т.п. */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class AdvancedValidators {
+
+  private AdvancedValidators() {}
 
   private static final Pattern URL_PATTERN =
       Pattern.compile("(https?://[^\\s]+)", Pattern.CASE_INSENSITIVE);

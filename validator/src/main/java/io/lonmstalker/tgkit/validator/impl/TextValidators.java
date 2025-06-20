@@ -5,8 +5,6 @@ import io.lonmstalker.tgkit.core.validator.Validator;
 import io.lonmstalker.tgkit.validator.moderation.ContentModerationService;
 import java.util.ServiceLoader;
 import java.util.regex.Pattern;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
@@ -15,8 +13,9 @@ import org.checkerframework.checker.nullness.qual.NonNull;
  * <p>Содержат проверки на пустоту, максимальную длину, корректное UTF-8 кодирование и опциональную
  * Cloud-модерацию (toxic/profanity).
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class TextValidators {
+
+  private TextValidators() {}
 
   private static final int MAX_LEN = 4096;
   private static final ContentModerationService MOD =
