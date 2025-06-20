@@ -18,9 +18,7 @@ package io.lonmstalker.tgkit.core.bot;
 import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.lang.reflect.Field;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
+import io.lonmstalker.tgkit.core.bot.GuavaRateLimiterWrapper;
 import org.junit.jupiter.api.Test;
 
 class TelegramSenderRateLimiterTest {
@@ -30,8 +28,8 @@ class TelegramSenderRateLimiterTest {
   }
 
   @Test
-  void permitsPerSecond() throws Exception {
-    TelegramSenderRateLimiter limiter = new TelegramSenderRateLimiter(2);
+  void permitsPerSecond() {
+    GuavaRateLimiterWrapper limiter = new GuavaRateLimiterWrapper(2);
     long start = System.currentTimeMillis();
     limiter.acquire();
     limiter.acquire();
@@ -39,16 +37,20 @@ class TelegramSenderRateLimiterTest {
     long elapsed = System.currentTimeMillis() - start;
     assertTrue(elapsed >= 1000);
     limiter.close();
-    Field field = TelegramSenderRateLimiter.class.getDeclaredField("scheduler");
-    field.setAccessible(true);
   }
 
+
   @Test
-  void externalSchedulerNotClosed() {
-    ScheduledExecutorService external = Executors.newSingleThreadScheduledExecutor();
-    TelegramSenderRateLimiter limiter = new TelegramSenderRateLimiter(1, external);
-    limiter.close();
-    assertFalse(external.isShutdown());
-    external.shutdownNow();
+  void independentLimiters() {
+    GuavaRateLimiterWrapper first = new GuavaRateLimiterWrapper(1);
+    GuavaRateLimiterWrapper second = new GuavaRateLimiterWrapper(1);
+
+    long start = System.currentTimeMillis();
+    first.acquire();
+    second.acquire();
+    first.acquire();
+    long elapsed = System.currentTimeMillis() - start;
+
+    assertTrue(elapsed >= 1000 && elapsed < 2000);
   }
 }
