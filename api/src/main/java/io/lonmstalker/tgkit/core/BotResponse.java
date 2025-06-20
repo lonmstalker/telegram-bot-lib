@@ -7,15 +7,13 @@ import lombok.NoArgsConstructor;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 
-/**
- * Ответ бота в виде метода Telegram API.
- */
+/** Ответ бота в виде метода Telegram API. */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
 public class BotResponse {
 
-    /** Метод, который будет выполнен Telegram API. */
-    private @Nullable BotApiMethod<?> method;
+  /** Метод, который будет выполнен Telegram API. */
+  private @Nullable BotApiMethod<?> method;
 }

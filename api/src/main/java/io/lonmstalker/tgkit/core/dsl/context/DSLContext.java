@@ -6,42 +6,33 @@ import io.lonmstalker.tgkit.core.exception.BotApiException;
 import io.lonmstalker.tgkit.core.user.BotUserInfo;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-/**
- * Контекст выполнения ответа.
- */
+/** Контекст выполнения ответа. */
 public interface DSLContext {
 
-    @NonNull
-    BotInfo botInfo();
+  @NonNull BotInfo botInfo();
 
-    @NonNull
-    BotUserInfo userInfo();
+  @NonNull BotUserInfo userInfo();
 
-    @NonNull
-    BotService service();
+  @NonNull BotService service();
 
-    /**
-     * Проверяет роль администратора.
-     */
-    boolean isAdmin();
+  /** Проверяет роль администратора. */
+  boolean isAdmin();
 
-    record SimpleDSLContext(@NonNull BotService service,
-                            @NonNull BotInfo botInfo,
-                            @NonNull BotUserInfo userInfo) implements DSLContext {
+  record SimpleDSLContext(
+      @NonNull BotService service, @NonNull BotInfo botInfo, @NonNull BotUserInfo userInfo)
+      implements DSLContext {
 
-        public SimpleDSLContext {
-            Long cId = userInfo.chatId();
-            Long uId = userInfo.userId();
-            if (cId == null && uId == null) {
-                throw new BotApiException("Both chatId and userId are null in update");
-            }
-        }
-
-        /**
-         * Проверяет роль администратора.
-         */
-        public boolean isAdmin() {
-            return userInfo.roles().contains("ADMIN");
-        }
+    public SimpleDSLContext {
+      Long cId = userInfo.chatId();
+      Long uId = userInfo.userId();
+      if (cId == null && uId == null) {
+        throw new BotApiException("Both chatId and userId are null in update");
+      }
     }
+
+    /** Проверяет роль администратора. */
+    public boolean isAdmin() {
+      return userInfo.roles().contains("ADMIN");
+    }
+  }
 }

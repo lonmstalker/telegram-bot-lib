@@ -7,6 +7,5 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 @FunctionalInterface
 public interface BotExceptionHandler {
-    @Nullable
-    BotApiMethod<?> handle(@NonNull Update update, @NonNull Exception ex);
+  @Nullable BotApiMethod<?> handle(@NonNull Update update, @NonNull Exception ex);
 }

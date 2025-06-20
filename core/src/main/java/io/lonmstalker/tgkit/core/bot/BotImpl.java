@@ -4,6 +4,14 @@ import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
 import io.lonmstalker.tgkit.core.event.impl.StartStatusBotEvent;
 import io.lonmstalker.tgkit.core.event.impl.StopStatusBotEvent;
 import io.lonmstalker.tgkit.core.exception.BotApiException;
+import java.time.Instant;
+import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,16 +24,6 @@ import org.telegram.telegrambots.meta.api.methods.GetMe;
 import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 import org.telegram.telegrambots.meta.api.objects.User;
 
-import java.time.Instant;
-import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicReference;
-
-
 @Slf4j
 @Getter
 @Builder
@@ -33,188 +31,198 @@ import java.util.concurrent.atomic.AtomicReference;
 @SuppressWarnings({"dereference.of.nullable", "argument"})
 public final class BotImpl implements Bot {
 
-    private final AtomicReference<BotState> state = new AtomicReference<>(BotState.NEW);
-    private final @NonNull List<BotCompleteAction> completeActions = new CopyOnWriteArrayList<>();
-    private long id;
-    private volatile @Nullable User user;
-    private @Nullable SetWebhook setWebhook;
-    private @NonNull String token;
-    private @NonNull BotConfig config;
-    private @NonNull DefaultAbsSender absSender;
-    private @NonNull BotCommandRegistry commandRegistry;
-    private @Nullable BotSessionImpl session;
+  private final AtomicReference<BotState> state = new AtomicReference<>(BotState.NEW);
+  private final @NonNull List<BotCompleteAction> completeActions = new CopyOnWriteArrayList<>();
+  private long id;
+  private volatile @Nullable User user;
+  private @Nullable SetWebhook setWebhook;
+  private @NonNull String token;
+  private @NonNull BotConfig config;
+  private @NonNull DefaultAbsSender absSender;
+  private @NonNull BotCommandRegistry commandRegistry;
+  private @Nullable BotSessionImpl session;
 
-    @Builder.Default
-    private long onCompletedActionTimeoutMs = 10_000;
+  @Builder.Default private long onCompletedActionTimeoutMs = 10_000;
 
-    @Override
-    public long internalId() {
-        checkStarted();
-        return id;
+  @Override
+  public long internalId() {
+    checkStarted();
+    return id;
+  }
+
+  @Override
+  @SuppressWarnings("argument")
+  public long externalId() {
+    checkStarted();
+    return Objects.requireNonNull(user).getId();
+  }
+
+  @Override
+  @SuppressWarnings("dereference.of.nullable")
+  public void start() {
+    checkNotStarted();
+    try {
+      if (absSender instanceof LongPollingReceiver receiver) {
+        initLongPolling(receiver);
+      } else if (absSender instanceof WebHookReceiver receiver) {
+        initWebHook(receiver);
+      }
+      BotRegistryImpl.getInstance().register(this);
+      BotGlobalConfig.INSTANCE
+          .events()
+          .getBus()
+          .publish(new StartStatusBotEvent(internalId(), externalId(), Instant.now(), null));
+      state.set(BotState.RUNNING);
+    } catch (Throwable ex) {
+      BotRegistryImpl.getInstance().unregister(this);
+      BotGlobalConfig.INSTANCE
+          .events()
+          .getBus()
+          .publish(new StartStatusBotEvent(internalId(), externalId(), Instant.now(), ex));
+      throw new BotApiException("Error starting bot", ex);
     }
+  }
 
-    @Override
-    @SuppressWarnings("argument")
-    public long externalId() {
-        checkStarted();
-        return Objects.requireNonNull(user).getId();
+  @Override
+  @SuppressWarnings("dereference.of.nullable")
+  public void stop() {
+    try {
+      checkStarted();
+      runCompleteActions();
+      shutdownSession();
+      closeAbsSender();
+      clearState();
+      BotGlobalConfig.INSTANCE
+          .events()
+          .getBus()
+          .publish(new StopStatusBotEvent(internalId(), externalId(), Instant.now(), null));
+    } catch (Throwable ex) {
+      BotGlobalConfig.INSTANCE
+          .events()
+          .getBus()
+          .publish(new StopStatusBotEvent(internalId(), externalId(), Instant.now(), ex));
+      throw new BotApiException("Error stopping bot", ex);
+    } finally {
+      state.set(BotState.STOPPED);
     }
+  }
 
-    @Override
-    @SuppressWarnings("dereference.of.nullable")
-    public void start() {
-        checkNotStarted();
+  @Override
+  @SuppressWarnings("argument")
+  public @NonNull String username() {
+    checkStarted();
+    return Objects.requireNonNull(user).getUserName();
+  }
+
+  @Override
+  public @NonNull BotCommandRegistry registry() {
+    return commandRegistry;
+  }
+
+  @Override
+  public @NonNull BotState state() {
+    return state.get();
+  }
+
+  @Override
+  public void onComplete(@NonNull BotCompleteAction action) {
+    completeActions.add(action);
+  }
+
+  @Override
+  public @NonNull BotConfig config() {
+    return this.config;
+  }
+
+  @Override
+  public @NonNull String token() {
+    return this.token;
+  }
+
+  @Override
+  public @NonNull BotRegistry botRegistry() {
+    return BotRegistryImpl.getInstance();
+  }
+
+  private void initLongPolling(@NonNull LongPollingReceiver receiver) throws Exception {
+    receiver.clearWebhook();
+    if (this.session == null) {
+      this.session = new BotSessionImpl();
+    }
+    this.session.setOptions(config);
+    this.session.setToken(token);
+    this.session.setCallback(receiver);
+    this.session.start();
+    this.user = absSender.execute(new GetMe());
+    receiver.setUsername(Objects.requireNonNull(this.user).getUserName());
+  }
+
+  private void initWebHook(WebHookReceiver receiver) throws Exception {
+    if (this.setWebhook != null) {
+      setWebhook.validate();
+      receiver.setWebhook(setWebhook);
+    }
+    this.user = absSender.execute(new GetMe());
+    receiver.setUsername(Objects.requireNonNull(this.user).getUserName());
+  }
+
+  private void runCompleteActions() {
+    try (ExecutorService executor = Executors.newSingleThreadExecutor()) {
+      for (BotCompleteAction action : completeActions) {
         try {
-            if (absSender instanceof LongPollingReceiver receiver) {
-                initLongPolling(receiver);
-            } else if (absSender instanceof WebHookReceiver receiver) {
-                initWebHook(receiver);
-            }
-            BotRegistryImpl.getInstance().register(this);
-            BotGlobalConfig.INSTANCE.events().getBus()
-                    .publish(new StartStatusBotEvent(internalId(), externalId(), Instant.now(), null));
-            state.set(BotState.RUNNING);
-        } catch (Throwable ex) {
-            BotRegistryImpl.getInstance().unregister(this);
-            BotGlobalConfig.INSTANCE.events().getBus()
-                    .publish(new StartStatusBotEvent(internalId(), externalId(), Instant.now(), ex));
-            throw new BotApiException("Error starting bot", ex);
+          executor
+              .submit(
+                  () -> {
+                    try {
+                      action.complete();
+                    } catch (Exception e) {
+                      throw new RuntimeException(e);
+                    }
+                  })
+              .get(onCompletedActionTimeoutMs, TimeUnit.MILLISECONDS);
+        } catch (Exception e) {
+          log.error("Complete action error", e);
         }
+      }
     }
+  }
 
-    @Override
-    @SuppressWarnings("dereference.of.nullable")
-    public void stop() {
-        try {
-            checkStarted();
-            runCompleteActions();
-            shutdownSession();
-            closeAbsSender();
-            clearState();
-            BotGlobalConfig.INSTANCE.events().getBus()
-                    .publish(new StopStatusBotEvent(internalId(), externalId(), Instant.now(), null));
-        } catch (Throwable ex) {
-            BotGlobalConfig.INSTANCE.events().getBus()
-                    .publish(new StopStatusBotEvent(internalId(), externalId(), Instant.now(), ex));
-            throw new BotApiException("Error stopping bot", ex);
-        } finally {
-            state.set(BotState.STOPPED);
-        }
+  private void shutdownSession() {
+    if (session != null && session.isRunning()) {
+      try {
+        session.stop();
+      } catch (Exception e) {
+        log.warn("Error stopping session", e);
+      }
     }
+  }
 
-    @Override
-    @SuppressWarnings("argument")
-    public @NonNull String username() {
-        checkStarted();
-        return Objects.requireNonNull(user).getUserName();
+  private void closeAbsSender() {
+    if (absSender instanceof AutoCloseable closeable) {
+      try {
+        closeable.close();
+      } catch (Exception e) {
+        log.warn("Error closing sender", e);
+      }
     }
+  }
 
-    @Override
-    public @NonNull BotCommandRegistry registry() {
-        return commandRegistry;
-    }
+  private void clearState() {
+    this.user = null;
+    this.setWebhook = null;
+    this.session = null;
+    BotRegistryImpl.getInstance().unregister(this);
+  }
 
-    @Override
-    public @NonNull BotState state() {
-        return state.get();
+  private void checkStarted() {
+    if (user == null) {
+      throw new BotApiException("Bot not started");
     }
+  }
 
-    @Override
-    public void onComplete(@NonNull BotCompleteAction action) {
-        completeActions.add(action);
+  private void checkNotStarted() {
+    if (user != null) {
+      throw new BotApiException("Bot started");
     }
-
-    @Override
-    public @NonNull BotConfig config() {
-        return this.config;
-    }
-
-    @Override
-    public @NonNull String token() {
-        return this.token;
-    }
-
-    @Override
-    public @NonNull BotRegistry botRegistry() {
-        return BotRegistryImpl.getInstance();
-    }
-
-    private void initLongPolling(@NonNull LongPollingReceiver receiver) throws Exception {
-        receiver.clearWebhook();
-        if (this.session == null) {
-            this.session = new BotSessionImpl();
-        }
-        this.session.setOptions(config);
-        this.session.setToken(token);
-        this.session.setCallback(receiver);
-        this.session.start();
-        this.user = absSender.execute(new GetMe());
-        receiver.setUsername(Objects.requireNonNull(this.user).getUserName());
-    }
-
-    private void initWebHook(WebHookReceiver receiver) throws Exception {
-        if (this.setWebhook != null) {
-            setWebhook.validate();
-            receiver.setWebhook(setWebhook);
-        }
-        this.user = absSender.execute(new GetMe());
-        receiver.setUsername(Objects.requireNonNull(this.user).getUserName());
-    }
-
-    private void runCompleteActions() {
-        try (ExecutorService executor = Executors.newSingleThreadExecutor()) {
-            for (BotCompleteAction action : completeActions) {
-                try {
-                    executor.submit(() -> {
-                        try {
-                            action.complete();
-                        } catch (Exception e) {
-                            throw new RuntimeException(e);
-                        }
-                    }).get(onCompletedActionTimeoutMs, TimeUnit.MILLISECONDS);
-                } catch (Exception e) {
-                    log.error("Complete action error", e);
-                }
-            }
-        }
-    }
-
-    private void shutdownSession() {
-        if (session != null && session.isRunning()) {
-            try {
-                session.stop();
-            } catch (Exception e) {
-                log.warn("Error stopping session", e);
-            }
-        }
-    }
-
-    private void closeAbsSender() {
-        if (absSender instanceof AutoCloseable closeable) {
-            try {
-                closeable.close();
-            } catch (Exception e) {
-                log.warn("Error closing sender", e);
-            }
-        }
-    }
-
-    private void clearState() {
-        this.user = null;
-        this.setWebhook = null;
-        this.session = null;
-        BotRegistryImpl.getInstance().unregister(this);
-    }
-
-    private void checkStarted() {
-        if (user == null) {
-            throw new BotApiException("Bot not started");
-        }
-    }
-
-    private void checkNotStarted() {
-        if (user != null) {
-            throw new BotApiException("Bot started");
-        }
-    }
+  }
 }

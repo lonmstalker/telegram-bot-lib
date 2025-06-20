@@ -1,61 +1,56 @@
 package io.lonmstalker.tgkit.validator.impl;
 
-import io.lonmstalker.tgkit.core.validator.Validator;
 import io.lonmstalker.tgkit.core.i18n.MessageKey;
+import io.lonmstalker.tgkit.core.validator.Validator;
 import io.lonmstalker.tgkit.validator.moderation.ContentModerationService;
-import lombok.NoArgsConstructor;
+import java.util.ServiceLoader;
 import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.objects.Video;
 
-import java.util.ServiceLoader;
-
 /**
  * Валидаторы для видеосообщений (Video из Telegram API).
- * <p>
- * Проверяют размер, продолжительность и SafeSearch.
+ *
+ * <p>Проверяют размер, продолжительность и SafeSearch.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class VideoValidators {
 
-    private static final ContentModerationService MOD =
-            ServiceLoader.load(ContentModerationService.class).findFirst().orElse(null);
+  private static final ContentModerationService MOD =
+      ServiceLoader.load(ContentModerationService.class).findFirst().orElse(null);
 
-    /**
-     * Проверяет, что размер видео не превышает заданного в килобайтах.
-     *
-     * @param maxKb максимальный размер в килобайтах
-     * @return Validator<Video> с ключом "error.video.tooLarge"
-     */
-    public static Validator<@NonNull Video> maxSizeKb(long maxKb) {
-        return Validator.of(
-                v -> v.getFileSize() != null && v.getFileSize() <= maxKb * 1024L,
-                MessageKey.of("error.video.tooLarge", maxKb)
-        );
-    }
+  /**
+   * Проверяет, что размер видео не превышает заданного в килобайтах.
+   *
+   * @param maxKb максимальный размер в килобайтах
+   * @return Validator<Video> с ключом "error.video.tooLarge"
+   */
+  public static Validator<@NonNull Video> maxSizeKb(long maxKb) {
+    return Validator.of(
+        v -> v.getFileSize() != null && v.getFileSize() <= maxKb * 1024L,
+        MessageKey.of("error.video.tooLarge", maxKb));
+  }
 
-    /**
-     * Проверяет, что длительность видео не превышает заданную (в секундах).
-     *
-     * @param maxSec максимальная продолжительность в секундах
-     * @return Validator<Video> с ключом "error.video.tooLong"
-     */
-    public static Validator<@NonNull Video> maxDurationSec(int maxSec) {
-        return Validator.of(
-                v -> v.getDuration() != null && v.getDuration() <= maxSec,
-                MessageKey.of("error.video.tooLong", maxSec)
-        );
-    }
+  /**
+   * Проверяет, что длительность видео не превышает заданную (в секундах).
+   *
+   * @param maxSec максимальная продолжительность в секундах
+   * @return Validator<Video> с ключом "error.video.tooLong"
+   */
+  public static Validator<@NonNull Video> maxDurationSec(int maxSec) {
+    return Validator.of(
+        v -> v.getDuration() != null && v.getDuration() <= maxSec,
+        MessageKey.of("error.video.tooLong", maxSec));
+  }
 
-    /**
-     * Проверяет безопасность видео через Cloud-Moderation.
-     *
-     * @return Validator<Video> с ключом "error.video.unsafe"
-     */
-    public static Validator<@NonNull Video> safeSearch() {
-        return Validator.of(
-                v -> MOD == null || MOD.isVideoSafe(v.getFileId()),
-                MessageKey.of("error.video.unsafe")
-        );
-    }
+  /**
+   * Проверяет безопасность видео через Cloud-Moderation.
+   *
+   * @return Validator<Video> с ключом "error.video.unsafe"
+   */
+  public static Validator<@NonNull Video> safeSearch() {
+    return Validator.of(
+        v -> MOD == null || MOD.isVideoSafe(v.getFileId()), MessageKey.of("error.video.unsafe"));
+  }
 }

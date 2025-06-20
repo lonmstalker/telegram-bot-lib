@@ -1,33 +1,33 @@
 package io.lonmstalker.tgkit.core.bot.loader;
 
+import static io.lonmstalker.tgkit.core.reflection.ReflectionUtils.newInstance;
+
 import io.lonmstalker.tgkit.core.BotCommand;
 import io.lonmstalker.tgkit.core.BotHandlerConverter;
 import io.lonmstalker.tgkit.core.BotRequest;
+import io.lonmstalker.tgkit.core.annotation.Arg;
 import io.lonmstalker.tgkit.core.annotation.BotHandler;
 import io.lonmstalker.tgkit.core.annotation.matching.CustomMatcher;
 import io.lonmstalker.tgkit.core.annotation.matching.MessageContainsMatch;
 import io.lonmstalker.tgkit.core.annotation.matching.MessageRegexMatch;
 import io.lonmstalker.tgkit.core.annotation.matching.MessageTextMatch;
-import io.lonmstalker.tgkit.core.annotation.Arg;
 import io.lonmstalker.tgkit.core.annotation.matching.UserRoleMatch;
+import io.lonmstalker.tgkit.core.args.BotArgumentConverter;
+import io.lonmstalker.tgkit.core.args.Converters;
 import io.lonmstalker.tgkit.core.args.ParamInfo;
 import io.lonmstalker.tgkit.core.bot.BotCommandRegistry;
 import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
 import io.lonmstalker.tgkit.core.event.impl.RegisterCommandBotEvent;
 import io.lonmstalker.tgkit.core.exception.BotApiException;
 import io.lonmstalker.tgkit.core.loader.BotCommandFactory;
+import io.lonmstalker.tgkit.core.matching.AlwaysMatch;
 import io.lonmstalker.tgkit.core.matching.CommandMatch;
-import io.lonmstalker.tgkit.core.args.BotArgumentConverter;
-import io.lonmstalker.tgkit.core.args.Converters;
-
+import io.lonmstalker.tgkit.core.user.BotUserProvider;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
 import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
-
-import io.lonmstalker.tgkit.core.matching.AlwaysMatch;
-import io.lonmstalker.tgkit.core.user.BotUserProvider;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -37,164 +37,172 @@ import org.reflections.util.ConfigurationBuilder;
 import org.telegram.telegrambots.meta.api.interfaces.BotApiObject;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import static io.lonmstalker.tgkit.core.reflection.ReflectionUtils.newInstance;
-
-/**
- * Utility to scan packages for {@link BotHandler} methods.
- */
+/** Utility to scan packages for {@link BotHandler} methods. */
 @Slf4j
 @UtilityClass
 public final class AnnotatedCommandLoader {
-    private static final List<BotCommandFactory<?>> FACTORIES = new CopyOnWriteArrayList<>();
+  private static final List<BotCommandFactory<?>> FACTORIES = new CopyOnWriteArrayList<>();
 
-    static {
-        ServiceLoader.load(BotCommandFactory.class).forEach(FACTORIES::add);
-        log.debug("loaded {} BotCommandFactory into FACTORIES", FACTORIES.size());
+  static {
+    ServiceLoader.load(BotCommandFactory.class).forEach(FACTORIES::add);
+    log.debug("loaded {} BotCommandFactory into FACTORIES", FACTORIES.size());
+  }
+
+  public static void addCommandFactory(@NonNull BotCommandFactory<?> factory) {
+    FACTORIES.add(factory);
+    log.debug("added {} inti FACTORIES", factory.getClass().getSimpleName());
+  }
+
+  /**
+   * Сканирует указанные пакеты и регистрирует все методы, помеченные аннотацией {@link BotHandler}.
+   */
+  @SuppressWarnings({"argument"})
+  public static void load(@NonNull BotCommandRegistry registry, @NonNull String... packages) {
+    ConfigurationBuilder cb = new ConfigurationBuilder();
+    log.debug("[command-load] loading commands in package {} ", packages.length);
+
+    cb.forPackages(packages);
+    cb.addScanners(Scanners.MethodsAnnotated);
+    Reflections reflections = new Reflections(cb);
+
+    Set<Method> methods = reflections.getMethodsAnnotatedWith(BotHandler.class);
+    for (Method method : methods) {
+      registerHandler(registry, method);
     }
 
-    public static void addCommandFactory(@NonNull BotCommandFactory<?> factory) {
-        FACTORIES.add(factory);
-        log.debug("added {} inti FACTORIES", factory.getClass().getSimpleName());
+    log.debug("[command-load] loaded {} commands in package {}", methods.size(), packages);
+  }
+
+  /** Обрабатывает один найденный метод-хендлер и регистрирует его. */
+  @SuppressWarnings({"argument", "unchecked"})
+  private static void registerHandler(
+      @NonNull BotCommandRegistry registry, @NonNull Method method) {
+    if (Modifier.isStatic(method.getModifiers())) {
+      throw new BotApiException("Handler methods must not be static: " + method);
     }
 
-    /**
-     * Сканирует указанные пакеты и регистрирует все методы, помеченные
-     * аннотацией {@link BotHandler}.
-     */
-    @SuppressWarnings({"argument"})
-    public static void load(@NonNull BotCommandRegistry registry,
-                            @NonNull String... packages) {
-        ConfigurationBuilder cb = new ConfigurationBuilder();
-        log.debug("[command-load] loading commands in package {} ", packages.length);
+    BotHandler ann = Objects.requireNonNull(method.getAnnotation(BotHandler.class));
+    Object instance = newInstance(method.getDeclaringClass());
+    CommandMatch<? extends BotApiObject> matcher = extractMatcher(method);
+    BotHandlerConverter<Object> converter =
+        (BotHandlerConverter<Object>) newInstance(ann.converter());
 
-        cb.forPackages(packages);
-        cb.addScanners(Scanners.MethodsAnnotated);
-        Reflections reflections = new Reflections(cb);
+    method.setAccessible(true);
+    BotCommand<BotApiObject> cmd =
+        InternalCommandAdapter.builder()
+            .method(method)
+            .type(ann.type())
+            .order(ann.order())
+            .instance(instance)
+            .converter(converter)
+            .commandMatch(matcher)
+            .botGroup(ann.botGroup())
+            .params(extractParameters(method))
+            .build();
 
-        Set<Method> methods = reflections.getMethodsAnnotatedWith(BotHandler.class);
-        for (Method method : methods) {
-            registerHandler(registry, method);
+    applyFactories(cmd, method);
+    BotGlobalConfig.INSTANCE
+        .events()
+        .getBus()
+        .publish(new RegisterCommandBotEvent(Instant.now(), method, cmd));
+    registry.add(cmd);
+  }
+
+  /** Создаёт объект сравнения, исходя из аннотаций на методе. */
+  @SuppressWarnings({"unchecked", "argument"})
+  private static @NonNull CommandMatch<? extends BotApiObject> extractMatcher(
+      @NonNull Method method) {
+    if (method.isAnnotationPresent(MessageContainsMatch.class)) {
+      MessageContainsMatch mc = method.getAnnotation(MessageContainsMatch.class);
+      return new io.lonmstalker.tgkit.core.matching.MessageContainsMatch(
+          Objects.requireNonNull(mc).value(), mc.ignoreCase());
+    } else if (method.isAnnotationPresent(MessageRegexMatch.class)) {
+      MessageRegexMatch mr = method.getAnnotation(MessageRegexMatch.class);
+      return new io.lonmstalker.tgkit.core.matching.MessageRegexMatch(
+          Objects.requireNonNull(mr).value());
+    } else if (method.isAnnotationPresent(MessageTextMatch.class)) {
+      MessageTextMatch mt = method.getAnnotation(MessageTextMatch.class);
+      return new io.lonmstalker.tgkit.core.matching.MessageTextMatch(
+          Objects.requireNonNull(mt).value(), mt.ignoreCase());
+    } else if (method.isAnnotationPresent(UserRoleMatch.class)) {
+      UserRoleMatch ur = method.getAnnotation(UserRoleMatch.class);
+      var provider = (BotUserProvider) newInstance(Objects.requireNonNull(ur).provider());
+      return new io.lonmstalker.tgkit.core.matching.UserRoleMatch<>(provider, Set.of(ur.roles()));
+    } else {
+      CustomMatcher custom = method.getAnnotation(CustomMatcher.class);
+      if (custom != null) {
+        return (CommandMatch<BotApiObject>) newInstance(custom.value());
+      }
+    }
+    return new AlwaysMatch<>();
+  }
+
+  /** Формирует информацию о параметрах метода для последующего вызова хендлера. */
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  private @NonNull ParamInfo[] extractParameters(@NonNull Method m) {
+    var ps = m.getParameters();
+    var anns = m.getParameterAnnotations();
+    ParamInfo[] out = new ParamInfo[ps.length];
+
+    for (int i = 0; i < ps.length; i++) {
+      Parameter p = ps[i];
+      Class<?> pt = p.getType();
+
+      // --- BotRequest<T> ---
+      if (BotRequest.class.isAssignableFrom(pt)) {
+        out[i] =
+            new ParamInfo(
+                i,
+                true,
+                false,
+                null,
+                p,
+                Converters.getByClass((Class) BotArgumentConverter.RequestConverter.class));
+        continue;
+      }
+
+      // --- Update ---
+      if (Update.class.equals(pt)) {
+        out[i] =
+            new ParamInfo(
+                i,
+                false,
+                true,
+                null,
+                p,
+                Converters.getByClass((Class) BotArgumentConverter.UpdateConverter.class));
+        continue;
+      }
+
+      // --- @Arg ---
+      Arg arg = null;
+      for (Annotation a : anns[i]) {
+        if (a instanceof Arg) {
+          arg = (Arg) a;
         }
+      }
+      if (arg == null) {
+        throw new BotApiException("Параметр без @Arg должен быть BotRequest или Update: " + m);
+      }
 
-        log.debug("[command-load] loaded {} commands in package {}", methods.size(), packages);
+      BotArgumentConverter conv =
+          arg.converter() == BotArgumentConverter.UpdateConverter.class
+              ? Converters.getByType(pt)
+              : Converters.getByClass((Class) arg.converter());
+
+      out[i] = new ParamInfo(i, false, false, arg, p, conv);
     }
+    return out;
+  }
 
-    /**
-     * Обрабатывает один найденный метод-хендлер и регистрирует его.
-     */
-    @SuppressWarnings({"argument", "unchecked"})
-    private static void registerHandler(@NonNull BotCommandRegistry registry, @NonNull Method method) {
-        if (Modifier.isStatic(method.getModifiers())) {
-            throw new BotApiException("Handler methods must not be static: " + method);
-        }
-
-        BotHandler ann = Objects.requireNonNull(method.getAnnotation(BotHandler.class));
-        Object instance = newInstance(method.getDeclaringClass());
-        CommandMatch<? extends BotApiObject> matcher = extractMatcher(method);
-        BotHandlerConverter<Object> converter = (BotHandlerConverter<Object>) newInstance(ann.converter());
-
-        method.setAccessible(true);
-        BotCommand<BotApiObject> cmd = InternalCommandAdapter.builder()
-                .method(method)
-                .type(ann.type())
-                .order(ann.order())
-                .instance(instance)
-                .converter(converter)
-                .commandMatch(matcher)
-                .botGroup(ann.botGroup())
-                .params(extractParameters(method))
-                .build();
-
-        applyFactories(cmd, method);
-        BotGlobalConfig.INSTANCE.events().getBus()
-                .publish(new RegisterCommandBotEvent(Instant.now(), method, cmd));
-        registry.add(cmd);
+  @SuppressWarnings({"unchecked", "rawtypes", "argument"})
+  private static void applyFactories(@NonNull BotCommand<?> command, @NonNull Method m) {
+    for (BotCommandFactory f : FACTORIES) {
+      if (f.annotationType() == BotCommandFactory.None.class) {
+        f.apply(command, m, null);
+      } else {
+        f.apply(command, m, m.getAnnotation(Objects.requireNonNull(f.annotationType())));
+      }
     }
-
-    /**
-     * Создаёт объект сравнения, исходя из аннотаций на методе.
-     */
-    @SuppressWarnings({"unchecked", "argument"})
-    private static @NonNull CommandMatch<? extends BotApiObject> extractMatcher(@NonNull Method method) {
-        if (method.isAnnotationPresent(MessageContainsMatch.class)) {
-            MessageContainsMatch mc = method.getAnnotation(MessageContainsMatch.class);
-            return new io.lonmstalker.tgkit.core.matching.MessageContainsMatch(Objects.requireNonNull(mc).value(), mc.ignoreCase());
-        } else if (method.isAnnotationPresent(MessageRegexMatch.class)) {
-            MessageRegexMatch mr = method.getAnnotation(MessageRegexMatch.class);
-            return new io.lonmstalker.tgkit.core.matching.MessageRegexMatch(Objects.requireNonNull(mr).value());
-        } else if (method.isAnnotationPresent(MessageTextMatch.class)) {
-            MessageTextMatch mt = method.getAnnotation(MessageTextMatch.class);
-            return new io.lonmstalker.tgkit.core.matching.MessageTextMatch(Objects.requireNonNull(mt).value(), mt.ignoreCase());
-        } else if (method.isAnnotationPresent(UserRoleMatch.class)) {
-            UserRoleMatch ur = method.getAnnotation(UserRoleMatch.class);
-            var provider = (BotUserProvider) newInstance(Objects.requireNonNull(ur).provider());
-            return new io.lonmstalker.tgkit.core.matching.UserRoleMatch<>(provider, Set.of(ur.roles()));
-        } else {
-            CustomMatcher custom = method.getAnnotation(CustomMatcher.class);
-            if (custom != null) {
-                return (CommandMatch<BotApiObject>) newInstance(custom.value());
-            }
-        }
-        return new AlwaysMatch<>();
-    }
-
-    /**
-     * Формирует информацию о параметрах метода для последующего вызова хендлера.
-     */
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    private @NonNull ParamInfo[] extractParameters(@NonNull Method m) {
-        var ps = m.getParameters();
-        var anns = m.getParameterAnnotations();
-        ParamInfo[] out = new ParamInfo[ps.length];
-
-        for (int i = 0; i < ps.length; i++) {
-            Parameter p = ps[i];
-            Class<?> pt = p.getType();
-
-            // --- BotRequest<T> ---
-            if (BotRequest.class.isAssignableFrom(pt)) {
-                out[i] = new ParamInfo(i, true, false, null, p,
-                        Converters.getByClass((Class) BotArgumentConverter.RequestConverter.class));
-                continue;
-            }
-
-            // --- Update ---
-            if (Update.class.equals(pt)) {
-                out[i] = new ParamInfo(i, false, true, null, p,
-                        Converters.getByClass((Class) BotArgumentConverter.UpdateConverter.class));
-                continue;
-            }
-
-            // --- @Arg ---
-            Arg arg = null;
-            for (Annotation a : anns[i]) {
-                if (a instanceof Arg) {
-                    arg = (Arg) a;
-                }
-            }
-            if (arg == null) {
-                throw new BotApiException(
-                        "Параметр без @Arg должен быть BotRequest или Update: " + m);
-            }
-
-            BotArgumentConverter conv = arg.converter() == BotArgumentConverter.UpdateConverter.class
-                    ? Converters.getByType(pt)
-                    : Converters.getByClass((Class) arg.converter());
-
-            out[i] = new ParamInfo(i, false, false, arg, p, conv);
-        }
-        return out;
-    }
-
-
-    @SuppressWarnings({"unchecked", "rawtypes", "argument"})
-    private static void applyFactories(@NonNull BotCommand<?> command, @NonNull Method m) {
-        for (BotCommandFactory f : FACTORIES) {
-            if (f.annotationType() == BotCommandFactory.None.class) {
-                f.apply(command, m, null);
-            } else {
-                f.apply(command, m, m.getAnnotation(Objects.requireNonNull(f.annotationType())));
-            }
-        }
-    }
+  }
 }

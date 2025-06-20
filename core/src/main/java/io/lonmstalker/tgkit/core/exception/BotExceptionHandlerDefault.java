@@ -10,22 +10,21 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Slf4j
 public class BotExceptionHandlerDefault implements BotExceptionHandler {
-    public static final BotExceptionHandler INSTANCE = new BotExceptionHandlerDefault();
+  public static final BotExceptionHandler INSTANCE = new BotExceptionHandlerDefault();
 
-    @Override
-    public @Nullable BotApiMethod<?> handle(@NonNull Update update,
-                                            @NonNull Exception ex) {
-        log.error("onUpdate with error: ", ex);
+  @Override
+  public @Nullable BotApiMethod<?> handle(@NonNull Update update, @NonNull Exception ex) {
+    log.error("onUpdate with error: ", ex);
 
-        Long chatId = UpdateUtils.resolveChatId(update);
-        if (chatId == null) {
-            return null;
-        }
-
-        return SendMessage.builder()
-                .chatId(chatId)
-                .text("error.internal")
-                .disableNotification(true)
-                .build();
+    Long chatId = UpdateUtils.resolveChatId(update);
+    if (chatId == null) {
+      return null;
     }
+
+    return SendMessage.builder()
+        .chatId(chatId)
+        .text("error.internal")
+        .disableNotification(true)
+        .build();
+  }
 }
