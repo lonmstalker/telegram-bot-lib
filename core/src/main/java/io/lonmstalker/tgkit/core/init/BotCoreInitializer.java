@@ -74,6 +74,9 @@ public final class BotCoreInitializer {
     // ── Events ────────────────────────────────────────────────────────
     BotGlobalConfig.INSTANCE.events().bus(new InMemoryEventBus());
 
+    // ── Webhook server ─────────────────────────────────────────────────────-
+    BotGlobalConfig.INSTANCE.webhook().start();
+
     log.info("[core-init] Ядро TGKIT успешно инициализировано ✅");
     started = true;
   }

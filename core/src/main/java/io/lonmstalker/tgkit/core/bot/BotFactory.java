@@ -18,6 +18,7 @@ package io.lonmstalker.tgkit.core.bot;
 import io.lonmstalker.tgkit.core.BotAdapter;
 import io.lonmstalker.tgkit.core.bot.BotDataSourceFactory.BotData;
 import io.lonmstalker.tgkit.core.bot.loader.AnnotatedCommandLoader;
+import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
 import io.lonmstalker.tgkit.core.crypto.TokenCipher;
 import java.util.concurrent.atomic.AtomicLong;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -85,13 +86,13 @@ public final class BotFactory {
       @NonNull BotAdapter adapter,
       @NonNull SetWebhook setWebhook) {
     TelegramSender sender = new TelegramSender(config, token);
-    var bot =
-        implBuilder(token, config)
-            .setWebhook(setWebhook)
-            .absSender(
-                new WebHookReceiver(
-                    config, adapter, token, sender, config.getGlobalExceptionHandler()))
-            .build();
+    WebHookReceiver receiver =
+        new WebHookReceiver(config, adapter, token, sender, config.getGlobalExceptionHandler());
+    BotGlobalConfig.INSTANCE.webhook().server().register(receiver);
+    setWebhook.setUrl(
+        "http://localhost:" + BotGlobalConfig.INSTANCE.webhook().port() + "/" + token);
+    setWebhook.setSecretToken(BotGlobalConfig.INSTANCE.webhook().secret());
+    var bot = implBuilder(token, config).setWebhook(setWebhook).absSender(receiver).build();
     if (adapter instanceof BotAdapterImpl b) {
       b.setCurrentBot(bot);
     }

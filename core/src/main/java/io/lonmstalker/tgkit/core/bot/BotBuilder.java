@@ -44,7 +44,6 @@ public final class BotBuilder {
     private final List<Supplier<BotPlugin>> plugins = new ArrayList<>();
     private String token;
     private boolean polling = true;
-    private int webhookPort = -1;
     private boolean started;
 
     @CheckReturnValue
@@ -56,14 +55,12 @@ public final class BotBuilder {
     @CheckReturnValue
     public @NonNull BotBuilderImpl withPolling() {
       this.polling = true;
-      this.webhookPort = -1;
       return this;
     }
 
     @CheckReturnValue
-    public @NonNull BotBuilderImpl withWebhook(int port) {
+    public @NonNull BotBuilderImpl withWebhook() {
       this.polling = false;
-      this.webhookPort = port;
       return this;
     }
 
@@ -99,7 +96,6 @@ public final class BotBuilder {
         bot = BotFactory.INSTANCE.from(token, config, adapter);
       } else {
         SetWebhook hook = new SetWebhook();
-        hook.setUrl("http://localhost:" + webhookPort);
         bot = BotFactory.INSTANCE.from(token, config, adapter, hook);
       }
 
