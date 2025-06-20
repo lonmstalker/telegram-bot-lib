@@ -58,23 +58,4 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.openjdk.jmh</groupId>
-                <artifactId>jmh-generator-maven-plugin</artifactId>
-                <version>${jmh.version}</version>
-                <executions>
-                    <execution>
-                        <id>generate-jmh-sources</id>
-                        <phase>generate-test-sources</phase>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
 </project>
