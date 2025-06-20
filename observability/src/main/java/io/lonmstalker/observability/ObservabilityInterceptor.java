@@ -32,8 +32,8 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 public class ObservabilityInterceptor implements BotInterceptor {
   private final Tracer tracer;
   private final MetricsCollector metrics;
-  private final ThreadLocal<Span> SPANS = new ThreadLocal<>();
-  private final ThreadLocal<Timer.Sample> SAMPLE = new ThreadLocal<>();
+  private final ThreadLocal<Span> SPANS = ThreadLocal.withInitial(() -> null);
+  private final ThreadLocal<Timer.Sample> SAMPLE = ThreadLocal.withInitial(() -> null);
 
   /**
    * Создаёт интерцептор.
@@ -72,23 +72,26 @@ public class ObservabilityInterceptor implements BotInterceptor {
       @Nullable BotResponse response,
       @Nullable Exception ex) {
     Tags tags = Tags.of(Tag.of("type", UpdateUtils.getType(update).name()));
-    Timer.Sample s = SAMPLE.get();
-    if (s != null) {
-      s.stop(metrics.timer("update_latency_ms", tags));
-      SAMPLE.remove();
-    }
+    Timer.Sample sample = SAMPLE.get();
     Span span = SPANS.get();
-    if (span != null) {
-      if (ex != null) {
-        span.setError(ex);
+    try {
+      if (sample != null) {
+        sample.stop(metrics.timer("update_latency_ms", tags));
       }
-      span.close();
+      if (span != null) {
+        if (ex != null) {
+          span.setError(ex);
+        }
+        span.close();
+      }
+      if (ex != null) {
+        metrics.counter("update_errors_total", tags).increment();
+      }
+      metrics.counter("updates_total", tags).increment();
+    } finally {
+      SAMPLE.remove();
       SPANS.remove();
+      LogContext.clear();
     }
-    if (ex != null) {
-      metrics.counter("update_errors_total", tags).increment();
-    }
-    metrics.counter("updates_total", tags).increment();
-    LogContext.clear();
   }
 }
