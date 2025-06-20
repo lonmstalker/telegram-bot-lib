@@ -4,7 +4,7 @@ module io.lonmstalker.tgkit.core {
   requires org.apache.commons.lang3;
   requires telegrambots;
   requires telegrambots.meta;
-  requires static lombok;
+  requires jedis;
   requires static org.checkerframework.checker.qual;
   requires static com.fasterxml.jackson.annotation;
   requires transitive com.fasterxml.jackson.databind;

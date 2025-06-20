@@ -63,6 +63,11 @@
             <groupId>io.netty</groupId>
             <artifactId>netty-transport</artifactId>
         </dependency>
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <scope>provided</scope>
+        </dependency>
 
         <!-- TEST -->
         <dependency>
@@ -89,6 +94,12 @@
         <dependency>
             <groupId>org.awaitility</groupId>
             <artifactId>awaitility</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>it.ozimov</groupId>
+            <artifactId>embedded-redis</artifactId>
+            <version>0.7.2</version>
             <scope>test</scope>
         </dependency>
         <dependency>
