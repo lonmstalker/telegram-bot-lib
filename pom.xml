@@ -33,34 +33,25 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <!-- LIBS -->
-        <slf4j.version>2.0.17</slf4j.version>
         <okhttp.version>4.12.0</okhttp.version>
         <jackson.version>2.19.1</jackson.version>
-        <prometheus.version>1.15.0</prometheus.version>
         <commons.lang3.version>3.14.0</commons.lang3.version>
         <telegrambots.version>6.9.7.1</telegrambots.version>
-        <micrometer.version>1.13.3</micrometer.version>
-        <opentelemetry.version>1.38.0</opentelemetry.version>
-        <logback.version>1.5.6</logback.version>
+        <micrometer.version>1.15.1</micrometer.version>
         <reflections.version>0.10.2</reflections.version>
-        <caffeine.version>3.2.0</caffeine.version>
-        <jedis.version>6.0.0</jedis.version>
         <http-simple-client.version>0.16.0</http-simple-client.version>
-        <netty.version>4.2.10.Final</netty.version>
-        <undertow.version>2.3.18.Final</undertow.version>
         <vault.version>6.2.0</vault.version>
         <tika.version>3.2.0</tika.version>
-        <jetty.version>12.0.22</jetty.version>
-        <jakarta.servlet.version>6.0.0</jakarta.servlet.version>
         <guava.version>33.4.8-jre</guava.version>
         <language.detector.version>0.6</language.detector.version>
         <spring.boot.version>3.5.3</spring.boot.version>
+        <spring.cloud.version>2025.0.0</spring.cloud.version>
+        <jakarta.jakartaee.version>11.0.0</jakarta.jakartaee.version>
         <dsljson.version>1.10.2</dsljson.version>
         <jmh.version>1.37</jmh.version>
         <jsoup.version>1.18.3</jsoup.version>
         <mapstruct.version>1.6.3</mapstruct.version>
         <swagger.core.version>2.2.5</swagger.core.version>
-        <snakeyaml.version>2.0</snakeyaml.version>
         <picocli.version>4.7.5</picocli.version>
 
         <!-- PLUGINS -->
@@ -83,11 +74,6 @@
         <exec-maven-plugin.version>3.1.0</exec-maven-plugin.version>
 
         <!-- TEST -->
-        <h2.version>2.3.232</h2.version>
-        <mockito.version>5.18.0</mockito.version>
-        <assertj.version>3.25.1</assertj.version>
-        <awaitility.version>4.3.0</awaitility.version>
-        <junit.jupiter.version>5.13.1</junit.jupiter.version>
         <compile.testing.version>0.21.0</compile.testing.version>
     </properties>
 
@@ -97,15 +83,49 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-api</artifactId>
-                <version>${slf4j.version}</version>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring.boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
             <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-lang3</artifactId>
-                <version>${commons.lang3.version}</version>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring.cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
+            <dependency>
+                <groupId>io.micrometer</groupId>
+                <artifactId>micrometer-bom</artifactId>
+                <version>${micrometer.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson</groupId>
+                <artifactId>jackson-bom</artifactId>
+                <version>${jackson.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava-bom</artifactId>
+                <version>${guava.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>jakarta.platform</groupId>
+                <artifactId>jakarta.jakartaee-bom</artifactId>
+                <version>${jakarta.jakartaee.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- локальные/редкие либы: хардкод версии -->
             <dependency>
                 <groupId>org.telegram</groupId>
                 <artifactId>telegrambots</artifactId>
@@ -115,92 +135,6 @@
                 <groupId>org.telegram</groupId>
                 <artifactId>telegrambots-meta</artifactId>
                 <version>${telegrambots.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.micrometer</groupId>
-                <artifactId>micrometer-core</artifactId>
-                <version>${micrometer.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.opentelemetry</groupId>
-                <artifactId>opentelemetry-api</artifactId>
-                <version>${opentelemetry.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.opentelemetry</groupId>
-                <artifactId>opentelemetry-sdk</artifactId>
-                <version>${opentelemetry.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.opentelemetry</groupId>
-                <artifactId>opentelemetry-exporter-logging</artifactId>
-                <version>${opentelemetry.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>ch.qos.logback</groupId>
-                <artifactId>logback-classic</artifactId>
-                <version>${logback.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.micrometer</groupId>
-                <artifactId>micrometer-registry-prometheus</artifactId>
-                <version>${prometheus.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.reflections</groupId>
-                <artifactId>reflections</artifactId>
-                <version>${reflections.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.h2database</groupId>
-                <artifactId>h2</artifactId>
-                <version>${h2.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-databind</artifactId>
-                <version>${jackson.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-annotations</artifactId>
-                <version>${jackson.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.ben-manes.caffeine</groupId>
-                <artifactId>caffeine</artifactId>
-                <version>${caffeine.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>redis.clients</groupId>
-                <artifactId>jedis</artifactId>
-                <version>${jedis.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.netty</groupId>
-                <artifactId>netty-transport</artifactId>
-                <version>${netty.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-server</artifactId>
-                <version>${jetty.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-servlet</artifactId>
-                <version>${jetty.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>jakarta.servlet</groupId>
-                <artifactId>jakarta.servlet-api</artifactId>
-                <version>${jakarta.servlet.version}</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>io.undertow</groupId>
-                <artifactId>undertow-core</artifactId>
-                <version>${undertow.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.github.jopenlibs</groupId>
@@ -218,33 +152,10 @@
                 <version>${tika.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.google.guava</groupId>
-                <artifactId>guava</artifactId>
-                <version>${guava.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>com.optimaize.languagedetector</groupId>
                 <artifactId>language-detector</artifactId>
                 <version>${language.detector.version}</version>
             </dependency>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot</artifactId>
-                <version>${spring.boot.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-autoconfigure</artifactId>
-                <version>${spring.boot.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-test</artifactId>
-                <version>${spring.boot.version}</version>
-                <scope>test</scope>
-            </dependency>
-
-            <!-- CHECKS -->
             <dependency>
                 <groupId>org.checkerframework</groupId>
                 <artifactId>checker-qual</artifactId>
@@ -254,26 +165,6 @@
                 <groupId>org.checkerframework</groupId>
                 <artifactId>checker</artifactId>
                 <version>${checkerframework.version}</version>
-            </dependency>
-
-            <!-- TEST -->
-            <dependency>
-                <groupId>org.junit.jupiter</groupId>
-                <artifactId>junit-jupiter</artifactId>
-                <version>${junit.jupiter.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.assertj</groupId>
-                <artifactId>assertj-core</artifactId>
-                <version>${assertj.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.awaitility</groupId>
-                <artifactId>awaitility</artifactId>
-                <version>${awaitility.version}</version>
-                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>com.google.testing.compile</groupId>
