@@ -14,23 +14,23 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.Map;
-import lombok.Builder;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 /** Google reCAPTCHA v3: тихий fallback-провайдер. */
-@Slf4j
 public final class RecaptchaWebProvider implements CaptchaProvider {
+
+  private static final Logger log = LoggerFactory.getLogger(RecaptchaWebProvider.class);
   private final @NonNull String verifyUrl;
   private final @NonNull String domain;
   private final @NonNull String secretKey;
   private final @NonNull ObjectMapper mapper;
   private final @NonNull HttpClient httpClient;
 
-  @Builder
-  public RecaptchaWebProvider(
+  private RecaptchaWebProvider(
       @NonNull String domain,
       @Nullable String secretKey,
       @Nullable SecretStore secretStore,
@@ -56,6 +56,53 @@ public final class RecaptchaWebProvider implements CaptchaProvider {
     this.mapper = mapper != null ? mapper : new ObjectMapper();
     this.verifyUrl =
         verifyUrl != null ? verifyUrl : "https://www.google.com/recaptcha/api/siteverify";
+  }
+
+  public static Builder builder() {
+    return new Builder();
+  }
+
+  public static final class Builder {
+    private String domain;
+    private String secretKey;
+    private SecretStore secretStore;
+    private String verifyUrl;
+    private ObjectMapper mapper;
+    private HttpClient httpClient;
+
+    public Builder domain(@NonNull String domain) {
+      this.domain = domain;
+      return this;
+    }
+
+    public Builder secretKey(@Nullable String secretKey) {
+      this.secretKey = secretKey;
+      return this;
+    }
+
+    public Builder secretStore(@Nullable SecretStore secretStore) {
+      this.secretStore = secretStore;
+      return this;
+    }
+
+    public Builder verifyUrl(@Nullable String verifyUrl) {
+      this.verifyUrl = verifyUrl;
+      return this;
+    }
+
+    public Builder mapper(@Nullable ObjectMapper mapper) {
+      this.mapper = mapper;
+      return this;
+    }
+
+    public Builder httpClient(@Nullable HttpClient client) {
+      this.httpClient = client;
+      return this;
+    }
+
+    public RecaptchaWebProvider build() {
+      return new RecaptchaWebProvider(domain, secretKey, secretStore, verifyUrl, mapper, httpClient);
+    }
   }
 
   @Override

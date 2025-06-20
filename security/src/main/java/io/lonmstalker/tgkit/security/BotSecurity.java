@@ -10,13 +10,10 @@ import io.lonmstalker.tgkit.security.ratelimit.impl.InMemoryRateLimiter;
 import io.lonmstalker.tgkit.security.ratelimit.impl.RedisRateLimiter;
 import java.time.Duration;
 import java.util.Set;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.Range;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import redis.clients.jedis.JedisPool;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 /**
  * Утилита для создания типовых компонентов безопасности: проверка на дубликаты, CAPTCHA и
  * ограничители скорости.
@@ -29,6 +26,8 @@ import redis.clients.jedis.JedisPool;
  * }</pre>
  */
 public final class BotSecurity {
+
+  private BotSecurity() {}
 
   /** Создаёт хранитель дубликатов сообщений в памяти. */
   public static @NonNull DuplicateProvider inMemoryDuplicateProvider(

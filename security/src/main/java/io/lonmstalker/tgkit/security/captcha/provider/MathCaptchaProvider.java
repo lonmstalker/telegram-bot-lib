@@ -8,7 +8,6 @@ import io.lonmstalker.tgkit.security.captcha.MathCaptchaProviderStore;
 import java.security.SecureRandom;
 import java.time.Duration;
 import java.util.*;
-import lombok.Builder;
 import org.apache.commons.lang3.Range;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -25,8 +24,7 @@ public final class MathCaptchaProvider implements CaptchaProvider {
   private final List<MathCaptchaOperations> allowedOps;
   private final MathCaptchaProviderStore answersStore;
 
-  @Builder
-  public MathCaptchaProvider(
+  private MathCaptchaProvider(
       @NonNull Duration ttl,
       @NonNull Range<Integer> numberRange,
       int wrongCount,
@@ -38,6 +36,47 @@ public final class MathCaptchaProvider implements CaptchaProvider {
     this.wrongCount = Math.max(wrongCount, 1);
     this.allowedOps = List.copyOf(allowedOps);
     this.answersStore = store != null ? store : new InMemoryMathCaptchaProviderStore(ttl, 1000);
+  }
+
+  public static Builder builder() {
+    return new Builder();
+  }
+
+  public static final class Builder {
+    private Duration ttl;
+    private Range<Integer> numberRange;
+    private int wrongCount;
+    private MathCaptchaProviderStore store;
+    private List<MathCaptchaOperations> allowedOps;
+
+    public Builder ttl(@NonNull Duration ttl) {
+      this.ttl = ttl;
+      return this;
+    }
+
+    public Builder numberRange(@NonNull Range<Integer> range) {
+      this.numberRange = range;
+      return this;
+    }
+
+    public Builder wrongCount(int count) {
+      this.wrongCount = count;
+      return this;
+    }
+
+    public Builder store(@Nullable MathCaptchaProviderStore store) {
+      this.store = store;
+      return this;
+    }
+
+    public Builder allowedOps(@NonNull List<MathCaptchaOperations> ops) {
+      this.allowedOps = ops;
+      return this;
+    }
+
+    public MathCaptchaProvider build() {
+      return new MathCaptchaProvider(ttl, numberRange, wrongCount, store, allowedOps);
+    }
   }
 
   @Override

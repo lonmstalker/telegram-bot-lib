@@ -2,11 +2,12 @@ package io.lonmstalker.tgkit.security.secret;
 
 import java.util.Optional;
 import java.util.Properties;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-@Slf4j
 public final class PropertyFileSecretStore implements SecretStore {
+  private static final Logger log = LoggerFactory.getLogger(PropertyFileSecretStore.class);
   private volatile Properties props;
 
   public PropertyFileSecretStore(@NonNull String classPath) {

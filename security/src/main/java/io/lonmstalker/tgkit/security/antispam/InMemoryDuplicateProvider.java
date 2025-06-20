@@ -6,15 +6,36 @@ import java.time.Duration;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import lombok.Builder;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 public class InMemoryDuplicateProvider implements DuplicateProvider {
   private final Cache<Long, Set<Integer>> cache;
 
-  @Builder
-  public InMemoryDuplicateProvider(@NonNull Duration ttl, long maxSize) {
+  private InMemoryDuplicateProvider(@NonNull Duration ttl, long maxSize) {
     this.cache = Caffeine.newBuilder().expireAfterWrite(ttl).maximumSize(maxSize).build();
+  }
+
+  public static Builder builder() {
+    return new Builder();
+  }
+
+  public static final class Builder {
+    private Duration ttl;
+    private long maxSize;
+
+    public Builder ttl(@NonNull Duration ttl) {
+      this.ttl = ttl;
+      return this;
+    }
+
+    public Builder maxSize(long maxSize) {
+      this.maxSize = maxSize;
+      return this;
+    }
+
+    public InMemoryDuplicateProvider build() {
+      return new InMemoryDuplicateProvider(ttl, maxSize);
+    }
   }
 
   @Override
