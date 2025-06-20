@@ -24,3 +24,13 @@ Bot bot = BotFactory.INSTANCE.from("TOKEN", cfg, update -> null, "com.example.bo
 bot.start();
 ```
 
+## Метрики
+
+| Имя | Тип | Описание |
+|-----|-----|----------|
+| `update_latency_ms` | timer | время обработки обновления |
+| `updates_total` | counter | количество успешно обработанных обновлений |
+| `update_errors_total` | counter | число ошибок во время обработки |
+| `updates_dropped_total` | counter | сколько обновлений отклонено из-за ошибок или переполнения очереди |
+| `updates_queue_size` | gauge | текущий размер очереди обновлений/обрабатываемых HTTP-запросов |
+

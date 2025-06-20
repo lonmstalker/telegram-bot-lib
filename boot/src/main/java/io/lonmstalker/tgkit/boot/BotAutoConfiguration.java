@@ -2,6 +2,7 @@ package io.lonmstalker.tgkit.boot;
 
 import io.lonmstalker.observability.BotObservability;
 import io.lonmstalker.observability.MetricsCollector;
+import io.lonmstalker.observability.impl.NoOpMetricsCollector;
 import io.lonmstalker.tgkit.security.init.BotSecurityInitializer;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
@@ -46,12 +47,18 @@ public class BotAutoConfiguration {
     @Override
     public void afterPropertiesSet() {
       collector = BotObservability.micrometer(properties.getMetricsPort());
+      io.lonmstalker.tgkit.core.config.BotGlobalConfig.INSTANCE
+          .observability()
+          .collector(collector);
     }
 
     @Override
     public void destroy() throws Exception {
       if (collector != null) {
         collector.close();
+        io.lonmstalker.tgkit.core.config.BotGlobalConfig.INSTANCE
+            .observability()
+            .collector(new NoOpMetricsCollector());
       }
     }
   }

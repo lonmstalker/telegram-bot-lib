@@ -32,6 +32,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,6 +41,10 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.generics.BotOptions;
 import org.telegram.telegrambots.meta.generics.BotSession;
 import org.telegram.telegrambots.meta.generics.LongPollingBot;
+import io.lonmstalker.observability.MetricsCollector;
+import io.lonmstalker.tgkit.observability.Tags;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.Gauge;
 
 /**
  * Сессия бота, получающая обновления через HTTP long polling и передающая их реализованному {@link
@@ -85,6 +90,9 @@ public class BotSessionImpl implements BotSession {
   private final AtomicBoolean running = new AtomicBoolean();
   private final BlockingQueue<Update> updates;
   private final int queueCapacity;
+  private final MetricsCollector metrics;
+  private final Counter dropped;
+  private final AtomicInteger queueGauge = new AtomicInteger();
 
   private final ObjectMapper mapper;
   private final @Nullable ExecutorService providedExecutor;
@@ -111,6 +119,10 @@ public class BotSessionImpl implements BotSession {
     this.mapper = mapper != null ? mapper : BotGlobalConfig.INSTANCE.http().getMapper();
     this.queueCapacity = queueCapacity;
     this.updates = new LinkedBlockingQueue<>(queueCapacity);
+    this.metrics = BotGlobalConfig.INSTANCE.observability().getCollector();
+    this.dropped = metrics.counter("updates_dropped_total", Tags.of());
+    Gauge.builder("updates_queue_size", queueGauge, AtomicInteger::get)
+        .register(metrics.registry());
   }
 
   /**
@@ -122,14 +134,16 @@ public class BotSessionImpl implements BotSession {
    */
   boolean enqueueUpdate(Update update) {
     try {
-      if (updates.offer(update, ENQUEUE_TIMEOUT_MS, TimeUnit.MILLISECONDS)) {
-        return true;
+      boolean added = updates.offer(update, ENQUEUE_TIMEOUT_MS, TimeUnit.MILLISECONDS);
+      queueGauge.set(updates.size());
+      if (!added) {
+        log.warn(
+            "updates queue full ({}), unable to enqueue after {}ms",
+            queueCapacity,
+            ENQUEUE_TIMEOUT_MS);
+        dropped.increment();
       }
-      log.warn(
-          "updates queue full ({}), unable to enqueue after {}ms",
-          queueCapacity,
-          ENQUEUE_TIMEOUT_MS);
-      return false;
+      return added;
     } catch (InterruptedException ex) {
       Thread.currentThread().interrupt();
       return false;

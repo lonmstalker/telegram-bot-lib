@@ -3,6 +3,11 @@ package io.lonmstalker.tgkit.webhook;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
 import io.lonmstalker.tgkit.core.bot.WebHookReceiver;
+import io.lonmstalker.observability.MetricsCollector;
+import io.lonmstalker.tgkit.observability.Tags;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.Gauge;
+import java.util.concurrent.atomic.AtomicInteger;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
@@ -85,10 +90,14 @@ public final class WebhookServer implements AutoCloseable {
   private final ServerEngine engine;
   private final ObjectMapper mapper = BotGlobalConfig.INSTANCE.http().getMapper();
   private final String secret;
+  private final MetricsCollector metrics = BotGlobalConfig.INSTANCE.observability().getCollector();
+  private final Counter dropped = metrics.counter("updates_dropped_total", Tags.of());
+  private final AtomicInteger queueGauge = new AtomicInteger();
 
   public WebhookServer(int port, @NonNull String secretToken, @NonNull Engine engine) {
     this.secret = secretToken;
     this.engine = engine == Engine.JETTY ? new JettyEngine(port) : new NettyEngine(port);
+    Gauge.builder("updates_queue_size", queueGauge, AtomicInteger::get).register(metrics.registry());
   }
 
   /** Запуск сервера. */
@@ -173,14 +182,19 @@ public final class WebhookServer implements AutoCloseable {
     private class UpdateServlet extends HttpServlet {
       @Override
       protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        queueGauge.incrementAndGet();
         String header = req.getHeader(SECRET_HEADER);
         if (!secret.equals(header)) {
           resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+          dropped.increment();
+          queueGauge.decrementAndGet();
           return;
         }
         WebHookReceiver receiver = receivers.get(req.getRequestURI());
         if (receiver == null) {
           resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+          dropped.increment();
+          queueGauge.decrementAndGet();
           return;
         }
         Update update;
@@ -188,6 +202,8 @@ public final class WebhookServer implements AutoCloseable {
           update = mapper.readValue(req.getInputStream(), Update.class);
         } catch (IOException e) {
           resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+          dropped.increment();
+          queueGauge.decrementAndGet();
           return;
         }
         try {
@@ -198,9 +214,12 @@ public final class WebhookServer implements AutoCloseable {
         } catch (Exception e) {
           log.error("Webhook handling failed", e);
           resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+          dropped.increment();
+          queueGauge.decrementAndGet();
           return;
         }
         resp.setStatus(HttpServletResponse.SC_OK);
+        queueGauge.decrementAndGet();
       }
     }
   }
@@ -272,16 +291,21 @@ public final class WebhookServer implements AutoCloseable {
       }
 
       private void handle(ChannelHandlerContext ctx) throws IOException {
+        queueGauge.incrementAndGet();
         HttpHeaders headers = request.headers();
         if (!HttpMethod.POST.equals(request.method())
             || !secret.equals(headers.get(SECRET_HEADER))) {
           send(ctx, HttpResponseStatus.UNAUTHORIZED);
+          dropped.increment();
+          queueGauge.decrementAndGet();
           return;
         }
         URI uri = URI.create(request.uri());
         WebHookReceiver receiver = receivers.get(uri.getPath());
         if (receiver == null) {
           send(ctx, HttpResponseStatus.NOT_FOUND);
+          dropped.increment();
+          queueGauge.decrementAndGet();
           return;
         }
         Update update;
@@ -289,6 +313,8 @@ public final class WebhookServer implements AutoCloseable {
           update = mapper.readValue(new ByteBufInputStream(body, true), Update.class);
         } catch (IOException e) {
           send(ctx, HttpResponseStatus.BAD_REQUEST);
+          dropped.increment();
+          queueGauge.decrementAndGet();
           return;
         }
         try {
@@ -299,9 +325,12 @@ public final class WebhookServer implements AutoCloseable {
         } catch (Exception e) {
           log.error("Webhook handling failed", e);
           send(ctx, HttpResponseStatus.INTERNAL_SERVER_ERROR);
+          dropped.increment();
+          queueGauge.decrementAndGet();
           return;
         }
         send(ctx, HttpResponseStatus.OK);
+        queueGauge.decrementAndGet();
       }
 
       private void send(ChannelHandlerContext ctx, HttpResponseStatus status) {

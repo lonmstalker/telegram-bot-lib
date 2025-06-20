@@ -22,6 +22,10 @@ import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Tag;
 import io.micrometer.core.instrument.Timer;
+import io.micrometer.core.instrument.Gauge;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.atomic.AtomicReference;
 import io.micrometer.prometheusmetrics.PrometheusConfig;
 import io.micrometer.prometheusmetrics.PrometheusMeterRegistry;
 import io.prometheus.client.CollectorRegistry;
@@ -33,6 +37,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 public class MicrometerCollector implements MetricsCollector {
   private final MeterRegistry registry;
   private final PrometheusMetricsServer httpServer;
+  private final ConcurrentMap<String, AtomicReference<Double>> gauges = new ConcurrentHashMap<>();
 
   public MicrometerCollector(
       @NonNull MeterRegistry registry, @NonNull PrometheusMetricsServer httpServer) {
@@ -53,6 +58,20 @@ public class MicrometerCollector implements MetricsCollector {
   @Override
   public @NonNull Counter counter(@NonNull String name, @NonNull Tags tags) {
     return Counter.builder(name).tags(map(tags)).register(registry);
+  }
+
+  @Override
+  public void gauge(@NonNull String name, @NonNull Tags tags, double value) {
+    String key = name + map(tags).toString();
+    AtomicReference<Double> ref =
+        gauges.computeIfAbsent(
+            key,
+            k -> {
+              AtomicReference<Double> r = new AtomicReference<>(value);
+              Gauge.builder(name, r, AtomicReference::get).tags(map(tags)).register(registry);
+              return r;
+            });
+    ref.set(value);
   }
 
   /**

@@ -24,6 +24,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.net.http.HttpClient;
 import java.time.Duration;
 import java.util.concurrent.Executors;
+import io.lonmstalker.observability.impl.NoOpMetricsCollector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,6 +73,10 @@ public final class BotCoreInitializer {
         .cpuExecutorService(Executors.newWorkStealingPool(2))
         .ioExecutorService(Executors.newVirtualThreadPerTaskExecutor())
         .scheduledExecutorService(Executors.newScheduledThreadPool(2));
+
+    BotGlobalConfig.INSTANCE
+        .observability()
+        .collector(new NoOpMetricsCollector());
 
     // ── Events ────────────────────────────────────────────────────────
     BotGlobalConfig.INSTANCE.events().bus(new InMemoryEventBus());

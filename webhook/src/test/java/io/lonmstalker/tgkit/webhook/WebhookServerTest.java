@@ -13,6 +13,8 @@ import io.lonmstalker.tgkit.core.bot.BotAdapterImpl;
 import io.lonmstalker.tgkit.core.bot.BotConfig;
 import io.lonmstalker.tgkit.core.bot.BotFactory;
 import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
+import io.lonmstalker.observability.BotObservability;
+import io.lonmstalker.observability.MetricsCollector;
 import io.lonmstalker.tgkit.core.matching.CommandMatch;
 import io.lonmstalker.tgkit.testkit.RecordedRequest;
 import io.lonmstalker.tgkit.testkit.TelegramMockServer;
@@ -36,6 +38,8 @@ class WebhookServerTest {
   @Test
   void dispatchesUpdateToBotAndAddsHsts() throws Exception {
     BotGlobalConfig.INSTANCE.webhook().engine(WebhookServer.Engine.JETTY).port(0).secret("SECRET");
+    MetricsCollector mc = BotObservability.micrometer(0);
+    BotGlobalConfig.INSTANCE.observability().collector(mc);
     TestBotBootstrap.initOnce();
     WebhookServer server = BotGlobalConfig.INSTANCE.webhook().server();
     try (TelegramMockServer tgServer = new TelegramMockServer()) {
@@ -84,6 +88,8 @@ class WebhookServerTest {
       RecordedRequest r = tgServer.takeRequest(1, TimeUnit.SECONDS);
       assertThat(r).isNotNull();
       assertThat(r.path()).endsWith("/sendMessage");
+      assertThat(mc.registry().find("updates_dropped_total").counter().count()).isZero();
+      assertThat(mc.registry().find("updates_queue_size").gauge().value()).isZero();
       bot.stop();
     }
   }
@@ -91,6 +97,8 @@ class WebhookServerTest {
   @Test
   void rejectsRequestWithWrongToken() throws Exception {
     BotGlobalConfig.INSTANCE.webhook().engine(WebhookServer.Engine.JETTY).port(0).secret("SECRET");
+    MetricsCollector mc = BotObservability.micrometer(0);
+    BotGlobalConfig.INSTANCE.observability().collector(mc);
     TestBotBootstrap.initOnce();
     WebhookServer server = BotGlobalConfig.INSTANCE.webhook().server();
     try (TelegramMockServer tgServer = new TelegramMockServer()) {
@@ -120,6 +128,8 @@ class WebhookServerTest {
       assertThat(resp.statusCode()).isEqualTo(401);
       RecordedRequest r = tgServer.takeRequest(1, TimeUnit.SECONDS);
       assertThat(r).isNull();
+      assertThat(mc.registry().find("updates_dropped_total").counter().count()).isEqualTo(1.0);
+      assertThat(mc.registry().find("updates_queue_size").gauge().value()).isZero();
       bot.stop();
     }
   }

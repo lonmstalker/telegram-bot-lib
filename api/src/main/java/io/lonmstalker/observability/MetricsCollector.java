@@ -44,4 +44,13 @@ public interface MetricsCollector extends AutoCloseable {
    * @return счётчик
    */
   @NonNull Counter counter(@NonNull String name, @NonNull Tags tags);
+
+  /**
+   * Устанавливает значение gauge.
+   *
+   * @param name имя gauge
+   * @param tags набор тегов
+   * @param value значение
+   */
+  void gauge(@NonNull String name, @NonNull Tags tags, double value);
 }

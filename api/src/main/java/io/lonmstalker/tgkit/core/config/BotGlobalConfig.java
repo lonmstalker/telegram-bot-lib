@@ -21,6 +21,8 @@ import io.lonmstalker.tgkit.core.event.BotEventBus;
 import io.lonmstalker.tgkit.core.parse_mode.ParseMode;
 import io.lonmstalker.tgkit.core.ttl.TtlScheduler;
 import io.lonmstalker.tgkit.webhook.WebhookServer;
+import io.lonmstalker.observability.MetricsCollector;
+import io.lonmstalker.observability.impl.NoOpMetricsCollector;
 import java.net.http.HttpClient;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.net.InetSocketAddress;
@@ -47,6 +49,7 @@ public class BotGlobalConfig {
   private final @NonNull EventGlobalConfig eventGlobalConfig;
   private final @NonNull ExecutorsGlobalConfig executorsGlobalConfig;
   private final @NonNull WebhookGlobalConfig webhookGlobalConfig;
+  private final @NonNull ObservabilityGlobalConfig observabilityGlobalConfig;
 
   private BotGlobalConfig() {
     this.executorsGlobalConfig = new ExecutorsGlobalConfig();
@@ -55,6 +58,7 @@ public class BotGlobalConfig {
     this.httpGlobalConfig = new HttpGlobalConfig();
     this.eventGlobalConfig = new EventGlobalConfig();
     this.webhookGlobalConfig = new WebhookGlobalConfig();
+    this.observabilityGlobalConfig = new ObservabilityGlobalConfig();
 
     Runtime.getRuntime()
         .addShutdownHook(
@@ -65,6 +69,7 @@ public class BotGlobalConfig {
                   webhookGlobalConfig.close();
                   dslGlobalConfig.close();
                   executorsGlobalConfig.close();
+                  observabilityGlobalConfig.close();
                 }));
   }
 
@@ -86,6 +91,10 @@ public class BotGlobalConfig {
 
   public @NonNull WebhookGlobalConfig webhook() {
     return this.webhookGlobalConfig;
+  }
+
+  public @NonNull ObservabilityGlobalConfig observability() {
+    return this.observabilityGlobalConfig;
   }
 
   public static class EventGlobalConfig {
@@ -335,6 +344,31 @@ public class BotGlobalConfig {
           srv.close();
         } catch (Exception ignored) {
         }
+      }
+    }
+  }
+
+  public static class ObservabilityGlobalConfig {
+    private final AtomicReference<MetricsCollector> collector =
+        new AtomicReference<>(new NoOpMetricsCollector());
+
+    public @NonNull MetricsCollector getCollector() {
+      return collector.get();
+    }
+
+    public BotGlobalConfig.@NonNull ObservabilityGlobalConfig collector(
+        @NonNull MetricsCollector metricsCollector) {
+      log.debug(
+          "[core-init] MetricsCollector changed to {}",
+          metricsCollector.getClass().getSimpleName());
+      collector.set(metricsCollector);
+      return this;
+    }
+
+    void close() {
+      try {
+        collector.get().close();
+      } catch (Exception ignored) {
       }
     }
   }
