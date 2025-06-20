@@ -266,7 +266,7 @@
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
-                    <afrtifactId>maven-checkstyle-plugin</afrtifactId>
+                    <artifactId>maven-checkstyle-plugin</artifactId>
                     <version>${checkstyle-maven-plugin.version}</version>
                 </plugin>
                 <plugin>
