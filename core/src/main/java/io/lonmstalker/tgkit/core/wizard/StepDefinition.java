@@ -26,6 +26,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * Описатель одного шага wizard’а.
@@ -149,15 +150,15 @@ public class StepDefinition<M, I, O> {
     return id;
   }
 
-  public List<Validator<O>> getValidators() {
+  public @NonNull List<Validator<O>> getValidators() {
     return validators;
   }
 
-  public List<MessageKey> getQuestionKeys() {
+  public @NonNull List<MessageKey> getQuestionKeys() {
     return questionKeys;
   }
 
-  public Function<BotRequest<?>, I> getParser() {
+  public @Nullable Function<BotRequest<?>, I> getParser() {
     return parser;
   }
 
@@ -165,7 +166,7 @@ public class StepDefinition<M, I, O> {
     this.parser = parser;
   }
 
-  public Validator<BotRequest<?>> getTypeValidator() {
+  public @Nullable Validator<BotRequest<?>> getTypeValidator() {
     return typeValidator;
   }
 
@@ -173,7 +174,7 @@ public class StepDefinition<M, I, O> {
     this.typeValidator = typeValidator;
   }
 
-  public BiConsumer<M, O> getSetter() {
+  public @Nullable BiConsumer<M, O> getSetter() {
     return setter;
   }
 
@@ -189,7 +190,7 @@ public class StepDefinition<M, I, O> {
     this.canBack = canBack;
   }
 
-  public BiConsumer<BotRequest<?>, M> getOnBack() {
+  public @Nullable BiConsumer<BotRequest<?>, M> getOnBack() {
     return onBack;
   }
 
@@ -205,7 +206,7 @@ public class StepDefinition<M, I, O> {
     this.canSkip = canSkip;
   }
 
-  public BiConsumer<BotRequest<?>, M> getOnSkip() {
+  public @Nullable BiConsumer<BotRequest<?>, M> getOnSkip() {
     return onSkip;
   }
 
@@ -221,7 +222,7 @@ public class StepDefinition<M, I, O> {
     this.canCancel = canCancel;
   }
 
-  public BiConsumer<BotRequest<?>, M> getOnCancel() {
+  public @Nullable BiConsumer<BotRequest<?>, M> getOnCancel() {
     return onCancel;
   }
 
@@ -229,7 +230,7 @@ public class StepDefinition<M, I, O> {
     this.onCancel = onCancel;
   }
 
-  public Function<M, String> getNextSupplier() {
+  public @NonNull Function<M, String> getNextSupplier() {
     return nextSupplier;
   }
 
@@ -237,7 +238,7 @@ public class StepDefinition<M, I, O> {
     this.nextSupplier = nextSupplier;
   }
 
-  public Duration getTimeout() {
+  public @Nullable Duration getTimeout() {
     return timeout;
   }
 
@@ -245,7 +246,7 @@ public class StepDefinition<M, I, O> {
     this.timeout = timeout;
   }
 
-  public MessageKey getReminderKey() {
+  public @Nullable MessageKey getReminderKey() {
     return reminderKey;
   }
 
@@ -253,7 +254,7 @@ public class StepDefinition<M, I, O> {
     this.reminderKey = reminderKey;
   }
 
-  public Predicate<M> getPreFinishChecker() {
+  public @Nullable Predicate<M> getPreFinishChecker() {
     return preFinishChecker;
   }
 
@@ -261,7 +262,7 @@ public class StepDefinition<M, I, O> {
     this.preFinishChecker = preFinishChecker;
   }
 
-  public String getPreFinishFailStepId() {
+  public @Nullable String getPreFinishFailStepId() {
     return preFinishFailStepId;
   }
 

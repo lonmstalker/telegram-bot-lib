@@ -94,7 +94,7 @@ class WebHookReceiver extends TelegramWebhookBot implements AutoCloseable {
   }
 
   @Override
-  public String getBotPath() {
+  public @NonNull String getBotPath() {
     return token;
   }
 

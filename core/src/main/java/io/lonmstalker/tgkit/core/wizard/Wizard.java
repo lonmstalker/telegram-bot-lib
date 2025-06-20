@@ -39,7 +39,7 @@ public abstract class Wizard<M> {
   private BiConsumer<BotRequest<?>, M> onComplete;
   private final List<StepDefinition<M, ?, ?>> steps = new ArrayList<>();
 
-  public String getId() {
+  public @NonNull String getId() {
     return id;
   }
 
