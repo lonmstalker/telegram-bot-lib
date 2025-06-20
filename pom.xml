@@ -46,6 +46,7 @@
         <undertow.version>2.3.9.Final</undertow.version>
         <vault.version>6.2.0</vault.version>
         <tika.version>3.2.0</tika.version>
+        <java-semver.version>0.10.2</java-semver.version>
 
         <!-- PLUGINS -->
         <checkerframework.version>3.49.4</checkerframework.version>
