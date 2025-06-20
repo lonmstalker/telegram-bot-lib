@@ -14,7 +14,7 @@
 | ✅ | **Pluggable StateStore**              | In-memory → Redis → JDBC переключается одной строкой |
 | ✅ | **Webhook ⇆ Polling auto-failover**   | Метод `serveHybrid()` сам решает, что сейчас живо |
 | 🟡 | Инструменты тестирования              | Record/Replay JSON-`Update`, JUnit-rule `@BotTest` |
-| ✅ | Метрики / трейсы / логи               | Micrometer + OpenTelemetry + SLF4J/MDC |
+| ✅ | [Метрики / трейсы / логи](observability/README.md) | Micrometer + OpenTelemetry + SLF4J/MDC |
 | ✅ | **Плагинная архитектура**             | Отдельный модуль `plugin` с `ServiceLoader`, hot-reload и системой разрешений |
 | 🟡 | [Security-bundle](security/README.md) | Rate-limit, inline-CAPTCHA, ACL и Spring Boot-стартер |
 | 🟡 | Расширенный форматтер                 | Markdown V2 / HTML, media-group, шаблоны FreeMarker |
