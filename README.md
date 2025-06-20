@@ -104,12 +104,8 @@ public class EchoCommands {
     }
 }
 
-Bot bot = BotFactory.INSTANCE.from(
-        token,
-        BotConfig.builder().build(),
-        update -> null,                       // вся логика в аннотированных хендлерах
-        "com.example.bot");
-bot.start();          // smart Webhook ↔︎ Polling
+// Конфигурация может быть YAML или JSON
+TelegramBot.run(Path.of("bot.yaml"));
 
 ```
 
@@ -119,7 +115,7 @@ BotConfig cfg = BotConfig.builder()
         .store(new InMemoryStateStore())    // можно RedisStateStore, JdbcStateStore…
         .build();
 
-Bot bot = BotFactory.INSTANCE.from(token, cfg, adapter);
+TelegramBot.run(Path.of("bot.yaml"));
 
 @BotHandler(type = BotRequestType.MESSAGE)
 public void quiz(BotRequest<Message> req) {
@@ -141,7 +137,7 @@ BotConfig cfg = BotConfig.builder()
         .globalInterceptor(new ObservabilityInterceptor(metrics, tracer))
         .build();
 
-Bot bot = BotFactory.INSTANCE.from(token, cfg, adapter);
+TelegramBot.run(Path.of("bot.yaml"));
 
 ```
 
