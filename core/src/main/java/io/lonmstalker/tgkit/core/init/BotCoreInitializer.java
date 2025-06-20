@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 public final class BotCoreInitializer {
 
   private static final Logger log = LoggerFactory.getLogger(BotCoreInitializer.class);
+
   private BotCoreInitializer() {}
 
   private static volatile boolean started;
@@ -57,6 +58,9 @@ public final class BotCoreInitializer {
 
     // ── Events ────────────────────────────────────────────────────────
     BotGlobalConfig.INSTANCE.events().bus(new InMemoryEventBus());
+
+    // ── Webhook server ─────────────────────────────────────────────────────-
+    BotGlobalConfig.INSTANCE.webhook().start();
 
     log.info("[core-init] Ядро TGKIT успешно инициализировано ✅");
     started = true;

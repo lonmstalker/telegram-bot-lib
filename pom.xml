@@ -17,6 +17,7 @@
         <module>examples</module>
         <module>api</module>
         <module>testkit</module>
+        <module>webhook</module>
         <module>validator</module>
     </modules>
 
@@ -45,6 +46,8 @@
         <undertow.version>2.3.9.Final</undertow.version>
         <vault.version>6.2.0</vault.version>
         <tika.version>3.2.0</tika.version>
+        <jetty.version>12.0.22</jetty.version>
+        <jakarta.servlet.version>6.0.0</jakarta.servlet.version>
         <guava.version>33.4.8-jre</guava.version>
         <language.detector.version>0.6</language.detector.version>
 
@@ -157,6 +160,22 @@
                 <groupId>io.netty</groupId>
                 <artifactId>netty-transport</artifactId>
                 <version>${netty.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-server</artifactId>
+                <version>${jetty.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-servlet</artifactId>
+                <version>${jetty.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>jakarta.servlet</groupId>
+                <artifactId>jakarta.servlet-api</artifactId>
+                <version>${jakarta.servlet.version}</version>
+                <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>io.undertow</groupId>

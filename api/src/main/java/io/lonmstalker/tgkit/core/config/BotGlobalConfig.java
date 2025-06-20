@@ -5,14 +5,15 @@ import io.lonmstalker.tgkit.core.dsl.feature_flags.FeatureFlags;
 import io.lonmstalker.tgkit.core.event.BotEventBus;
 import io.lonmstalker.tgkit.core.parse_mode.ParseMode;
 import io.lonmstalker.tgkit.core.ttl.TtlScheduler;
+import io.lonmstalker.tgkit.webhook.WebhookServer;
 import java.net.http.HttpClient;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.checkerframework.checker.nullness.qual.NonNull;
 
 /** Настройки по умолчанию для BotResponse. */
 public class BotGlobalConfig {
@@ -25,6 +26,7 @@ public class BotGlobalConfig {
   private final @NonNull HttpGlobalConfig httpGlobalConfig;
   private final @NonNull EventGlobalConfig eventGlobalConfig;
   private final @NonNull ExecutorsGlobalConfig executorsGlobalConfig;
+  private final @NonNull WebhookGlobalConfig webhookGlobalConfig;
 
   private BotGlobalConfig() {
     this.executorsGlobalConfig = new ExecutorsGlobalConfig();
@@ -32,6 +34,7 @@ public class BotGlobalConfig {
     this.dslGlobalConfig = new DSLGlobalConfig();
     this.httpGlobalConfig = new HttpGlobalConfig();
     this.eventGlobalConfig = new EventGlobalConfig();
+    this.webhookGlobalConfig = new WebhookGlobalConfig();
 
     Runtime.getRuntime()
         .addShutdownHook(
@@ -39,6 +42,7 @@ public class BotGlobalConfig {
                 () -> {
                   eventGlobalConfig.close();
                   httpGlobalConfig.close();
+                  webhookGlobalConfig.close();
                   dslGlobalConfig.close();
                   executorsGlobalConfig.close();
                 }));
@@ -58,6 +62,10 @@ public class BotGlobalConfig {
 
   public @NonNull HttpGlobalConfig http() {
     return this.httpGlobalConfig;
+  }
+
+  public @NonNull WebhookGlobalConfig webhook() {
+    return this.webhookGlobalConfig;
   }
 
   public static class EventGlobalConfig {
@@ -230,6 +238,62 @@ public class BotGlobalConfig {
       try {
         ttlScheduler.get().close();
       } catch (Exception ignored) {
+      }
+    }
+  }
+
+  public static class WebhookGlobalConfig {
+    private final AtomicReference<WebhookServer> server = new AtomicReference<>();
+    private final AtomicReference<WebhookServer.Engine> engine =
+        new AtomicReference<>(WebhookServer.Engine.JETTY);
+    private final AtomicReference<String> secret = new AtomicReference<>();
+    private final AtomicReference<Integer> port = new AtomicReference<>(0);
+
+    public @NonNull WebhookGlobalConfig engine(@NonNull WebhookServer.Engine engine) {
+      this.engine.set(engine);
+      return this;
+    }
+
+    public @NonNull WebhookGlobalConfig secret(@NonNull String secret) {
+      this.secret.set(secret);
+      return this;
+    }
+
+    public @NonNull WebhookGlobalConfig port(int port) {
+      this.port.set(port);
+      return this;
+    }
+
+    public int port() {
+      return this.port.get();
+    }
+
+    public String secret() {
+      return this.secret.get();
+    }
+
+    public void start() {
+      WebhookServer srv = new WebhookServer(port.get(), secret.get(), engine.get());
+      try {
+        srv.start();
+      } catch (Exception e) {
+        throw new IllegalStateException("Webhook server start failed", e);
+      }
+      server.set(srv);
+      port.set(srv.port());
+    }
+
+    public WebhookServer server() {
+      return server.get();
+    }
+
+    void close() {
+      WebhookServer srv = server.get();
+      if (srv != null) {
+        try {
+          srv.close();
+        } catch (Exception ignored) {
+        }
       }
     }
   }
