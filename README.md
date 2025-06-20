@@ -111,8 +111,9 @@ TelegramBot.run(Path.of("bot.yaml"));
 
 ### 2 — Работа с StateStore
 ```java
+JedisPool pool = new JedisPool("localhost", 6379);
 BotConfig cfg = BotConfig.builder()
-        .store(new InMemoryStateStore())    // можно RedisStateStore, JdbcStateStore…
+        .store(new RedisStateStore(pool))    // можно InMemoryStateStore, JdbcStateStore…
         .build();
 
 TelegramBot.run(Path.of("bot.yaml"));
@@ -122,9 +123,9 @@ public void quiz(BotRequest<Message> req) {
     var store = req.botInfo().store();
     long chat = req.user().chatId();
 
-    String step = store.get(chat, "step");            // чтение
+    String step = store.get(String.valueOf(chat));     // чтение
     // … бизнес-логика …
-    store.set(chat, "step", "NEXT");                  // запись
+    store.set(String.valueOf(chat), "NEXT");           // запись
 }
 ```
 
