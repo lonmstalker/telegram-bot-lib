@@ -59,6 +59,7 @@
         <revapi.version>0.28.2</revapi.version>
         <revapi-maven-plugin.version>0.15.1</revapi-maven-plugin.version>
         <jacoco-maven-plugin.version>0.8.13</jacoco-maven-plugin.version>
+        <errorprone-maven-plugin.version>2.29.1</errorprone-maven-plugin.version>
 
         <!-- TEST -->
         <h2.version>2.3.232</h2.version>
@@ -365,6 +366,26 @@
                         <goals>
                             <goal>check</goal>
                         </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>net.ltgt.errorprone</groupId>
+                <artifactId>errorprone-maven-plugin</artifactId>
+                <version>${errorprone-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>compile</goal>
+                            <goal>test-compile</goal>
+                        </goals>
+                        <configuration>
+                            <args>
+                                <arg>-XepAllErrorsAsWarnings</arg>
+                                <arg>-XepDisableWarningsInGeneratedCode</arg>
+                            </args>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
