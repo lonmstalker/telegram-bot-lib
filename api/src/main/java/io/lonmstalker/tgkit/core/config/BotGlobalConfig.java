@@ -22,11 +22,16 @@ import io.lonmstalker.tgkit.core.parse_mode.ParseMode;
 import io.lonmstalker.tgkit.core.ttl.TtlScheduler;
 import io.lonmstalker.tgkit.webhook.WebhookServer;
 import java.net.http.HttpClient;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.net.InetSocketAddress;
+import java.net.ProxySelector;
+import java.time.Duration;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -106,6 +111,7 @@ public class BotGlobalConfig {
 
   public static class HttpGlobalConfig {
     private final @NonNull AtomicReference<@NonNull HttpClient> client = new AtomicReference<>();
+    private final @NonNull AtomicReference<ObjectMapper> mapper = new AtomicReference<>();
 
     public @NonNull HttpGlobalConfig httpClient(@NonNull HttpClient httpClient) {
       log.debug("[core-init] HttpClient changed to {}", httpClient.getClass().getSimpleName());
@@ -113,8 +119,28 @@ public class BotGlobalConfig {
       return this;
     }
 
+    public @NonNull HttpGlobalConfig mapper(@NonNull ObjectMapper mapper) {
+      log.debug("[core-init] ObjectMapper changed to {}", mapper.getClass().getSimpleName());
+      this.mapper.set(mapper);
+      return this;
+    }
+
     public @NonNull HttpClient getClient() {
       return this.client.get();
+    }
+
+    public @NonNull HttpClient getClient(@Nullable String proxyHost, int proxyPort) {
+      if (proxyHost == null || proxyHost.isEmpty()) {
+        return client.get();
+      }
+      return HttpClient.newBuilder()
+          .connectTimeout(client.get().connectTimeout().orElse(Duration.ofSeconds(30)))
+          .proxy(ProxySelector.of(new InetSocketAddress(proxyHost, proxyPort)))
+          .build();
+    }
+
+    public @NonNull ObjectMapper getMapper() {
+      return this.mapper.get();
     }
 
     void close() {

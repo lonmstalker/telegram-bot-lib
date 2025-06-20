@@ -1,6 +1,7 @@
 package io.lonmstalker.tgkit.webhook;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
 import io.lonmstalker.tgkit.core.bot.WebHookReceiver;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;
@@ -82,7 +83,7 @@ public final class WebhookServer implements AutoCloseable {
   }
 
   private final ServerEngine engine;
-  private final ObjectMapper mapper = new ObjectMapper();
+  private final ObjectMapper mapper = BotGlobalConfig.INSTANCE.http().getMapper();
   private final String secret;
 
   public WebhookServer(int port, @NonNull String secretToken, @NonNull Engine engine) {

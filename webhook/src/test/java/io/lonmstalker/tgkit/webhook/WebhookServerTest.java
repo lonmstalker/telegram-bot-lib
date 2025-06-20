@@ -31,7 +31,7 @@ import org.telegram.telegrambots.meta.api.objects.User;
 
 /** Tests for {@link WebhookServer}. */
 class WebhookServerTest {
-  private static final ObjectMapper MAPPER = new ObjectMapper();
+  private static final ObjectMapper MAPPER = BotGlobalConfig.INSTANCE.http().getMapper();
 
   @Test
   void dispatchesUpdateToBotAndAddsHsts() throws Exception {

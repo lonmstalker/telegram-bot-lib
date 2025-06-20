@@ -20,8 +20,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
 import io.lonmstalker.tgkit.core.exception.BotApiException;
 import java.io.InputStream;
-import java.net.InetSocketAddress;
-import java.net.ProxySelector;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -110,7 +108,7 @@ public class BotSessionImpl implements BotSession {
   public BotSessionImpl(
       @Nullable ExecutorService executor, @Nullable ObjectMapper mapper, int queueCapacity) {
     this.providedExecutor = executor;
-    this.mapper = mapper != null ? mapper : new ObjectMapper();
+    this.mapper = mapper != null ? mapper : BotGlobalConfig.INSTANCE.http().getMapper();
     this.queueCapacity = queueCapacity;
     this.updates = new LinkedBlockingQueue<>(queueCapacity);
   }
@@ -147,16 +145,10 @@ public class BotSessionImpl implements BotSession {
     Objects.requireNonNull(token, "Token not set");
     Objects.requireNonNull(callback, "Callback not set");
 
-    if (options.getProxyHost() != null && !options.getProxyHost().isEmpty()) {
-      this.httpClient =
-          HttpClient.newBuilder()
-              .proxy(
-                  ProxySelector.of(
-                      new InetSocketAddress(options.getProxyHost(), options.getProxyPort())))
-              .build();
-    } else {
-      this.httpClient = BotGlobalConfig.INSTANCE.http().getClient();
-    }
+    this.httpClient =
+        BotGlobalConfig.INSTANCE
+            .http()
+            .getClient(options.getProxyHost(), options.getProxyPort());
 
     this.executor =
         providedExecutor != null

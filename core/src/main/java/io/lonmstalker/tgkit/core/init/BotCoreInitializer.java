@@ -20,6 +20,7 @@ import io.lonmstalker.tgkit.core.dsl.MissingIdStrategy;
 import io.lonmstalker.tgkit.core.dsl.feature_flags.InMemoryFeatureFlags;
 import io.lonmstalker.tgkit.core.dsl.ttl.TtlSchedulerDefault;
 import io.lonmstalker.tgkit.core.event.InMemoryEventBus;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.net.http.HttpClient;
 import java.time.Duration;
 import java.util.concurrent.Executors;
@@ -59,10 +60,11 @@ public final class BotCoreInitializer {
         .ttlScheduler(new TtlSchedulerDefault()) // дефолтный планировщик TTL
         .missingIdStrategy(MissingIdStrategy.ERROR);
 
-    // ── HTTP-клиент с собственным таймаутом ───────────────────────────────
-    BotGlobalConfig.INSTANCE
-        .http()
-        .httpClient(HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(30)).build());
+    // ── HTTP и сериализация ─────────────────────────────────────────────
+    HttpClient httpClient =
+        HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(30)).build();
+    ObjectMapper mapper = new ObjectMapper();
+    BotGlobalConfig.INSTANCE.http().httpClient(httpClient).mapper(mapper);
 
     // ── Executors ────────────────────────────────────────────────────────
     BotGlobalConfig.INSTANCE
