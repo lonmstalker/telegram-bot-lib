@@ -2,8 +2,12 @@ module io.lonmstalker.tgkit.core {
   requires io.lonmstalker.tgkit.api;
   requires org.slf4j;
   requires org.apache.commons.lang3;
-  requires org.telegram.telegrambots;
-  requires com.fasterxml.jackson.databind;
+  requires telegrambots;
+  requires telegrambots.meta;
+  requires static lombok;
+  requires static org.checkerframework.checker.qual;
+  requires static com.fasterxml.jackson.annotation;
+  requires transitive com.fasterxml.jackson.databind;
   requires com.fasterxml.jackson.dataformat.yaml;
   requires com.h2database;
   requires org.reflections;
