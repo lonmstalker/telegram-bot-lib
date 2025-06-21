@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.github.tgkit.security.rbac;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -44,8 +43,7 @@ public class RoleSecurityTest {
 
   /* ======= dummy handler ======= */
   @RequiresRole("ADMIN")
-  void secure(Update u) {
-  }
+  void secure(Update u) {}
 
   @BeforeEach
   void init() throws Exception {

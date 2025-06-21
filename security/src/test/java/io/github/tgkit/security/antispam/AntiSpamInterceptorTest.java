@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.github.tgkit.security.antispam;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -51,9 +50,7 @@ class AntiSpamInterceptorTest implements WithAssertions {
   BotService bot;
   AntiSpamInterceptor isp;
 
-  /**
-   * minimal Update with Message
-   */
+  /** minimal Update with Message */
   private static Update upd(long chatId, long userId, String txt) {
     Message m = new Message();
     Chat chat = new Chat();

@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.github.examples.simplebot;
 
 import static io.github.tgkit.core.update.UpdateUtils.resolveChatId;
@@ -40,6 +39,5 @@ public class SimpleRoleProvider implements BotUserProvider {
       @Nullable Long userId,
       @Nullable Long internalUserId,
       Set<String> roles)
-      implements BotUserInfo {
-  }
+      implements BotUserInfo {}
 }

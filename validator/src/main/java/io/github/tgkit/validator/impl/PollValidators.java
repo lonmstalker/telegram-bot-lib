@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.github.tgkit.validator.impl;
 
 import io.github.tgkit.core.i18n.MessageKey;
@@ -31,8 +30,7 @@ public final class PollValidators {
 
   private static final int MIN_OPTS = 2, MAX_OPTS = 10, MAX_TEXT = 100;
 
-  private PollValidators() {
-  }
+  private PollValidators() {}
 
   /**
    * Проверяет, что количество вариантов находится в диапазоне [2..10].

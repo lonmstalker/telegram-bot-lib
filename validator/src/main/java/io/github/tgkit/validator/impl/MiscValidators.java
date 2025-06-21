@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.github.tgkit.validator.impl;
 
 import io.github.tgkit.core.i18n.MessageKey;
@@ -36,8 +35,7 @@ import org.telegram.telegrambots.meta.api.objects.stickers.Sticker;
  */
 public final class MiscValidators {
 
-  private MiscValidators() {
-  }
+  private MiscValidators() {}
 
   /**
    * Стикер должен принадлежать одному из разрешённых наборов.

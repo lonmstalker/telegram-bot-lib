@@ -13,12 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.github.tgkit.validator.impl;
 
-import io.github.tgkit.validator.moderation.ContentModerationService;
 import io.github.tgkit.core.i18n.MessageKey;
 import io.github.tgkit.core.validator.Validator;
+import io.github.tgkit.validator.moderation.ContentModerationService;
 import java.net.URI;
 import java.util.ServiceLoader;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -33,8 +32,7 @@ public final class UrlValidators {
   private static final ContentModerationService MOD =
       ServiceLoader.load(ContentModerationService.class).findFirst().orElse(null);
 
-  private UrlValidators() {
-  }
+  private UrlValidators() {}
 
   /**
    * Проверяет, что строка является корректным URI.

@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.github.tgkit.security.captcha.provider;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -37,9 +36,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
-/**
- * Google reCAPTCHA v3: тихий fallback-провайдер.
- */
+/** Google reCAPTCHA v3: тихий fallback-провайдер. */
 public final class RecaptchaWebProvider implements CaptchaProvider {
 
   private static final Logger log = LoggerFactory.getLogger(RecaptchaWebProvider.class);
@@ -65,8 +62,8 @@ public final class RecaptchaWebProvider implements CaptchaProvider {
         secretKey != null
             ? secretKey
             : secretStore
-            .get("RECAPTCHA_SECRET_KEY")
-            .orElseThrow(() -> new IllegalArgumentException("recaptcha site key required"));
+                .get("RECAPTCHA_SECRET_KEY")
+                .orElseThrow(() -> new IllegalArgumentException("recaptcha site key required"));
 
     this.domain = domain;
     this.mapper = mapper != null ? mapper : BotGlobalConfig.INSTANCE.http().getMapper();
@@ -87,9 +84,7 @@ public final class RecaptchaWebProvider implements CaptchaProvider {
         .build();
   }
 
-  /**
-   * REST-endpoint вызывается фронтом после Google check.
-   */
+  /** REST-endpoint вызывается фронтом после Google check. */
   @Override
   @SuppressWarnings("unchecked")
   public boolean verify(@NonNull BotRequest<?> request, @NonNull String answer) {

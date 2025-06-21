@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.github.tgkit.validator.impl;
 
 import io.github.tgkit.core.i18n.MessageKey;
@@ -33,8 +32,7 @@ public final class VideoValidators {
   private static final ContentModerationService MOD =
       ServiceLoader.load(ContentModerationService.class).findFirst().orElse(null);
 
-  private VideoValidators() {
-  }
+  private VideoValidators() {}
 
   /**
    * Проверяет, что размер видео не превышает заданного в килобайтах.
