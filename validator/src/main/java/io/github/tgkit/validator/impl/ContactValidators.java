@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.github.tgkit.validator.impl;
 
 import io.github.tgkit.core.i18n.MessageKey;
@@ -31,8 +30,8 @@ public final class ContactValidators {
 
   private static final Pattern E164 = Pattern.compile("^\\+\\d{1,15}$");
   private static final int MAX_NAME = 255;
-  private ContactValidators() {
-  }
+
+  private ContactValidators() {}
 
   /**
    * Проверяет, что телефон соответствует формату E.164.

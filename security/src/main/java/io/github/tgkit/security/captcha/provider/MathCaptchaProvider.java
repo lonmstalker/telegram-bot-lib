@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.github.tgkit.security.captcha.provider;
 
 import io.github.tgkit.core.BotRequest;
@@ -34,9 +33,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
-/**
- * Математическая CAPTCHA с несколькими операциями.
- */
+/** Математическая CAPTCHA с несколькими операциями. */
 public final class MathCaptchaProvider implements CaptchaProvider {
   private static final String CAPTCHA_KEY = "captcha_msg_id";
   private final int wrongCount;
@@ -93,8 +90,7 @@ public final class MathCaptchaProvider implements CaptchaProvider {
                         Objects.requireNonNull(request.user().userId()),
                         CAPTCHA_KEY,
                         String.valueOf(id)),
-            ex -> {
-            })
+            ex -> {})
         .build();
   }
 

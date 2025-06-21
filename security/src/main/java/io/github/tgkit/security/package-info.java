@@ -6,8 +6,7 @@
  * <ul>
  *   <li>{@link io.github.tgkit.security.BotSecurity} — фабрика типовых компонентов
  *   <li>{@link io.github.tgkit.security.antispam.AntiSpamInterceptor} — фильтр спама
- *   <li>{@link io.github.tgkit.security.ratelimit.RateLimitInterceptor} — ограничитель
- *       скорости
+ *   <li>{@link io.github.tgkit.security.ratelimit.RateLimitInterceptor} — ограничитель скорости
  * </ul>
  *
  * <p>Пример подключения:

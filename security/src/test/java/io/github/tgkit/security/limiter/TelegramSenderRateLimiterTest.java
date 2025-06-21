@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.github.tgkit.security.limiter;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -47,8 +46,7 @@ class TelegramSenderRateLimiterTest {
   /* === dummy handler method with annotations ==================== */
   @RateLimit(key = LimiterKey.USER, permits = 2, seconds = 60)
   @RateLimit(key = LimiterKey.GLOBAL, permits = 5, seconds = 60)
-  void roll() {
-  }
+  void roll() {}
 
   @BeforeEach
   void init() throws Exception {
