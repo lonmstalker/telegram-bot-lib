@@ -20,7 +20,6 @@ module io.github.tgkit.api {
   requires transitive java.net.http;
   requires transitive org.apache.httpcomponents.httpclient;
   requires transitive org.apache.httpcomponents.httpcore;
-  requires static webhook;
   requires static com.fasterxml.jackson.annotation;
   requires static org.checkerframework.checker.qual;
 
