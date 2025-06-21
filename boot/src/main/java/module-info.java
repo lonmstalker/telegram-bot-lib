@@ -1,5 +1,6 @@
 module io.github.tgkit.boot {
   requires io.github.tgkit.core;
+  requires io.github.tgkit.api;
   requires spring.boot;
   requires spring.boot.autoconfigure;
   requires spring.context;

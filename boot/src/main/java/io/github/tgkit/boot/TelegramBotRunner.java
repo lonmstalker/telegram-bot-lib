@@ -15,13 +15,13 @@
  */
 package io.github.tgkit.boot;
 
-import io.github.tgkit.internal.bot.Bot;
-import io.github.tgkit.internal.bot.BotAdapter;
-import io.github.tgkit.internal.bot.BotAdapterImpl;
-import io.github.tgkit.internal.bot.BotConfig;
-import io.github.tgkit.internal.bot.BotFactory;
-import io.github.tgkit.internal.bot.TelegramSender;
-import io.github.tgkit.internal.init.BotCoreInitializer;
+import io.github.tgkit.api.bot.Bot;
+import io.github.tgkit.api.BotAdapter;
+import io.github.tgkit.api.bot.BotAdapterImpl;
+import io.github.tgkit.api.bot.BotConfig;
+import io.github.tgkit.api.bot.BotFactory;
+import io.github.tgkit.api.bot.TelegramSender;
+import io.github.tgkit.api.init.BotCoreInitializer;
 import java.util.List;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.springframework.boot.ApplicationArguments;
