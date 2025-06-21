@@ -239,14 +239,14 @@ mvn verify jacoco:report
 
 Результат ищите в `target/site/jacoco/index.html`.
 
-Для локального сканирования зависимостей на уязвимости:
+Для локального сканирования зависимостей на уязвимости запустите профиль `secure`.
+Образ сканера задаётся свойством `dc.image` (по умолчанию `owasp/dependency-check:latest`).
 
 ```bash
-mvn verify
+mvn -Psecure verify
 ```
 
-Отчёты появятся в `target/dependency-check-report.html` и
-`target/dependency-check-report.sarif`.
+Отчёты появятся в каталоге `target/odc-reports`.
 
 ### Бенчмарки
 

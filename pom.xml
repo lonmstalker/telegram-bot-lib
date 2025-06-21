@@ -75,6 +75,7 @@
         <spotbugs-maven-plugin.version>4.7.3.3</spotbugs-maven-plugin.version>
         <cyclonedx-maven-plugin.version>2.7.9</cyclonedx-maven-plugin.version>
         <exec-maven-plugin.version>3.1.0</exec-maven-plugin.version>
+        <dc.image>owasp/dependency-check:latest</dc.image>
 
         <!-- TEST -->
         <wiremock.version>3.13.1</wiremock.version>
@@ -647,6 +648,47 @@
                                 <goals>
                                     <goal>makeAggregateBom</goal>
                                 </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>secure</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>${exec-maven-plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>docker</executable>
+                                    <arguments>
+                                        <argument>run</argument>
+                                        <argument>--rm</argument>
+                                        <argument>-v</argument>
+                                        <argument>${project.basedir}:/src</argument>
+                                        <argument>-v</argument>
+                                        <argument>${project.build.directory}/odc-reports:/report</argument>
+                                        <argument>${dc.image}</argument>
+                                        <argument>--scan</argument>
+                                        <argument>/src</argument>
+                                        <argument>--format</argument>
+                                        <argument>HTML,JSON</argument>
+                                        <argument>--out</argument>
+                                        <argument>/report</argument>
+                                        <argument>--project</argument>
+                                        <argument>${project.artifactId}</argument>
+                                        <argument>--noupdate</argument>
+                                    </arguments>
+                                </configuration>
                             </execution>
                         </executions>
                     </plugin>
