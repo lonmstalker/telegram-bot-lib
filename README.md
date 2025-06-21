@@ -113,14 +113,14 @@ testImplementation("io.github.tgkit:tgkit-testkit-core")
 ```xml
 <dependency>
     <groupId>io.github.tgkit</groupId>
-    <artifactId>tgkit-flag-test</artifactId>
+    <artifactId>flag-test</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <scope>test</scope>
 </dependency>
 ```
 
 ```kotlin
-testImplementation("io.github.tgkit:tgkit-flag-test:0.0.1-SNAPSHOT")
+testImplementation("io.github.tgkit:flag-test:0.0.1-SNAPSHOT")
 ```
 
 </details>
