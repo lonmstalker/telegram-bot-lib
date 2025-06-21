@@ -18,7 +18,7 @@ package io.github.observability;
 import io.github.tgkit.api.BotRequest;
 import io.github.tgkit.api.BotResponse;
 import io.github.tgkit.api.interceptor.BotInterceptor;
-import io.github.tgkit.internal.update.UpdateUtils;
+import io.github.tgkit.api.update.UpdateUtils;
 import io.github.tgkit.observability.Span;
 import io.github.tgkit.observability.Tag;
 import io.github.tgkit.observability.Tags;
