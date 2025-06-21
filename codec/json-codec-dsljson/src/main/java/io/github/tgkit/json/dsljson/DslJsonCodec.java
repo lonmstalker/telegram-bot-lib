@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.json.dsljson;
+package io.github.tgkit.json.dsljson;
 
 import com.dslplatform.json.DslJson;
 import com.dslplatform.json.JsonReader;
-import io.lonmstalker.tgkit.json.JsonCodec;
+import io.github.tgkit.json.JsonCodec;
 import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
