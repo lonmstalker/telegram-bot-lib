@@ -18,6 +18,19 @@ package io.github.tgkit.api.user;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+/**
+ * Поставщик информации о пользователе.
+ *
+ * <p>Инкапсулирует логику извлечения {@link BotUserInfo} из обновлений Telegram или внешних
+ * источников данных.
+ */
 public interface BotUserProvider {
+
+  /**
+   * Получает сведения о пользователе на основе входящего {@link Update}.
+   *
+   * @param update обновление Telegram
+   * @return заполненная структура {@link BotUserInfo}
+   */
   @NonNull BotUserInfo resolve(@NonNull Update update);
 }

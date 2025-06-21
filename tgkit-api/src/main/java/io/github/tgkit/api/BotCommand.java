@@ -60,10 +60,25 @@ public interface BotCommand<T> {
    */
   @NonNull List<BotInterceptor> interceptors();
 
+  /**
+   * Задаёт правило сопоставления команды.
+   *
+   * @param matcher правило сопоставления
+   */
   void setMatcher(@NonNull CommandMatch<T> matcher);
 
+  /**
+   * Устанавливает тип обрабатываемого запроса.
+   *
+   * @param type тип запроса
+   */
   void setType(@NonNull BotRequestType type);
 
+  /**
+   * Определяет группу команд, к которой относится обработчик.
+   *
+   * @param group название группы
+   */
   void setBotGroup(@NonNull String group);
 
   /**
