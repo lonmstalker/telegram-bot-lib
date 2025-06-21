@@ -26,6 +26,7 @@
         <module>doc2oas</module>
         <module>experiment</module>
         <module>flag</module>
+        <module>flag-test</module>
     </modules>
 
     <properties>

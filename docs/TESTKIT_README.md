@@ -63,7 +63,7 @@ Bot bot = BotBuilder.builder()
 
 ## Фич-флаги в тестах
 
-Модуль `tgkit-flag-test` содержит расширение `FlagOverrideExtension`.
+Модуль `flag-test` содержит расширение `FlagOverrideExtension`.
 Оно позволяет включать или выключать флаги прямо в тестовом методе.
 
 ```java
