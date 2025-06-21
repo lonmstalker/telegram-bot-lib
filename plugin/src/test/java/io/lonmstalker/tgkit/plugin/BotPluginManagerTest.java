@@ -221,6 +221,35 @@ public class BotPluginManagerTest {
   }
 
   @Test
+  void testHotReloadDescriptorFailure() throws Exception {
+    Path jar = tempDir.resolve("fail.jar");
+    createPluginJar(
+        jar,
+        "fail",
+        "1.0",
+        String.valueOf(CURRENT_VERSION),
+        ReloadPluginV1.class.getName(),
+        null);
+
+    manager.loadAll(tempDir);
+    assertEquals("v1", System.getProperty("reload.phase"));
+
+    Mockito.reset(auditBus);
+    try (JarOutputStream jos = new JarOutputStream(new FileOutputStream(jar.toFile()))) {
+      jos.putNextEntry(new JarEntry("dummy.txt"));
+      jos.write(new byte[] {1, 2});
+      jos.closeEntry();
+    }
+
+    manager.hotReload("fail");
+
+    assertEquals("v1", System.getProperty("reload.phase"));
+    verify(auditBus).publish(argThat(evt -> evt.getAction().contains("plugin.yml missing")));
+    verify(auditBus, never()).publish(argThat(evt -> evt.getAction().equals("plugin:fail unloaded")));
+    verify(auditBus, never()).publish(argThat(evt -> evt.getAction().contains("plugin:fail loaded")));
+  }
+
+  @Test
   void testUnloadTimeout() throws Exception {
     Path jar = tempDir.resolve("slow.jar");
     createPluginJar(

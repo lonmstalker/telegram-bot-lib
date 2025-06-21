@@ -154,8 +154,17 @@ public final class BotPluginManager implements AutoCloseable {
       }
       log.info("Hot reloading plugin {}", id);
       Path jar = old.source();
+
+      BotPluginDescriptor desc;
+      try {
+        desc = parseDescriptor(jar);
+      } catch (Exception ex) {
+        log.warn("Failed to parse descriptor for {}: {}", id, ex.getMessage());
+        auditBus.publish(AuditEvent.securityAlert("plugin-scan", ex.getMessage()));
+        return;
+      }
+
       unload(id);
-      BotPluginDescriptor desc = parseDescriptor(jar);
       loadPlugin(desc, jar);
     } catch (IOException io) {
       throw new PluginException("Failed to reload plugin " + id, io);
