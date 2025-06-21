@@ -13,36 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.doc.emitter;
+package io.lonmstalker.tgkit.doc.generator;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import io.lonmstalker.tgkit.doc.emitter.OpenApiEmitter;
 import io.lonmstalker.tgkit.doc.mapper.OperationInfo;
-import io.swagger.v3.oas.models.OpenAPI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import org.junit.jupiter.api.Test;
+import picocli.CommandLine;
 
-class OpenApiEmitterTest {
+class GeneratorCliTest {
   @Test
-  void buildsAndWritesYaml() throws Exception {
+  void generatesSdk() throws Exception {
     OpenApiEmitter emitter = new OpenApiEmitter();
-    List<OperationInfo> ops = List.of(new OperationInfo("getMe", "desc"));
-    OpenAPI api = emitter.toOpenApi(ops);
-    Path tmp = Files.createTempFile("openapi", ".yaml");
-    emitter.write(api, tmp);
-    String yaml = Files.readString(tmp);
-    assertThat(yaml).contains("/getMe");
+    Path spec = Files.createTempFile("spec", ".yaml");
+    Path target = Files.createTempDirectory("sdk");
+    emitter.write(emitter.toOpenApi(List.of(new OperationInfo("getMe", "desc"))), spec);
+    int code =
+        new CommandLine(new GeneratorCli())
+            .execute("--spec", spec.toString(), "--target", target.toString());
+    assertThat(code).isZero();
+    assertThat(Files.exists(target.resolve("pom.xml"))).isTrue();
   }
 }
-  @Test
-  void failsOnInvalidSpec() throws Exception {
-    OpenAPI api = new OpenAPI();
-    Path tmp = Files.createTempFile("bad", ".yaml");
-    try {
-      new OpenApiEmitter().write(api, tmp);
-    } catch (IllegalStateException e) {
-      assertThat(e).hasMessageContaining("OpenAPI errors");
-    }
-  }

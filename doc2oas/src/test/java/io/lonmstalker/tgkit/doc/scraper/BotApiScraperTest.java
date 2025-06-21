@@ -86,3 +86,22 @@ class BotApiScraperTest {
     }
   }
 }
+  @Test
+  void failsOnBadStatus() throws Exception {
+    HttpServer server = HttpServer.create(new InetSocketAddress(0), 0);
+    server.createContext(
+        "/bots/api",
+        exchange -> {
+          exchange.sendResponseHeaders(500, -1);
+        });
+    server.start();
+    URI uri = URI.create("http://localhost:" + server.getAddress().getPort() + "/bots/api");
+    BotApiScraper scraper = new BotApiScraper(HttpClient.newHttpClient(), uri, Files.createTempDirectory("cache"));
+    try {
+      scraper.fetch();
+    } catch (IllegalStateException e) {
+      assertThat(e).hasMessageContaining("HTTP");
+    } finally {
+      server.stop(0);
+    }
+  }

@@ -46,6 +46,7 @@ public class GeneratorCli implements Runnable {
         new CodegenConfigurator()
             .setInputSpec(spec.toString())
             .setOutputDir(target.toString())
+            .setGeneratorName(language)
             .setAdditionalProperties(
                 Map.of(
                     "withRecordModels", "true",
