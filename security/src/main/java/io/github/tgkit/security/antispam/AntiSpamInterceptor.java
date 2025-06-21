@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.github.tgkit.security.antispam;
 
 import io.github.tgkit.core.BotRequest;
@@ -130,16 +129,14 @@ public final class AntiSpamInterceptor implements BotInterceptor {
   }
 
   @Override
-  public void postHandle(@NonNull Update u, @NonNull BotRequest<?> request) {
-  }
+  public void postHandle(@NonNull Update u, @NonNull BotRequest<?> request) {}
 
   @Override
   public void afterCompletion(
       @NonNull Update u,
       @Nullable BotRequest<?> req,
       @Nullable BotResponse r,
-      @Nullable Exception e) {
-  }
+      @Nullable Exception e) {}
 
   private boolean containsBadUrl(String text) {
     Matcher m = URL_RE.matcher(text);
@@ -158,8 +155,7 @@ public final class AntiSpamInterceptor implements BotInterceptor {
     private CaptchaProvider captcha;
     private Set<String> badDomains;
 
-    private Builder() {
-    }
+    private Builder() {}
 
     public Builder dup(@NonNull DuplicateProvider dup) {
       this.dup = dup;

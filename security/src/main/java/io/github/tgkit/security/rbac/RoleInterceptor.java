@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.github.tgkit.security.rbac;
 
 import io.github.tgkit.core.BotRequest;
@@ -41,14 +40,12 @@ final class RoleInterceptor implements BotInterceptor {
   }
 
   @Override
-  public void postHandle(@NonNull Update u, @NonNull BotRequest<?> request) {
-  }
+  public void postHandle(@NonNull Update u, @NonNull BotRequest<?> request) {}
 
   @Override
   public void afterCompletion(
       @NonNull Update u,
       @NonNull BotRequest<?> req,
       @Nullable BotResponse r,
-      @Nullable Exception e) {
-  }
+      @Nullable Exception e) {}
 }

@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.github.tgkit.security.audit;
 
 import io.github.tgkit.core.config.BotGlobalConfig;
@@ -45,18 +44,14 @@ public class AsyncAuditBus implements AuditBus {
   private final List<Consumer<AuditEvent>> subscribers = new CopyOnWriteArrayList<>();
   private final AtomicLong dropped = new AtomicLong();
 
-  /**
-   * Создаёт bus на указанном executore.
-   */
+  /** Создаёт bus на указанном executore. */
   @SuppressWarnings("methodref.receiver.bound")
   public AsyncAuditBus(@NonNull ExecutorService executor, int queueSize) {
     executor.submit(this::loop);
     this.queue = new LinkedBlockingQueue<>(queueSize);
   }
 
-  /**
-   * Используется конфигом по умолчанию (виртуальные треды).
-   */
+  /** Используется конфигом по умолчанию (виртуальные треды). */
   public AsyncAuditBus() {
     this(BotGlobalConfig.INSTANCE.executors().getIoExecutorService(), 100);
   }
@@ -84,9 +79,7 @@ public class AsyncAuditBus implements AuditBus {
     return subscribers;
   }
 
-  /**
-   * Возвращает количество событий, отброшенных из-за переполнения очереди.
-   */
+  /** Возвращает количество событий, отброшенных из-за переполнения очереди. */
   public long droppedCount() {
     return dropped.get();
   }

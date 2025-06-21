@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.github.tgkit.security.init;
 
 import io.github.tgkit.core.config.BotGlobalConfig;
@@ -39,8 +38,7 @@ public final class BotSecurityInitializer {
   private static final Logger log = LoggerFactory.getLogger(BotSecurityInitializer.class);
   private static volatile boolean started;
 
-  private BotSecurityInitializer() {
-  }
+  private BotSecurityInitializer() {}
 
   public synchronized void init() {
     if (started) {

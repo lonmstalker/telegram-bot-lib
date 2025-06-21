@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.github.tgkit.validator.impl;
 
 import io.github.tgkit.core.i18n.MessageKey;
@@ -30,8 +29,7 @@ public final class PaymentValidators {
 
   private static final long MAX_CENTS = 1_000_000L; // $10 000
 
-  private PaymentValidators() {
-  }
+  private PaymentValidators() {}
 
   /**
    * Проверяет, что сумма >0 и ≤$10 000.

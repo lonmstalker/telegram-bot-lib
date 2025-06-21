@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.github.tgkit.security.audit;
 
 import io.github.tgkit.core.BotRequest;
@@ -27,6 +26,7 @@ final class DelegatingAuditInterceptor implements BotInterceptor {
 
   private final @NonNull AuditBus auditBus;
   private final @NonNull AuditConverter conv;
+
   DelegatingAuditInterceptor(@NonNull AuditBus auditBus, @NonNull AuditConverter conv) {
     this.auditBus = auditBus;
     this.conv = conv;

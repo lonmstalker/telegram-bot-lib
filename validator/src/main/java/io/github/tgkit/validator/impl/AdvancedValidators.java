@@ -13,13 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.github.tgkit.validator.impl;
 
-import io.github.tgkit.validator.language.LanguageDetectionService;
 import io.github.tgkit.core.BotRequest;
 import io.github.tgkit.core.i18n.MessageKey;
 import io.github.tgkit.core.validator.Validator;
+import io.github.tgkit.validator.language.LanguageDetectionService;
 import java.net.URI;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -35,9 +34,7 @@ import java.util.regex.Pattern;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
-/**
- * Валидации, выходящие за рамки базовых: спам-фильтры, дата/время, ссылки, валюты и т.п.
- */
+/** Валидации, выходящие за рамки базовых: спам-фильтры, дата/время, ссылки, валюты и т.п. */
 public final class AdvancedValidators {
 
   private static final Pattern URL_PATTERN =
@@ -50,8 +47,7 @@ public final class AdvancedValidators {
           DateTimeFormatter.ofPattern("yyyy.MM.dd"),
           DateTimeFormatter.ofPattern("yyyy MM dd"));
 
-  private AdvancedValidators() {
-  }
+  private AdvancedValidators() {}
 
   /**
    * Проверяет, что в тексте нет ссылок на домены, не входящие в список разрешённых.

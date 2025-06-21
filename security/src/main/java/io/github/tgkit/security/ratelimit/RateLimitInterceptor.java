@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.github.tgkit.security.ratelimit;
 
 import io.github.tgkit.core.BotRequest;
@@ -72,11 +71,8 @@ public final class RateLimitInterceptor implements BotInterceptor {
     /* noop */
   }
 
-  /**
-   * immutable meta per annotation
-   */
-  record Meta(LimiterKey key, int permits, int seconds, String prefix) {
-  }
+  /** immutable meta per annotation */
+  record Meta(LimiterKey key, int permits, int seconds, String prefix) {}
 
   public static final class RateLimitExceededException extends RuntimeException {
     RateLimitExceededException() {
