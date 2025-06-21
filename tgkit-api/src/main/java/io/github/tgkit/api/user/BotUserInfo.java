@@ -20,16 +20,27 @@ import java.util.Set;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+/**
+ * Сводная информация о пользователе Telegram.
+ *
+ * <p>Используется при авторизации и персонализации, содержит основные идентификаторы и роли
+ * пользователя.
+ */
 public interface BotUserInfo {
 
+  /** Идентификатор чата, если известен. */
   @Nullable Long chatId();
 
+  /** Идентификатор пользователя Telegram. */
   @Nullable Long userId();
 
+  /** Внутренний идентификатор пользователя в системе. */
   @Nullable Long internalUserId();
 
+  /** Набор ролей пользователя. */
   @NonNull Set<String> roles();
 
+  /** Локаль пользователя для выбора языка сообщений. */
   default @Nullable Locale locale() {
     return null;
   }
