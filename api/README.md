@@ -1,6 +1,6 @@
 # tgkit-api
 
-В модуле `api` собраны интерфейсы и базовые DTO, необходимые другим частям библиотеки.
+В модуле `tgkit-api` собраны интерфейсы и базовые DTO, необходимые другим частям библиотеки.
 Он не содержит реализаций и может использоваться для описания контрактов при разработке
 своих компонентов поверх tgkit.
 
@@ -9,7 +9,7 @@
 ```xml
 <dependency>
   <groupId>io.github.tgkit</groupId>
-  <artifactId>api</artifactId>
+  <artifactId>tgkit-api</artifactId>
   <version>0.0.1-SNAPSHOT</version>
 </dependency>
 ```

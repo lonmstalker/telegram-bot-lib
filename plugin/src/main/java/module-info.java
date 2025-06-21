@@ -22,6 +22,4 @@ module io.github.tgkit.plugin {
 
   exports io.github.tgkit.plugin;
   exports io.github.tgkit.plugin.annotation;
-  exports io.github.tgkit.plugin.internal to
-      io.github.tgkit.core;
 }
