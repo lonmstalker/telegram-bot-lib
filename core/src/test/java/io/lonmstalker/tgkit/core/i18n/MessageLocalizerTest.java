@@ -17,7 +17,7 @@ package io.lonmstalker.tgkit.core.i18n;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
+import io.github.tgkit.testkit.TestBotBootstrap;
 import java.util.Locale;
 import org.junit.jupiter.api.Test;
 

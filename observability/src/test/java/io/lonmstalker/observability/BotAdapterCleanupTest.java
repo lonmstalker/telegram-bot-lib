@@ -36,7 +36,7 @@ import io.lonmstalker.tgkit.core.storage.BotRequestContextHolder;
 import io.lonmstalker.tgkit.observability.Span;
 import io.lonmstalker.tgkit.observability.Tags;
 import io.lonmstalker.tgkit.observability.Tracer;
-import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
+import io.github.tgkit.testkit.TestBotBootstrap;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Timer;

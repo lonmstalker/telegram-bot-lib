@@ -22,7 +22,7 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.read.ListAppender;
 import io.lonmstalker.tgkit.security.config.BotSecurityGlobalConfig;
 import io.lonmstalker.tgkit.security.init.BotSecurityInitializer;
-import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
+import io.github.tgkit.testkit.TestBotBootstrap;
 import java.time.Duration;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;

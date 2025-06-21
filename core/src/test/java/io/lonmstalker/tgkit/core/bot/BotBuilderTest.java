@@ -23,7 +23,7 @@ import io.lonmstalker.tgkit.core.BotRequestType;
 import io.lonmstalker.tgkit.core.BotResponse;
 import io.lonmstalker.tgkit.plugin.BotPlugin;
 import io.lonmstalker.tgkit.plugin.BotPluginContext;
-import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
+import io.github.tgkit.testkit.TestBotBootstrap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import org.junit.jupiter.api.Test;
 import org.telegram.telegrambots.meta.api.interfaces.BotApiObject;

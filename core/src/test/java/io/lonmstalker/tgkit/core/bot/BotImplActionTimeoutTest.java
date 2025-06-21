@@ -17,7 +17,7 @@ package io.lonmstalker.tgkit.core.bot;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
+import io.github.tgkit.testkit.TestBotBootstrap;
 import java.io.Serializable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

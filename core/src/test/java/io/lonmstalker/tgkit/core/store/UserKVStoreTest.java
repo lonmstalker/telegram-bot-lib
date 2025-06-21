@@ -18,7 +18,7 @@ package io.lonmstalker.tgkit.core.store;
 import io.lonmstalker.tgkit.core.user.store.InMemoryUserKVStore;
 import io.lonmstalker.tgkit.core.user.store.JdbcUserKVStore;
 import io.lonmstalker.tgkit.core.user.store.ReadOnlyUserKVStore;
-import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
+import io.github.tgkit.testkit.TestBotBootstrap;
 import java.util.Map;
 import javax.sql.DataSource;
 import org.assertj.core.api.WithAssertions;

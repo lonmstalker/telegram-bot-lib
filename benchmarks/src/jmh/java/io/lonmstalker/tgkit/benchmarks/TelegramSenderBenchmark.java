@@ -2,8 +2,8 @@ package io.lonmstalker.tgkit.benchmarks;
 
 import io.lonmstalker.tgkit.core.bot.BotConfig;
 import io.lonmstalker.tgkit.core.bot.TelegramSender;
-import io.lonmstalker.tgkit.testkit.TelegramMockServer;
-import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
+import io.github.tgkit.testkit.TelegramMockServer;
+import io.github.tgkit.testkit.TestBotBootstrap;
 import java.util.Locale;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.Scope;

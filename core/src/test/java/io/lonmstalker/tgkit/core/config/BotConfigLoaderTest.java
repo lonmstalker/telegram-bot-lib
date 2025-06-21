@@ -17,7 +17,7 @@ package io.lonmstalker.tgkit.core.config;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
+import io.github.tgkit.testkit.TestBotBootstrap;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;

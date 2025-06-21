@@ -23,7 +23,7 @@ import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
 import io.lonmstalker.tgkit.core.dsl.common.MockCtx;
 import io.lonmstalker.tgkit.core.dsl.context.DSLContext;
 import io.lonmstalker.tgkit.core.dsl.feature_flags.InMemoryFeatureFlags;
-import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
+import io.github.tgkit.testkit.TestBotBootstrap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 import org.junit.jupiter.api.Test;

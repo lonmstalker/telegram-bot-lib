@@ -24,7 +24,7 @@ import io.lonmstalker.tgkit.core.interceptor.BotInterceptor;
 import io.lonmstalker.tgkit.security.*;
 import io.lonmstalker.tgkit.security.init.BotSecurityInitializer;
 import io.lonmstalker.tgkit.security.ratelimit.*;
-import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
+import io.github.tgkit.testkit.TestBotBootstrap;
 import java.lang.reflect.Method;
 import java.util.Optional;
 import org.junit.jupiter.api.*;

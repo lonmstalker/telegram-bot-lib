@@ -24,7 +24,7 @@ import io.lonmstalker.tgkit.core.BotService;
 import io.lonmstalker.tgkit.core.bot.TelegramSender;
 import io.lonmstalker.tgkit.core.dsl.context.DSLContext;
 import io.lonmstalker.tgkit.core.user.BotUserInfo;
-import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
+import io.github.tgkit.testkit.TestBotBootstrap;
 import java.io.Serializable;
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;

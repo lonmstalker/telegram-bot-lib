@@ -27,7 +27,7 @@ import io.lonmstalker.tgkit.security.audit.AuditBus;
 import io.lonmstalker.tgkit.security.audit.AuditEvent;
 import io.lonmstalker.tgkit.security.config.BotSecurityGlobalConfig;
 import io.lonmstalker.tgkit.security.init.BotSecurityInitializer;
-import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
+import io.github.tgkit.testkit.TestBotBootstrap;
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.nio.file.Files;

@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import io.lonmstalker.observability.BotObservability;
 import io.lonmstalker.observability.MetricsCollector;
 import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
-import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
+import io.github.tgkit.testkit.TestBotBootstrap;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.AbstractExecutorService;

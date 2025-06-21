@@ -23,7 +23,7 @@ import io.lonmstalker.tgkit.core.BotService;
 import io.lonmstalker.tgkit.core.dsl.context.DSLContext.SimpleDSLContext;
 import io.lonmstalker.tgkit.core.exception.BotApiException;
 import io.lonmstalker.tgkit.core.user.BotUserInfo;
-import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
+import io.github.tgkit.testkit.TestBotBootstrap;
 import org.junit.jupiter.api.Test;
 
 class DslContextValidationTest {

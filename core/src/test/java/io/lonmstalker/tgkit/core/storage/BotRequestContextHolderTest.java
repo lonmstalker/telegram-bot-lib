@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import io.lonmstalker.tgkit.core.bot.BotConfig;
 import io.lonmstalker.tgkit.core.bot.TelegramSender;
-import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
+import io.github.tgkit.testkit.TestBotBootstrap;
 import org.junit.jupiter.api.Test;
 import org.telegram.telegrambots.meta.api.objects.Update;
 

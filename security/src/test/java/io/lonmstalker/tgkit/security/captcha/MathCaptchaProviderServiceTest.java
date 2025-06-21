@@ -27,7 +27,7 @@ import io.lonmstalker.tgkit.core.user.store.UserKVStore;
 import io.lonmstalker.tgkit.security.TestUtils;
 import io.lonmstalker.tgkit.security.captcha.provider.MathCaptchaProvider;
 import io.lonmstalker.tgkit.security.init.BotSecurityInitializer;
-import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
+import io.github.tgkit.testkit.TestBotBootstrap;
 import java.time.Duration;
 import java.util.Locale;
 import java.util.Set;

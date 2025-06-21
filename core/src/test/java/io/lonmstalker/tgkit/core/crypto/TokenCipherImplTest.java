@@ -18,7 +18,7 @@ package io.lonmstalker.tgkit.core.crypto;
 import static org.junit.jupiter.api.Assertions.*;
 
 import io.lonmstalker.tgkit.core.exception.BotApiException;
-import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
+import io.github.tgkit.testkit.TestBotBootstrap;
 import org.junit.jupiter.api.Test;
 
 public class TokenCipherImplTest {

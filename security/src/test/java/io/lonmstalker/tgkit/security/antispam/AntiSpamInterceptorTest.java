@@ -25,7 +25,7 @@ import io.lonmstalker.tgkit.core.i18n.MessageLocalizerImpl;
 import io.lonmstalker.tgkit.security.captcha.CaptchaProvider;
 import io.lonmstalker.tgkit.security.init.BotSecurityInitializer;
 import io.lonmstalker.tgkit.security.ratelimit.RateLimiter;
-import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
+import io.github.tgkit.testkit.TestBotBootstrap;
 import java.time.Duration;
 import java.util.Locale;
 import java.util.Set;

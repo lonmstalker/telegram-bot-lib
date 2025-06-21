@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.testkit;
+package io.github.tgkit.testkit;
 
 import io.lonmstalker.tgkit.core.bot.BotAdapterImpl;
 import io.lonmstalker.tgkit.core.bot.BotConfig;

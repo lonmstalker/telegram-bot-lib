@@ -17,7 +17,7 @@ package io.lonmstalker.tgkit.core.bot;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
+import io.github.tgkit.testkit.TestBotBootstrap;
 import org.junit.jupiter.api.Test;
 
 class TelegramSenderRateLimiterTest {

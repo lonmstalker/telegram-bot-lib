@@ -23,7 +23,7 @@ import io.lonmstalker.tgkit.core.BotRequest;
 import io.lonmstalker.tgkit.core.interceptor.BotInterceptor;
 import io.lonmstalker.tgkit.core.loader.BotCommandFactory;
 import io.lonmstalker.tgkit.security.init.BotSecurityInitializer;
-import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
+import io.github.tgkit.testkit.TestBotBootstrap;
 import java.lang.reflect.Method;
 import java.util.ServiceLoader;
 import java.util.Set;

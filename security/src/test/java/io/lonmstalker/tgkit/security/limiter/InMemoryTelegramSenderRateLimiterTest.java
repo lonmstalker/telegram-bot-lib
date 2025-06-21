@@ -18,7 +18,7 @@ package io.lonmstalker.tgkit.security.limiter;
 import io.lonmstalker.tgkit.security.init.BotSecurityInitializer;
 import io.lonmstalker.tgkit.security.ratelimit.RateLimiter;
 import io.lonmstalker.tgkit.security.ratelimit.impl.InMemoryRateLimiter;
-import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
+import io.github.tgkit.testkit.TestBotBootstrap;
 import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;

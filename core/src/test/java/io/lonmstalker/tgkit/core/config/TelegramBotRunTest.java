@@ -19,8 +19,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import io.lonmstalker.tgkit.core.TelegramBot;
 import io.lonmstalker.tgkit.core.bot.Bot;
-import io.lonmstalker.tgkit.testkit.TelegramMockServer;
-import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
+import io.github.tgkit.testkit.TelegramMockServer;
+import io.github.tgkit.testkit.TestBotBootstrap;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.concurrent.TimeUnit;

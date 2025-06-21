@@ -32,7 +32,7 @@ import io.lonmstalker.tgkit.core.i18n.MessageLocalizerImpl;
 import io.lonmstalker.tgkit.core.state.InMemoryStateStore;
 import io.lonmstalker.tgkit.core.user.BotUserInfo;
 import io.lonmstalker.tgkit.core.user.store.InMemoryUserKVStore;
-import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
+import io.github.tgkit.testkit.TestBotBootstrap;
 import java.util.Locale;
 import java.util.Set;
 import org.checkerframework.checker.nullness.qual.NonNull;

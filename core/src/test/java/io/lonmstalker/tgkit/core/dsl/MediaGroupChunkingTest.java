@@ -21,7 +21,7 @@ import static org.mockito.Mockito.*;
 import io.lonmstalker.tgkit.core.bot.TelegramSender;
 import io.lonmstalker.tgkit.core.dsl.common.MockCtx;
 import io.lonmstalker.tgkit.core.dsl.context.DSLContext;
-import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
+import io.github.tgkit.testkit.TestBotBootstrap;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
