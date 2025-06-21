@@ -104,6 +104,26 @@ public class BotSessionImplTest {
     assertEquals(1.0, mc.registry().find("updates_queue_size").gauge().value());
   }
 
+  @Test
+  void handleErrorLogsStacktrace() {
+    var logger = (ch.qos.logback.classic.Logger) LoggerFactory.getLogger(BotSessionImpl.class);
+    var appender =
+        new ch.qos.logback.core.read.ListAppender<ch.qos.logback.classic.spi.ILoggingEvent>();
+    appender.start();
+    logger.addAppender(appender);
+
+    BotSessionImpl session = new BotSessionImpl();
+    session.handleError(new IOException("boom"), 1);
+
+    logger.detachAppender(appender);
+    appender.stop();
+
+    assertFalse(appender.list.isEmpty());
+    var event = appender.list.get(0);
+    assertEquals(ch.qos.logback.classic.Level.WARN, event.getLevel());
+    assertNotNull(event.getThrowableProxy());
+  }
+
   private static class DummyBot implements LongPollingBot {
     private final DefaultBotOptions opt;
 

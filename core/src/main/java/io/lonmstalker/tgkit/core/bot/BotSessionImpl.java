@@ -285,7 +285,7 @@ public class BotSessionImpl implements BotSession {
   }
 
   long handleError(Throwable ex, long backOff) {
-    log.warn("Error in readLoop: {}, backing off {}s", ex.getMessage(), backOff);
+    log.warn("Error in readLoop, backing off {}s", backOff, ex);
     return Math.min(backOff * 2, 30);
   }
 
