@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-module io.lonmstalker.tgkit.validator {
+module io.github.tgkit.validator {
   requires io.lonmstalker.tgkit.api;
   requires telegrambots;
   requires telegrambots.meta;
@@ -22,7 +22,7 @@ module io.lonmstalker.tgkit.validator {
   requires org.apache.tika.langdetect.optimaize;
   requires com.google.common;
 
-  exports io.lonmstalker.tgkit.validator.impl;
-  exports io.lonmstalker.tgkit.validator.language;
-  exports io.lonmstalker.tgkit.validator.moderation;
+  exports io.github.tgkit.validator.impl;
+  exports io.github.tgkit.validator.language;
+  exports io.github.tgkit.validator.moderation;
 }
