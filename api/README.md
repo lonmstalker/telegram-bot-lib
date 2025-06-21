@@ -9,7 +9,7 @@
 ```xml
 <dependency>
   <groupId>io.github.tgkit</groupId>
-  <artifactId>api</artifactId>
+  <artifactId>tgkit-api</artifactId>
   <version>0.0.1-SNAPSHOT</version>
 </dependency>
 ```

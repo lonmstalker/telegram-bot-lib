@@ -71,8 +71,8 @@
 <details>
 <summary>Gradle Kotlin DSL</summary>
 
-```kotlin 
-implementation("io.github.tgkit:api:0.0.1-SNAPSHOT")
+```kotlin
+implementation("io.github.tgkit:tgkit-api:0.0.1-SNAPSHOT")
 ```
 
 </details>
