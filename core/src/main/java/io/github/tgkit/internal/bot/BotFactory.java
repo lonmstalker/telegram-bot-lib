@@ -89,8 +89,9 @@ public final class BotFactory {
     WebHookReceiver receiver =
         new WebHookReceiver(config, adapter, token, sender, config.getGlobalExceptionHandler());
     BotGlobalConfig.INSTANCE.webhook().server().register(receiver);
+    String host = BotGlobalConfig.INSTANCE.webhook().host();
     setWebhook.setUrl(
-        "http://localhost:" + BotGlobalConfig.INSTANCE.webhook().port() + "/" + token);
+        "http://" + host + ":" + BotGlobalConfig.INSTANCE.webhook().port() + "/" + token);
     setWebhook.setSecretToken(BotGlobalConfig.INSTANCE.webhook().secret());
     var bot = implBuilder(token, config).setWebhook(setWebhook).absSender(receiver).build();
     if (adapter instanceof BotAdapterImpl b) {
