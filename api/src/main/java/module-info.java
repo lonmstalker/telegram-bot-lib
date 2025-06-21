@@ -50,7 +50,7 @@ module io.lonmstalker.tgkit.api {
   exports io.lonmstalker.tgkit.core.validator;
   exports io.lonmstalker.tgkit.core.annotation.wizard;
   exports io.lonmstalker.tgkit.observability;
-  exports io.lonmstalker.tgkit.plugin;
+  exports io.github.tgkit.plugin;
   exports io.lonmstalker.tgkit.security.antispam;
   exports io.lonmstalker.tgkit.security.audit;
   exports io.lonmstalker.tgkit.security.captcha;

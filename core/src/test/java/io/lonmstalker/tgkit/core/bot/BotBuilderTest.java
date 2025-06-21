@@ -21,8 +21,8 @@ import io.lonmstalker.tgkit.core.BotCommand;
 import io.lonmstalker.tgkit.core.BotRequest;
 import io.lonmstalker.tgkit.core.BotRequestType;
 import io.lonmstalker.tgkit.core.BotResponse;
-import io.lonmstalker.tgkit.plugin.BotPlugin;
-import io.lonmstalker.tgkit.plugin.BotPluginContext;
+import io.github.tgkit.plugin.BotPlugin;
+import io.github.tgkit.plugin.BotPluginContext;
 import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import org.junit.jupiter.api.Test;
@@ -52,7 +52,7 @@ public class BotBuilderTest {
     }
   }
 
-  @io.lonmstalker.tgkit.plugin.annotation.BotPlugin
+  @io.github.tgkit.plugin.annotation.BotPlugin
   public static class TestPlugin implements BotPlugin {
     static final AtomicBoolean started = new AtomicBoolean();
 

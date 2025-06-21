@@ -13,17 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-module io.lonmstalker.tgkit.observability {
-  requires io.lonmstalker.tgkit.core;
-  requires io.micrometer.core;
-  requires io.opentelemetry.api;
-  requires io.opentelemetry.sdk;
-  requires io.opentelemetry.exporter.logging;
-  requires ch.qos.logback.classic;
-  requires io.micrometer.registry.prometheus;
-  requires io.prometheus.simpleclient_httpserver;
+package io.github.tgkit.plugin;
 
-  exports io.lonmstalker.observability;
-  exports io.lonmstalker.observability.impl to
-      io.github.tgkit.plugin;
-}
+import java.net.URLClassLoader;
+import java.nio.file.Path;
+import org.checkerframework.checker.nullness.qual.NonNull;
+
+/** runtime container */
+record BotPluginContainer(
+    @NonNull BotPluginDescriptor descriptor,
+    @NonNull BotPlugin plugin,
+    @NonNull URLClassLoader classLoader,
+    @NonNull Path source) {}

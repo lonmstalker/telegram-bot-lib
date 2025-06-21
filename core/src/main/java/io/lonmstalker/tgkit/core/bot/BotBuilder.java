@@ -19,9 +19,9 @@ import io.lonmstalker.tgkit.core.BotAdapter;
 import io.lonmstalker.tgkit.core.annotation.BotCommand;
 import io.lonmstalker.tgkit.core.annotation.CheckReturnValue;
 import io.lonmstalker.tgkit.core.loader.ClasspathScanner;
-import io.lonmstalker.tgkit.plugin.BotPlugin;
-import io.lonmstalker.tgkit.plugin.BotPluginContext;
-import io.lonmstalker.tgkit.plugin.internal.BotPluginContextDefault;
+import io.github.tgkit.plugin.BotPlugin;
+import io.github.tgkit.plugin.BotPluginContext;
+import io.github.tgkit.plugin.internal.BotPluginContextDefault;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -113,7 +113,7 @@ public final class BotBuilder {
 
         Set<Class<?>> pluginClasses =
             ClasspathScanner.findAnnotated(
-                io.lonmstalker.tgkit.plugin.annotation.BotPlugin.class, pkg);
+                io.github.tgkit.plugin.annotation.BotPlugin.class, pkg);
         for (Class<?> cls : pluginClasses) {
           plugins.add(
               () -> {

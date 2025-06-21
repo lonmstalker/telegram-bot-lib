@@ -13,17 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-module io.lonmstalker.tgkit.observability {
-  requires io.lonmstalker.tgkit.core;
-  requires io.micrometer.core;
-  requires io.opentelemetry.api;
-  requires io.opentelemetry.sdk;
-  requires io.opentelemetry.exporter.logging;
-  requires ch.qos.logback.classic;
-  requires io.micrometer.registry.prometheus;
-  requires io.prometheus.simpleclient_httpserver;
+package io.github.tgkit.plugin.annotation;
 
-  exports io.lonmstalker.observability;
-  exports io.lonmstalker.observability.impl to
-      io.github.tgkit.plugin;
-}
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+/** Marks a class as a plugin for classpath scanning. */
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface BotPlugin {}

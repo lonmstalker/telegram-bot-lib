@@ -13,17 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-module io.lonmstalker.tgkit.observability {
-  requires io.lonmstalker.tgkit.core;
-  requires io.micrometer.core;
-  requires io.opentelemetry.api;
-  requires io.opentelemetry.sdk;
-  requires io.opentelemetry.exporter.logging;
-  requires ch.qos.logback.classic;
-  requires io.micrometer.registry.prometheus;
-  requires io.prometheus.simpleclient_httpserver;
+package io.github.tgkit.plugin;
 
-  exports io.lonmstalker.observability;
-  exports io.lonmstalker.observability.impl to
-      io.github.tgkit.plugin;
+/**
+ * Набор констант, используемых системой плагинов.
+ *
+ * <p>Пример использования:
+ *
+ * <pre>{@code
+ * if (descriptor.api() > BotPluginConstants.CURRENT_VERSION) {
+ *     throw new UnsupportedOperationException();
+ * }
+ * }</pre>
+ */
+public class BotPluginConstants {
+  private BotPluginConstants() {}
+
+  /** Текущая поддерживаемая версия API плагинов. */
+  public static final Double CURRENT_VERSION = 0.1;
 }

@@ -29,7 +29,7 @@ module io.lonmstalker.tgkit.security {
   exports io.lonmstalker.tgkit.security.init;
   exports io.lonmstalker.tgkit.security.ratelimit;
   exports io.lonmstalker.tgkit.security.ratelimit.impl to
-      io.lonmstalker.tgkit.plugin;
+      io.github.tgkit.plugin;
   exports io.lonmstalker.tgkit.security.rbac;
   exports io.lonmstalker.tgkit.security.secret;
   exports io.lonmstalker.tgkit.security.config;

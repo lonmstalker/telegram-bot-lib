@@ -36,7 +36,7 @@ module io.lonmstalker.tgkit.core {
   exports io.lonmstalker.tgkit.core.i18n;
   exports io.lonmstalker.tgkit.core.init;
   exports io.lonmstalker.tgkit.core.loader to
-      io.lonmstalker.tgkit.plugin;
+      io.github.tgkit.plugin;
   exports io.lonmstalker.tgkit.core.matching;
   exports io.lonmstalker.tgkit.core.processor;
   exports io.lonmstalker.tgkit.core.resource;
