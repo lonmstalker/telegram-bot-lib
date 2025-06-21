@@ -142,7 +142,7 @@ public final class RateLimitBotCommandFactory implements BotCommandFactory<RateL
 ```
 
 Подключение:
-```META-INF/services/io.lonmstalker.tgkit.core.loader.BotCommandFactory```
+```META-INF/services/io.github.tgkit.core.loader.BotCommandFactory```
 
 ---
 

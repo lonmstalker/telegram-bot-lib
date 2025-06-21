@@ -11,7 +11,7 @@
 
 ```xml
 <dependency>
-    <groupId>io.lonmstalker.tgkit</groupId>
+    <groupId>io.github.tgkit</groupId>
     <artifactId>testkit</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <scope>test</scope>
@@ -22,7 +22,7 @@
 <summary>Gradle Kotlin DSL</summary>
 
 ```kotlin
-testImplementation("io.lonmstalker.tgkit:testkit:0.0.1-SNAPSHOT")
+testImplementation("io.github.tgkit:testkit:0.0.1-SNAPSHOT")
 ```
 </details>
 
