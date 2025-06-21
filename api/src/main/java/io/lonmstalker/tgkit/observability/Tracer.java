@@ -13,18 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.observability;
+
+package io.github.tgkit.observability;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-/** Абстракция над системой трассировки. */
+/**
+ * Абстракция над системой трассировки.
+ */
 public interface Tracer {
 
   /**
    * Запускает новый span.
    *
    * @param spanName имя span
-   * @param tags теги
+   * @param tags     теги
    * @return созданный {@link Span}
    */
   Span start(@NonNull String spanName, @NonNull Tags tags);

@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.annotation.matching;
 
-import io.lonmstalker.tgkit.core.matching.CommandMatch;
+package io.github.tgkit.core.annotation.matching;
+
+import io.github.tgkit.core.matching.CommandMatch;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

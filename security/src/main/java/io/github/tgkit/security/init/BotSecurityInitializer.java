@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.github.tgkit.security.init;
 
-import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
+import io.github.tgkit.core.config.BotGlobalConfig;
 import io.github.tgkit.security.antispam.InMemoryDuplicateProvider;
 import io.github.tgkit.security.audit.AsyncAuditBus;
 import io.github.tgkit.security.captcha.MathCaptchaOperations;
@@ -31,15 +32,15 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Базовая инициализация security-модуля.<br>
- * Аналогично {@link io.lonmstalker.tgkit.core.init.BotCoreInitializer}.
+ * Аналогично {@link io.github.tgkit.core.init.BotCoreInitializer}.
  */
 public final class BotSecurityInitializer {
 
   private static final Logger log = LoggerFactory.getLogger(BotSecurityInitializer.class);
-
-  private BotSecurityInitializer() {}
-
   private static volatile boolean started;
+
+  private BotSecurityInitializer() {
+  }
 
   public synchronized void init() {
     if (started) {

@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.plugin;
+
+package io.github.tgkit.plugin;
 
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -21,7 +22,9 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-/** ClassLoader с child-first стратегией и кешированием загруженных классов для ускорения lookup. */
+/**
+ * ClassLoader с child-first стратегией и кешированием загруженных классов для ускорения lookup.
+ */
 public class ChildFirstURLClassLoader extends URLClassLoader {
   private final Map<String, Class<?>> classCache = new ConcurrentHashMap<>();
 

@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.github.tgkit.security.rbac;
 
-import io.lonmstalker.tgkit.core.BotRequest;
-import io.lonmstalker.tgkit.core.BotResponse;
-import io.lonmstalker.tgkit.core.interceptor.BotInterceptor;
-import io.lonmstalker.tgkit.core.user.BotUserInfo;
+import io.github.tgkit.core.BotRequest;
+import io.github.tgkit.core.BotResponse;
+import io.github.tgkit.core.interceptor.BotInterceptor;
+import io.github.tgkit.core.user.BotUserInfo;
 import java.util.Set;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -40,12 +41,14 @@ final class RoleInterceptor implements BotInterceptor {
   }
 
   @Override
-  public void postHandle(@NonNull Update u, @NonNull BotRequest<?> request) {}
+  public void postHandle(@NonNull Update u, @NonNull BotRequest<?> request) {
+  }
 
   @Override
   public void afterCompletion(
       @NonNull Update u,
       @NonNull BotRequest<?> req,
       @Nullable BotResponse r,
-      @Nullable Exception e) {}
+      @Nullable Exception e) {
+  }
 }

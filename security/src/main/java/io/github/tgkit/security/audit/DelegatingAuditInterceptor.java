@@ -13,24 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.github.tgkit.security.audit;
 
-import io.lonmstalker.tgkit.core.BotRequest;
-import io.lonmstalker.tgkit.core.BotResponse;
-import io.lonmstalker.tgkit.core.interceptor.BotInterceptor;
+import io.github.tgkit.core.BotRequest;
+import io.github.tgkit.core.BotResponse;
+import io.github.tgkit.core.interceptor.BotInterceptor;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 final class DelegatingAuditInterceptor implements BotInterceptor {
 
+  private final @NonNull AuditBus auditBus;
+  private final @NonNull AuditConverter conv;
   DelegatingAuditInterceptor(@NonNull AuditBus auditBus, @NonNull AuditConverter conv) {
     this.auditBus = auditBus;
     this.conv = conv;
   }
-
-  private final @NonNull AuditBus auditBus;
-  private final @NonNull AuditConverter conv;
 
   @Override
   public void preHandle(@NonNull Update u, @NonNull BotRequest<?> request) {

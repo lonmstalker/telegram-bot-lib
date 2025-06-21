@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.plugin.sort;
 
-import io.lonmstalker.tgkit.plugin.PluginException;
+package io.github.tgkit.plugin.sort;
+
+import io.github.tgkit.plugin.PluginException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -26,17 +27,20 @@ import java.util.Map;
 import java.util.function.Function;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-/** Утилита для топологической сортировки по зависимостям. */
+/**
+ * Утилита для топологической сортировки по зависимостям.
+ */
 public final class TopoSorter {
-  private TopoSorter() {}
+  private TopoSorter() {
+  }
 
   /**
    * Выполняет topological sort.
    *
-   * @param items коллекция элементов
-   * @param idFn функция получения ID элемента
+   * @param items  коллекция элементов
+   * @param idFn   функция получения ID элемента
    * @param depsFn функция получения списка зависимостей по ID
-   * @param <T> тип элемента
+   * @param <T>    тип элемента
    * @return список элементов в порядке без нарушения зависимостей
    * @throws PluginException при наличии циклических зависимостей или отсутствующем депенденси
    */

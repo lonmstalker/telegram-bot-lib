@@ -97,7 +97,7 @@
                             <goal>java</goal>
                         </goals>
                         <configuration>
-                            <mainClass>io.lonmstalker.tgkit.doc.cli.DocCli</mainClass>
+                            <mainClass>io.github.tgkit.doc.cli.DocCli</mainClass>
                             <arguments>
                                 <argument>--output</argument>
                                 <argument>${project.build.directory}/openapi/telegram.yaml</argument>
@@ -119,8 +119,9 @@
                         <configuration>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
                             <transformers>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>io.lonmstalker.tgkit.doc.cli.DocCli</mainClass>
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>io.github.tgkit.doc.cli.DocCli</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>

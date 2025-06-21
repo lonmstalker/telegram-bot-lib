@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.wizard;
 
-import io.lonmstalker.tgkit.core.BotRequest;
-import io.lonmstalker.tgkit.core.annotation.wizard.WizardMeta;
+package io.github.tgkit.core.wizard;
+
+import io.github.tgkit.core.BotRequest;
+import io.github.tgkit.core.annotation.wizard.WizardMeta;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -36,31 +37,32 @@ public abstract class Wizard<M> {
 
   private final String id;
   private final Supplier<M> factory;
-  private BiConsumer<BotRequest<?>, M> onComplete;
   private final List<StepDefinition<M, ?, ?>> steps = new ArrayList<>();
+  private BiConsumer<BotRequest<?>, M> onComplete;
+
+  /**
+   * Конструктор.
+   *
+   * @param id           уникальный идентификатор сценария (из {@link WizardMeta})
+   * @param modelFactory фабрика для создания пустого экземпляра {@code M}
+   */
+  protected Wizard(@NonNull String id, @NonNull Supplier<@NonNull M> modelFactory) {
+    this.id = id;
+    this.factory = modelFactory;
+    this.onComplete = (botRequest, M) -> {
+    };
+  }
 
   public @NonNull String getId() {
     return id;
   }
 
   /**
-   * Конструктор.
-   *
-   * @param id уникальный идентификатор сценария (из {@link WizardMeta})
-   * @param modelFactory фабрика для создания пустого экземпляра {@code M}
-   */
-  protected Wizard(@NonNull String id, @NonNull Supplier<@NonNull M> modelFactory) {
-    this.id = id;
-    this.factory = modelFactory;
-    this.onComplete = (botRequest, M) -> {};
-  }
-
-  /**
    * Начинает объявление нового шага.
    *
    * @param stepId уникальный идентификатор шага в рамках сценария
-   * @param <I> исходный тип ввода (до конвертации)
-   * @param <O> тип после конвертации и валидации
+   * @param <I>    исходный тип ввода (до конвертации)
+   * @param <O>    тип после конвертации и валидации
    * @return билдера шага
    */
   protected <I, O> @NonNull StepBuilder<M, I, O> stepId(@NonNull String stepId) {
@@ -78,15 +80,18 @@ public abstract class Wizard<M> {
     this.onComplete = handler;
   }
 
-  @NonNull Supplier<M> getFactory() {
+  @NonNull
+  Supplier<M> getFactory() {
     return factory;
   }
 
-  @NonNull List<StepDefinition<M, ?, ?>> getSteps() {
+  @NonNull
+  List<StepDefinition<M, ?, ?>> getSteps() {
     return Collections.unmodifiableList(steps);
   }
 
-  @NonNull BiConsumer<BotRequest<?>, M> getOnComplete() {
+  @NonNull
+  BiConsumer<BotRequest<?>, M> getOnComplete() {
     return onComplete;
   }
 }

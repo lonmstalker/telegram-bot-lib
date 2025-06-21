@@ -13,13 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.plugin;
+
+package io.github.tgkit.plugin;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
- *
- *
  * <h3>PluginLifecycle</h3>
  *
  * <p>Минимальный контракт, который должен реализовать каждый JAR-плагин.
@@ -35,15 +34,27 @@ import org.checkerframework.checker.nullness.qual.NonNull;
  */
 public interface PluginLifecycle {
 
-  /** Инициализация плагина. */
-  default void onLoad(@NonNull BotPluginContext ctx) throws Exception {}
+  /**
+   * Инициализация плагина.
+   */
+  default void onLoad(@NonNull BotPluginContext ctx) throws Exception {
+  }
 
-  /** Корректное завершение работы, освобождение ресурсов. */
-  default void onUnload() throws Exception {}
+  /**
+   * Корректное завершение работы, освобождение ресурсов.
+   */
+  default void onUnload() throws Exception {
+  }
 
-  /** Hook перед остановкой плагина, для подготовки. */
-  default void beforeStop() throws Exception {}
+  /**
+   * Hook перед остановкой плагина, для подготовки.
+   */
+  default void beforeStop() throws Exception {
+  }
 
-  /** Hook после stop, для финальной очистки. */
-  default void afterStop() throws Exception {}
+  /**
+   * Hook после stop, для финальной очистки.
+   */
+  default void afterStop() throws Exception {
+  }
 }

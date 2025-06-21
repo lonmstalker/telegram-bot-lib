@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.interceptor;
+
+package io.github.tgkit.core.interceptor;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -21,7 +22,7 @@ import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.read.ListAppender;
-import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
+import io.github.tgkit.testkit.TestBotBootstrap;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -31,12 +32,12 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 
 public class LoggingBotInterceptorTest {
-  private final Logger logger = (Logger) LoggerFactory.getLogger(LoggingBotInterceptor.class);
-  private final ListAppender<ILoggingEvent> appender = new ListAppender<>();
-
   static {
     TestBotBootstrap.initOnce();
   }
+
+  private final Logger logger = (Logger) LoggerFactory.getLogger(LoggingBotInterceptor.class);
+  private final ListAppender<ILoggingEvent> appender = new ListAppender<>();
 
   @AfterEach
   void tearDown() {

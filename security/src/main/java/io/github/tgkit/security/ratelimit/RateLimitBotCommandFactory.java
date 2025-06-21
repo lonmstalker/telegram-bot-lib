@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.github.tgkit.security.ratelimit;
 
-import io.lonmstalker.tgkit.core.BotCommand;
-import io.lonmstalker.tgkit.core.loader.BotCommandFactory;
+import io.github.tgkit.core.BotCommand;
+import io.github.tgkit.core.loader.BotCommandFactory;
 import io.github.tgkit.security.config.BotSecurityGlobalConfig;
 import java.lang.reflect.Method;
 import java.util.ArrayList;

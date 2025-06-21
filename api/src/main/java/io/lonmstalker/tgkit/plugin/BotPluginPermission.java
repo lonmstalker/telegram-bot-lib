@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.plugin;
+
+package io.github.tgkit.plugin;
 
 public enum BotPluginPermission {
   READ_UPDATES(1L),

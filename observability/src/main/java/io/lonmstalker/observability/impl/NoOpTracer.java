@@ -13,17 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.observability.impl;
 
-import io.lonmstalker.tgkit.observability.Span;
-import io.lonmstalker.tgkit.observability.Tags;
-import io.lonmstalker.tgkit.observability.Tracer;
+package io.github.observability.impl;
+
+import io.github.tgkit.observability.Span;
+import io.github.tgkit.observability.Tags;
+import io.github.tgkit.observability.Tracer;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-/** Трассировщик-заглушка, не сохраняющий информацию о span'ах. */
+/**
+ * Трассировщик-заглушка, не сохраняющий информацию о span'ах.
+ */
 public final class NoOpTracer implements Tracer {
 
-  /** Возвращает пустой {@link Span}, не совершающий никаких действий. */
+  /**
+   * Возвращает пустой {@link Span}, не совершающий никаких действий.
+   */
   @Override
   public @NonNull Span start(@NonNull String spanName, @NonNull Tags tags) {
     return new Span() {

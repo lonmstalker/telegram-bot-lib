@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.github.tgkit.validator.impl;
 
-import io.lonmstalker.tgkit.core.i18n.MessageKey;
-import io.lonmstalker.tgkit.core.validator.Validator;
 import io.github.tgkit.validator.moderation.ContentModerationService;
+import io.github.tgkit.core.i18n.MessageKey;
+import io.github.tgkit.core.validator.Validator;
 import java.util.List;
 import java.util.ServiceLoader;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -30,16 +31,17 @@ import org.telegram.telegrambots.meta.api.objects.PhotoSize;
  */
 public final class PhotoValidators {
 
-  private PhotoValidators() {}
-
   private static final ContentModerationService MOD =
       ServiceLoader.load(ContentModerationService.class).findFirst().orElse(null);
+
+  private PhotoValidators() {
+  }
 
   /**
    * Проверяет, что каждая PhotoSize не больше указанного размера в килобайтах.
    *
    * @param maxKb максимальный размер одного фото в килобайтах
-   * @return Validator<List<PhotoSize>> с ключом "error.photo.tooLarge"
+   * @return Validator<List < PhotoSize>> с ключом "error.photo.tooLarge"
    */
   public static Validator<@NonNull List<PhotoSize>> maxSizeKb(int maxKb) {
     return Validator.of(
@@ -54,7 +56,7 @@ public final class PhotoValidators {
    *
    * @param w минимальная ширина в пикселях
    * @param h минимальная высота в пикселях
-   * @return Validator<List<PhotoSize>> с ключом "error.photo.resolution"
+   * @return Validator<List < PhotoSize>> с ключом "error.photo.resolution"
    */
   public static Validator<@NonNull List<PhotoSize>> minResolution(int w, int h) {
     return Validator.of(
@@ -65,7 +67,7 @@ public final class PhotoValidators {
   /**
    * Проверяет, что фото безопасно (не NSFW/violence) через Google Vision SafeSearch.
    *
-   * @return Validator<List<PhotoSize>> с ключом "error.photo.unsafe"
+   * @return Validator<List < PhotoSize>> с ключом "error.photo.unsafe"
    */
   public static Validator<@NonNull List<PhotoSize>> safeSearch() {
     return Validator.of(

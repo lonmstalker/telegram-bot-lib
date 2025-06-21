@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.app;
 
-import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
-import io.lonmstalker.tgkit.plugin.BotPluginManager;
+package io.github.tgkit.app;
+
+import io.github.tgkit.core.init.BotCoreInitializer;
+import io.github.tgkit.plugin.BotPluginManager;
 import io.github.tgkit.security.init.BotSecurityInitializer;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -34,10 +35,10 @@ public class Main {
         args.length > 0
             ? Path.of(args[0])
             : projectRoot
-                .resolve("examples")
-                .resolve("plugin-demo")
-                .resolve("plugin-example")
-                .resolve("target");
+            .resolve("examples")
+            .resolve("plugin-demo")
+            .resolve("plugin-example")
+            .resolve("target");
 
     try (var mgr = new BotPluginManager()) {
       mgr.loadAll(pluginsDir);

@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.github.tgkit.validator.impl;
 
 import static io.github.tgkit.validator.impl.TextValidators.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import io.lonmstalker.tgkit.core.exception.ValidationException;
+import io.github.tgkit.core.exception.ValidationException;
 import org.junit.jupiter.api.Test;
 
 class TextValidatorsTest {

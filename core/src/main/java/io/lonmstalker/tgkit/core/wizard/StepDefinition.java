@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.wizard;
 
-import io.lonmstalker.tgkit.core.BotRequest;
-import io.lonmstalker.tgkit.core.i18n.MessageKey;
-import io.lonmstalker.tgkit.core.validator.Validator;
+package io.github.tgkit.core.wizard;
+
+import io.github.tgkit.core.BotRequest;
+import io.github.tgkit.core.i18n.MessageKey;
+import io.github.tgkit.core.validator.Validator;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,42 +38,74 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  */
 public class StepDefinition<M, I, O> {
 
-  /** Builder для {@link StepDefinition}. */
-  public static final class Builder<M, I, O> {
-    private String id;
-    private List<Validator<O>> validators = new ArrayList<>();
-    private List<MessageKey> questionKeys = new ArrayList<>();
-    private Function<BotRequest<?>, I> parser;
-    private Validator<BotRequest<?>> typeValidator;
-    private BiConsumer<M, O> setter;
-    private boolean canBack = true;
-    private BiConsumer<BotRequest<?>, M> onBack;
-    private boolean canSkip = false;
-    private BiConsumer<BotRequest<?>, M> onSkip;
-    private boolean canCancel = true;
-    private BiConsumer<BotRequest<?>, M> onCancel;
-    private Function<M, String> nextSupplier = m -> null;
-    private Duration timeout;
-    private MessageKey reminderKey;
-    private Predicate<M> preFinishChecker;
-    private String preFinishFailStepId;
-
-    /** Устанавливает идентификатор шага. */
-    public Builder<M, I, O> id(@NonNull String id) {
-      this.id = id;
-      return this;
-    }
-
-    /** Собирает объект {@link StepDefinition}. */
-    public StepDefinition<M, I, O> build() {
-      return new StepDefinition<>(this);
-    }
-  }
-
-  /** Возвращает новый builder. */
-  public static <M, I, O> Builder<M, I, O> builder() {
-    return new Builder<>();
-  }
+  /**
+   * Уникальный идентификатор шага.
+   */
+  final @NonNull String id;
+  /**
+   * Список валидаторов выходного значения.
+   */
+  final List<Validator<O>> validators = new ArrayList<>();
+  /**
+   * Один (или несколько) MessageKey’ей: A/B-варианты вопроса.
+   */
+  final List<MessageKey> questionKeys = new ArrayList<>();
+  /**
+   * Парсер из BotRequest→I.
+   */
+  Function<BotRequest<?>, I> parser;
+  /**
+   * Проверка типа запроса до парсинга.
+   */
+  Validator<BotRequest<?>> typeValidator;
+  /**
+   * Сеттер: сохраняет O в модель M.
+   */
+  BiConsumer<M, O> setter;
+  /**
+   * Разрешено ли вернуться назад.
+   */
+  boolean canBack = true;
+  /**
+   * Хук при нажатии «назад».
+   */
+  BiConsumer<BotRequest<?>, M> onBack;
+  /**
+   * Разрешено ли пропустить шаг.
+   */
+  boolean canSkip = false;
+  /**
+   * Хук при пропуске.
+   */
+  BiConsumer<BotRequest<?>, M> onSkip;
+  /**
+   * Разрешено ли отменить сессию.
+   */
+  boolean canCancel = true;
+  /**
+   * Хук при отмене.
+   */
+  BiConsumer<BotRequest<?>, M> onCancel;
+  /**
+   * Бизнес-логика ветвления: по model+ответу выдаёт следующий stepId.
+   */
+  Function<M, String> nextSupplier = m -> null;
+  /**
+   * Таймаут до напоминания.
+   */
+  Duration timeout;
+  /**
+   * Сообщение-напоминание, если таймаут исчерпан.
+   */
+  MessageKey reminderKey;
+  /**
+   * Pre–finish проверка перед завершением сценария.
+   */
+  Predicate<M> preFinishChecker;
+  /**
+   * Куда перейти, если pre–finishChecker вернул false.
+   */
+  String preFinishFailStepId;
 
   private StepDefinition(Builder<M, I, O> b) {
     this.id = Objects.requireNonNull(b.id, "id");
@@ -94,56 +127,12 @@ public class StepDefinition<M, I, O> {
     this.preFinishFailStepId = b.preFinishFailStepId;
   }
 
-  /** Уникальный идентификатор шага. */
-  final @NonNull String id;
-
-  /** Список валидаторов выходного значения. */
-  final List<Validator<O>> validators = new ArrayList<>();
-
-  /** Один (или несколько) MessageKey’ей: A/B-варианты вопроса. */
-  final List<MessageKey> questionKeys = new ArrayList<>();
-
-  /** Парсер из BotRequest→I. */
-  Function<BotRequest<?>, I> parser;
-
-  /** Проверка типа запроса до парсинга. */
-  Validator<BotRequest<?>> typeValidator;
-
-  /** Сеттер: сохраняет O в модель M. */
-  BiConsumer<M, O> setter;
-
-  /** Разрешено ли вернуться назад. */
-  boolean canBack = true;
-
-  /** Хук при нажатии «назад». */
-  BiConsumer<BotRequest<?>, M> onBack;
-
-  /** Разрешено ли пропустить шаг. */
-  boolean canSkip = false;
-
-  /** Хук при пропуске. */
-  BiConsumer<BotRequest<?>, M> onSkip;
-
-  /** Разрешено ли отменить сессию. */
-  boolean canCancel = true;
-
-  /** Хук при отмене. */
-  BiConsumer<BotRequest<?>, M> onCancel;
-
-  /** Бизнес-логика ветвления: по model+ответу выдаёт следующий stepId. */
-  Function<M, String> nextSupplier = m -> null;
-
-  /** Таймаут до напоминания. */
-  Duration timeout;
-
-  /** Сообщение-напоминание, если таймаут исчерпан. */
-  MessageKey reminderKey;
-
-  /** Pre–finish проверка перед завершением сценария. */
-  Predicate<M> preFinishChecker;
-
-  /** Куда перейти, если pre–finishChecker вернул false. */
-  String preFinishFailStepId;
+  /**
+   * Возвращает новый builder.
+   */
+  public static <M, I, O> Builder<M, I, O> builder() {
+    return new Builder<>();
+  }
 
   // ----- getters -----
   public @NonNull String getId() {
@@ -268,5 +257,43 @@ public class StepDefinition<M, I, O> {
 
   public void setPreFinishFailStepId(String preFinishFailStepId) {
     this.preFinishFailStepId = preFinishFailStepId;
+  }
+
+  /**
+   * Builder для {@link StepDefinition}.
+   */
+  public static final class Builder<M, I, O> {
+    private String id;
+    private List<Validator<O>> validators = new ArrayList<>();
+    private List<MessageKey> questionKeys = new ArrayList<>();
+    private Function<BotRequest<?>, I> parser;
+    private Validator<BotRequest<?>> typeValidator;
+    private BiConsumer<M, O> setter;
+    private boolean canBack = true;
+    private BiConsumer<BotRequest<?>, M> onBack;
+    private boolean canSkip = false;
+    private BiConsumer<BotRequest<?>, M> onSkip;
+    private boolean canCancel = true;
+    private BiConsumer<BotRequest<?>, M> onCancel;
+    private Function<M, String> nextSupplier = m -> null;
+    private Duration timeout;
+    private MessageKey reminderKey;
+    private Predicate<M> preFinishChecker;
+    private String preFinishFailStepId;
+
+    /**
+     * Устанавливает идентификатор шага.
+     */
+    public Builder<M, I, O> id(@NonNull String id) {
+      this.id = id;
+      return this;
+    }
+
+    /**
+     * Собирает объект {@link StepDefinition}.
+     */
+    public StepDefinition<M, I, O> build() {
+      return new StepDefinition<>(this);
+    }
   }
 }

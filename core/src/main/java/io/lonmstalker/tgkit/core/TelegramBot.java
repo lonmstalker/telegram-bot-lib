@@ -13,25 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core;
 
-import io.lonmstalker.tgkit.core.bot.Bot;
-import io.lonmstalker.tgkit.core.bot.BotAdapter;
-import io.lonmstalker.tgkit.core.bot.BotAdapterImpl;
-import io.lonmstalker.tgkit.core.bot.BotConfig;
-import io.lonmstalker.tgkit.core.bot.BotFactory;
-import io.lonmstalker.tgkit.core.bot.TelegramSender;
-import io.lonmstalker.tgkit.core.config.BotConfigLoader;
-import io.lonmstalker.tgkit.core.config.BotConfigLoader.Settings;
-import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
+package io.github.tgkit.core;
+
+import io.github.tgkit.core.bot.Bot;
+import io.github.tgkit.core.bot.BotAdapter;
+import io.github.tgkit.core.bot.BotAdapterImpl;
+import io.github.tgkit.core.bot.BotConfig;
+import io.github.tgkit.core.bot.BotFactory;
+import io.github.tgkit.core.bot.TelegramSender;
+import io.github.tgkit.core.config.BotConfigLoader;
+import io.github.tgkit.core.config.BotConfigLoader.Settings;
+import io.github.tgkit.core.init.BotCoreInitializer;
 import java.io.IOException;
 import java.nio.file.Path;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-/** Вспомогательный класс для запуска бота по конфигурационному файлу. */
+/**
+ * Вспомогательный класс для запуска бота по конфигурационному файлу.
+ */
 public final class TelegramBot {
 
-  private TelegramBot() {}
+  private TelegramBot() {
+  }
 
   /**
    * Загружает конфигурацию, создаёт и запускает бота.

@@ -13,11 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.observability;
+
+package io.github.tgkit.observability;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-/** Интерфейс абстракции над span системы трассировки. */
+/**
+ * Интерфейс абстракции над span системы трассировки.
+ */
 public interface Span extends AutoCloseable {
 
   /**
@@ -30,7 +33,7 @@ public interface Span extends AutoCloseable {
   /**
    * Проставляет тег в span
    *
-   * @param tag - ключ
+   * @param tag   - ключ
    * @param value - значение
    */
   void setTag(@NonNull String tag, @NonNull String value);

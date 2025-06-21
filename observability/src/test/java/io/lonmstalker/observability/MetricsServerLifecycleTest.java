@@ -13,22 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.observability;
 
-import io.lonmstalker.observability.impl.PrometheusMetricsServer;
+package io.github.observability;
+
+import io.github.observability.impl.PrometheusMetricsServer;
 import java.net.ServerSocket;
 import org.junit.jupiter.api.*;
 
 class MetricsServerLifecycleTest {
-
-  @Test
-  void serverBindsAndReleasesPort() throws Exception {
-    int port = 9188;
-    try (var srv = PrometheusMetricsServer.builder().port(port).build()) {
-      Assertions.assertFalse(isFree(port));
-    }
-    Assertions.assertTrue(isFree(port));
-  }
 
   /* helper */
   private static boolean isFree(int p) {
@@ -37,5 +29,14 @@ class MetricsServerLifecycleTest {
     } catch (Exception e) {
       return false;
     }
+  }
+
+  @Test
+  void serverBindsAndReleasesPort() throws Exception {
+    int port = 9188;
+    try (var srv = PrometheusMetricsServer.builder().port(port).build()) {
+      Assertions.assertFalse(isFree(port));
+    }
+    Assertions.assertTrue(isFree(port));
   }
 }

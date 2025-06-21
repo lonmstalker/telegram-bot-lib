@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.bot;
 
-import io.lonmstalker.tgkit.core.BotRequestConverter;
-import io.lonmstalker.tgkit.core.BotRequestType;
-import io.lonmstalker.tgkit.core.exception.BotApiException;
+package io.github.tgkit.core.bot;
+
+import io.github.tgkit.core.BotRequestConverter;
+import io.github.tgkit.core.BotRequestType;
+import io.github.tgkit.core.exception.BotApiException;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.function.Function;
@@ -25,7 +26,9 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.interfaces.BotApiObject;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-/** Реестр конвертеров для каждого BotRequestType вместо большого switch. */
+/**
+ * Реестр конвертеров для каждого BotRequestType вместо большого switch.
+ */
 class BotRequestConverterImpl implements BotRequestConverter<BotApiObject> {
 
   private final Map<BotRequestType, Function<Update, BotApiObject>> registry =
@@ -52,7 +55,9 @@ class BotRequestConverterImpl implements BotRequestConverter<BotApiObject> {
     registry.put(BotRequestType.REMOVED_CHAT_BOOST, Update::getRemovedChatBoost);
   }
 
-  /** Извлекает из {@link Update} нужный объект Bot API. */
+  /**
+   * Извлекает из {@link Update} нужный объект Bot API.
+   */
   @Override
   public @NonNull BotApiObject convert(@NonNull Update update, @NonNull BotRequestType type) {
     Function<Update, BotApiObject> fn = registry.get(type);

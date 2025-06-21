@@ -13,17 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.dsl;
+
+package io.github.tgkit.core.dsl;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.times;
 
-import io.lonmstalker.tgkit.core.bot.TelegramSender;
-import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
-import io.lonmstalker.tgkit.core.dsl.common.MockCtx;
-import io.lonmstalker.tgkit.core.dsl.context.DSLContext;
-import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
+import io.github.tgkit.core.bot.TelegramSender;
+import io.github.tgkit.core.config.BotGlobalConfig;
+import io.github.tgkit.core.dsl.common.MockCtx;
+import io.github.tgkit.core.dsl.context.DSLContext;
+import io.github.tgkit.testkit.TestBotBootstrap;
 import java.time.Duration;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

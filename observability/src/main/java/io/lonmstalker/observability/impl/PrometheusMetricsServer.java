@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.observability.impl;
 
-import io.lonmstalker.tgkit.observability.ClosableMetricsServer;
+package io.github.observability.impl;
+
+import io.github.tgkit.observability.ClosableMetricsServer;
 import io.prometheus.client.CollectorRegistry;
 import io.prometheus.client.exporter.HTTPServer;
 import java.io.IOException;
@@ -39,6 +40,24 @@ public class PrometheusMetricsServer implements ClosableMetricsServer {
     return new Builder();
   }
 
+  /**
+   * Метод ничего не делает, так как сервер запускается в конструкторе.
+   */
+  @Override
+  public void start() throws IOException {
+    // no-op
+  }
+
+  @Override
+  public void stop() {
+    server.close();
+  }
+
+  @Override
+  public void close() throws Exception {
+    stop();
+  }
+
   public static final class Builder {
     private int port;
     private CollectorRegistry registry;
@@ -56,21 +75,5 @@ public class PrometheusMetricsServer implements ClosableMetricsServer {
     public PrometheusMetricsServer build() throws IOException {
       return new PrometheusMetricsServer(port, registry);
     }
-  }
-
-  /** Метод ничего не делает, так как сервер запускается в конструкторе. */
-  @Override
-  public void start() throws IOException {
-    // no-op
-  }
-
-  @Override
-  public void stop() {
-    server.close();
-  }
-
-  @Override
-  public void close() throws Exception {
-    stop();
   }
 }

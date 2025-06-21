@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.bot;
 
-import io.lonmstalker.tgkit.core.exception.BotExceptionHandler;
-import io.lonmstalker.tgkit.core.interceptor.BotInterceptor;
-import io.lonmstalker.tgkit.core.state.StateStore;
+package io.github.tgkit.core.bot;
+
+import io.github.tgkit.core.exception.BotExceptionHandler;
+import io.github.tgkit.core.interceptor.BotInterceptor;
+import io.github.tgkit.core.state.StateStore;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -40,6 +41,8 @@ import org.telegram.telegrambots.meta.generics.BackOff;
  * }</pre>
  */
 public class BotConfig extends DefaultBotOptions {
+  public static final int DEFAULT_UPDATE_QUEUE_CAPACITY = 1000;
+  public static final long DEFAULT_ON_COMPLETED_ACTION_TIMEOUT_MS = 10_000L;
   private static final String BASE_URL = "https://api.telegram.org/bot";
   private @NonNull Locale locale;
   private @NonNull String botGroup;
@@ -49,9 +52,6 @@ public class BotConfig extends DefaultBotOptions {
   private int requestsPerSecond;
   private int updateQueueCapacity;
   private long onCompletedActionTimeoutMs;
-
-  public static final int DEFAULT_UPDATE_QUEUE_CAPACITY = 1000;
-  public static final long DEFAULT_ON_COMPLETED_ACTION_TIMEOUT_MS = 10_000L;
 
   @SuppressWarnings({"argument", "method.invocation"})
   private BotConfig(
@@ -100,6 +100,10 @@ public class BotConfig extends DefaultBotOptions {
     this.setGetUpdatesTimeout(getUpdatesTimeout != null ? getUpdatesTimeout : 50);
     this.setMaxWebhookConnections(maxWebhookConnections != null ? maxWebhookConnections : 40);
     this.setGetUpdatesLimit(getUpdatesLimit != null ? getUpdatesLimit : 100);
+  }
+
+  public static Builder builder() {
+    return new Builder();
   }
 
   public @NonNull Locale getLocale() {
@@ -164,10 +168,6 @@ public class BotConfig extends DefaultBotOptions {
 
   public void setOnCompletedActionTimeoutMs(long onCompletedActionTimeoutMs) {
     this.onCompletedActionTimeoutMs = onCompletedActionTimeoutMs;
-  }
-
-  public static Builder builder() {
-    return new Builder();
   }
 
   public static final class Builder {

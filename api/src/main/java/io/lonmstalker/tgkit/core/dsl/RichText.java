@@ -13,11 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.dsl;
+
+package io.github.tgkit.core.dsl;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-/** Построитель форматированного текста Markdown. */
+/**
+ * Построитель форматированного текста Markdown.
+ */
 public final class RichText {
   private final StringBuilder sb = new StringBuilder();
 
@@ -25,13 +28,17 @@ public final class RichText {
     return new RichText();
   }
 
-  /** Полужирный текст. */
+  /**
+   * Полужирный текст.
+   */
   public @NonNull RichText bold(@NonNull String text) {
     sb.append("**").append(text).append("**");
     return this;
   }
 
-  /** Ссылка. */
+  /**
+   * Ссылка.
+   */
   public @NonNull RichText url(@NonNull String label, @NonNull String url) {
     sb.append("[").append(label).append("](").append(url).append(")");
     return this;

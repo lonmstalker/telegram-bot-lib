@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.bot;
+
+package io.github.tgkit.core.bot;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import io.lonmstalker.tgkit.core.crypto.TokenCipherImpl;
-import io.lonmstalker.tgkit.core.exception.BotApiException;
-import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
+import io.github.tgkit.core.crypto.TokenCipherImpl;
+import io.github.tgkit.core.exception.BotApiException;
+import io.github.tgkit.testkit.TestBotBootstrap;
 import java.sql.Connection;
 import java.sql.Statement;
 import javax.sql.DataSource;
@@ -28,11 +29,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class BotDataSourceFactoryTest {
-  private DataSource ds;
-
   static {
     TestBotBootstrap.initOnce();
   }
+
+  private DataSource ds;
 
   @BeforeEach
   void setup() throws Exception {
@@ -40,7 +41,7 @@ public class BotDataSourceFactoryTest {
     h2.setURL("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1");
     ds = h2;
     try (Connection c = ds.getConnection();
-        Statement st = c.createStatement()) {
+         Statement st = c.createStatement()) {
       st.executeUpdate(
           "CREATE TABLE IF NOT EXISTS bot_settings (id INT PRIMARY KEY, token VARCHAR(255), "
               + "proxy_host VARCHAR(255), proxy_port INT, proxy_type INT, "
@@ -53,7 +54,7 @@ public class BotDataSourceFactoryTest {
     var cipher = new TokenCipherImpl("secretkey123456");
     String enc = cipher.encrypt("TEST_TOKEN");
     try (Connection c = ds.getConnection();
-        Statement st = c.createStatement()) {
+         Statement st = c.createStatement()) {
       st.executeUpdate(
           "INSERT INTO bot_settings VALUES (1, '" + enc + "', NULL, NULL, 0, 1, 0, 100, '')");
     }
@@ -75,7 +76,7 @@ public class BotDataSourceFactoryTest {
     var cipher = new TokenCipherImpl("secretkey123456");
     String enc = cipher.encrypt("");
     try (Connection c = ds.getConnection();
-        Statement st = c.createStatement()) {
+         Statement st = c.createStatement()) {
       st.executeUpdate(
           "INSERT INTO bot_settings VALUES (2, '" + enc + "', NULL, NULL, 0, 1, 0, 100, '')");
     }

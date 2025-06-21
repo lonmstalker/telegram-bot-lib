@@ -13,21 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.bot.loader;
 
-import io.lonmstalker.tgkit.core.BotCommand;
-import io.lonmstalker.tgkit.core.BotHandlerConverter;
-import io.lonmstalker.tgkit.core.BotRequest;
-import io.lonmstalker.tgkit.core.BotRequestType;
-import io.lonmstalker.tgkit.core.BotResponse;
-import io.lonmstalker.tgkit.core.annotation.Arg;
-import io.lonmstalker.tgkit.core.args.Context;
-import io.lonmstalker.tgkit.core.args.ParamInfo;
-import io.lonmstalker.tgkit.core.args.RouteContextHolder;
-import io.lonmstalker.tgkit.core.exception.BotApiException;
-import io.lonmstalker.tgkit.core.interceptor.BotInterceptor;
-import io.lonmstalker.tgkit.core.matching.CommandMatch;
-import io.lonmstalker.tgkit.core.storage.BotRequestContextHolder;
+package io.github.tgkit.core.bot.loader;
+
+import io.github.tgkit.core.BotCommand;
+import io.github.tgkit.core.BotHandlerConverter;
+import io.github.tgkit.core.BotRequest;
+import io.github.tgkit.core.BotRequestType;
+import io.github.tgkit.core.BotResponse;
+import io.github.tgkit.core.annotation.Arg;
+import io.github.tgkit.core.args.Context;
+import io.github.tgkit.core.args.ParamInfo;
+import io.github.tgkit.core.args.RouteContextHolder;
+import io.github.tgkit.core.exception.BotApiException;
+import io.github.tgkit.core.interceptor.BotInterceptor;
+import io.github.tgkit.core.matching.CommandMatch;
+import io.github.tgkit.core.storage.BotRequestContextHolder;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Objects;
@@ -44,36 +45,45 @@ import org.telegram.telegrambots.meta.api.objects.Update;
  */
 class InternalCommandAdapter implements BotCommand<BotApiObject> {
 
-  /** Порядок выполнения команды. */
+  /**
+   * Порядок выполнения команды.
+   */
   private final int order;
 
-  /** Метаданные параметров метода. */
+  /**
+   * Метаданные параметров метода.
+   */
   private final ParamInfo[] params;
 
-  /** Сам метод-хендлер. */
+  /**
+   * Сам метод-хендлер.
+   */
   private final @NonNull Method method;
 
-  /** Инстанс класса, содержащего метод. */
+  /**
+   * Инстанс класса, содержащего метод.
+   */
   private final @NonNull Object instance;
-
-  /** Группа команд (botGroup). */
-  private volatile @NonNull String botGroup;
-
-  /** Тип запроса (MESSAGE, CALLBACK_QUERY и т.п.). */
-  private volatile @NonNull BotRequestType type;
-
-  /** Конвертер BotRequest → нужный для метода тип. */
-  private volatile @NonNull BotHandlerConverter<Object> converter;
-
-  /** Правило матчинга команды. */
-  private volatile @NonNull CommandMatch<? extends BotApiObject> commandMatch;
-
-  /** Интерсепторы до/после вызова метода. */
+  /**
+   * Интерсепторы до/после вызова метода.
+   */
   private final @NonNull List<BotInterceptor> interceptors = new CopyOnWriteArrayList<>();
-
-  static Builder builder() {
-    return new Builder();
-  }
+  /**
+   * Группа команд (botGroup).
+   */
+  private volatile @NonNull String botGroup;
+  /**
+   * Тип запроса (MESSAGE, CALLBACK_QUERY и т.п.).
+   */
+  private volatile @NonNull BotRequestType type;
+  /**
+   * Конвертер BotRequest → нужный для метода тип.
+   */
+  private volatile @NonNull BotHandlerConverter<Object> converter;
+  /**
+   * Правило матчинга команды.
+   */
+  private volatile @NonNull CommandMatch<? extends BotApiObject> commandMatch;
 
   InternalCommandAdapter(
       int order,
@@ -94,60 +104,8 @@ class InternalCommandAdapter implements BotCommand<BotApiObject> {
     this.commandMatch = commandMatch;
   }
 
-  static class Builder {
-    private int order;
-    private ParamInfo[] params;
-    private Method method;
-    private Object instance;
-    private String botGroup;
-    private BotRequestType type;
-    private BotHandlerConverter<Object> converter;
-    private CommandMatch<? extends BotApiObject> commandMatch;
-
-    Builder order(int order) {
-      this.order = order;
-      return this;
-    }
-
-    Builder params(ParamInfo[] params) {
-      this.params = params;
-      return this;
-    }
-
-    Builder method(@NonNull Method method) {
-      this.method = method;
-      return this;
-    }
-
-    Builder instance(@NonNull Object instance) {
-      this.instance = instance;
-      return this;
-    }
-
-    Builder botGroup(@NonNull String botGroup) {
-      this.botGroup = botGroup;
-      return this;
-    }
-
-    Builder type(@NonNull BotRequestType type) {
-      this.type = type;
-      return this;
-    }
-
-    Builder converter(@NonNull BotHandlerConverter<Object> converter) {
-      this.converter = converter;
-      return this;
-    }
-
-    Builder commandMatch(@NonNull CommandMatch<? extends BotApiObject> match) {
-      this.commandMatch = match;
-      return this;
-    }
-
-    InternalCommandAdapter build() {
-      return new InternalCommandAdapter(
-          order, params, method, instance, botGroup, type, converter, commandMatch);
-    }
+  static Builder builder() {
+    return new Builder();
   }
 
   @Override
@@ -266,5 +224,61 @@ class InternalCommandAdapter implements BotCommand<BotApiObject> {
   @Override
   public int order() {
     return order;
+  }
+
+  static class Builder {
+    private int order;
+    private ParamInfo[] params;
+    private Method method;
+    private Object instance;
+    private String botGroup;
+    private BotRequestType type;
+    private BotHandlerConverter<Object> converter;
+    private CommandMatch<? extends BotApiObject> commandMatch;
+
+    Builder order(int order) {
+      this.order = order;
+      return this;
+    }
+
+    Builder params(ParamInfo[] params) {
+      this.params = params;
+      return this;
+    }
+
+    Builder method(@NonNull Method method) {
+      this.method = method;
+      return this;
+    }
+
+    Builder instance(@NonNull Object instance) {
+      this.instance = instance;
+      return this;
+    }
+
+    Builder botGroup(@NonNull String botGroup) {
+      this.botGroup = botGroup;
+      return this;
+    }
+
+    Builder type(@NonNull BotRequestType type) {
+      this.type = type;
+      return this;
+    }
+
+    Builder converter(@NonNull BotHandlerConverter<Object> converter) {
+      this.converter = converter;
+      return this;
+    }
+
+    Builder commandMatch(@NonNull CommandMatch<? extends BotApiObject> match) {
+      this.commandMatch = match;
+      return this;
+    }
+
+    InternalCommandAdapter build() {
+      return new InternalCommandAdapter(
+          order, params, method, instance, botGroup, type, converter, commandMatch);
+    }
   }
 }

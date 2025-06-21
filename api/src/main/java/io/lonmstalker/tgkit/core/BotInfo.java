@@ -13,11 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core;
+
+package io.github.tgkit.core;
 
 /**
  * Информация о работающем экземпляре бота.
  *
  * @param internalId внутренний идентификатор бота
  */
-public record BotInfo(long internalId) {}
+public record BotInfo(long internalId) {
+}

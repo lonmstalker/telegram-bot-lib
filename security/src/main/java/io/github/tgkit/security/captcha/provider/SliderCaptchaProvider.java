@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.github.tgkit.security.captcha.provider;
 
 import static java.util.Collections.synchronizedMap;
 
-import io.lonmstalker.tgkit.core.BotRequest;
-import io.lonmstalker.tgkit.core.dsl.Button;
-import io.lonmstalker.tgkit.core.exception.BotApiException;
+import io.github.tgkit.core.BotRequest;
+import io.github.tgkit.core.dsl.Button;
+import io.github.tgkit.core.exception.BotApiException;
 import io.github.tgkit.security.captcha.CaptchaProvider;
 import java.awt.AlphaComposite;
 import java.awt.Graphics2D;
@@ -45,6 +46,17 @@ public final class SliderCaptchaProvider implements CaptchaProvider {
 
   public SliderCaptchaProvider(@NonNull String backgroundPath) {
     this.backgroundPath = backgroundPath;
+  }
+
+  /* — helpers — */
+  private static BufferedImage cutPiece(BufferedImage src, int x) {
+    int w = 60, h = 60, y = 50;
+    BufferedImage dst = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+    Graphics2D g = dst.createGraphics();
+    g.setClip(new RoundRectangle2D.Double(0, 0, w, h, 12, 12));
+    g.drawImage(src, -x, -y, null);
+    g.dispose();
+    return dst;
   }
 
   @Override
@@ -83,16 +95,5 @@ public final class SliderCaptchaProvider implements CaptchaProvider {
     int pos = Integer.parseInt(data.substring(4));
     Integer expect = answers.remove(r.user().chatId());
     return expect != null && Math.abs(expect - pos) <= 5;
-  }
-
-  /* — helpers — */
-  private static BufferedImage cutPiece(BufferedImage src, int x) {
-    int w = 60, h = 60, y = 50;
-    BufferedImage dst = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
-    Graphics2D g = dst.createGraphics();
-    g.setClip(new RoundRectangle2D.Double(0, 0, w, h, 12, 12));
-    g.drawImage(src, -x, -y, null);
-    g.dispose();
-    return dst;
   }
 }

@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.event.impl;
 
-import io.lonmstalker.tgkit.core.BotCommand;
-import io.lonmstalker.tgkit.core.event.BotEvent;
+package io.github.tgkit.core.event.impl;
+
+import io.github.tgkit.core.BotCommand;
+import io.github.tgkit.core.event.BotEvent;
 import java.lang.reflect.Method;
 import java.time.Instant;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -27,4 +28,5 @@ public record RegisterCommandBotEvent(
     @NonNull Instant timestamp,
     @Nullable Method method,
     @NonNull BotCommand<? extends BotApiObject> command)
-    implements BotEvent {}
+    implements BotEvent {
+}

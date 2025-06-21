@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.annotation;
 
-import io.lonmstalker.tgkit.core.args.BotArgumentConverter;
+package io.github.tgkit.core.annotation;
+
+import io.github.tgkit.core.args.BotArgumentConverter;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -26,16 +27,24 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Arg {
 
-  /** Имя именованной regex-группы из ближайшего матчера. */
+  /**
+   * Имя именованной regex-группы из ближайшего матчера.
+   */
   @NonNull String value() default "";
 
-  /** Обязательность; для примитивов по умолчанию false запрещён. */
+  /**
+   * Обязательность; для примитивов по умолчанию false запрещён.
+   */
   boolean required() default true;
 
-  /** Строковый дефолт; применяется до конвертации. */
+  /**
+   * Строковый дефолт; применяется до конвертации.
+   */
   String defaultValue() default "";
 
-  /** Пользовательский конвертер; Identity = авто-выбор по типу. */
+  /**
+   * Пользовательский конвертер; Identity = авто-выбор по типу.
+   */
   Class<? extends BotArgumentConverter<?, ?>> converter() default
       BotArgumentConverter.UpdateConverter.class;
 }

@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.doc.scraper;
+
+package io.github.tgkit.doc.scraper;
 
 import java.io.InputStream;
 import java.util.List;
@@ -23,7 +24,9 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-/** Реализация {@link DocScraper} на базе Jsoup. */
+/**
+ * Реализация {@link DocScraper} на базе Jsoup.
+ */
 public class JsoupDocScraper implements DocScraper {
 
   @Override

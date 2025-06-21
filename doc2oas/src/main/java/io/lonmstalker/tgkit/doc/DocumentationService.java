@@ -13,14 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.doc;
 
-import io.lonmstalker.tgkit.doc.emitter.OpenApiEmitter;
-import io.lonmstalker.tgkit.doc.mapper.MethodDocMapper;
-import io.lonmstalker.tgkit.doc.scraper.BotApiScraper;
-import io.lonmstalker.tgkit.doc.scraper.DocScraper;
-import io.lonmstalker.tgkit.doc.scraper.JsoupDocScraper;
-import io.lonmstalker.tgkit.doc.scraper.MethodDoc;
+package io.github.tgkit.doc;
+
+import io.github.tgkit.doc.emitter.OpenApiEmitter;
+import io.github.tgkit.doc.mapper.MethodDocMapper;
+import io.github.tgkit.doc.scraper.BotApiScraper;
+import io.github.tgkit.doc.scraper.DocScraper;
+import io.github.tgkit.doc.scraper.JsoupDocScraper;
+import io.github.tgkit.doc.scraper.MethodDoc;
 import io.swagger.v3.oas.models.OpenAPI;
 import java.io.IOException;
 import java.io.InputStream;
@@ -50,7 +51,7 @@ public final class DocumentationService {
   /**
    * Генерирует файл OpenAPI из HTML-документа.
    *
-   * @param input путь к исходному HTML
+   * @param input  путь к исходному HTML
    * @param output путь для сохранения YAML
    */
   public void generate(@NonNull Path input, @NonNull Path output) {
@@ -62,7 +63,9 @@ public final class DocumentationService {
     }
   }
 
-  /** Скачивает официальную документацию и сохраняет YAML. */
+  /**
+   * Скачивает официальную документацию и сохраняет YAML.
+   */
   public void generateFromApi(@NonNull Path output) {
     List<MethodDoc> docs = apiScraper.fetch();
     write(docs, output);

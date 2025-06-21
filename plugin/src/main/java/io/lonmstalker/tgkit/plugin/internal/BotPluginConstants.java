@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.plugin;
+
+package io.github.tgkit.plugin;
 
 /**
  * Набор констант, используемых системой плагинов.
@@ -27,8 +28,11 @@ package io.lonmstalker.tgkit.plugin;
  * }</pre>
  */
 public class BotPluginConstants {
-  private BotPluginConstants() {}
-
-  /** Текущая поддерживаемая версия API плагинов. */
+  /**
+   * Текущая поддерживаемая версия API плагинов.
+   */
   public static final Double CURRENT_VERSION = 0.1;
+
+  private BotPluginConstants() {
+  }
 }

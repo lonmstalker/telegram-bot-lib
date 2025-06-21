@@ -13,15 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.bot;
 
-import io.lonmstalker.tgkit.core.BotAdapter;
-import io.lonmstalker.tgkit.core.annotation.BotCommand;
-import io.lonmstalker.tgkit.core.annotation.CheckReturnValue;
-import io.lonmstalker.tgkit.core.loader.ClasspathScanner;
-import io.lonmstalker.tgkit.plugin.BotPlugin;
-import io.lonmstalker.tgkit.plugin.BotPluginContext;
-import io.lonmstalker.tgkit.plugin.internal.BotPluginContextDefault;
+package io.github.tgkit.core.bot;
+
+import io.github.tgkit.core.BotAdapter;
+import io.github.tgkit.core.annotation.BotCommand;
+import io.github.tgkit.core.annotation.CheckReturnValue;
+import io.github.tgkit.core.loader.ClasspathScanner;
+import io.github.tgkit.plugin.BotPlugin;
+import io.github.tgkit.plugin.BotPluginContext;
+import io.github.tgkit.plugin.internal.BotPluginContextDefault;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -30,15 +31,20 @@ import java.util.function.Supplier;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 
-/** Fluent builder for creating and starting bots. */
+/**
+ * Fluent builder for creating and starting bots.
+ */
 public final class BotBuilder {
-  private BotBuilder() {}
+  private BotBuilder() {
+  }
 
   public static @NonNull BotBuilderImpl builder() {
     return new BotBuilderImpl();
   }
 
-  /** Actual implementation of the builder. */
+  /**
+   * Actual implementation of the builder.
+   */
   public static final class BotBuilderImpl {
     private final List<String> packages = new ArrayList<>();
     private final List<Supplier<BotPlugin>> plugins = new ArrayList<>();
@@ -105,7 +111,7 @@ public final class BotBuilder {
         for (Class<?> cls : cmdClasses) {
           try {
             Object instance = cls.getDeclaredConstructor().newInstance();
-            registry.add((io.lonmstalker.tgkit.core.BotCommand<?>) instance);
+            registry.add((io.github.tgkit.core.BotCommand<?>) instance);
           } catch (Exception e) {
             throw new IllegalStateException("Cannot init command " + cls, e);
           }
@@ -113,7 +119,7 @@ public final class BotBuilder {
 
         Set<Class<?>> pluginClasses =
             ClasspathScanner.findAnnotated(
-                io.lonmstalker.tgkit.plugin.annotation.BotPlugin.class, pkg);
+                io.github.tgkit.plugin.annotation.BotPlugin.class, pkg);
         for (Class<?> cls : pluginClasses) {
           plugins.add(
               () -> {

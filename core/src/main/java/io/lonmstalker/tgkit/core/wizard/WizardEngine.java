@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.wizard;
 
-import io.lonmstalker.tgkit.core.BotRequest;
+package io.github.tgkit.core.wizard;
+
+import io.github.tgkit.core.BotRequest;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
@@ -35,10 +36,11 @@ public interface WizardEngine {
    * Запускает сценарий, создаёт новую сессию и возвращает её sessionId.
    *
    * @param wizardId идентификатор сценария
-   * @param request входящее сообщение
+   * @param request  входящее сообщение
    * @return уникальный sessionId
    */
-  @NonNull String start(@NonNull String wizardId, @NonNull BotRequest<?> request);
+  @NonNull
+  String start(@NonNull String wizardId, @NonNull BotRequest<?> request);
 
   /**
    * Продолжает работу существующей или создаёт новую сессию, исходя из данных в request (payload

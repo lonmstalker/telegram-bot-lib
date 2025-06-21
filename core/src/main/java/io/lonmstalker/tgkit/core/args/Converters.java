@@ -13,19 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.args;
 
-import io.lonmstalker.tgkit.core.BotRequest;
-import io.lonmstalker.tgkit.core.reflection.ReflectionUtils;
+package io.github.tgkit.core.args;
+
+import io.github.tgkit.core.BotRequest;
+import io.github.tgkit.core.reflection.ReflectionUtils;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-/** Утилитарный реестр, где хранятся все кастомные BotArgumentConverter. */
+/**
+ * Утилитарный реестр, где хранятся все кастомные BotArgumentConverter.
+ */
 public final class Converters {
-  private Converters() {}
-
   private static final Map<Class<?>, BotArgumentConverter<?, ?>> BY_TYPE =
       new ConcurrentHashMap<>();
   private static final Map<Class<?>, BotArgumentConverter<?, ?>> BY_CLASS =
@@ -35,6 +36,9 @@ public final class Converters {
     register(Update.class, new BotArgumentConverter.UpdateConverter());
     register(BotRequest.class, new BotArgumentConverter.RequestConverter());
     // ... добавляем Number/Boolean/Enum и т.п.
+  }
+
+  private Converters() {
   }
 
   public static <T> void register(

@@ -1,11 +1,11 @@
-module io.lonmstalker.tgkit.boot {
-  requires io.lonmstalker.tgkit.core;
+module io.github.tgkit.boot {
+  requires io.github.tgkit.core;
   requires spring.boot;
   requires spring.boot.autoconfigure;
   requires spring.context;
   requires spring.beans;
   requires static io.github.tgkit.security;
-  requires static io.lonmstalker.tgkit.observability;
+  requires static io.github.tgkit.observability;
 
-  exports io.lonmstalker.tgkit.boot;
+  exports io.github.tgkit.boot;
 }

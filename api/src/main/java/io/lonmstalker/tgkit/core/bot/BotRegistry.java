@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.bot;
+
+package io.github.tgkit.core.bot;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -21,9 +22,12 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 
 public interface BotRegistry {
 
-  @NonNull Collection<Bot> all();
+  @NonNull
+  Collection<Bot> all();
 
-  @NonNull Optional<Bot> getByInternalId(long internalId);
+  @NonNull
+  Optional<Bot> getByInternalId(long internalId);
 
-  @NonNull Optional<Bot> getByExternalId(long externalId);
+  @NonNull
+  Optional<Bot> getByExternalId(long externalId);
 }

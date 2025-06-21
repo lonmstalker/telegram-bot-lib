@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.dsl;
 
-import io.lonmstalker.tgkit.core.BotResponse;
-import io.lonmstalker.tgkit.core.dsl.context.DSLContext;
+package io.github.tgkit.core.dsl;
+
+import io.github.tgkit.core.BotResponse;
+import io.github.tgkit.core.dsl.context.DSLContext;
 import java.time.Duration;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
@@ -33,40 +34,56 @@ import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
  */
 public interface Common<T extends Common<T, D>, D extends PartialBotApiMethod<?>> {
 
-  @NonNull T requireChatId();
+  @NonNull
+  T requireChatId();
 
-  @NonNull T missingIdStrategy(@NonNull MissingIdStrategy strategy);
+  @NonNull
+  T missingIdStrategy(@NonNull MissingIdStrategy strategy);
 
-  @NonNull T replyTo(long msgId);
+  @NonNull
+  T replyTo(long msgId);
 
-  @NonNull T disableNotif();
+  @NonNull
+  T disableNotif();
 
-  @NonNull T keyboard(@NonNull Consumer<KbBuilder> cfg);
+  @NonNull
+  T keyboard(@NonNull Consumer<KbBuilder> cfg);
 
-  @NonNull T when(@NonNull Predicate<DSLContext> cond, @NonNull Consumer<Common<T, D>> branch);
+  @NonNull
+  T when(@NonNull Predicate<DSLContext> cond, @NonNull Consumer<Common<T, D>> branch);
 
-  @NonNull T onlyAdmin(@NonNull Consumer<Common<T, D>> branch);
+  @NonNull
+  T onlyAdmin(@NonNull Consumer<Common<T, D>> branch);
 
-  @NonNull T ifFlag(@NonNull String flag, @NonNull Consumer<Common<T, D>> branch);
+  @NonNull
+  T ifFlag(@NonNull String flag, @NonNull Consumer<Common<T, D>> branch);
 
-  @NonNull T flag(@NonNull String flag, @NonNull Consumer<Common<T, D>> branch);
+  @NonNull
+  T flag(@NonNull String flag, @NonNull Consumer<Common<T, D>> branch);
 
   // проверка для userId
-  @NonNull T flagUser(@NonNull String flag, @NonNull Consumer<Common<T, D>> branch);
+  @NonNull
+  T flagUser(@NonNull String flag, @NonNull Consumer<Common<T, D>> branch);
 
   // A/B-сплит: control / variant
-  @NonNull T abTest(
+  @NonNull
+  T abTest(
       @NonNull String key,
       @NonNull Consumer<Common<T, D>> control,
       @NonNull Consumer<Common<T, D>> variant);
 
-  @NonNull T hooks(@NonNull Consumer<Long> ok, @NonNull Consumer<Throwable> fail);
+  @NonNull
+  T hooks(@NonNull Consumer<Long> ok, @NonNull Consumer<Throwable> fail);
 
-  @NonNull BotResponse send();
+  @NonNull
+  BotResponse send();
 
-  @NonNull CompletableFuture<BotResponse> sendAsync(@NonNull Executor executor);
+  @NonNull
+  CompletableFuture<BotResponse> sendAsync(@NonNull Executor executor);
 
-  @NonNull WithTtl ttl(@NonNull Duration d);
+  @NonNull
+  WithTtl ttl(@NonNull Duration d);
 
-  @NonNull D build();
+  @NonNull
+  D build();
 }

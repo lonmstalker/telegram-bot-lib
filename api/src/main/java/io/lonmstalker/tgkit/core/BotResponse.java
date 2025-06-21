@@ -13,15 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core;
+
+package io.github.tgkit.core;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 
-/** Ответ бота в виде метода Telegram API. */
+/**
+ * Ответ бота в виде метода Telegram API.
+ */
 public class BotResponse {
 
-  /** Метод, который будет выполнен Telegram API. */
+  /**
+   * Метод, который будет выполнен Telegram API.
+   */
   private @Nullable BotApiMethod<?> method;
 
   public BotResponse() {
@@ -32,16 +37,16 @@ public class BotResponse {
     this.method = method;
   }
 
+  public static Builder builder() {
+    return new Builder();
+  }
+
   public @Nullable BotApiMethod<?> getMethod() {
     return method;
   }
 
   public void setMethod(@Nullable BotApiMethod<?> method) {
     this.method = method;
-  }
-
-  public static Builder builder() {
-    return new Builder();
   }
 
   public static final class Builder {

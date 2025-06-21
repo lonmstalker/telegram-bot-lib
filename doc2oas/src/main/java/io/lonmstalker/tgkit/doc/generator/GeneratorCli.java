@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.doc.generator;
+
+package io.github.tgkit.doc.generator;
 
 import java.nio.file.Path;
 import java.util.Map;
@@ -22,7 +23,9 @@ import org.openapitools.codegen.DefaultGenerator;
 import org.openapitools.codegen.config.CodegenConfigurator;
 import picocli.CommandLine;
 
-/** CLI-обёртка OpenAPI Generator. */
+/**
+ * CLI-обёртка OpenAPI Generator.
+ */
 @CommandLine.Command(name = "generate", mixinStandardHelpOptions = true)
 public class GeneratorCli implements Runnable {
 
@@ -35,7 +38,9 @@ public class GeneratorCli implements Runnable {
   @CommandLine.Option(names = "--language", defaultValue = "java", description = "Язык SDK")
   private String language;
 
-  /** Точка входа. */
+  /**
+   * Точка входа.
+   */
   public static void main(String[] args) {
     new CommandLine(new GeneratorCli()).execute(args);
   }

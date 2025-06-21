@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core;
 
-import io.lonmstalker.tgkit.core.interceptor.BotInterceptor;
-import io.lonmstalker.tgkit.core.matching.CommandMatch;
+package io.github.tgkit.core;
+
+import io.github.tgkit.core.interceptor.BotInterceptor;
+import io.github.tgkit.core.matching.CommandMatch;
 import java.util.List;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -35,30 +36,34 @@ public interface BotCommand<T> {
    *
    * @param request запрос, содержащий данные об обновлении
    * @return {@link BotResponse}, который необходимо отправить пользователю, либо {@code null}, если
-   *     ответ не требуется
+   * ответ не требуется
    */
-  @Nullable BotResponse handle(@NonNull BotRequest<T> request);
+  @Nullable
+  BotResponse handle(@NonNull BotRequest<T> request);
 
   /**
    * Тип обрабатываемого запроса.
    *
    * @return тип запроса
    */
-  @NonNull BotRequestType type();
+  @NonNull
+  BotRequestType type();
 
   /**
    * Правило сопоставления команды с обновлением.
    *
    * @return правило (matcher)
    */
-  @NonNull CommandMatch<T> matcher();
+  @NonNull
+  CommandMatch<T> matcher();
 
   /**
    * Список интерсепторов команды.
    *
    * @return изменяемый список
    */
-  @NonNull List<BotInterceptor> interceptors();
+  @NonNull
+  List<BotInterceptor> interceptors();
 
   void setMatcher(@NonNull CommandMatch<T> matcher);
 

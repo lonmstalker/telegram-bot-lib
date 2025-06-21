@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.security.antispam;
+
+package io.github.tgkit.security.antispam;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 

@@ -13,33 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.plugin.internal.sort;
+
+package io.github.tgkit.plugin.internal.sort;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import io.lonmstalker.tgkit.plugin.PluginException;
+import io.github.tgkit.plugin.PluginException;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
 class TopoSorterTest {
-
-  private static class Node {
-    final String id;
-    final List<String> deps;
-
-    Node(String id, List<String> deps) {
-      this.id = id;
-      this.deps = deps;
-    }
-
-    String getId() {
-      return id;
-    }
-
-    List<String> getDeps() {
-      return deps;
-    }
-  }
 
   @Test
   void testSimpleChain() {
@@ -82,5 +65,23 @@ class TopoSorterTest {
     assertTrue(ex.getMessage().contains("Cyclic dependency detected"));
     assertTrue(ex.getMessage().contains("A"));
     assertTrue(ex.getMessage().contains("B"));
+  }
+
+  private static class Node {
+    final String id;
+    final List<String> deps;
+
+    Node(String id, List<String> deps) {
+      this.id = id;
+      this.deps = deps;
+    }
+
+    String getId() {
+      return id;
+    }
+
+    List<String> getDeps() {
+      return deps;
+    }
   }
 }

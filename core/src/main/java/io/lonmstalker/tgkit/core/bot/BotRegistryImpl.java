@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.bot;
+
+package io.github.tgkit.core.bot;
 
 import java.lang.ref.WeakReference;
 import java.util.Collection;
@@ -27,11 +28,11 @@ import org.checkerframework.checker.nullness.qual.NonNull;
  * память.
  */
 public final class BotRegistryImpl implements BotRegistry {
-  private BotRegistryImpl() {}
-
   private static final BotRegistryImpl INSTANCE = new BotRegistryImpl();
   private final Map<Long, WeakReference<Bot>> byInternal = new ConcurrentHashMap<>();
   private final Map<Long, WeakReference<Bot>> byExternal = new ConcurrentHashMap<>();
+  private BotRegistryImpl() {
+  }
 
   public static BotRegistryImpl getInstance() {
     return INSTANCE;

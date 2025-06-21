@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.observability.impl;
 
-import io.lonmstalker.observability.MetricsCollector;
-import io.lonmstalker.tgkit.core.exception.BotApiException;
-import io.lonmstalker.tgkit.observability.Tags;
+package io.github.observability.impl;
+
+import io.github.observability.MetricsCollector;
+import io.github.tgkit.core.exception.BotApiException;
+import io.github.tgkit.observability.Tags;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.Gauge;
 import io.micrometer.core.instrument.MeterRegistry;
@@ -33,7 +34,9 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicReference;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-/** Реализация {@link MetricsCollector} на базе Micrometer. */
+/**
+ * Реализация {@link MetricsCollector} на базе Micrometer.
+ */
 public class MicrometerCollector implements MetricsCollector {
   private final MeterRegistry registry;
   private final PrometheusMetricsServer httpServer;
@@ -43,6 +46,22 @@ public class MicrometerCollector implements MetricsCollector {
       @NonNull MeterRegistry registry, @NonNull PrometheusMetricsServer httpServer) {
     this.registry = registry;
     this.httpServer = httpServer;
+  }
+
+  /**
+   * Создаёт collector и поднимает HTTP-сервер для экспонирования метрик в формате Prometheus.
+   *
+   * @param port порт HTTP-сервера
+   * @return созданный collector
+   */
+  public static @NonNull MicrometerCollector prometheus(PrometheusConfig cfg, int port) {
+    PrometheusMeterRegistry reg = new PrometheusMeterRegistry(cfg);
+    try {
+      return new MicrometerCollector(
+          reg, new PrometheusMetricsServer(port, new CollectorRegistry()));
+    } catch (IOException e) {
+      throw new BotApiException(e);
+    }
   }
 
   @Override
@@ -72,22 +91,6 @@ public class MicrometerCollector implements MetricsCollector {
               return r;
             });
     ref.set(value);
-  }
-
-  /**
-   * Создаёт collector и поднимает HTTP-сервер для экспонирования метрик в формате Prometheus.
-   *
-   * @param port порт HTTP-сервера
-   * @return созданный collector
-   */
-  public static @NonNull MicrometerCollector prometheus(PrometheusConfig cfg, int port) {
-    PrometheusMeterRegistry reg = new PrometheusMeterRegistry(cfg);
-    try {
-      return new MicrometerCollector(
-          reg, new PrometheusMetricsServer(port, new CollectorRegistry()));
-    } catch (IOException e) {
-      throw new BotApiException(e);
-    }
   }
 
   @Override

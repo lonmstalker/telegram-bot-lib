@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.bot;
+
+package io.github.tgkit.core.bot;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import io.lonmstalker.tgkit.core.exception.BotApiException;
-import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
+import io.github.tgkit.core.exception.BotApiException;
+import io.github.tgkit.testkit.TestBotBootstrap;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import org.junit.jupiter.api.Test;

@@ -13,19 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.dsl;
 
-import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
-import io.lonmstalker.tgkit.core.dsl.context.DSLContext;
-import io.lonmstalker.tgkit.core.parse_mode.ParseMode;
-import io.lonmstalker.tgkit.core.parse_mode.Sanitizer;
+package io.github.tgkit.core.dsl;
+
+import io.github.tgkit.core.config.BotGlobalConfig;
+import io.github.tgkit.core.dsl.context.DSLContext;
+import io.github.tgkit.core.parse_mode.ParseMode;
+import io.github.tgkit.core.parse_mode.Sanitizer;
 import java.time.Duration;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.methods.ActionType;
 import org.telegram.telegrambots.meta.api.methods.send.SendChatAction;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 
-/** Редактирование сообщения. */
+/**
+ * Редактирование сообщения.
+ */
 @SuppressWarnings("initialization.fields.uninitialized")
 public final class EditBuilder extends BotDSL.CommonBuilder<EditBuilder, EditMessageText> {
   private final long msgId;
@@ -39,13 +42,17 @@ public final class EditBuilder extends BotDSL.CommonBuilder<EditBuilder, EditMes
     this.msgId = msgId;
   }
 
-  /** Показать набор текста перед редактированием. */
+  /**
+   * Показать набор текста перед редактированием.
+   */
   public @NonNull EditBuilder typing(@NonNull Duration d) {
     this.typing = d;
     return this;
   }
 
-  /** Текст после редактирования. */
+  /**
+   * Текст после редактирования.
+   */
   public @NonNull EditBuilder thenEdit(@NonNull String text) {
     this.newText = text;
     return this;

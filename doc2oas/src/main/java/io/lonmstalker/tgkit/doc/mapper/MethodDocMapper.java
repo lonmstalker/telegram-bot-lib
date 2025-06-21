@@ -13,17 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.doc.mapper;
 
-import io.lonmstalker.tgkit.doc.scraper.MethodDoc;
+package io.github.tgkit.doc.mapper;
+
+import io.github.tgkit.doc.scraper.MethodDoc;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
-/** Маппер между {@link MethodDoc} и внутренней моделью {@link OperationInfo}. */
+/**
+ * Маппер между {@link MethodDoc} и внутренней моделью {@link OperationInfo}.
+ */
 @Mapper
 public interface MethodDocMapper {
   MethodDocMapper INSTANCE = Mappers.getMapper(MethodDocMapper.class);
 
-  @NonNull OperationInfo toOperation(@NonNull MethodDoc methodDoc);
+  @NonNull
+  OperationInfo toOperation(@NonNull MethodDoc methodDoc);
 }

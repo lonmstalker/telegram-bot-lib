@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.experimental;
+
+package io.github.tgkit.core.experimental;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -40,4 +41,5 @@ import java.lang.annotation.Target;
 @Documented
 @Retention(RetentionPolicy.CLASS)
 @Target({ElementType.TYPE, ElementType.METHOD})
-public @interface Incubating {}
+public @interface Incubating {
+}

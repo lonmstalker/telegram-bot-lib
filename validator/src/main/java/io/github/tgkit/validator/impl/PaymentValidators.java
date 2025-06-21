@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.github.tgkit.validator.impl;
 
-import io.lonmstalker.tgkit.core.i18n.MessageKey;
-import io.lonmstalker.tgkit.core.validator.Validator;
+import io.github.tgkit.core.i18n.MessageKey;
+import io.github.tgkit.core.validator.Validator;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.objects.payments.Invoice;
 
@@ -27,9 +28,10 @@ import org.telegram.telegrambots.meta.api.objects.payments.Invoice;
  */
 public final class PaymentValidators {
 
-  private PaymentValidators() {}
-
   private static final long MAX_CENTS = 1_000_000L; // $10 000
+
+  private PaymentValidators() {
+  }
 
   /**
    * Проверяет, что сумма >0 и ≤$10 000.

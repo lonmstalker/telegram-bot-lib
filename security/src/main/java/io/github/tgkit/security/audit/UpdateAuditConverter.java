@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.github.tgkit.security.audit;
 
-import io.lonmstalker.tgkit.core.update.UpdateUtils;
+import io.github.tgkit.core.update.UpdateUtils;
 import java.time.Instant;
 import java.util.Map;
 import org.checkerframework.checker.nullness.qual.NonNull;

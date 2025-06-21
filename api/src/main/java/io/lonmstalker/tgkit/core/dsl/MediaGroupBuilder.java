@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.dsl;
 
-import io.lonmstalker.tgkit.core.BotResponse;
-import io.lonmstalker.tgkit.core.dsl.context.DSLContext;
-import io.lonmstalker.tgkit.core.dsl.validator.MediaGroupSizeValidator;
+package io.github.tgkit.core.dsl;
+
+import io.github.tgkit.core.BotResponse;
+import io.github.tgkit.core.dsl.context.DSLContext;
+import io.github.tgkit.core.dsl.validator.MediaGroupSizeValidator;
 import java.util.ArrayList;
 import java.util.List;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -27,7 +28,9 @@ import org.telegram.telegrambots.meta.api.objects.media.InputMedia;
 import org.telegram.telegrambots.meta.api.objects.media.InputMediaPhoto;
 import org.telegram.telegrambots.meta.api.objects.media.InputMediaVideo;
 
-/** Построитель медиа-группы. */
+/**
+ * Построитель медиа-группы.
+ */
 public final class MediaGroupBuilder
     extends BotDSL.CommonBuilder<MediaGroupBuilder, SendMediaGroup> {
   private static final MediaGroupSizeValidator VALIDATOR = new MediaGroupSizeValidator();
@@ -37,7 +40,9 @@ public final class MediaGroupBuilder
     super(ctx);
   }
 
-  /** Фото с подписью. */
+  /**
+   * Фото с подписью.
+   */
   public @NonNull MediaGroupBuilder photo(@NonNull InputFile file, @NonNull String cap) {
     InputMediaPhoto ph = new InputMediaPhoto();
     ph.setMedia(file.getNewMediaFile(), file.getMediaName());
@@ -46,7 +51,9 @@ public final class MediaGroupBuilder
     return this;
   }
 
-  /** Видео. */
+  /**
+   * Видео.
+   */
   public @NonNull MediaGroupBuilder video(@NonNull InputFile file) {
     InputMediaVideo v = new InputMediaVideo();
     v.setMedia(file.getNewMediaFile(), file.getMediaName());

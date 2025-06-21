@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.github.tgkit.validator.impl;
 
-import io.lonmstalker.tgkit.core.BotRequest;
-import io.lonmstalker.tgkit.core.i18n.MessageKey;
-import io.lonmstalker.tgkit.core.validator.Validator;
 import io.github.tgkit.validator.language.LanguageDetectionService;
+import io.github.tgkit.core.BotRequest;
+import io.github.tgkit.core.i18n.MessageKey;
+import io.github.tgkit.core.validator.Validator;
 import java.net.URI;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -34,21 +35,23 @@ import java.util.regex.Pattern;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
-/** Валидации, выходящие за рамки базовых: спам-фильтры, дата/время, ссылки, валюты и т.п. */
+/**
+ * Валидации, выходящие за рамки базовых: спам-фильтры, дата/время, ссылки, валюты и т.п.
+ */
 public final class AdvancedValidators {
-
-  private AdvancedValidators() {}
 
   private static final Pattern URL_PATTERN =
       Pattern.compile("(https?://[^\\s]+)", Pattern.CASE_INSENSITIVE);
   private static final Pattern CURRENCY_PATTERN =
       Pattern.compile("^\\s*([0-9]+(?:\\.[0-9]{1,2})?)\\s+([A-Z]{3})\\s*$");
-
   private static final List<DateTimeFormatter> FMTS =
       List.of(
           DateTimeFormatter.ISO_LOCAL_DATE,
           DateTimeFormatter.ofPattern("yyyy.MM.dd"),
           DateTimeFormatter.ofPattern("yyyy MM dd"));
+
+  private AdvancedValidators() {
+  }
 
   /**
    * Проверяет, что в тексте нет ссылок на домены, не входящие в список разрешённых.
@@ -63,7 +66,9 @@ public final class AdvancedValidators {
           while (m.find()) {
             try {
               String host = URI.create(m.group(1)).getHost();
-              if (host == null) return false;
+              if (host == null) {
+                return false;
+              }
               String normalized = host.toLowerCase(Locale.ROOT).replaceFirst("^www\\.", "");
               if (!allowedDomains.contains(normalized)) {
                 return false;
@@ -116,7 +121,9 @@ public final class AdvancedValidators {
             } catch (DateTimeParseException ignored) {
             }
           }
-          if (d == null) return false;
+          if (d == null) {
+            return false;
+          }
           LocalDate today = LocalDate.now(ZoneOffset.UTC);
           LocalDate max = today.plusDays(maxDaysAhead);
           return !d.isBefore(today) && !d.isAfter(max);

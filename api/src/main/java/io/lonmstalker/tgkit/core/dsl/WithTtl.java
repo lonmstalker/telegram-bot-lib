@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.dsl;
 
-import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
-import io.lonmstalker.tgkit.core.dsl.context.DSLContext;
-import io.lonmstalker.tgkit.core.ttl.DeleteTask;
-import io.lonmstalker.tgkit.core.ttl.TtlPolicy;
+package io.github.tgkit.core.dsl;
+
+import io.github.tgkit.core.config.BotGlobalConfig;
+import io.github.tgkit.core.dsl.context.DSLContext;
+import io.github.tgkit.core.ttl.DeleteTask;
+import io.github.tgkit.core.ttl.TtlPolicy;
 import java.time.Duration;
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -32,8 +33,10 @@ public final class WithTtl<T extends BotDSL.CommonBuilder<T, D>, D extends Parti
   private final BotDSL.@NonNull CommonBuilder<T, D> b;
 
   private TtlPolicy policy = TtlPolicy.defaults();
-  private Consumer<Exception> onError = ex -> {};
-  private Consumer<Long> onSuccess = id -> {};
+  private Consumer<Exception> onError = ex -> {
+  };
+  private Consumer<Long> onSuccess = id -> {
+  };
 
   WithTtl(@NonNull Duration d, @NonNull DSLContext ctx, BotDSL.@NonNull CommonBuilder<T, D> b) {
     this.b = b;

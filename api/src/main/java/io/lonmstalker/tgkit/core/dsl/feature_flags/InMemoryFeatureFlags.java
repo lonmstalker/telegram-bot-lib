@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.dsl.feature_flags;
+
+package io.github.tgkit.core.dsl.feature_flags;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -22,7 +23,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-/** Хранит состояние флагов в памяти. */
+/**
+ * Хранит состояние флагов в памяти.
+ */
 public class InMemoryFeatureFlags implements FeatureFlags {
   private final Set<String> disabledFlags = new HashSet<>();
   private final Map<String, Set<Long>> chatFlags = new ConcurrentHashMap<>();

@@ -1,16 +1,16 @@
 package io.github.examples.testkitdemo;
 
-import io.lonmstalker.tgkit.testkit.TelegramBotTest;
-import io.lonmstalker.tgkit.testkit.UpdateInjector;
-import io.lonmstalker.tgkit.testkit.Expectation;
+import io.github.tgkit.testkit.TelegramBotTest;
+import io.github.tgkit.testkit.UpdateInjector;
+import io.github.tgkit.testkit.Expectation;
 import org.junit.jupiter.api.Test;
 
 @TelegramBotTest
 class PingCommandTest {
 
-    @Test
-    void pingPong(UpdateInjector inject, Expectation expect) {
-        inject.text("/ping").from(42L);
-        expect.api("sendMessage").jsonPath("$.text", "pong");
-    }
+  @Test
+  void pingPong(UpdateInjector inject, Expectation expect) {
+    inject.text("/ping").from(42L);
+    expect.api("sendMessage").jsonPath("$.text", "pong");
+  }
 }

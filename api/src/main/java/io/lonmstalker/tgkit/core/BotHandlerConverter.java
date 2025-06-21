@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core;
+
+package io.github.tgkit.core;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
@@ -31,9 +32,12 @@ public interface BotHandlerConverter<T> {
    * @param request исходный запрос
    * @return результат преобразования
    */
-  @NonNull T convert(@NonNull BotRequest<?> request);
+  @NonNull
+  T convert(@NonNull BotRequest<?> request);
 
-  /** Конвертер по умолчанию, возвращающий исходный запрос без изменений. */
+  /**
+   * Конвертер по умолчанию, возвращающий исходный запрос без изменений.
+   */
   class Identity implements BotHandlerConverter<BotRequest<?>> {
     @Override
     public @NonNull BotRequest<?> convert(@NonNull BotRequest<?> request) {

@@ -13,22 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.observability;
 
-import io.lonmstalker.tgkit.core.BotRequest;
-import io.lonmstalker.tgkit.core.BotResponse;
-import io.lonmstalker.tgkit.core.interceptor.BotInterceptor;
-import io.lonmstalker.tgkit.core.update.UpdateUtils;
-import io.lonmstalker.tgkit.observability.Span;
-import io.lonmstalker.tgkit.observability.Tag;
-import io.lonmstalker.tgkit.observability.Tags;
-import io.lonmstalker.tgkit.observability.Tracer;
+package io.github.observability;
+
+import io.github.tgkit.core.BotRequest;
+import io.github.tgkit.core.BotResponse;
+import io.github.tgkit.core.interceptor.BotInterceptor;
+import io.github.tgkit.core.update.UpdateUtils;
+import io.github.tgkit.observability.Span;
+import io.github.tgkit.observability.Tag;
+import io.github.tgkit.observability.Tags;
+import io.github.tgkit.observability.Tracer;
 import io.micrometer.core.instrument.Timer;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-/** Интерцептор, собирающий метрики и трассировки для каждого обновления. */
+/**
+ * Интерцептор, собирающий метрики и трассировки для каждого обновления.
+ */
 public class ObservabilityInterceptor implements BotInterceptor {
   private final Tracer tracer;
   private final MetricsCollector metrics;
@@ -39,7 +42,7 @@ public class ObservabilityInterceptor implements BotInterceptor {
    * Создаёт интерцептор.
    *
    * @param metrics сборщик метрик
-   * @param tracer трассировщик
+   * @param tracer  трассировщик
    */
   public ObservabilityInterceptor(@NonNull MetricsCollector metrics, @NonNull Tracer tracer) {
     this.metrics = metrics;
@@ -58,13 +61,17 @@ public class ObservabilityInterceptor implements BotInterceptor {
     LogContext.put("updateId", String.valueOf(update.getUpdateId()));
   }
 
-  /** Завершающий этап после хендлера. В данной реализации ничего не делает. */
+  /**
+   * Завершающий этап после хендлера. В данной реализации ничего не делает.
+   */
   @Override
   public void postHandle(@NonNull Update update, @NonNull BotRequest<?> request) {
     // nothing
   }
 
-  /** Завершает обработку: фиксирует метрики и закрывает span. */
+  /**
+   * Завершает обработку: фиксирует метрики и закрывает span.
+   */
   @Override
   public void afterCompletion(
       @NonNull Update update,

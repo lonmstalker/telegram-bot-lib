@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.bot;
 
-import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
-import io.lonmstalker.tgkit.core.event.impl.StartStatusBotEvent;
-import io.lonmstalker.tgkit.core.event.impl.StopStatusBotEvent;
-import io.lonmstalker.tgkit.core.exception.BotApiException;
+package io.github.tgkit.core.bot;
+
+import io.github.tgkit.core.config.BotGlobalConfig;
+import io.github.tgkit.core.event.impl.StartStatusBotEvent;
+import io.github.tgkit.core.event.impl.StopStatusBotEvent;
+import io.github.tgkit.core.exception.BotApiException;
 import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
@@ -40,7 +41,17 @@ import org.telegram.telegrambots.meta.api.objects.User;
 public final class BotImpl implements Bot {
   private static final Logger log = LoggerFactory.getLogger(BotImpl.class);
   private static final long DEFAULT_ACTION_TIMEOUT_MS = 10_000L;
-
+  private final AtomicReference<BotState> state = new AtomicReference<>(BotState.NEW);
+  private final @NonNull List<BotCompleteAction> completeActions = new CopyOnWriteArrayList<>();
+  private long id;
+  private volatile @Nullable User user;
+  private @Nullable SetWebhook setWebhook;
+  private @NonNull String token;
+  private @NonNull BotConfig config;
+  private @NonNull DefaultAbsSender absSender;
+  private @NonNull BotCommandRegistry commandRegistry;
+  private @Nullable BotSessionImpl session;
+  private long onCompletedActionTimeoutMs = DEFAULT_ACTION_TIMEOUT_MS;
   private BotImpl(
       long id,
       @Nullable User user,
@@ -65,92 +76,6 @@ public final class BotImpl implements Bot {
   public static Builder builder() {
     return new Builder();
   }
-
-  public static class Builder {
-    private long id;
-    private User user;
-    private SetWebhook setWebhook;
-    private String token;
-    private BotConfig config;
-    private DefaultAbsSender absSender;
-    private BotCommandRegistry commandRegistry;
-    private BotSessionImpl session;
-    private long onCompletedActionTimeoutMs = DEFAULT_ACTION_TIMEOUT_MS;
-
-    public Builder id(long id) {
-      this.id = id;
-      return this;
-    }
-
-    public Builder user(@Nullable User user) {
-      this.user = user;
-      return this;
-    }
-
-    public Builder setWebhook(@Nullable SetWebhook setWebhook) {
-      this.setWebhook = setWebhook;
-      return this;
-    }
-
-    public Builder token(@NonNull String token) {
-      this.token = token;
-      return this;
-    }
-
-    public Builder config(@NonNull BotConfig config) {
-      this.config = config;
-      if (this.onCompletedActionTimeoutMs == DEFAULT_ACTION_TIMEOUT_MS) {
-        this.onCompletedActionTimeoutMs = config.getOnCompletedActionTimeoutMs();
-      }
-      return this;
-    }
-
-    public Builder absSender(@NonNull DefaultAbsSender absSender) {
-      this.absSender = absSender;
-      return this;
-    }
-
-    public Builder commandRegistry(@NonNull BotCommandRegistry registry) {
-      this.commandRegistry = registry;
-      return this;
-    }
-
-    public Builder session(@Nullable BotSessionImpl session) {
-      this.session = session;
-      return this;
-    }
-
-    public Builder onCompletedActionTimeoutMs(long timeout) {
-      this.onCompletedActionTimeoutMs = timeout;
-      return this;
-    }
-
-    public BotImpl build() {
-      return new BotImpl(
-          id,
-          user,
-          setWebhook,
-          token,
-          config,
-          absSender,
-          commandRegistry,
-          session,
-          onCompletedActionTimeoutMs);
-    }
-  }
-
-  private final AtomicReference<BotState> state = new AtomicReference<>(BotState.NEW);
-  private final @NonNull List<BotCompleteAction> completeActions = new CopyOnWriteArrayList<>();
-  private long id;
-  private volatile @Nullable User user;
-  private @Nullable SetWebhook setWebhook;
-  private @NonNull String token;
-  private @NonNull BotConfig config;
-  private @NonNull DefaultAbsSender absSender;
-  private @NonNull BotCommandRegistry commandRegistry;
-  private @Nullable BotSessionImpl session;
-
-  private long onCompletedActionTimeoutMs = DEFAULT_ACTION_TIMEOUT_MS;
 
   public AtomicReference<BotState> getState() {
     return state;
@@ -375,6 +300,79 @@ public final class BotImpl implements Bot {
   private void checkNotStarted() {
     if (user != null) {
       throw new BotApiException("Bot started");
+    }
+  }
+
+  public static class Builder {
+    private long id;
+    private User user;
+    private SetWebhook setWebhook;
+    private String token;
+    private BotConfig config;
+    private DefaultAbsSender absSender;
+    private BotCommandRegistry commandRegistry;
+    private BotSessionImpl session;
+    private long onCompletedActionTimeoutMs = DEFAULT_ACTION_TIMEOUT_MS;
+
+    public Builder id(long id) {
+      this.id = id;
+      return this;
+    }
+
+    public Builder user(@Nullable User user) {
+      this.user = user;
+      return this;
+    }
+
+    public Builder setWebhook(@Nullable SetWebhook setWebhook) {
+      this.setWebhook = setWebhook;
+      return this;
+    }
+
+    public Builder token(@NonNull String token) {
+      this.token = token;
+      return this;
+    }
+
+    public Builder config(@NonNull BotConfig config) {
+      this.config = config;
+      if (this.onCompletedActionTimeoutMs == DEFAULT_ACTION_TIMEOUT_MS) {
+        this.onCompletedActionTimeoutMs = config.getOnCompletedActionTimeoutMs();
+      }
+      return this;
+    }
+
+    public Builder absSender(@NonNull DefaultAbsSender absSender) {
+      this.absSender = absSender;
+      return this;
+    }
+
+    public Builder commandRegistry(@NonNull BotCommandRegistry registry) {
+      this.commandRegistry = registry;
+      return this;
+    }
+
+    public Builder session(@Nullable BotSessionImpl session) {
+      this.session = session;
+      return this;
+    }
+
+    public Builder onCompletedActionTimeoutMs(long timeout) {
+      this.onCompletedActionTimeoutMs = timeout;
+      return this;
+    }
+
+    public BotImpl build() {
+      return new BotImpl(
+          id,
+          user,
+          setWebhook,
+          token,
+          config,
+          absSender,
+          commandRegistry,
+          session,
+          onCompletedActionTimeoutMs);
     }
   }
 }

@@ -13,19 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.dsl;
 
-import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
-import io.lonmstalker.tgkit.core.dsl.context.DSLContext;
-import io.lonmstalker.tgkit.core.dsl.validator.CaptionValidator;
-import io.lonmstalker.tgkit.core.dsl.validator.FileSizeValidator;
-import io.lonmstalker.tgkit.core.parse_mode.ParseMode;
-import io.lonmstalker.tgkit.core.parse_mode.Sanitizer;
+package io.github.tgkit.core.dsl;
+
+import io.github.tgkit.core.config.BotGlobalConfig;
+import io.github.tgkit.core.dsl.context.DSLContext;
+import io.github.tgkit.core.dsl.validator.CaptionValidator;
+import io.github.tgkit.core.dsl.validator.FileSizeValidator;
+import io.github.tgkit.core.parse_mode.ParseMode;
+import io.github.tgkit.core.parse_mode.Sanitizer;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 
-/** Построитель отправки фото. */
+/**
+ * Построитель отправки фото.
+ */
 @SuppressWarnings("initialization.fields.uninitialized")
 public final class PhotoBuilder extends BotDSL.CommonBuilder<PhotoBuilder, SendPhoto> {
   private static final CaptionValidator CAPTION_VALIDATOR = new CaptionValidator();
@@ -47,7 +50,9 @@ public final class PhotoBuilder extends BotDSL.CommonBuilder<PhotoBuilder, SendP
     return this;
   }
 
-  /** Подпись к фото. */
+  /**
+   * Подпись к фото.
+   */
   public @NonNull PhotoBuilder caption(@NonNull String text) {
     this.caption = text;
     return this;

@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.user;
+
+package io.github.tgkit.core.user;
 
 import java.util.Locale;
 import java.util.Set;
@@ -22,13 +23,17 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 public interface BotUserInfo {
 
-  @Nullable Long chatId();
+  @Nullable
+  Long chatId();
 
-  @Nullable Long userId();
+  @Nullable
+  Long userId();
 
-  @Nullable Long internalUserId();
+  @Nullable
+  Long internalUserId();
 
-  @NonNull Set<String> roles();
+  @NonNull
+  Set<String> roles();
 
   default @Nullable Locale locale() {
     return null;

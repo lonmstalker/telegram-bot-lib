@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 module io.github.tgkit.security {
-  requires io.lonmstalker.tgkit.core;
+  requires io.github.tgkit.core;
   requires org.slf4j;
   requires com.github.benmanes.caffeine;
   requires io.github.jopenlibs.vault.java.driver;
@@ -29,7 +29,7 @@ module io.github.tgkit.security {
   exports io.github.tgkit.security.init;
   exports io.github.tgkit.security.ratelimit;
   exports io.github.tgkit.security.ratelimit.impl to
-      io.lonmstalker.tgkit.plugin;
+      io.github.tgkit.plugin;
   exports io.github.tgkit.security.rbac;
   exports io.github.tgkit.security.secret;
   exports io.github.tgkit.security.config;

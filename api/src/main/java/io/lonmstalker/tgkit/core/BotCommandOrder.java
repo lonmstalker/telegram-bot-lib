@@ -13,15 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core;
 
-/** Константы, определяющие порядок выполнения обработчиков команд. */
+package io.github.tgkit.core;
+
+/**
+ * Константы, определяющие порядок выполнения обработчиков команд.
+ */
 public final class BotCommandOrder {
-  private BotCommandOrder() {}
-
-  /** Выполняется первым. */
+  /**
+   * Выполняется первым.
+   */
   public static final int FIRST = Integer.MIN_VALUE;
-
-  /** Выполняется последним. */
+  /**
+   * Выполняется последним.
+   */
   public static final int LAST = Integer.MAX_VALUE;
+
+  private BotCommandOrder() {
+  }
 }

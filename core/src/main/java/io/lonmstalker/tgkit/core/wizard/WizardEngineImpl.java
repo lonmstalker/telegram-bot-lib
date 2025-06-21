@@ -13,14 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.wizard;
 
-import io.lonmstalker.tgkit.core.BotCommand;
-import io.lonmstalker.tgkit.core.BotRequest;
-import io.lonmstalker.tgkit.core.annotation.BotHandler;
-import io.lonmstalker.tgkit.core.bot.BotCommandRegistry;
-import io.lonmstalker.tgkit.core.loader.BotCommandFactory;
-import io.lonmstalker.tgkit.core.state.StateStore;
+package io.github.tgkit.core.wizard;
+
+import io.github.tgkit.core.BotCommand;
+import io.github.tgkit.core.BotRequest;
+import io.github.tgkit.core.annotation.BotHandler;
+import io.github.tgkit.core.bot.BotCommandRegistry;
+import io.github.tgkit.core.loader.BotCommandFactory;
+import io.github.tgkit.core.state.StateStore;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.time.Instant;
@@ -63,7 +64,9 @@ public final class WizardEngineImpl implements WizardEngine {
           .map(ServiceLoader.Provider::get)
           .toList();
 
-  /** wizardId → Wizard<?> */
+  /**
+   * wizardId → Wizard<?>
+   */
   private final Map<String, Wizard<?>> wizardMap = new HashMap<>();
 
   WizardEngineImpl(
@@ -75,6 +78,17 @@ public final class WizardEngineImpl implements WizardEngine {
     this.stepRunner = stepRunner;
   }
 
+  private static @NonNull String extractSessionId(@NonNull Update u) {
+    if (u.hasCallbackQuery()) {
+      CallbackQuery cb = u.getCallbackQuery();
+      String[] p = cb.getData().split(":");
+      if (p.length > 2 && "W".equals(p[0])) {
+        return p[1];
+      }
+    }
+    throw new IllegalArgumentException("No sessionId in update");
+  }
+
   @Override
   public void register(@NonNull Wizard<?> wizard) {
     wizardMap.put(wizard.getId(), wizard);
@@ -82,14 +96,18 @@ public final class WizardEngineImpl implements WizardEngine {
     log.info("Wizard [{}] registered, steps={}", wizard.getId(), wizard.getSteps().size());
   }
 
-  /** Каждый «короткий» переход оформляем как команду /callback. */
+  /**
+   * Каждый «короткий» переход оформляем как команду /callback.
+   */
   private void registerShortcutsAsCommands(Wizard<?> wizard) {
     Class<?> dynClass = DynamicShortcutHolder.generate(wizard.meta().id());
     Object instance = DynamicShortcutHolder.newInstance(dynClass);
 
     // накладываем factories вручную (динамический класс не сканируется Reflections)
     for (Method m : dynClass.getDeclaredMethods()) {
-      if (!m.isAnnotationPresent(BotHandler.class)) continue;
+      if (!m.isAnnotationPresent(BotHandler.class)) {
+        continue;
+      }
       InternalCommandAdapter.Builder b = DynamicShortcutHolder.toBuilder(m, instance);
       applyFactories(b, m);
       commandRegistry.add(b.build());
@@ -100,14 +118,18 @@ public final class WizardEngineImpl implements WizardEngine {
   private void applyFactories(InternalCommandAdapter.Builder b, Method m) {
     for (BotCommandFactory<?> f : factories) {
       Annotation a = m.getAnnotation(f.annotationType());
-      if (a != null) ((BotCommandFactory<Annotation>) f).apply(b, m, a);
+      if (a != null) {
+        ((BotCommandFactory<Annotation>) f).apply(b, m, a);
+      }
     }
   }
 
   @Override
   public @NonNull String start(@NonNull String wizardId, @NonNull BotRequest<?> req) {
     Wizard<?> w = wizardMap.get(wizardId);
-    if (w == null) throw new IllegalArgumentException("Wizard not found: " + wizardId);
+    if (w == null) {
+      throw new IllegalArgumentException("Wizard not found: " + wizardId);
+    }
     String sid = UUID.randomUUID().toString();
     stateStore.newSession(req.chatId(), sid, wizardId, Instant.now());
     stepRunner.askStep(wizardId, sid, w.steps().get(0), req);
@@ -142,14 +164,5 @@ public final class WizardEngineImpl implements WizardEngine {
               Wizard<?> w = wizardMap.get(st.wizardId());
               stepRunner.askStep(w.meta().id(), st.sessionId(), w.steps().get(st.stepId()), req);
             });
-  }
-
-  private static @NonNull String extractSessionId(@NonNull Update u) {
-    if (u.hasCallbackQuery()) {
-      CallbackQuery cb = u.getCallbackQuery();
-      String[] p = cb.getData().split(":");
-      if (p.length > 2 && "W".equals(p[0])) return p[1];
-    }
-    throw new IllegalArgumentException("No sessionId in update");
   }
 }

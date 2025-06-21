@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.boot;
 
-import io.lonmstalker.observability.BotObservability;
-import io.lonmstalker.observability.MetricsCollector;
-import io.lonmstalker.observability.impl.NoOpMetricsCollector;
+package io.github.tgkit.boot;
+
+import io.github.observability.BotObservability;
+import io.github.observability.MetricsCollector;
+import io.github.observability.impl.NoOpMetricsCollector;
 import io.github.tgkit.security.init.BotSecurityInitializer;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
@@ -26,7 +27,9 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-/** Автоконфигурация TgKit для Spring Boot. */
+/**
+ * Автоконфигурация TgKit для Spring Boot.
+ */
 @Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties(BotProperties.class)
 public class BotAutoConfiguration {
@@ -59,7 +62,7 @@ public class BotAutoConfiguration {
     @Override
     public void afterPropertiesSet() {
       collector = BotObservability.micrometer(properties.getMetricsPort());
-      io.lonmstalker.tgkit.core.config.BotGlobalConfig.INSTANCE
+      io.github.tgkit.core.config.BotGlobalConfig.INSTANCE
           .observability()
           .collector(collector);
     }
@@ -68,7 +71,7 @@ public class BotAutoConfiguration {
     public void destroy() throws Exception {
       if (collector != null) {
         collector.close();
-        io.lonmstalker.tgkit.core.config.BotGlobalConfig.INSTANCE
+        io.github.tgkit.core.config.BotGlobalConfig.INSTANCE
             .observability()
             .collector(new NoOpMetricsCollector());
       }

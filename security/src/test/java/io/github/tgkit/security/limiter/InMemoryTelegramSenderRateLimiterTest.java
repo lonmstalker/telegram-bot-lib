@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.github.tgkit.security.limiter;
 
 import io.github.tgkit.security.init.BotSecurityInitializer;
 import io.github.tgkit.security.ratelimit.RateLimiter;
 import io.github.tgkit.security.ratelimit.impl.InMemoryRateLimiter;
-import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
+import io.github.tgkit.testkit.TestBotBootstrap;
 import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
@@ -30,40 +31,17 @@ import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 
 class InMemoryTelegramSenderRateLimiterTest implements WithAssertions {
+  static {
+    TestBotBootstrap.initOnce();
+    BotSecurityInitializer.init();
+  }
+
   static RateLimiter newLimiter() {
     return new InMemoryRateLimiter(10_000);
   }
 
   static RateLimiter newLimiter(Clock clock) {
     return new InMemoryRateLimiter(10_000, clock);
-  }
-
-  private static final class FakeClock extends Clock {
-    private Instant now = Instant.EPOCH;
-
-    @Override
-    public ZoneId getZone() {
-      return ZoneOffset.UTC;
-    }
-
-    @Override
-    public Clock withZone(@SuppressWarnings("unused") ZoneId zone) {
-      return this;
-    }
-
-    @Override
-    public Instant instant() {
-      return now;
-    }
-
-    void advance(Duration duration) {
-      now = now.plus(duration);
-    }
-  }
-
-  static {
-    TestBotBootstrap.initOnce();
-    BotSecurityInitializer.init();
   }
 
   /* ================================================================ *
@@ -154,5 +132,28 @@ class InMemoryTelegramSenderRateLimiterTest implements WithAssertions {
     // second attempt per key must fail individually
     assertThat(rl.tryAcquire(a, 1, 60)).isFalse();
     assertThat(rl.tryAcquire(b, 1, 60)).isFalse();
+  }
+
+  private static final class FakeClock extends Clock {
+    private Instant now = Instant.EPOCH;
+
+    @Override
+    public ZoneId getZone() {
+      return ZoneOffset.UTC;
+    }
+
+    @Override
+    public Clock withZone(@SuppressWarnings("unused") ZoneId zone) {
+      return this;
+    }
+
+    @Override
+    public Instant instant() {
+      return now;
+    }
+
+    void advance(Duration duration) {
+      now = now.plus(duration);
+    }
   }
 }

@@ -13,23 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.security.audit;
+
+package io.github.tgkit.security.audit;
 
 import java.util.List;
 import java.util.function.Consumer;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-/** Единый контракт для публикации и подписки. */
+/**
+ * Единый контракт для публикации и подписки.
+ */
 public interface AuditBus extends AutoCloseable {
 
-  /** Опубликовать событие (быстро, без блокировок). */
+  /**
+   * Опубликовать событие (быстро, без блокировок).
+   */
   void publish(@NonNull AuditEvent event);
 
-  /** Зарегистрировать подписчика. */
+  /**
+   * Зарегистрировать подписчика.
+   */
   void subscribe(@NonNull Consumer<AuditEvent> handler);
 
-  /** Убрать подписчика. */
+  /**
+   * Убрать подписчика.
+   */
   void unsubscribe(@NonNull Consumer<AuditEvent> handler);
 
-  @NonNull List<Consumer<AuditEvent>> getSubscribers();
+  @NonNull
+  List<Consumer<AuditEvent>> getSubscribers();
 }

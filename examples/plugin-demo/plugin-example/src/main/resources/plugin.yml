@@ -2,6 +2,6 @@ id: example
 name: Example Plugin
 version: "1.0.0"
 api: "0.1"
-mainClass: "io.lonmstalker.tgkit.plugin.ExamplePlugin"
-requires: []
+mainClass: "io.github.tgkit.plugin.ExamplePlugin"
+requires: [ ]
 sha256: ""

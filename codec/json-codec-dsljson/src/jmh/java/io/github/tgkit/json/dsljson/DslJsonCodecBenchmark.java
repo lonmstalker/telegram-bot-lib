@@ -1,6 +1,6 @@
 package io.github.tgkit.json.dsljson;
 
-import io.lonmstalker.tgkit.core.bot.BotConfig;
+import io.github.tgkit.core.bot.BotConfig;
 import io.github.tgkit.json.JsonCodec;
 import java.util.Locale;
 import org.openjdk.jmh.annotations.Benchmark;
@@ -8,7 +8,9 @@ import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
 
-/** Бенчмарк сериализации/десериализации. */
+/**
+ * Бенчмарк сериализации/десериализации.
+ */
 @State(Scope.Thread)
 public class DslJsonCodecBenchmark {
   private final JsonCodec codec = new DslJsonCodec();

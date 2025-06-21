@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.plugin;
+
+package io.github.tgkit.plugin;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import io.lonmstalker.tgkit.plugin.internal.ChildFirstURLClassLoader;
+import io.github.tgkit.plugin.internal.ChildFirstURLClassLoader;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Files;
@@ -27,7 +28,9 @@ import java.util.jar.JarOutputStream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-/** Unit-тесты для ChildFirstURLClassLoader. */
+/**
+ * Unit-тесты для ChildFirstURLClassLoader.
+ */
 public class ChildFirstURLClassLoaderTest {
 
   private ChildFirstURLClassLoader classLoader;
@@ -39,7 +42,9 @@ public class ChildFirstURLClassLoaderTest {
     classLoader = new ChildFirstURLClassLoader(urls, ClassLoader.getSystemClassLoader());
   }
 
-  /** При первом запросе класса из кеша происходит поиск через родительский и кеширование. */
+  /**
+   * При первом запросе класса из кеша происходит поиск через родительский и кеширование.
+   */
   @Test
   void testLoadClassCachesParentClass() throws ClassNotFoundException {
     // Загрузим стандартный класс String
@@ -48,7 +53,9 @@ public class ChildFirstURLClassLoaderTest {
     assertSame(first, second, "Класс должен кешироваться и возвращаться один и тот же экземпляр");
   }
 
-  /** Если класс присутствует внутри URL-источников, он находится через findClass. */
+  /**
+   * Если класс присутствует внутри URL-источников, он находится через findClass.
+   */
   @Test
   void testFindClassInChildFirst() throws Exception {
     // Генерируем временный JAR с байтами этого тестового класса
@@ -60,7 +67,7 @@ public class ChildFirstURLClassLoaderTest {
       JarEntry entry = new JarEntry(entryName);
       jos.putNextEntry(entry);
       try (InputStream is =
-          ChildFirstURLClassLoaderTest.class.getClassLoader().getResourceAsStream(entryName)) {
+               ChildFirstURLClassLoaderTest.class.getClassLoader().getResourceAsStream(entryName)) {
         assertNotNull(is, "Не удалось получить байты тестового класса");
         jos.write(is.readAllBytes());
       }

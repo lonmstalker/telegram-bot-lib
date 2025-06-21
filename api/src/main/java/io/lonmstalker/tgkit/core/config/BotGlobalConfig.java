@@ -13,17 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.config;
+
+package io.github.tgkit.core.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.lonmstalker.observability.MetricsCollector;
-import io.lonmstalker.observability.impl.NoOpMetricsCollector;
-import io.lonmstalker.tgkit.core.dsl.MissingIdStrategy;
-import io.lonmstalker.tgkit.core.dsl.feature_flags.FeatureFlags;
-import io.lonmstalker.tgkit.core.event.BotEventBus;
-import io.lonmstalker.tgkit.core.parse_mode.ParseMode;
-import io.lonmstalker.tgkit.core.ttl.TtlScheduler;
-import io.lonmstalker.tgkit.webhook.WebhookServer;
+import io.github.observability.MetricsCollector;
+import io.github.observability.impl.NoOpMetricsCollector;
+import io.github.tgkit.core.dsl.MissingIdStrategy;
+import io.github.tgkit.core.dsl.feature_flags.FeatureFlags;
+import io.github.tgkit.core.event.BotEventBus;
+import io.github.tgkit.core.parse_mode.ParseMode;
+import io.github.tgkit.core.ttl.TtlScheduler;
+import io.github.tgkit.webhook.WebhookServer;
 import java.net.InetSocketAddress;
 import java.net.ProxySelector;
 import java.net.http.HttpClient;
@@ -37,13 +38,15 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/** Настройки по умолчанию для BotResponse. */
+/**
+ * Настройки по умолчанию для BotResponse.
+ */
 public class BotGlobalConfig {
-  private static final Logger log = LoggerFactory.getLogger(BotGlobalConfig.class);
-
-  /** Глобальная конфигурация. */
+  /**
+   * Глобальная конфигурация.
+   */
   public static final BotGlobalConfig INSTANCE = new BotGlobalConfig();
-
+  private static final Logger log = LoggerFactory.getLogger(BotGlobalConfig.class);
   private final @NonNull DSLGlobalConfig dslGlobalConfig;
   private final @NonNull HttpGlobalConfig httpGlobalConfig;
   private final @NonNull EventGlobalConfig eventGlobalConfig;
@@ -216,12 +219,16 @@ public class BotGlobalConfig {
       return this;
     }
 
-    /** Возвращает размер пула для CPU-задач. */
+    /**
+     * Возвращает размер пула для CPU-задач.
+     */
     public int cpuPoolSize() {
       return this.cpuPoolSize.get();
     }
 
-    /** Возвращает размер пула планировщика. */
+    /**
+     * Возвращает размер пула планировщика.
+     */
     public int scheduledPoolSize() {
       return this.scheduledPoolSize.get();
     }

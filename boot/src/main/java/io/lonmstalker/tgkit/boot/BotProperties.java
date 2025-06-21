@@ -13,13 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.boot;
+
+package io.github.tgkit.boot;
 
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-/** Настройки бота для использования вместе со Spring Boot. */
+/**
+ * Настройки бота для использования вместе со Spring Boot.
+ */
 @ConfigurationProperties("tgkit.bot")
 public class BotProperties {
 

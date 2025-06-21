@@ -13,9 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.dsl.validator;
+
+package io.github.tgkit.core.dsl.validator;
 
 import java.util.List;
 
 /* Вспомогательный record для опросов */
-public record PollSpec(String question, List<String> options, Integer correct) {}
+public record PollSpec(String question, List<String> options, Integer correct) {
+}

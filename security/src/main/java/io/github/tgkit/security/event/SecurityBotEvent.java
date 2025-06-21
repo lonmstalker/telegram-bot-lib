@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.github.tgkit.security.event;
 
-import io.lonmstalker.tgkit.core.BotRequest;
-import io.lonmstalker.tgkit.core.bot.BotRegistryImpl;
-import io.lonmstalker.tgkit.core.event.TelegramBotEvent;
-import io.lonmstalker.tgkit.core.exception.BotApiException;
+import io.github.tgkit.core.BotRequest;
+import io.github.tgkit.core.bot.BotRegistryImpl;
+import io.github.tgkit.core.event.TelegramBotEvent;
+import io.github.tgkit.core.exception.BotApiException;
 import java.time.Instant;
 import org.checkerframework.checker.nullness.qual.NonNull;
 

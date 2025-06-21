@@ -13,19 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.testkit;
 
-import io.lonmstalker.tgkit.core.bot.BotAdapterImpl;
-import io.lonmstalker.tgkit.core.bot.BotConfig;
-import io.lonmstalker.tgkit.core.bot.TelegramSender;
-import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
+package io.github.tgkit.testkit;
+
+import io.github.tgkit.core.bot.BotAdapterImpl;
+import io.github.tgkit.core.bot.BotConfig;
+import io.github.tgkit.core.bot.TelegramSender;
+import io.github.tgkit.core.init.BotCoreInitializer;
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.api.extension.ParameterResolver;
 
-/** JUnit extension, подготавливающий {@link TelegramMockServer} и утилиты. */
+/**
+ * JUnit extension, подготавливающий {@link TelegramMockServer} и утилиты.
+ */
 public final class BotTestExtension
     implements BeforeEachCallback, AfterEachCallback, ParameterResolver {
 

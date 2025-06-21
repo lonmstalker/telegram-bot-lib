@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.resource;
+
+package io.github.tgkit.core.resource;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.assertj.core.api.Assertions.*;
@@ -21,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.net.httpserver.HttpServer;
-import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
+import io.github.tgkit.testkit.TestBotBootstrap;
 import java.io.*;
 import java.net.*;
 import java.nio.file.*;
@@ -37,11 +38,12 @@ class ResourceLoaderTest {
   private static final String YAML = "name: test\nvalue: 42\n";
   private static final String JSON = "{\"hello\":\"world\"}";
 
-  @TempDir Path tmp;
-
   static {
     TestBotBootstrap.initOnce();
   }
+
+  @TempDir
+  Path tmp;
 
   /* ───────────────── classpath loader ──────────────────────────── */
   @Test
@@ -125,10 +127,10 @@ class ResourceLoaderTest {
     String entry = "cfg/limits.yml";
     String content =
         """
-                user:
-                  permits: 5
-                  seconds: 60
-                """;
+            user:
+              permits: 5
+              seconds: 60
+            """;
 
     // try-with-resources гарантирует закрытие
     try (JarOutputStream jos = new JarOutputStream(Files.newOutputStream(jarFile))) {

@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.boot;
+
+package io.github.tgkit.boot;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.lonmstalker.tgkit.core.bot.Bot;
-import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
-import io.lonmstalker.tgkit.testkit.TelegramMockServer;
+import io.github.tgkit.core.bot.Bot;
+import io.github.tgkit.core.init.BotCoreInitializer;
+import io.github.tgkit.testkit.TelegramMockServer;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.BeforeAll;

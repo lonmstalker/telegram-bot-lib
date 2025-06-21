@@ -13,16 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.github.examples.observability;
 
-import io.lonmstalker.observability.BotObservability;
-import io.lonmstalker.observability.ObservabilityInterceptor;
-import io.lonmstalker.tgkit.core.BotAdapter;
-import io.lonmstalker.tgkit.core.bot.Bot;
-import io.lonmstalker.tgkit.core.bot.BotAdapterImpl;
-import io.lonmstalker.tgkit.core.bot.BotConfig;
-import io.lonmstalker.tgkit.core.bot.BotFactory;
-import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
+import io.github.observability.BotObservability;
+import io.github.observability.ObservabilityInterceptor;
+import io.github.tgkit.core.BotAdapter;
+import io.github.tgkit.core.bot.Bot;
+import io.github.tgkit.core.bot.BotAdapterImpl;
+import io.github.tgkit.core.bot.BotConfig;
+import io.github.tgkit.core.bot.BotFactory;
+import io.github.tgkit.core.init.BotCoreInitializer;
 
 public class ObservabilityDemoApplication {
 

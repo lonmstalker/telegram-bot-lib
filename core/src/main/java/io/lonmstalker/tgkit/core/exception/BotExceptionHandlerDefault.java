@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.exception;
 
-import io.lonmstalker.tgkit.core.update.UpdateUtils;
+package io.github.tgkit.core.exception;
+
+import io.github.tgkit.core.update.UpdateUtils;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.slf4j.Logger;
@@ -34,8 +35,8 @@ import org.telegram.telegrambots.meta.api.objects.Update;
  * }</pre>
  */
 public class BotExceptionHandlerDefault implements BotExceptionHandler {
-  private static final Logger log = LoggerFactory.getLogger(BotExceptionHandlerDefault.class);
   public static final BotExceptionHandler INSTANCE = new BotExceptionHandlerDefault();
+  private static final Logger log = LoggerFactory.getLogger(BotExceptionHandlerDefault.class);
 
   @Override
   public @Nullable BotApiMethod<?> handle(@NonNull Update update, @NonNull Exception ex) {

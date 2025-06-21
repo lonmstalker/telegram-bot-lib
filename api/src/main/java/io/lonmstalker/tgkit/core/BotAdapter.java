@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core;
+
+package io.github.tgkit.core;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -33,5 +34,6 @@ public interface BotAdapter {
    * @param update полученное от Telegram обновление
    * @return метод Telegram API для отправки пользователю или {@code null}, если ответа не требуется
    */
-  @Nullable BotApiMethod<?> handle(@NonNull Update update) throws Exception;
+  @Nullable
+  BotApiMethod<?> handle(@NonNull Update update) throws Exception;
 }

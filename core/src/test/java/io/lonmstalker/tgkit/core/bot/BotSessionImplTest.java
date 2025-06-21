@@ -13,14 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.bot;
+
+package io.github.tgkit.core.bot;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import io.lonmstalker.observability.BotObservability;
-import io.lonmstalker.observability.MetricsCollector;
-import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
-import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
+import io.github.observability.BotObservability;
+import io.github.observability.MetricsCollector;
+import io.github.tgkit.core.config.BotGlobalConfig;
+import io.github.tgkit.testkit.TestBotBootstrap;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.AbstractExecutorService;
@@ -132,10 +133,12 @@ public class BotSessionImplTest {
     }
 
     @Override
-    public void onUpdateReceived(Update update) {}
+    public void onUpdateReceived(Update update) {
+    }
 
     @Override
-    public void onUpdatesReceived(List<Update> updates) {}
+    public void onUpdatesReceived(List<Update> updates) {
+    }
 
     @Override
     public BotOptions getOptions() {
@@ -143,10 +146,12 @@ public class BotSessionImplTest {
     }
 
     @Override
-    public void clearWebhook() {}
+    public void clearWebhook() {
+    }
 
     @Override
-    public void onClosing() {}
+    public void onClosing() {
+    }
 
     @Override
     public String getBotUsername() {

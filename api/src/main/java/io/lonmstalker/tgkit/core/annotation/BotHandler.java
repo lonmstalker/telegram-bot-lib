@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.annotation;
 
-import io.lonmstalker.tgkit.core.BotCommandOrder;
-import io.lonmstalker.tgkit.core.BotHandlerConverter;
-import io.lonmstalker.tgkit.core.BotRequestType;
+package io.github.tgkit.core.annotation;
+
+import io.github.tgkit.core.BotCommandOrder;
+import io.github.tgkit.core.BotHandlerConverter;
+import io.github.tgkit.core.BotRequestType;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -28,18 +29,28 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface BotHandler {
 
-  /** Идентификатор команды Дефолтное значение: генерируется автоматически */
+  /**
+   * Идентификатор команды Дефолтное значение: генерируется автоматически
+   */
   String id() default "";
 
-  /** Тип сообщения на вход Дефолтное значение: MESSAGE */
+  /**
+   * Тип сообщения на вход Дефолтное значение: MESSAGE
+   */
   @NonNull BotRequestType type() default BotRequestType.MESSAGE;
 
-  /** Группировка команд для использования ботом Дефолтное значение: доступно всем */
+  /**
+   * Группировка команд для использования ботом Дефолтное значение: доступно всем
+   */
   String botGroup() default "";
 
-  /** Конвертер входящего BotRequest Дефолтное значение: возвращает BotRequest */
+  /**
+   * Конвертер входящего BotRequest Дефолтное значение: возвращает BotRequest
+   */
   Class<? extends BotHandlerConverter<?>> converter() default BotHandlerConverter.Identity.class;
 
-  /** Порядок проверки команд Дефолтное значение: LAST */
+  /**
+   * Порядок проверки команд Дефолтное значение: LAST
+   */
   int order() default BotCommandOrder.LAST;
 }

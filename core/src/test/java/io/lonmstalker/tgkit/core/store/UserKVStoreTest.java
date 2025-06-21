@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.store;
 
-import io.lonmstalker.tgkit.core.user.store.InMemoryUserKVStore;
-import io.lonmstalker.tgkit.core.user.store.JdbcUserKVStore;
-import io.lonmstalker.tgkit.core.user.store.ReadOnlyUserKVStore;
-import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
+package io.github.tgkit.core.store;
+
+import io.github.tgkit.core.user.store.InMemoryUserKVStore;
+import io.github.tgkit.core.user.store.JdbcUserKVStore;
+import io.github.tgkit.core.user.store.ReadOnlyUserKVStore;
+import io.github.tgkit.testkit.TestBotBootstrap;
 import java.util.Map;
 import javax.sql.DataSource;
 import org.assertj.core.api.WithAssertions;
@@ -28,13 +29,13 @@ import org.junit.jupiter.api.*;
 @SuppressWarnings("ConstantConditions")
 class UserKVStoreTest implements WithAssertions {
 
-  static {
-    TestBotBootstrap.initOnce();
-  }
-
   /* ---------- shared test data ---------- */
   private static final long UID = 77L;
   private static final String KEY = "lang";
+
+  static {
+    TestBotBootstrap.initOnce();
+  }
 
   /* ===================================================================
    *  1. In-Memory store
@@ -89,16 +90,16 @@ class UserKVStoreTest implements WithAssertions {
       ds = h2;
 
       try (var c = ds.getConnection();
-          var st = c.createStatement()) {
+           var st = c.createStatement()) {
         st.execute(
             """
-                            create table user_kv(
-                              user_id bigint not null,
-                              k varchar(64) not null,
-                              v varchar(512),
-                              primary key (user_id, k)
-                            );
-                        """);
+                    create table user_kv(
+                      user_id bigint not null,
+                      k varchar(64) not null,
+                      v varchar(512),
+                      primary key (user_id, k)
+                    );
+                """);
       }
     }
 
@@ -110,7 +111,7 @@ class UserKVStoreTest implements WithAssertions {
     @AfterEach
     void cleanup() throws Exception {
       try (var c = ds.getConnection();
-          var st = c.createStatement()) {
+           var st = c.createStatement()) {
         st.execute("delete from user_kv");
       }
     }

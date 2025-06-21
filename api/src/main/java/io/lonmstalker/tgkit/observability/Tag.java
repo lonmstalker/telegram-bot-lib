@@ -13,29 +13,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.observability;
+
+package io.github.tgkit.observability;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-/** Интерфейс тега метрики. */
+/**
+ * Интерфейс тега метрики.
+ */
 public interface Tag extends Comparable<Tag> {
-
-  /** Возвращает ключ тега. */
-  @NonNull String key();
-
-  /** Возвращает значение тега. */
-  @NonNull String value();
 
   /**
    * Создаёт неизменяемый тег.
    *
-   * @param key ключ
+   * @param key   ключ
    * @param value значение
    * @return новый тег
    */
   static Tag of(@NonNull String key, @NonNull String value) {
     return new ImmutableTag(key, value);
   }
+
+  /**
+   * Возвращает ключ тега.
+   */
+  @NonNull
+  String key();
+
+  /**
+   * Возвращает значение тега.
+   */
+  @NonNull
+  String value();
 
   /**
    * Сравнивает теги по ключу.

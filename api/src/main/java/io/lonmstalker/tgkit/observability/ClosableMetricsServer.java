@@ -13,16 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.observability;
+
+package io.github.tgkit.observability;
 
 import java.io.IOException;
 
-/** Интерфейс для управляемого HTTP-сервера метрик. */
+/**
+ * Интерфейс для управляемого HTTP-сервера метрик.
+ */
 public interface ClosableMetricsServer extends AutoCloseable {
 
-  /** Запустить сервер метрик, принимающий запросы Prometheus. */
+  /**
+   * Запустить сервер метрик, принимающий запросы Prometheus.
+   */
   void start() throws IOException;
 
-  /** Остановить сервер метрик. */
+  /**
+   * Остановить сервер метрик.
+   */
   void stop() throws IOException;
 }

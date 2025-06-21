@@ -550,7 +550,7 @@
                                 <arg>-XepAllErrorsAsErrors</arg>
                                 <arg>-XepDisableWarningsInGeneratedCode</arg>
                                 <arg>-Xep:NullAway</arg>
-                                <arg>-XepOpt:NullAway:AnnotatedPackages=io.lonmstalker.tgkit</arg>
+                                <arg>-XepOpt:NullAway:AnnotatedPackages=io.github.tgkit</arg>
                             </compilerArgs>
                             <annotationProcessorPaths>
                                 <path>

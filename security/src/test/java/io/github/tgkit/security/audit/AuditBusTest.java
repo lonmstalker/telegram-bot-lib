@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.github.tgkit.security.audit;
 
 import static org.assertj.core.api.Assertions.*;
@@ -22,7 +23,7 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.read.ListAppender;
 import io.github.tgkit.security.config.BotSecurityGlobalConfig;
 import io.github.tgkit.security.init.BotSecurityInitializer;
-import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
+import io.github.tgkit.testkit.TestBotBootstrap;
 import java.time.Duration;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
@@ -35,16 +36,16 @@ import org.slf4j.LoggerFactory;
 
 class AuditBusTest {
 
-  /* отдельный executor, чтобы не мешать другим тестам + контролируем shutdown */
-  private AsyncAuditBus bus;
-  private ExecutorService exec;
-  private final Logger logger = (Logger) LoggerFactory.getLogger(AsyncAuditBus.class);
-  private final ListAppender<ILoggingEvent> appender = new ListAppender<>();
-
   static {
     TestBotBootstrap.initOnce();
     BotSecurityInitializer.init();
   }
+
+  private final Logger logger = (Logger) LoggerFactory.getLogger(AsyncAuditBus.class);
+  private final ListAppender<ILoggingEvent> appender = new ListAppender<>();
+  /* отдельный executor, чтобы не мешать другим тестам + контролируем shutdown */
+  private AsyncAuditBus bus;
+  private ExecutorService exec;
 
   @BeforeEach
   void init() {

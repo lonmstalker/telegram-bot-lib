@@ -13,26 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.args;
+
+package io.github.tgkit.core.args;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import io.lonmstalker.tgkit.core.*;
-import io.lonmstalker.tgkit.core.BotRequest;
-import io.lonmstalker.tgkit.core.BotRequestType;
-import io.lonmstalker.tgkit.core.BotResponse;
-import io.lonmstalker.tgkit.core.annotation.Arg;
-import io.lonmstalker.tgkit.core.annotation.BotHandler;
-import io.lonmstalker.tgkit.core.annotation.matching.MessageRegexMatch;
-import io.lonmstalker.tgkit.core.bot.BotCommandRegistryImpl;
-import io.lonmstalker.tgkit.core.bot.BotConfig;
-import io.lonmstalker.tgkit.core.bot.TelegramSender;
-import io.lonmstalker.tgkit.core.bot.loader.AnnotatedCommandLoader;
-import io.lonmstalker.tgkit.core.i18n.MessageLocalizerImpl;
-import io.lonmstalker.tgkit.core.state.InMemoryStateStore;
-import io.lonmstalker.tgkit.core.user.BotUserInfo;
-import io.lonmstalker.tgkit.core.user.store.InMemoryUserKVStore;
-import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
+import io.github.tgkit.core.*;
+import io.github.tgkit.core.BotRequest;
+import io.github.tgkit.core.BotRequestType;
+import io.github.tgkit.core.BotResponse;
+import io.github.tgkit.core.annotation.Arg;
+import io.github.tgkit.core.annotation.BotHandler;
+import io.github.tgkit.core.annotation.matching.MessageRegexMatch;
+import io.github.tgkit.core.bot.BotCommandRegistryImpl;
+import io.github.tgkit.core.bot.BotConfig;
+import io.github.tgkit.core.bot.TelegramSender;
+import io.github.tgkit.core.bot.loader.AnnotatedCommandLoader;
+import io.github.tgkit.core.i18n.MessageLocalizerImpl;
+import io.github.tgkit.core.state.InMemoryStateStore;
+import io.github.tgkit.core.user.BotUserInfo;
+import io.github.tgkit.core.user.store.InMemoryUserKVStore;
+import io.github.tgkit.testkit.TestBotBootstrap;
 import java.util.Locale;
 import java.util.Set;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -44,6 +45,31 @@ public class ArgBindingTest {
 
   static {
     TestBotBootstrap.initOnce();
+  }
+
+  @Test
+  void bindArgument() {
+    BotCommandRegistryImpl reg = new BotCommandRegistryImpl();
+    AnnotatedCommandLoader.load(reg, Commands.class.getPackageName());
+
+    Message msg = new Message();
+    msg.setText("id 42");
+    var cmd = reg.find(BotRequestType.MESSAGE, "", msg);
+    assertNotNull(cmd);
+
+    BotInfo info = new BotInfo(1L);
+    BotService service =
+        new BotService(
+            new InMemoryStateStore(),
+            new TelegramSender(BotConfig.builder().build(), "T"),
+            new InMemoryUserKVStore(),
+            new MessageLocalizerImpl("i18n/messages", Locale.US));
+    BotRequest<Message> req =
+        new BotRequest<>(
+            0, msg, Locale.getDefault(), null, info, new User(1L), service, BotRequestType.MESSAGE);
+    cmd.handle(req);
+
+    assertEquals(42, Commands.captured);
   }
 
   public static class Commands {
@@ -73,30 +99,5 @@ public class ArgBindingTest {
     public @NonNull Set<String> roles() {
       return Set.of();
     }
-  }
-
-  @Test
-  void bindArgument() {
-    BotCommandRegistryImpl reg = new BotCommandRegistryImpl();
-    AnnotatedCommandLoader.load(reg, Commands.class.getPackageName());
-
-    Message msg = new Message();
-    msg.setText("id 42");
-    var cmd = reg.find(BotRequestType.MESSAGE, "", msg);
-    assertNotNull(cmd);
-
-    BotInfo info = new BotInfo(1L);
-    BotService service =
-        new BotService(
-            new InMemoryStateStore(),
-            new TelegramSender(BotConfig.builder().build(), "T"),
-            new InMemoryUserKVStore(),
-            new MessageLocalizerImpl("i18n/messages", Locale.US));
-    BotRequest<Message> req =
-        new BotRequest<>(
-            0, msg, Locale.getDefault(), null, info, new User(1L), service, BotRequestType.MESSAGE);
-    cmd.handle(req);
-
-    assertEquals(42, Commands.captured);
   }
 }

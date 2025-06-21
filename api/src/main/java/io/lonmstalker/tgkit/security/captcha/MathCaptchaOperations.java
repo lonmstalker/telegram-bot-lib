@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.security.captcha;
+
+package io.github.tgkit.security.captcha;
 
 import java.util.Arrays;
 import java.util.List;

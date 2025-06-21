@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.update;
 
-import io.lonmstalker.tgkit.core.BotRequestType;
-import io.lonmstalker.tgkit.core.exception.BotApiException;
+package io.github.tgkit.core.update;
+
+import io.github.tgkit.core.BotRequestType;
+import io.github.tgkit.core.exception.BotApiException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,9 +32,9 @@ import org.telegram.telegrambots.meta.api.objects.boost.ChatBoostUpdated;
 
 @SuppressWarnings({"method.invocation", "argument", "type.anno.before.modifier", "return"})
 public final class UpdateUtils {
-  private UpdateUtils() {}
-
-  /** Таблица, сопоставляющая условие из Update типу запроса. */
+  /**
+   * Таблица, сопоставляющая условие из Update типу запроса.
+   */
   private static final Map<Predicate<Update>, BotRequestType> TYPE_MAP =
       new LinkedHashMap<>() {
         {
@@ -57,8 +58,9 @@ public final class UpdateUtils {
           put(u -> u.getRemovedChatBoost() != null, BotRequestType.REMOVED_CHAT_BOOST);
         }
       };
-
-  /** Функции, извлекающие пользователя из update. */
+  /**
+   * Функции, извлекающие пользователя из update.
+   */
   private static final List<Function<Update, User>> USER_EXTRACTORS =
       List.of(
           u -> u.getMessage() != null ? u.getMessage().getFrom() : null,
@@ -75,7 +77,12 @@ public final class UpdateUtils {
           u -> u.getMyChatMember() != null ? u.getMyChatMember().getFrom() : null,
           u -> u.getChatJoinRequest() != null ? u.getChatJoinRequest().getUser() : null);
 
-  /** Определяет тип входящего update, используя таблицу соответствия предикатов и типов запроса. */
+  private UpdateUtils() {
+  }
+
+  /**
+   * Определяет тип входящего update, используя таблицу соответствия предикатов и типов запроса.
+   */
   public static @NonNull BotRequestType getType(@NonNull Update update) {
     return TYPE_MAP.entrySet().stream()
         .filter(e -> e.getKey().test(update))
@@ -97,7 +104,78 @@ public final class UpdateUtils {
         .orElseThrow(() -> new BotApiException("User not found in update: " + update));
   }
 
-  /** userId или {@code null}, если не применимо (анонимные реакции и т.д.). */
+  /**
+   * Извлекает chat_id из {@link Update}.
+   */
+  public static @Nullable Long resolveChatId(@NonNull Update u) {
+    if (u.getMessage() != null) {
+      return u.getMessage().getChatId();
+    }
+    if (u.getEditedMessage() != null) {
+      return u.getEditedMessage().getChatId();
+    }
+    if (u.getChannelPost() != null) {
+      return u.getChannelPost().getChatId();
+    }
+    if (u.getEditedChannelPost() != null) {
+      return u.getEditedChannelPost().getChatId();
+    }
+    if (u.getCallbackQuery() != null && u.getCallbackQuery().getMessage() != null) {
+      return u.getCallbackQuery().getMessage().getChatId();
+    }
+    if (u.getChatMember() != null) {
+      return u.getChatMember().getChat().getId();
+    }
+    if (u.getMyChatMember() != null) {
+      return u.getMyChatMember().getChat().getId();
+    }
+    if (u.getChatJoinRequest() != null) {
+      return u.getChatJoinRequest().getChat().getId();
+    }
+    if (u.getChatBoost() != null) {
+      var boost = u.getChatBoost();
+      return boost != null && boost.getChat() != null ? boost.getChat().getId() : null;
+    }
+    if (u.getRemovedChatBoost() != null) {
+      var boost = u.getRemovedChatBoost();
+      return boost != null && boost.getChat() != null ? boost.getChat().getId() : null;
+    }
+    // InlineQuery, PreCheckoutQuery, ShippingQuery и другие события не содержат chat_id.
+    return null;
+  }
+
+  /**
+   * messageId или {@code null}.
+   */
+  public static @Nullable Integer resolveMessageId(@NonNull Update u) {
+    if (u.getMessage() != null) {
+      return u.getMessage().getMessageId();
+    }
+    if (u.getEditedMessage() != null) {
+      return u.getEditedMessage().getMessageId();
+    }
+    if (u.getChannelPost() != null) {
+      return u.getChannelPost().getMessageId();
+    }
+    if (u.getEditedChannelPost() != null) {
+      return u.getEditedChannelPost().getMessageId();
+    }
+    if (u.getMessageReaction() != null) {
+      return u.getMessageReaction().getMessageId();
+    }
+    if (u.getMessageReactionCount() != null) {
+      return u.getMessageReactionCount().getMessageId();
+    }
+    if (u.getCallbackQuery() != null && u.getCallbackQuery().getMessage() != null) {
+      return u.getCallbackQuery().getMessage().getMessageId();
+    }
+    /* Poll, PollAnswer, InlineQuery, ShippingQuery, Pre-Checkout и др. без messageId */
+    return null;
+  }
+
+  /**
+   * userId или {@code null}, если не применимо (анонимные реакции и т.д.).
+   */
   public @Nullable Long resolveUserId(@NonNull Update update) {
     User u = getUserQuiet(update);
     return u != null ? u.getId() : null;
@@ -112,43 +190,6 @@ public final class UpdateUtils {
     return user != null ? user.getUserName() : null;
   }
 
-  /** Извлекает chat_id из {@link Update}. */
-  public static @Nullable Long resolveChatId(@NonNull Update u) {
-    if (u.getMessage() != null) return u.getMessage().getChatId();
-    if (u.getEditedMessage() != null) return u.getEditedMessage().getChatId();
-    if (u.getChannelPost() != null) return u.getChannelPost().getChatId();
-    if (u.getEditedChannelPost() != null) return u.getEditedChannelPost().getChatId();
-    if (u.getCallbackQuery() != null && u.getCallbackQuery().getMessage() != null)
-      return u.getCallbackQuery().getMessage().getChatId();
-    if (u.getChatMember() != null) return u.getChatMember().getChat().getId();
-    if (u.getMyChatMember() != null) return u.getMyChatMember().getChat().getId();
-    if (u.getChatJoinRequest() != null) return u.getChatJoinRequest().getChat().getId();
-    if (u.getChatBoost() != null) {
-      var boost = u.getChatBoost();
-      return boost != null && boost.getChat() != null ? boost.getChat().getId() : null;
-    }
-    if (u.getRemovedChatBoost() != null) {
-      var boost = u.getRemovedChatBoost();
-      return boost != null && boost.getChat() != null ? boost.getChat().getId() : null;
-    }
-    // InlineQuery, PreCheckoutQuery, ShippingQuery и другие события не содержат chat_id.
-    return null;
-  }
-
-  /** messageId или {@code null}. */
-  public static @Nullable Integer resolveMessageId(@NonNull Update u) {
-    if (u.getMessage() != null) return u.getMessage().getMessageId();
-    if (u.getEditedMessage() != null) return u.getEditedMessage().getMessageId();
-    if (u.getChannelPost() != null) return u.getChannelPost().getMessageId();
-    if (u.getEditedChannelPost() != null) return u.getEditedChannelPost().getMessageId();
-    if (u.getMessageReaction() != null) return u.getMessageReaction().getMessageId();
-    if (u.getMessageReactionCount() != null) return u.getMessageReactionCount().getMessageId();
-    if (u.getCallbackQuery() != null && u.getCallbackQuery().getMessage() != null)
-      return u.getCallbackQuery().getMessage().getMessageId();
-    /* Poll, PollAnswer, InlineQuery, ShippingQuery, Pre-Checkout и др. без messageId */
-    return null;
-  }
-
   /**
    * Пытается извлечь «основной» текст из Update. Это может быть: • text обычного сообщения / поста
    * <br>
@@ -159,18 +200,38 @@ public final class UpdateUtils {
    * null}.
    */
   public @Nullable String resolveText(@NonNull Update u) {
-    if (u.getMessage() != null) return u.getMessage().getText();
-    if (u.getEditedMessage() != null) return u.getEditedMessage().getText();
-    if (u.getChannelPost() != null) return u.getChannelPost().getText();
-    if (u.getEditedChannelPost() != null) return u.getEditedChannelPost().getText();
+    if (u.getMessage() != null) {
+      return u.getMessage().getText();
+    }
+    if (u.getEditedMessage() != null) {
+      return u.getEditedMessage().getText();
+    }
+    if (u.getChannelPost() != null) {
+      return u.getChannelPost().getText();
+    }
+    if (u.getEditedChannelPost() != null) {
+      return u.getEditedChannelPost().getText();
+    }
 
-    if (u.getCallbackQuery() != null) return u.getCallbackQuery().getData();
-    if (u.getInlineQuery() != null) return u.getInlineQuery().getQuery();
-    if (u.getChosenInlineQuery() != null) return u.getChosenInlineQuery().getQuery();
+    if (u.getCallbackQuery() != null) {
+      return u.getCallbackQuery().getData();
+    }
+    if (u.getInlineQuery() != null) {
+      return u.getInlineQuery().getQuery();
+    }
+    if (u.getChosenInlineQuery() != null) {
+      return u.getChosenInlineQuery().getQuery();
+    }
 
-    if (u.getPoll() != null) return u.getPoll().getQuestion();
-    if (u.getShippingQuery() != null) return u.getShippingQuery().getInvoicePayload();
-    if (u.getPreCheckoutQuery() != null) return u.getPreCheckoutQuery().getInvoicePayload();
+    if (u.getPoll() != null) {
+      return u.getPoll().getQuestion();
+    }
+    if (u.getShippingQuery() != null) {
+      return u.getShippingQuery().getInvoicePayload();
+    }
+    if (u.getPreCheckoutQuery() != null) {
+      return u.getPreCheckoutQuery().getInvoicePayload();
+    }
 
     /* Boost / Reaction / Member updates не содержат текстового поля */
     return null;
@@ -179,7 +240,9 @@ public final class UpdateUtils {
   private @Nullable User getUserQuiet(@NonNull Update u) {
     for (Function<Update, User> f : USER_EXTRACTORS) {
       User r = f.apply(u);
-      if (r != null) return r;
+      if (r != null) {
+        return r;
+      }
     }
     return null;
   }

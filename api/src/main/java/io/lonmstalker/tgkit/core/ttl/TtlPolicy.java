@@ -13,18 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.ttl;
+
+package io.github.tgkit.core.ttl;
 
 import java.time.Duration;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 public interface TtlPolicy {
-
-  int maxRetries();
-
-  @NonNull Duration initialBackOff();
-
-  @NonNull Duration maxBackOff();
 
   static TtlPolicy defaults() {
     return new TtlPolicy() {
@@ -45,4 +40,12 @@ public interface TtlPolicy {
       }
     };
   }
+
+  int maxRetries();
+
+  @NonNull
+  Duration initialBackOff();
+
+  @NonNull
+  Duration maxBackOff();
 }

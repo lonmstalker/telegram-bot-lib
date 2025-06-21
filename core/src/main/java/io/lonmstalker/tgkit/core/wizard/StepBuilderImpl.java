@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.wizard;
 
-import io.lonmstalker.tgkit.core.BotRequest;
-import io.lonmstalker.tgkit.core.i18n.MessageKey;
-import io.lonmstalker.tgkit.core.validator.Validator;
+package io.github.tgkit.core.wizard;
+
+import io.github.tgkit.core.BotRequest;
+import io.github.tgkit.core.i18n.MessageKey;
+import io.github.tgkit.core.validator.Validator;
 import io.github.tgkit.validator.impl.LocationValidators;
 import io.github.tgkit.validator.impl.PhotoValidators;
 import io.github.tgkit.validator.impl.TextValidators;
@@ -46,11 +47,11 @@ import org.telegram.telegrambots.meta.api.objects.VideoNote;
  */
 final class StepBuilderImpl<M, I, O> implements StepBuilder<M, I, O> {
 
+  private final @NonNull StepDefinition<M, I, O> def;
+
   StepBuilderImpl(@NonNull StepDefinition<M, I, O> def) {
     this.def = def;
   }
-
-  private final @NonNull StepDefinition<M, I, O> def;
 
   @Override
   public @NonNull StepBuilder<M, I, O> ask(@NonNull MessageKey... keys) {
@@ -132,7 +133,7 @@ final class StepBuilderImpl<M, I, O> implements StepBuilder<M, I, O> {
         Validator.of(
             r -> r.data() instanceof Message msg && msg.hasLocation(),
             MessageKey.of("error.location.required")));
-    def.getValidators().add((Validator<O>) LocationValidators.inBounds(/*world*/ ));
+    def.getValidators().add((Validator<O>) LocationValidators.inBounds(/*world*/));
     return (StepBuilder<M, ?, Location>) this;
   }
 

@@ -13,14 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.doc.mapper;
+
+package io.github.tgkit.doc.mapper;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Внутреннее представление метода Telegram API.
  *
- * @param name имя метода
+ * @param name        имя метода
  * @param description краткое описание
  */
-public record OperationInfo(@NonNull String name, @NonNull String description) {}
+public record OperationInfo(@NonNull String name, @NonNull String description) {
+}

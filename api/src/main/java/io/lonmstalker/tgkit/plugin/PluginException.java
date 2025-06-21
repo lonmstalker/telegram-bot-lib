@@ -13,11 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.plugin;
 
-import io.lonmstalker.tgkit.core.exception.BotApiException;
+package io.github.tgkit.plugin;
 
-/** Исключение, возникающее при ошибке загрузки или выполнения плагина. */
+import io.github.tgkit.core.exception.BotApiException;
+
+/**
+ * Исключение, возникающее при ошибке загрузки или выполнения плагина.
+ */
 public class PluginException extends BotApiException {
 
   public PluginException(String message) {

@@ -13,30 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.bot;
 
-import io.lonmstalker.tgkit.core.Bot;
-import io.lonmstalker.tgkit.core.BotAdapter;
-import io.lonmstalker.tgkit.core.BotConfig;
-import io.lonmstalker.tgkit.core.BotInfo;
-import io.lonmstalker.tgkit.core.BotRequest;
-import io.lonmstalker.tgkit.core.BotRequestConverter;
-import io.lonmstalker.tgkit.core.BotRequestConverterImpl;
-import io.lonmstalker.tgkit.core.BotRequestType;
-import io.lonmstalker.tgkit.core.BotResponse;
-import io.lonmstalker.tgkit.core.BotService;
-import io.lonmstalker.tgkit.core.args.RouteContextHolder;
-import io.lonmstalker.tgkit.core.i18n.MessageLocalizer;
-import io.lonmstalker.tgkit.core.i18n.NoopMessageLocalizer;
-import io.lonmstalker.tgkit.core.interceptor.BotInterceptor;
-import io.lonmstalker.tgkit.core.state.InMemoryStateStore;
-import io.lonmstalker.tgkit.core.storage.BotRequestContextHolder;
-import io.lonmstalker.tgkit.core.update.UpdateUtils;
-import io.lonmstalker.tgkit.core.user.BotUserInfo;
-import io.lonmstalker.tgkit.core.user.BotUserProvider;
-import io.lonmstalker.tgkit.core.user.SimpleUserProvider;
-import io.lonmstalker.tgkit.core.user.store.InMemoryUserKVStore;
-import io.lonmstalker.tgkit.core.user.store.UserKVStore;
+package io.github.tgkit.core.bot;
+
+import io.github.tgkit.core.Bot;
+import io.github.tgkit.core.BotAdapter;
+import io.github.tgkit.core.BotConfig;
+import io.github.tgkit.core.BotInfo;
+import io.github.tgkit.core.BotRequest;
+import io.github.tgkit.core.BotRequestConverter;
+import io.github.tgkit.core.BotRequestConverterImpl;
+import io.github.tgkit.core.BotRequestType;
+import io.github.tgkit.core.BotResponse;
+import io.github.tgkit.core.BotService;
+import io.github.tgkit.core.args.RouteContextHolder;
+import io.github.tgkit.core.i18n.MessageLocalizer;
+import io.github.tgkit.core.i18n.NoopMessageLocalizer;
+import io.github.tgkit.core.interceptor.BotInterceptor;
+import io.github.tgkit.core.state.InMemoryStateStore;
+import io.github.tgkit.core.storage.BotRequestContextHolder;
+import io.github.tgkit.core.update.UpdateUtils;
+import io.github.tgkit.core.user.BotUserInfo;
+import io.github.tgkit.core.user.BotUserProvider;
+import io.github.tgkit.core.user.SimpleUserProvider;
+import io.github.tgkit.core.user.store.InMemoryUserKVStore;
+import io.github.tgkit.core.user.store.UserKVStore;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
@@ -74,81 +75,6 @@ public class BotAdapterImpl implements BotAdapter, AutoCloseable {
 
   private @Nullable TelegramSender sender;
 
-  static Builder builder() {
-    return new Builder();
-  }
-
-  static class Builder {
-    private long internalId;
-    private BotConfig config;
-    private TelegramSender sender;
-    private UserKVStore userKVStore;
-    private BotUserProvider userProvider;
-    private BotCommandRegistry registry;
-    private List<BotInterceptor> interceptors;
-    private MessageLocalizer messageLocalizer;
-
-    Builder internalId(long internalId) {
-      this.internalId = internalId;
-      return this;
-    }
-
-    Builder config(@Nullable BotConfig config) {
-      this.config = config;
-      return this;
-    }
-
-    Builder sender(@NonNull TelegramSender sender) {
-      this.sender = sender;
-      return this;
-    }
-
-    Builder userKVStore(@Nullable UserKVStore userKVStore) {
-      this.userKVStore = userKVStore;
-      return this;
-    }
-
-    Builder userProvider(@Nullable BotUserProvider userProvider) {
-      this.userProvider = userProvider;
-      return this;
-    }
-
-    Builder registry(@Nullable BotCommandRegistry registry) {
-      this.registry = registry;
-      return this;
-    }
-
-    Builder interceptors(@Nullable List<BotInterceptor> interceptors) {
-      this.interceptors = interceptors;
-      return this;
-    }
-
-    Builder messageLocalizer(@Nullable MessageLocalizer localizer) {
-      this.messageLocalizer = localizer;
-      return this;
-    }
-
-    BotAdapterImpl build() {
-      return new BotAdapterImpl(
-          internalId,
-          config,
-          sender,
-          userKVStore,
-          userProvider,
-          registry,
-          interceptors,
-          messageLocalizer);
-    }
-  }
-
-  void setCurrentBot(@Nullable Bot bot) {
-    this.currentBot = bot;
-  }
-
-  void setSender(@Nullable TelegramSender sender) {
-    this.sender = sender;
-  }
-
   public BotAdapterImpl(
       long internalId,
       @Nullable BotConfig config,
@@ -173,6 +99,18 @@ public class BotAdapterImpl implements BotAdapter, AutoCloseable {
             sender,
             userKVStore == null ? new InMemoryUserKVStore() : userKVStore,
             messageLocalizer != null ? messageLocalizer : new NoopMessageLocalizer());
+  }
+
+  static Builder builder() {
+    return new Builder();
+  }
+
+  void setCurrentBot(@Nullable Bot bot) {
+    this.currentBot = bot;
+  }
+
+  void setSender(@Nullable TelegramSender sender) {
+    this.sender = sender;
   }
 
   @Override
@@ -282,6 +220,69 @@ public class BotAdapterImpl implements BotAdapter, AutoCloseable {
   private void checkStarted() {
     if (currentBot == null || currentBot.state() != BotState.RUNNING) {
       throw new IllegalStateException("Bot adapter not started");
+    }
+  }
+
+  static class Builder {
+    private long internalId;
+    private BotConfig config;
+    private TelegramSender sender;
+    private UserKVStore userKVStore;
+    private BotUserProvider userProvider;
+    private BotCommandRegistry registry;
+    private List<BotInterceptor> interceptors;
+    private MessageLocalizer messageLocalizer;
+
+    Builder internalId(long internalId) {
+      this.internalId = internalId;
+      return this;
+    }
+
+    Builder config(@Nullable BotConfig config) {
+      this.config = config;
+      return this;
+    }
+
+    Builder sender(@NonNull TelegramSender sender) {
+      this.sender = sender;
+      return this;
+    }
+
+    Builder userKVStore(@Nullable UserKVStore userKVStore) {
+      this.userKVStore = userKVStore;
+      return this;
+    }
+
+    Builder userProvider(@Nullable BotUserProvider userProvider) {
+      this.userProvider = userProvider;
+      return this;
+    }
+
+    Builder registry(@Nullable BotCommandRegistry registry) {
+      this.registry = registry;
+      return this;
+    }
+
+    Builder interceptors(@Nullable List<BotInterceptor> interceptors) {
+      this.interceptors = interceptors;
+      return this;
+    }
+
+    Builder messageLocalizer(@Nullable MessageLocalizer localizer) {
+      this.messageLocalizer = localizer;
+      return this;
+    }
+
+    BotAdapterImpl build() {
+      return new BotAdapterImpl(
+          internalId,
+          config,
+          sender,
+          userKVStore,
+          userProvider,
+          registry,
+          interceptors,
+          messageLocalizer);
     }
   }
 }

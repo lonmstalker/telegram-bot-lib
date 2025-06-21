@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.doc.scraper;
+
+package io.github.tgkit.doc.scraper;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,9 +28,13 @@ import java.nio.file.StandardCopyOption;
 import java.util.List;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-/** Скачивает официальную документацию Telegram Bot API и парсит её как HTML. */
+/**
+ * Скачивает официальную документацию Telegram Bot API и парсит её как HTML.
+ */
 public class BotApiScraper extends JsoupDocScraper {
-  /** URL официальной документации Telegram Bot API по умолчанию. */
+  /**
+   * URL официальной документации Telegram Bot API по умолчанию.
+   */
   private static final String DEFAULT_URL = "https://core.telegram.org/bots/api";
 
   private final HttpClient client;
@@ -59,12 +64,16 @@ public class BotApiScraper extends JsoupDocScraper {
     return Path.of(System.getProperty("user.home"), ".cache", "tgdoc");
   }
 
-  /** Возвращает базовый URI, учитывая системное свойство {@code tg.doc.baseUri}. */
+  /**
+   * Возвращает базовый URI, учитывая системное свойство {@code tg.doc.baseUri}.
+   */
   private static URI defaultUri() {
     return URI.create(System.getProperty("tg.doc.baseUri", DEFAULT_URL));
   }
 
-  /** Загружает страницу API и возвращает список методов. */
+  /**
+   * Загружает страницу API и возвращает список методов.
+   */
   public @NonNull List<MethodDoc> fetch() {
     try {
       Files.createDirectories(cacheDir);

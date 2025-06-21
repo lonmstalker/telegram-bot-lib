@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.parse_mode;
+
+package io.github.tgkit.core.parse_mode;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
@@ -31,10 +32,6 @@ public enum ParseMode {
 
   private final String mode;
 
-  public String getMode() {
-    return mode;
-  }
-
   ParseMode(String mode) {
     this.mode = mode;
   }
@@ -47,5 +44,9 @@ public enum ParseMode {
       case "None" -> NONE;
       default -> throw new IllegalArgumentException("Unknown mode: " + mode);
     };
+  }
+
+  public String getMode() {
+    return mode;
   }
 }

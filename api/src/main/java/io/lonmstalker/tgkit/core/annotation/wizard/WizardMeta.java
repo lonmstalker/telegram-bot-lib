@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.annotation.wizard;
+
+package io.github.tgkit.core.annotation.wizard;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -32,6 +33,8 @@ import java.lang.annotation.Target;
 @Documented
 public @interface WizardMeta {
 
-  /** Уникальный идентификатор сценария. */
+  /**
+   * Уникальный идентификатор сценария.
+   */
   String id();
 }

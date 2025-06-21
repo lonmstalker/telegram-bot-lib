@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.exception;
 
-import io.lonmstalker.tgkit.core.i18n.MessageKey;
+package io.github.tgkit.core.exception;
+
+import io.github.tgkit.core.i18n.MessageKey;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**

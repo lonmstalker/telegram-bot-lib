@@ -13,9 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.ttl;
+
+package io.github.tgkit.core.ttl;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-/** Задача удаления. */
-public record DeleteTask(long chatId, long messageId, @NonNull Runnable action) {}
+/**
+ * Задача удаления.
+ */
+public record DeleteTask(long chatId, long messageId, @NonNull Runnable action) {
+}

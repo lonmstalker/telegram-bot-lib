@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.ttl;
+
+package io.github.tgkit.core.ttl;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
-import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
+import io.github.tgkit.core.config.BotGlobalConfig;
+import io.github.tgkit.testkit.TestBotBootstrap;
 import java.time.Duration;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;

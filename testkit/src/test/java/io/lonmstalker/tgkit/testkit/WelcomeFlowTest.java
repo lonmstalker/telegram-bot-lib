@@ -13,16 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.testkit;
+
+package io.github.tgkit.testkit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.lonmstalker.tgkit.core.BotCommand;
-import io.lonmstalker.tgkit.core.BotRequest;
-import io.lonmstalker.tgkit.core.BotRequestType;
-import io.lonmstalker.tgkit.core.BotResponse;
-import io.lonmstalker.tgkit.core.bot.BotAdapterImpl;
-import io.lonmstalker.tgkit.core.matching.CommandMatch;
+import io.github.tgkit.core.BotCommand;
+import io.github.tgkit.core.BotRequest;
+import io.github.tgkit.core.BotRequestType;
+import io.github.tgkit.core.BotResponse;
+import io.github.tgkit.core.bot.BotAdapterImpl;
+import io.github.tgkit.core.matching.CommandMatch;
 import java.util.concurrent.TimeUnit;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.junit.jupiter.api.Test;

@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.github.tgkit.validator.impl;
 
-import io.lonmstalker.tgkit.core.i18n.MessageKey;
-import io.lonmstalker.tgkit.core.validator.Validator;
 import io.github.tgkit.validator.moderation.ContentModerationService;
+import io.github.tgkit.core.i18n.MessageKey;
+import io.github.tgkit.core.validator.Validator;
 import java.util.ServiceLoader;
 import java.util.regex.Pattern;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -30,19 +31,23 @@ import org.checkerframework.checker.nullness.qual.NonNull;
  */
 public final class TextValidators {
 
-  private TextValidators() {}
-
   private static final int MAX_LEN = 4096;
   private static final ContentModerationService MOD =
       ServiceLoader.load(ContentModerationService.class).findFirst().orElse(null);
+  private TextValidators() {
+  }
 
-  /** Валидатор по регулярному выражению. */
+  /**
+   * Валидатор по регулярному выражению.
+   */
   public static @NonNull Validator<String> regex(@NonNull Pattern pattern) {
     return Validator.of(
         s -> s != null && pattern.matcher(s).matches(), MessageKey.of("error.invalidRegex"));
   }
 
-  /** Валидатор диапазона для целых чисел. */
+  /**
+   * Валидатор диапазона для целых чисел.
+   */
   public static @NonNull Validator<Integer> range(int min, int max) {
     return Validator.of(
         i -> i != null && i >= min && i <= max, MessageKey.of("error.invalidRange", min, max));

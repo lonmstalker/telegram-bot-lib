@@ -13,38 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.storage;
 
-import io.lonmstalker.tgkit.core.bot.Bot;
-import io.lonmstalker.tgkit.core.bot.TelegramSender;
-import io.lonmstalker.tgkit.core.exception.BotApiException;
+package io.github.tgkit.core.storage;
+
+import io.github.tgkit.core.bot.Bot;
+import io.github.tgkit.core.bot.TelegramSender;
+import io.github.tgkit.core.exception.BotApiException;
 import java.util.Optional;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 public final class BotRequestContextHolder {
-  private BotRequestContextHolder() {}
-
   private static final ThreadLocal<@Nullable Update> UPDATE = new ThreadLocal<>();
   private static final ThreadLocal<@Nullable Bot> CURRENT_BOT = new ThreadLocal<>();
   private static final ThreadLocal<@Nullable String> REQUEST_ID = new ThreadLocal<>();
   private static final ThreadLocal<@Nullable TelegramSender> SENDER = new ThreadLocal<>();
-
-  public static void setUpdate(@NonNull Update update) {
-    UPDATE.set(update);
-  }
-
-  public static void setSender(@NonNull TelegramSender sender) {
-    SENDER.set(sender);
-  }
-
-  public static void setRequestId(@NonNull String requestId) {
-    REQUEST_ID.set(requestId);
-  }
-
-  public static void setBot(@NonNull Bot bot) {
-    CURRENT_BOT.set(bot);
+  private BotRequestContextHolder() {
   }
 
   public static void init(
@@ -66,16 +51,32 @@ public final class BotRequestContextHolder {
     return UPDATE.get();
   }
 
+  public static void setUpdate(@NonNull Update update) {
+    UPDATE.set(update);
+  }
+
   public static @Nullable TelegramSender getSender() {
     return SENDER.get();
+  }
+
+  public static void setSender(@NonNull TelegramSender sender) {
+    SENDER.set(sender);
   }
 
   public static @Nullable String getRequestId() {
     return REQUEST_ID.get();
   }
 
+  public static void setRequestId(@NonNull String requestId) {
+    REQUEST_ID.set(requestId);
+  }
+
   public static @Nullable Bot getBot() {
     return CURRENT_BOT.get();
+  }
+
+  public static void setBot(@NonNull Bot bot) {
+    CURRENT_BOT.set(bot);
   }
 
   public static @NonNull Update getUpdateNotNull() {

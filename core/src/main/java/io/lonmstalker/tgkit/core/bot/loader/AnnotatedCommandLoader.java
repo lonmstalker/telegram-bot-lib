@@ -13,31 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.bot.loader;
 
-import static io.lonmstalker.tgkit.core.reflection.ReflectionUtils.newInstance;
+package io.github.tgkit.core.bot.loader;
 
-import io.lonmstalker.tgkit.core.BotCommand;
-import io.lonmstalker.tgkit.core.BotHandlerConverter;
-import io.lonmstalker.tgkit.core.BotRequest;
-import io.lonmstalker.tgkit.core.annotation.Arg;
-import io.lonmstalker.tgkit.core.annotation.BotHandler;
-import io.lonmstalker.tgkit.core.annotation.matching.CustomMatcher;
-import io.lonmstalker.tgkit.core.annotation.matching.MessageContainsMatch;
-import io.lonmstalker.tgkit.core.annotation.matching.MessageRegexMatch;
-import io.lonmstalker.tgkit.core.annotation.matching.MessageTextMatch;
-import io.lonmstalker.tgkit.core.annotation.matching.UserRoleMatch;
-import io.lonmstalker.tgkit.core.args.BotArgumentConverter;
-import io.lonmstalker.tgkit.core.args.Converters;
-import io.lonmstalker.tgkit.core.args.ParamInfo;
-import io.lonmstalker.tgkit.core.bot.BotCommandRegistry;
-import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
-import io.lonmstalker.tgkit.core.event.impl.RegisterCommandBotEvent;
-import io.lonmstalker.tgkit.core.exception.BotApiException;
-import io.lonmstalker.tgkit.core.loader.BotCommandFactory;
-import io.lonmstalker.tgkit.core.matching.AlwaysMatch;
-import io.lonmstalker.tgkit.core.matching.CommandMatch;
-import io.lonmstalker.tgkit.core.user.BotUserProvider;
+import static io.github.tgkit.core.reflection.ReflectionUtils.newInstance;
+
+import io.github.tgkit.core.BotCommand;
+import io.github.tgkit.core.BotHandlerConverter;
+import io.github.tgkit.core.BotRequest;
+import io.github.tgkit.core.annotation.Arg;
+import io.github.tgkit.core.annotation.BotHandler;
+import io.github.tgkit.core.annotation.matching.CustomMatcher;
+import io.github.tgkit.core.annotation.matching.MessageContainsMatch;
+import io.github.tgkit.core.annotation.matching.MessageRegexMatch;
+import io.github.tgkit.core.annotation.matching.MessageTextMatch;
+import io.github.tgkit.core.annotation.matching.UserRoleMatch;
+import io.github.tgkit.core.args.BotArgumentConverter;
+import io.github.tgkit.core.args.Converters;
+import io.github.tgkit.core.args.ParamInfo;
+import io.github.tgkit.core.bot.BotCommandRegistry;
+import io.github.tgkit.core.config.BotGlobalConfig;
+import io.github.tgkit.core.event.impl.RegisterCommandBotEvent;
+import io.github.tgkit.core.exception.BotApiException;
+import io.github.tgkit.core.loader.BotCommandFactory;
+import io.github.tgkit.core.matching.AlwaysMatch;
+import io.github.tgkit.core.matching.CommandMatch;
+import io.github.tgkit.core.user.BotUserProvider;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -56,17 +57,19 @@ import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.meta.api.interfaces.BotApiObject;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-/** Utility to scan packages for {@link BotHandler} methods. */
+/**
+ * Utility to scan packages for {@link BotHandler} methods.
+ */
 public final class AnnotatedCommandLoader {
   private static final Logger log = LoggerFactory.getLogger(AnnotatedCommandLoader.class);
-
-  private AnnotatedCommandLoader() {}
-
   private static final List<BotCommandFactory<?>> FACTORIES = new CopyOnWriteArrayList<>();
 
   static {
     ServiceLoader.load(BotCommandFactory.class).forEach(FACTORIES::add);
     log.debug("loaded {} BotCommandFactory into FACTORIES", FACTORIES.size());
+  }
+
+  private AnnotatedCommandLoader() {
   }
 
   public static void addCommandFactory(@NonNull BotCommandFactory<?> factory) {
@@ -94,7 +97,9 @@ public final class AnnotatedCommandLoader {
     log.debug("[command-load] loaded {} commands in package {}", methods.size(), packages);
   }
 
-  /** Обрабатывает один найденный метод-хендлер и регистрирует его. */
+  /**
+   * Обрабатывает один найденный метод-хендлер и регистрирует его.
+   */
   @SuppressWarnings({"argument", "unchecked"})
   private static void registerHandler(
       @NonNull BotCommandRegistry registry, @NonNull Method method) {
@@ -129,26 +134,28 @@ public final class AnnotatedCommandLoader {
     registry.add(cmd);
   }
 
-  /** Создаёт объект сравнения, исходя из аннотаций на методе. */
+  /**
+   * Создаёт объект сравнения, исходя из аннотаций на методе.
+   */
   @SuppressWarnings({"unchecked", "argument"})
   private static @NonNull CommandMatch<? extends BotApiObject> extractMatcher(
       @NonNull Method method) {
     if (method.isAnnotationPresent(MessageContainsMatch.class)) {
       MessageContainsMatch mc = method.getAnnotation(MessageContainsMatch.class);
-      return new io.lonmstalker.tgkit.core.matching.MessageContainsMatch(
+      return new io.github.tgkit.core.matching.MessageContainsMatch(
           Objects.requireNonNull(mc).value(), mc.ignoreCase());
     } else if (method.isAnnotationPresent(MessageRegexMatch.class)) {
       MessageRegexMatch mr = method.getAnnotation(MessageRegexMatch.class);
-      return new io.lonmstalker.tgkit.core.matching.MessageRegexMatch(
+      return new io.github.tgkit.core.matching.MessageRegexMatch(
           Objects.requireNonNull(mr).value());
     } else if (method.isAnnotationPresent(MessageTextMatch.class)) {
       MessageTextMatch mt = method.getAnnotation(MessageTextMatch.class);
-      return new io.lonmstalker.tgkit.core.matching.MessageTextMatch(
+      return new io.github.tgkit.core.matching.MessageTextMatch(
           Objects.requireNonNull(mt).value(), mt.ignoreCase());
     } else if (method.isAnnotationPresent(UserRoleMatch.class)) {
       UserRoleMatch ur = method.getAnnotation(UserRoleMatch.class);
       var provider = (BotUserProvider) newInstance(Objects.requireNonNull(ur).provider());
-      return new io.lonmstalker.tgkit.core.matching.UserRoleMatch<>(provider, Set.of(ur.roles()));
+      return new io.github.tgkit.core.matching.UserRoleMatch<>(provider, Set.of(ur.roles()));
     } else {
       CustomMatcher custom = method.getAnnotation(CustomMatcher.class);
       if (custom != null) {
@@ -158,7 +165,20 @@ public final class AnnotatedCommandLoader {
     return new AlwaysMatch<>();
   }
 
-  /** Формирует информацию о параметрах метода для последующего вызова хендлера. */
+  @SuppressWarnings({"unchecked", "rawtypes", "argument"})
+  private static void applyFactories(@NonNull BotCommand<?> command, @NonNull Method m) {
+    for (BotCommandFactory f : FACTORIES) {
+      if (f.annotationType() == BotCommandFactory.None.class) {
+        f.apply(command, m, null);
+      } else {
+        f.apply(command, m, m.getAnnotation(Objects.requireNonNull(f.annotationType())));
+      }
+    }
+  }
+
+  /**
+   * Формирует информацию о параметрах метода для последующего вызова хендлера.
+   */
   @SuppressWarnings({"unchecked", "rawtypes"})
   private @NonNull ParamInfo[] extractParameters(@NonNull Method m) {
     var ps = m.getParameters();
@@ -214,16 +234,5 @@ public final class AnnotatedCommandLoader {
       out[i] = new ParamInfo(i, false, false, arg, p, conv);
     }
     return out;
-  }
-
-  @SuppressWarnings({"unchecked", "rawtypes", "argument"})
-  private static void applyFactories(@NonNull BotCommand<?> command, @NonNull Method m) {
-    for (BotCommandFactory f : FACTORIES) {
-      if (f.annotationType() == BotCommandFactory.None.class) {
-        f.apply(command, m, null);
-      } else {
-        f.apply(command, m, m.getAnnotation(Objects.requireNonNull(f.annotationType())));
-      }
-    }
   }
 }

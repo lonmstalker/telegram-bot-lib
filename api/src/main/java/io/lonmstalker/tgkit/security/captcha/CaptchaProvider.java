@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.security.captcha;
 
-import io.lonmstalker.tgkit.core.BotRequest;
+package io.github.tgkit.security.captcha;
+
+import io.github.tgkit.core.BotRequest;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 
@@ -30,7 +31,8 @@ public interface CaptchaProvider {
    *
    * @return {@link PartialBotApiMethod}
    */
-  @NonNull PartialBotApiMethod<?> question(@NonNull BotRequest<?> request);
+  @NonNull
+  PartialBotApiMethod<?> question(@NonNull BotRequest<?> request);
 
   /**
    * Проверяет ответ пользователя.

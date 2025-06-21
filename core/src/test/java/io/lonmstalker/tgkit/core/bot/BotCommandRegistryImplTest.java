@@ -13,18 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.bot;
+
+package io.github.tgkit.core.bot;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import io.lonmstalker.tgkit.core.BotCommand;
-import io.lonmstalker.tgkit.core.BotRequest;
-import io.lonmstalker.tgkit.core.BotRequestType;
-import io.lonmstalker.tgkit.core.BotResponse;
-import io.lonmstalker.tgkit.core.exception.BotApiException;
-import io.lonmstalker.tgkit.core.interceptor.BotInterceptor;
-import io.lonmstalker.tgkit.core.matching.CommandMatch;
-import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
+import io.github.tgkit.core.BotCommand;
+import io.github.tgkit.core.BotRequest;
+import io.github.tgkit.core.BotRequestType;
+import io.github.tgkit.core.BotResponse;
+import io.github.tgkit.core.exception.BotApiException;
+import io.github.tgkit.core.interceptor.BotInterceptor;
+import io.github.tgkit.core.matching.CommandMatch;
+import io.github.tgkit.testkit.TestBotBootstrap;
 import java.util.List;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.junit.jupiter.api.Test;
@@ -88,13 +89,16 @@ class BotCommandRegistryImplTest {
     }
 
     @Override
-    public void setMatcher(@NonNull CommandMatch<Message> matcher) {}
+    public void setMatcher(@NonNull CommandMatch<Message> matcher) {
+    }
 
     @Override
-    public void setType(@NonNull BotRequestType type) {}
+    public void setType(@NonNull BotRequestType type) {
+    }
 
     @Override
-    public void setBotGroup(@NonNull String group) {}
+    public void setBotGroup(@NonNull String group) {
+    }
 
     @Override
     public int order() {

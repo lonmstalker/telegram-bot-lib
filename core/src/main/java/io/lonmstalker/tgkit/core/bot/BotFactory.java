@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.bot;
 
-import io.lonmstalker.tgkit.core.BotAdapter;
-import io.lonmstalker.tgkit.core.bot.BotDataSourceFactory.BotData;
-import io.lonmstalker.tgkit.core.bot.loader.AnnotatedCommandLoader;
-import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
-import io.lonmstalker.tgkit.core.crypto.TokenCipher;
+package io.github.tgkit.core.bot;
+
+import io.github.tgkit.core.BotAdapter;
+import io.github.tgkit.core.bot.BotDataSourceFactory.BotData;
+import io.github.tgkit.core.bot.loader.AnnotatedCommandLoader;
+import io.github.tgkit.core.config.BotGlobalConfig;
+import io.github.tgkit.core.crypto.TokenCipher;
 import java.util.concurrent.atomic.AtomicLong;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
@@ -39,16 +40,16 @@ import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
  * }</pre>
  */
 public final class BotFactory {
-  private BotFactory() {}
-
   public static final BotFactory INSTANCE = new BotFactory();
   private final AtomicLong nextId = new AtomicLong();
+  private BotFactory() {
+  }
 
   /**
    * Создаёт бота с long polling.
    *
-   * @param token токен BotFather
-   * @param config конфигурация бота
+   * @param token   токен BotFather
+   * @param config  конфигурация бота
    * @param adapter адаптер для обработки обновлений
    * @return запущенный бот
    */
@@ -68,7 +69,9 @@ public final class BotFactory {
     return bot;
   }
 
-  /** Создаёт бота и сканирует указанные пакеты на предмет команд. */
+  /**
+   * Создаёт бота и сканирует указанные пакеты на предмет команд.
+   */
   public @NonNull Bot from(
       @NonNull String token,
       @NonNull BotConfig config,
@@ -79,7 +82,9 @@ public final class BotFactory {
     return bot;
   }
 
-  /** Создаёт бота в режиме webhook. */
+  /**
+   * Создаёт бота в режиме webhook.
+   */
   public @NonNull Bot from(
       @NonNull String token,
       @NonNull BotConfig config,
@@ -99,7 +104,9 @@ public final class BotFactory {
     return bot;
   }
 
-  /** Webhook-биржа с автоподключением команд из пакетов. */
+  /**
+   * Webhook-биржа с автоподключением команд из пакетов.
+   */
   public @NonNull Bot from(
       @NonNull String token,
       @NonNull BotConfig config,
@@ -111,7 +118,9 @@ public final class BotFactory {
     return bot;
   }
 
-  /** Загружает конфигурацию бота из внешнего источника. */
+  /**
+   * Загружает конфигурацию бота из внешнего источника.
+   */
   public @NonNull Bot from(
       long botId,
       @NonNull BotDataSourceConfig config,
@@ -133,7 +142,9 @@ public final class BotFactory {
     return from(data.token(), cfg, adapter);
   }
 
-  /** Загружает конфигурацию из источника и сканирует пакеты. */
+  /**
+   * Загружает конфигурацию из источника и сканирует пакеты.
+   */
   public @NonNull Bot from(
       long botId,
       @NonNull BotDataSourceConfig config,

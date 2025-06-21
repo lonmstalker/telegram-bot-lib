@@ -13,14 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.plugin;
+
+package io.github.tgkit.plugin;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Описатель плагина, маппится из plugin.yml и обратно. */
+/**
+ * Описатель плагина, маппится из plugin.yml и обратно.
+ */
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public final class BotPluginDescriptor {
   @JsonProperty("id")
@@ -84,6 +87,50 @@ public final class BotPluginDescriptor {
 
   public static Builder builder() {
     return new Builder();
+  }
+
+  public String id() {
+    return id;
+  }
+
+  public String name() {
+    return name;
+  }
+
+  public String version() {
+    return version;
+  }
+
+  public String api() {
+    return api;
+  }
+
+  public String mainClass() {
+    return mainClass;
+  }
+
+  public String author() {
+    return author;
+  }
+
+  public String description() {
+    return description;
+  }
+
+  public String license() {
+    return license;
+  }
+
+  public String minCoreVersion() {
+    return minCoreVersion;
+  }
+
+  public List<String> requires() {
+    return requires;
+  }
+
+  public String sha256() {
+    return sha256;
   }
 
   public static final class Builder {
@@ -168,49 +215,5 @@ public final class BotPluginDescriptor {
           requires,
           sha256);
     }
-  }
-
-  public String id() {
-    return id;
-  }
-
-  public String name() {
-    return name;
-  }
-
-  public String version() {
-    return version;
-  }
-
-  public String api() {
-    return api;
-  }
-
-  public String mainClass() {
-    return mainClass;
-  }
-
-  public String author() {
-    return author;
-  }
-
-  public String description() {
-    return description;
-  }
-
-  public String license() {
-    return license;
-  }
-
-  public String minCoreVersion() {
-    return minCoreVersion;
-  }
-
-  public List<String> requires() {
-    return requires;
-  }
-
-  public String sha256() {
-    return sha256;
   }
 }

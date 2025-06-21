@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.bot;
 
-import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
-import io.lonmstalker.tgkit.core.exception.BotApiException;
+package io.github.tgkit.core.bot;
+
+import io.github.tgkit.core.config.BotGlobalConfig;
+import io.github.tgkit.core.exception.BotApiException;
 import java.io.Serializable;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -82,13 +83,13 @@ public class TelegramSender extends DefaultAbsSender implements AutoCloseable {
 
   @Override
   public <T extends Serializable, Method extends BotApiMethod<T>>
-      @NonNull CompletableFuture<T> executeAsync(@NonNull Method method) throws BotApiException {
+  @NonNull CompletableFuture<T> executeAsync(@NonNull Method method) throws BotApiException {
     return CompletableFuture.supplyAsync(() -> execute(method), executor);
   }
 
   @Override
   public <T extends Serializable, Method extends BotApiMethod<T>, Callback extends SentCallback<T>>
-      void executeAsync(@NonNull Method method, @NonNull Callback callback) throws BotApiException {
+  void executeAsync(@NonNull Method method, @NonNull Callback callback) throws BotApiException {
     executeAsync(method)
         .whenComplete(
             (r, ex) -> {
@@ -103,8 +104,8 @@ public class TelegramSender extends DefaultAbsSender implements AutoCloseable {
 
   @Override
   protected <T extends Serializable, Method extends BotApiMethod<T>>
-      @NonNull CompletableFuture<T> sendApiMethodAsync(@NonNull Method method)
-          throws BotApiException {
+  @NonNull CompletableFuture<T> sendApiMethodAsync(@NonNull Method method)
+      throws BotApiException {
     return CompletableFuture.supplyAsync(() -> execute(method), executor);
   }
 
@@ -250,7 +251,9 @@ public class TelegramSender extends DefaultAbsSender implements AutoCloseable {
     return executeWithRetry(() -> super.execute(setChatPhoto));
   }
 
-  /** Синхронное выполнение любого PartialBotApiMethod<T>. */
+  /**
+   * Синхронное выполнение любого PartialBotApiMethod<T>.
+   */
   @SuppressWarnings("unchecked")
   public <T extends Serializable> T execute(PartialBotApiMethod<T> method) throws BotApiException {
     return withConvertException(
@@ -310,10 +313,6 @@ public class TelegramSender extends DefaultAbsSender implements AutoCloseable {
     }
   }
 
-  interface RuntimeExceptionExecutor<T> {
-    T execute() throws Exception;
-  }
-
   private BotApiException convertToBotApiException(@NonNull Throwable throwable) {
     if (throwable instanceof java.util.concurrent.CompletionException ce && ce.getCause() != null) {
       throwable = ce.getCause();
@@ -330,5 +329,9 @@ public class TelegramSender extends DefaultAbsSender implements AutoCloseable {
   @Override
   public void close() {
     telegramSenderRateLimiter.close();
+  }
+
+  interface RuntimeExceptionExecutor<T> {
+    T execute() throws Exception;
   }
 }

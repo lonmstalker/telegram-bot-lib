@@ -13,21 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.plugin;
 
-import static io.lonmstalker.tgkit.plugin.internal.BotPluginConstants.CURRENT_VERSION;
+package io.github.tgkit.plugin;
+
+import static io.github.tgkit.plugin.internal.BotPluginConstants.CURRENT_VERSION;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import io.lonmstalker.tgkit.plugin.internal.BotPluginDescriptor;
-import io.lonmstalker.tgkit.security.audit.AuditBus;
-import io.lonmstalker.tgkit.security.audit.AuditEvent;
+import io.github.tgkit.plugin.internal.BotPluginDescriptor;
+import io.github.tgkit.security.audit.AuditBus;
+import io.github.tgkit.security.audit.AuditEvent;
 import io.github.tgkit.security.config.BotSecurityGlobalConfig;
 import io.github.tgkit.security.init.BotSecurityInitializer;
-import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
+import io.github.tgkit.testkit.TestBotBootstrap;
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.nio.file.Files;
@@ -49,13 +50,37 @@ import org.mockito.Mockito;
  */
 public class BotPluginManagerTest {
 
-  @TempDir Path tempDir;
-  private AuditBus auditBus;
-  private BotPluginManager manager;
-
   static {
     TestBotBootstrap.initOnce();
     BotSecurityInitializer.init();
+  }
+
+  @TempDir
+  Path tempDir;
+  private AuditBus auditBus;
+  private BotPluginManager manager;
+
+  private static void createPluginJar(
+      Path path, String id, String version, String api, String mainClass, String sha256)
+      throws Exception {
+    ObjectMapper yaml = new ObjectMapper(new YAMLFactory());
+    BotPluginDescriptor desc =
+        BotPluginDescriptor.builder()
+            .id(id)
+            .version(version)
+            .api(api)
+            .mainClass(mainClass)
+            .sha256(sha256)
+            .requires(List.of())
+            .build();
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    yaml.writeValue(baos, desc);
+
+    try (JarOutputStream jos = new JarOutputStream(new FileOutputStream(path.toFile()))) {
+      jos.putNextEntry(new JarEntry("plugin.yml"));
+      jos.write(baos.toByteArray());
+      jos.closeEntry();
+    }
   }
 
   @BeforeEach
@@ -87,7 +112,7 @@ public class BotPluginManagerTest {
                 (AuditEvent evt) ->
                     "plugin-scan".equals(evt.getActor())
                         && evt.getAction()
-                            .equals("plugin:test-id loaded (v" + CURRENT_VERSION + ")")));
+                        .equals("plugin:test-id loaded (v" + CURRENT_VERSION + ")")));
 
     // выгрузка
     Mockito.reset(auditBus);
@@ -245,8 +270,10 @@ public class BotPluginManagerTest {
 
     assertEquals("v1", System.getProperty("reload.phase"));
     verify(auditBus).publish(argThat(evt -> evt.getAction().contains("plugin.yml missing")));
-    verify(auditBus, never()).publish(argThat(evt -> evt.getAction().equals("plugin:fail unloaded")));
-    verify(auditBus, never()).publish(argThat(evt -> evt.getAction().contains("plugin:fail loaded")));
+    verify(auditBus, never()).publish(
+        argThat(evt -> evt.getAction().equals("plugin:fail unloaded")));
+    verify(auditBus, never()).publish(
+        argThat(evt -> evt.getAction().contains("plugin:fail loaded")));
   }
 
   @Test
@@ -291,41 +318,22 @@ public class BotPluginManagerTest {
     verify(auditBus).publish(argThat(evt -> evt.getAction().contains("plugin.yml missing")));
   }
 
-  private static void createPluginJar(
-      Path path, String id, String version, String api, String mainClass, String sha256)
-      throws Exception {
-    ObjectMapper yaml = new ObjectMapper(new YAMLFactory());
-    BotPluginDescriptor desc =
-        BotPluginDescriptor.builder()
-            .id(id)
-            .version(version)
-            .api(api)
-            .mainClass(mainClass)
-            .sha256(sha256)
-            .requires(List.of())
-            .build();
-    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-    yaml.writeValue(baos, desc);
-
-    try (JarOutputStream jos = new JarOutputStream(new FileOutputStream(path.toFile()))) {
-      jos.putNextEntry(new JarEntry("plugin.yml"));
-      jos.write(baos.toByteArray());
-      jos.closeEntry();
-    }
-  }
-
   public static class TestPlugin implements BotPlugin {
     @Override
-    public void onLoad(@NonNull BotPluginContext context) {}
+    public void onLoad(@NonNull BotPluginContext context) {
+    }
 
     @Override
-    public void start() {}
+    public void start() {
+    }
 
     @Override
-    public void stop() {}
+    public void stop() {
+    }
 
     @Override
-    public void onUnload() {}
+    public void onUnload() {
+    }
   }
 
   public static class ThreadNamePlugin implements BotPlugin {

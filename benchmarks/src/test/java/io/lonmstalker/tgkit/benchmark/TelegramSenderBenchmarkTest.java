@@ -13,11 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.benchmark;
+
+package io.github.tgkit.benchmark;
 
 import org.junit.jupiter.api.Test;
 
-/** Smoke test for {@link TelegramSenderBenchmark}. */
+/**
+ * Smoke test for {@link TelegramSenderBenchmark}.
+ */
 class TelegramSenderBenchmarkTest {
 
   @Test

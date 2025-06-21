@@ -13,15 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.observability.impl;
 
-import io.lonmstalker.tgkit.observability.Span;
-import io.lonmstalker.tgkit.observability.Tags;
-import io.lonmstalker.tgkit.observability.Tracer;
+package io.github.observability.impl;
+
+import io.github.tgkit.observability.Span;
+import io.github.tgkit.observability.Tags;
+import io.github.tgkit.observability.Tracer;
 import java.util.List;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-/** Трейсер, объединяющий сразу несколько Tracer-реализаций. */
+/**
+ * Трейсер, объединяющий сразу несколько Tracer-реализаций.
+ */
 public class CompositeTracer implements Tracer {
   private final List<Tracer> delegates;
 
@@ -35,7 +38,9 @@ public class CompositeTracer implements Tracer {
     return new CompositeSpan(spans);
   }
 
-  /** CompositeSpan: делегирует операции всем вложенным спанам. */
+  /**
+   * CompositeSpan: делегирует операции всем вложенным спанам.
+   */
   private record CompositeSpan(List<Span> spans) implements Span {
     private CompositeSpan(@NonNull List<Span> spans) {
       this.spans = spans;

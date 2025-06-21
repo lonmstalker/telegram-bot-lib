@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.dsl;
 
-import io.lonmstalker.tgkit.core.i18n.MessageLocalizer;
+package io.github.tgkit.core.dsl;
+
+import io.github.tgkit.core.i18n.MessageLocalizer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -26,7 +27,9 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
-/** Конструктор inline-клавиатуры. */
+/**
+ * Конструктор inline-клавиатуры.
+ */
 public final class KbBuilder {
   private final @NonNull MessageLocalizer loc;
   private final List<List<InlineKeyboardButton>> rows = new ArrayList<>();
@@ -35,13 +38,17 @@ public final class KbBuilder {
     this.loc = loc;
   }
 
-  /** Добавляет строку кнопок. */
+  /**
+   * Добавляет строку кнопок.
+   */
   public @NonNull KbBuilder row(@NonNull Button... buttons) {
     rows.add(to(buttons));
     return this;
   }
 
-  /** Каждая кнопка в отдельной строке. */
+  /**
+   * Каждая кнопка в отдельной строке.
+   */
   public @NonNull KbBuilder col(@NonNull Button... buttons) {
     for (Button b : buttons) {
       rows.add(to(b));
@@ -49,7 +56,9 @@ public final class KbBuilder {
     return this;
   }
 
-  /** Добавляет строку кнопок. */
+  /**
+   * Добавляет строку кнопок.
+   */
   public <T> @NonNull KbBuilder rowFrom(
       @NonNull Collection<T> data, @NonNull Function<T, InlineKeyboardButton> map) {
     List<InlineKeyboardButton> cur = new ArrayList<>();
@@ -60,7 +69,9 @@ public final class KbBuilder {
     return this;
   }
 
-  /** Каждая кнопка в отдельной строке. */
+  /**
+   * Каждая кнопка в отдельной строке.
+   */
   public <T> @NonNull KbBuilder colFrom(
       @NonNull Collection<T> data, @NonNull Function<T, InlineKeyboardButton> map) {
     for (T elem : data) {
@@ -69,7 +80,9 @@ public final class KbBuilder {
     return this;
   }
 
-  /** Размещает кнопки по сетке. */
+  /**
+   * Размещает кнопки по сетке.
+   */
   public @NonNull KbBuilder grid(int cols, @NonNull Button... buttons) {
     List<InlineKeyboardButton> cur = new ArrayList<>();
     for (Button b : buttons) {
@@ -85,12 +98,15 @@ public final class KbBuilder {
     return this;
   }
 
-  /** Итоговая разметка. */
+  /**
+   * Итоговая разметка.
+   */
   public @NonNull InlineKeyboardMarkup build() {
     return new InlineKeyboardMarkup(rows);
   }
 
-  @NonNull List<List<InlineKeyboardButton>> rows() {
+  @NonNull
+  List<List<InlineKeyboardButton>> rows() {
     return rows;
   }
 

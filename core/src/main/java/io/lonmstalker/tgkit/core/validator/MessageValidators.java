@@ -13,15 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.validator;
 
-import io.lonmstalker.tgkit.core.i18n.MessageKey;
+package io.github.tgkit.core.validator;
+
+import io.github.tgkit.core.i18n.MessageKey;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
-/** Валидаторы содержимого {@link Message Telegram-сообщения}. */
+/**
+ * Валидаторы содержимого {@link Message Telegram-сообщения}.
+ */
 public final class MessageValidators {
-  private MessageValidators() {}
+  private MessageValidators() {
+  }
 
   public static @NonNull Validator<Message> hasText() {
     return Validator.of(

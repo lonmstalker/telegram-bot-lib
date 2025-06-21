@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.config;
+
+package io.github.tgkit.core.config;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import io.lonmstalker.tgkit.core.resource.Loaders;
-import io.lonmstalker.tgkit.core.resource.ResourceLoader;
+import io.github.tgkit.core.resource.Loaders;
+import io.github.tgkit.core.resource.ResourceLoader;
 import java.io.IOException;
 import java.io.InputStream;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -39,7 +40,20 @@ public class ConfigLoader {
   private static final ObjectMapper YAML = new ObjectMapper(new YAMLFactory());
   private static final ObjectMapper JSON = new ObjectMapper();
 
-  /** Читает и мержит YAML+JSON в единое JsonNode */
+  /*------------------- helpers -------------------*/
+  private static JsonNode parse(InputStream in, String id) throws IOException {
+    if (id.endsWith(".yml") || id.endsWith(".yaml")) {
+      return YAML.readTree(in);
+    }
+    if (id.endsWith(".json")) {
+      return JSON.readTree(in);
+    }
+    throw new IOException("unsupported config format: " + id);
+  }
+
+  /**
+   * Читает и мержит YAML+JSON в единое JsonNode
+   */
   public @NonNull JsonNode asJsonNode(@NonNull String path) throws IOException {
     JsonNode merged = JSON.nullNode();
     ResourceLoader loader = Loaders.load(path);
@@ -48,15 +62,10 @@ public class ConfigLoader {
     }
   }
 
-  /** Приводит конфиг к строго типизированному POJO */
+  /**
+   * Приводит конфиг к строго типизированному POJO
+   */
   public <T> T as(@NonNull String path, @NonNull Class<T> type) throws IOException {
     return JSON.treeToValue(asJsonNode(path), type);
-  }
-
-  /*------------------- helpers -------------------*/
-  private static JsonNode parse(InputStream in, String id) throws IOException {
-    if (id.endsWith(".yml") || id.endsWith(".yaml")) return YAML.readTree(in);
-    if (id.endsWith(".json")) return JSON.readTree(in);
-    throw new IOException("unsupported config format: " + id);
   }
 }

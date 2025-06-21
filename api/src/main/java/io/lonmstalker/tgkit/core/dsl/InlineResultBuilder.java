@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.dsl;
 
-import io.lonmstalker.tgkit.core.dsl.context.DSLContext;
+package io.github.tgkit.core.dsl;
+
+import io.github.tgkit.core.dsl.context.DSLContext;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -28,7 +29,9 @@ import org.telegram.telegrambots.meta.api.objects.inlinequery.result.InlineQuery
 import org.telegram.telegrambots.meta.api.objects.inlinequery.result.InlineQueryResultPhoto;
 import org.telegram.telegrambots.meta.api.objects.inlinequery.result.InlineQueryResultsButton;
 
-/** Построитель результатов инлайн‑запроса. */
+/**
+ * Построитель результатов инлайн‑запроса.
+ */
 public final class InlineResultBuilder
     extends BotDSL.CommonBuilder<InlineResultBuilder, AnswerInlineQuery> {
   private final @NonNull DSLContext ctx;
@@ -44,7 +47,9 @@ public final class InlineResultBuilder
     this.ctx = ctx;
   }
 
-  /** Статья. */
+  /**
+   * Статья.
+   */
   public InlineResultBuilder article(
       @NonNull String id, @NonNull String title, @NonNull String text) {
     InlineQueryResultArticle a = new InlineQueryResultArticle();
@@ -55,7 +60,9 @@ public final class InlineResultBuilder
     return this;
   }
 
-  /** Статья с текстом из i18n. */
+  /**
+   * Статья с текстом из i18n.
+   */
   public InlineResultBuilder articleKey(
       @NonNull String id,
       @NonNull String titleKey,
@@ -67,7 +74,9 @@ public final class InlineResultBuilder
         ctx.service().localizer().get(textKey, args));
   }
 
-  /** Фото. */
+  /**
+   * Фото.
+   */
   public @NonNull InlineResultBuilder photo(
       @NonNull String id, @NonNull String url, @NonNull String thumb) {
     InlineQueryResultPhoto p = new InlineQueryResultPhoto();

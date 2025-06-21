@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.init;
+
+package io.github.tgkit.core.init;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
-import io.lonmstalker.tgkit.webhook.WebhookServer;
+import io.github.tgkit.core.config.BotGlobalConfig;
+import io.github.tgkit.webhook.WebhookServer;
 import java.lang.reflect.Field;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;

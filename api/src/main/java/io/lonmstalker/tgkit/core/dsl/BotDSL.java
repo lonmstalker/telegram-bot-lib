@@ -13,18 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.dsl;
 
-import io.lonmstalker.tgkit.core.BotInfo;
-import io.lonmstalker.tgkit.core.BotRequest;
-import io.lonmstalker.tgkit.core.BotResponse;
-import io.lonmstalker.tgkit.core.BotService;
-import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
-import io.lonmstalker.tgkit.core.dsl.context.DSLContext;
-import io.lonmstalker.tgkit.core.dsl.feature_flags.FeatureFlags;
-import io.lonmstalker.tgkit.core.exception.BotApiException;
-import io.lonmstalker.tgkit.core.i18n.MessageLocalizer;
-import io.lonmstalker.tgkit.core.user.BotUserInfo;
+package io.github.tgkit.core.dsl;
+
+import io.github.tgkit.core.BotInfo;
+import io.github.tgkit.core.BotRequest;
+import io.github.tgkit.core.BotResponse;
+import io.github.tgkit.core.BotService;
+import io.github.tgkit.core.config.BotGlobalConfig;
+import io.github.tgkit.core.dsl.context.DSLContext;
+import io.github.tgkit.core.dsl.feature_flags.FeatureFlags;
+import io.github.tgkit.core.exception.BotApiException;
+import io.github.tgkit.core.i18n.MessageLocalizer;
+import io.github.tgkit.core.user.BotUserInfo;
 import java.io.Serializable;
 import java.time.Duration;
 import java.util.concurrent.CompletableFuture;
@@ -38,12 +39,17 @@ import org.telegram.telegrambots.meta.api.objects.InaccessibleMessage;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
-/** Точка входа в DSL ответа бота. */
+/**
+ * Точка входа в DSL ответа бота.
+ */
 @SuppressWarnings("initialization.fields.uninitialized")
 public final class BotDSL {
-  private BotDSL() {}
+  private BotDSL() {
+  }
 
-  /** Конфигурирует глобальные параметры. */
+  /**
+   * Конфигурирует глобальные параметры.
+   */
   public static void config(@NonNull Consumer<BotGlobalConfig> cfg) {
     cfg.accept(BotGlobalConfig.INSTANCE);
   }
@@ -53,106 +59,144 @@ public final class BotDSL {
     return new DSLContext.SimpleDSLContext(service, info, user);
   }
 
-  /** Сообщение. */
+  /**
+   * Сообщение.
+   */
   public static @NonNull MessageBuilder msg(@NonNull DSLContext ctx, @NonNull String text) {
     return new MessageBuilder(ctx, text);
   }
 
-  /** Сообщение из i18n. */
+  /**
+   * Сообщение из i18n.
+   */
   public static @NonNull MessageBuilder msgKey(
       @NonNull DSLContext ctx, @NonNull String key, @NonNull Object... args) {
     MessageLocalizer loc = ctx.service().localizer();
     return new MessageBuilder(ctx, loc.get(key, args));
   }
 
-  /** Фото. */
+  /**
+   * Фото.
+   */
   public static @NonNull PhotoBuilder photo(@NonNull DSLContext ctx, @NonNull InputFile file) {
     return new PhotoBuilder(ctx, file);
   }
 
-  /** Редактирование сообщения. */
+  /**
+   * Редактирование сообщения.
+   */
   public static @NonNull EditBuilder edit(@NonNull DSLContext ctx, long msgId) {
     return new EditBuilder(ctx, msgId);
   }
 
-  /** Удаление сообщения. */
+  /**
+   * Удаление сообщения.
+   */
   public static @NonNull DeleteBuilder delete(@NonNull DSLContext ctx, long msgId) {
     return new DeleteBuilder(ctx, msgId);
   }
 
-  /** Отправка медиа-группы. */
+  /**
+   * Отправка медиа-группы.
+   */
   public static @NonNull MediaGroupBuilder mediaGroup(@NonNull DSLContext ctx) {
     return new MediaGroupBuilder(ctx);
   }
 
-  /** Опрос. */
+  /**
+   * Опрос.
+   */
   public static @NonNull PollBuilder poll(@NonNull DSLContext ctx, @NonNull String question) {
     return new PollBuilder(ctx, question);
   }
 
-  /** Викторина. */
+  /**
+   * Викторина.
+   */
   public static @NonNull QuizBuilder quiz(
       @NonNull DSLContext ctx, @NonNull String question, int correct) {
     return new QuizBuilder(ctx, question, correct);
   }
 
-  /** Результаты инлайн-запроса. */
+  /**
+   * Результаты инлайн-запроса.
+   */
   public static @NonNull InlineResultBuilder inline(@NonNull DSLContext ctx) {
     return new InlineResultBuilder(ctx);
   }
 
-  /** Сообщение. */
+  /**
+   * Сообщение.
+   */
   public static @NonNull MessageBuilder msg(@NonNull BotRequest<?> req, @NonNull String text) {
     return new MessageBuilder(ctx(req.botInfo(), req.user(), req.service()), text);
   }
 
-  /** Сообщение из i18n. */
+  /**
+   * Сообщение из i18n.
+   */
   public static @NonNull MessageBuilder msgKey(
       @NonNull BotRequest<?> req, @NonNull String key, @NonNull Object... args) {
     MessageLocalizer loc = req.service().localizer();
     return new MessageBuilder(ctx(req.botInfo(), req.user(), req.service()), loc.get(key, args));
   }
 
-  /** Фото. */
+  /**
+   * Фото.
+   */
   public static @NonNull PhotoBuilder photo(@NonNull BotRequest<?> req, @NonNull InputFile file) {
     return new PhotoBuilder(ctx(req.botInfo(), req.user(), req.service()), file);
   }
 
-  /** Редактирование сообщения. */
+  /**
+   * Редактирование сообщения.
+   */
   public static @NonNull EditBuilder edit(@NonNull BotRequest<?> req, long msgId) {
     return new EditBuilder(ctx(req.botInfo(), req.user(), req.service()), msgId);
   }
 
-  /** Удаление сообщения. */
+  /**
+   * Удаление сообщения.
+   */
   public static @NonNull DeleteBuilder delete(@NonNull BotRequest<?> req, long msgId) {
     return new DeleteBuilder(ctx(req.botInfo(), req.user(), req.service()), msgId);
   }
 
-  /** Отправка медиа-группы. */
+  /**
+   * Отправка медиа-группы.
+   */
   public static @NonNull MediaGroupBuilder mediaGroup(@NonNull BotRequest<?> req) {
     return new MediaGroupBuilder(ctx(req.botInfo(), req.user(), req.service()));
   }
 
-  /** Опрос. */
+  /**
+   * Опрос.
+   */
   public static @NonNull PollBuilder poll(@NonNull BotRequest<?> req, @NonNull String question) {
     return new PollBuilder(ctx(req.botInfo(), req.user(), req.service()), question);
   }
 
-  /** Викторина. */
+  /**
+   * Викторина.
+   */
   public static @NonNull QuizBuilder quiz(
       @NonNull BotRequest<?> req, @NonNull String question, int correct) {
     return new QuizBuilder(ctx(req.botInfo(), req.user(), req.service()), question, correct);
   }
 
-  /** Результаты инлайн-запроса. */
+  /**
+   * Результаты инлайн-запроса.
+   */
   public static @NonNull InlineResultBuilder inline(@NonNull BotRequest<?> req) {
     return new InlineResultBuilder(ctx(req.botInfo(), req.user(), req.service()));
   }
 
-  /** Базовый строитель. */
+  /**
+   * Базовый строитель.
+   */
   @SuppressWarnings("unchecked")
   abstract static class CommonBuilder<
-          T extends CommonBuilder<T, D>, D extends PartialBotApiMethod<?>>
+      T extends CommonBuilder<T, D>, D extends PartialBotApiMethod<?>>
       implements Common<T, D> {
     protected @Nullable Long chatId;
     protected Long replyTo;

@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.parse_mode;
+
+package io.github.tgkit.core.parse_mode;
 
 import java.util.regex.Pattern;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -23,16 +24,17 @@ import org.checkerframework.checker.nullness.qual.NonNull;
  * (для Telegram Bot API).
  */
 public final class Sanitizer {
-  private Sanitizer() {}
-
   // Используем regex для одновременного экранирования
   private static final Pattern MARKDOWN2_PATTERN = Pattern.compile("([_*\\[\\]()~`>#+\\-=|{}.!])");
+
+  private Sanitizer() {
+  }
 
   /**
    * Основной метод: возвращает «безопасную» строку для заданного режима.
    *
    * @param input исходный текст
-   * @param mode выбранный режим экранирования
+   * @param mode  выбранный режим экранирования
    * @return экранированная строка
    */
   public static @NonNull String sanitize(@NonNull String input, @NonNull ParseMode mode) {

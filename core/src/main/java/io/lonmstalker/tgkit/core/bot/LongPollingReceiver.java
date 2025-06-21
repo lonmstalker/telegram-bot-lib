@@ -13,14 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.bot;
 
-import static io.lonmstalker.tgkit.core.bot.BotConstants.BOT_TOKEN_SECRET;
+package io.github.tgkit.core.bot;
 
-import io.lonmstalker.tgkit.core.BotAdapter;
-import io.lonmstalker.tgkit.core.exception.BotExceptionHandler;
-import io.lonmstalker.tgkit.core.exception.BotExceptionHandlerDefault;
-import io.lonmstalker.tgkit.security.secret.SecretStore;
+import static io.github.tgkit.core.bot.BotConstants.BOT_TOKEN_SECRET;
+
+import io.github.tgkit.core.BotAdapter;
+import io.github.tgkit.core.exception.BotExceptionHandler;
+import io.github.tgkit.core.exception.BotExceptionHandlerDefault;
+import io.github.tgkit.security.secret.SecretStore;
 import org.apache.commons.lang3.StringUtils;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -37,10 +38,6 @@ class LongPollingReceiver extends TelegramLongPollingBot implements AutoCloseabl
   private final @NonNull BotExceptionHandler globalExceptionHandler;
 
   private @Nullable String username;
-
-  void setUsername(@Nullable String username) {
-    this.username = username;
-  }
 
   public LongPollingReceiver(
       @NonNull BotConfig options,
@@ -74,6 +71,10 @@ class LongPollingReceiver extends TelegramLongPollingBot implements AutoCloseabl
     if (adapter instanceof BotAdapterImpl b) {
       b.setSender(sender);
     }
+  }
+
+  void setUsername(@Nullable String username) {
+    this.username = username;
   }
 
   @Override

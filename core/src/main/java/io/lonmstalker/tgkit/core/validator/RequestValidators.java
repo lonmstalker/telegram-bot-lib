@@ -13,23 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.validator;
 
-import io.lonmstalker.tgkit.core.BotRequest;
-import io.lonmstalker.tgkit.core.BotRequestType;
-import io.lonmstalker.tgkit.core.exception.ValidationException;
-import io.lonmstalker.tgkit.core.i18n.MessageKey;
+package io.github.tgkit.core.validator;
 
-/** Утилиты для валидации свойств {@link BotRequest}. */
+import io.github.tgkit.core.BotRequest;
+import io.github.tgkit.core.BotRequestType;
+import io.github.tgkit.core.exception.ValidationException;
+import io.github.tgkit.core.i18n.MessageKey;
+
+/**
+ * Утилиты для валидации свойств {@link BotRequest}.
+ */
 public final class RequestValidators {
-  private RequestValidators() {}
+  private RequestValidators() {
+  }
 
   /**
    * Валидатор, проверяющий, что тип запроса совпадает с ожидаемым.
    *
    * @param expected ожидаемый тип запроса
    * @return {@link Validator} на {@link BotRequest}, бросающий {@link ValidationException} с ключом
-   *     "error.invalidRequestType" при несовпадении
+   * "error.invalidRequestType" при несовпадении
    */
   public static Validator<BotRequest<?>> requestType(BotRequestType expected) {
     return req -> {
@@ -44,7 +48,7 @@ public final class RequestValidators {
    * Валидатор, проверяющий наличие userId, если {@link BotRequestType#requiresUserId()}.
    *
    * @return {@link Validator} на {@link BotRequest}, бросающий {@link ValidationException} с ключом
-   *     "error.missingUserId" при отсутствии userId
+   * "error.missingUserId" при отсутствии userId
    */
   public static Validator<BotRequest<?>> requiresUserId() {
     return req -> {
@@ -59,7 +63,7 @@ public final class RequestValidators {
    * Валидатор, проверяющий наличие chatId, если {@link BotRequestType#requiresChatId()}.
    *
    * @return {@link Validator} на {@link BotRequest}, бросающий {@link ValidationException} с ключом
-   *     "error.missingChatId" при отсутствии chatId
+   * "error.missingChatId" при отсутствии chatId
    */
   public static Validator<BotRequest<?>> requiresChatId() {
     return req -> {

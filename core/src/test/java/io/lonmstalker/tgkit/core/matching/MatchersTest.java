@@ -13,14 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.matching;
+
+package io.github.tgkit.core.matching;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import io.lonmstalker.tgkit.core.storage.BotRequestContextHolder;
-import io.lonmstalker.tgkit.core.user.BotUserInfo;
-import io.lonmstalker.tgkit.core.user.BotUserProvider;
-import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
+import io.github.tgkit.core.storage.BotRequestContextHolder;
+import io.github.tgkit.core.user.BotUserInfo;
+import io.github.tgkit.core.user.BotUserProvider;
+import io.github.tgkit.testkit.TestBotBootstrap;
 import java.util.Set;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;

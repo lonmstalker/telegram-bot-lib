@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.github.tgkit.validator.impl;
 
-import io.lonmstalker.tgkit.core.i18n.MessageKey;
-import io.lonmstalker.tgkit.core.validator.Validator;
 import io.github.tgkit.validator.moderation.ContentModerationService;
+import io.github.tgkit.core.i18n.MessageKey;
+import io.github.tgkit.core.validator.Validator;
 import java.util.ServiceLoader;
 import java.util.Set;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -30,8 +31,6 @@ import org.telegram.telegrambots.meta.api.objects.Document;
  */
 public final class DocumentValidators {
 
-  private DocumentValidators() {}
-
   private static final Set<String> ALLOWED_MIME =
       Set.of(
           "application/pdf",
@@ -40,6 +39,8 @@ public final class DocumentValidators {
           "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
   private static final ContentModerationService MOD =
       ServiceLoader.load(ContentModerationService.class).findFirst().orElse(null);
+  private DocumentValidators() {
+  }
 
   /**
    * Проверяет, что размер документа не больше заданного (в мегабайтах).

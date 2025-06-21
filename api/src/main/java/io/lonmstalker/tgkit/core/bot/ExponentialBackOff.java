@@ -13,25 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.bot;
+
+package io.github.tgkit.core.bot;
 
 import org.telegram.telegrambots.meta.generics.BackOff;
 
-/** Простая реализация экспоненциальной задержки для TelegramBot. */
+/**
+ * Простая реализация экспоненциальной задержки для TelegramBot.
+ */
 public class ExponentialBackOff implements BackOff {
   private static final int DEFAULT_INITIAL_INTERVAL_MILLIS = 500;
   private static final double DEFAULT_RANDOMIZATION_FACTOR = 0.5d;
   private static final double DEFAULT_MULTIPLIER = 1.5d;
   private static final int DEFAULT_MAX_INTERVAL_MILLIS = 900_000;
   private static final int DEFAULT_MAX_ELAPSED_TIME_MILLIS = 3_600_000;
-
-  private int currentIntervalMillis;
   private final int initialIntervalMillis;
   private final double randomizationFactor;
   private final double multiplier;
   private final int maxIntervalMillis;
-  private long startTimeNanos;
   private final int maxElapsedTimeMillis;
+  private int currentIntervalMillis;
+  private long startTimeNanos;
 
   public ExponentialBackOff() {
     this(new Builder());
@@ -63,6 +65,14 @@ public class ExponentialBackOff implements BackOff {
     reset();
   }
 
+  private static int getRandomValueFromInterval(
+      double randomizationFactor, double random, int currentInterval) {
+    double delta = randomizationFactor * currentInterval;
+    double minInterval = currentInterval - delta;
+    double maxInterval = currentInterval + delta;
+    return (int) (minInterval + random * (maxInterval - minInterval + 1));
+  }
+
   @Override
   public void reset() {
     currentIntervalMillis = initialIntervalMillis;
@@ -78,14 +88,6 @@ public class ExponentialBackOff implements BackOff {
         getRandomValueFromInterval(randomizationFactor, Math.random(), currentIntervalMillis);
     incrementCurrentInterval();
     return randomInterval;
-  }
-
-  private static int getRandomValueFromInterval(
-      double randomizationFactor, double random, int currentInterval) {
-    double delta = randomizationFactor * currentInterval;
-    double minInterval = currentInterval - delta;
-    double maxInterval = currentInterval + delta;
-    return (int) (minInterval + random * (maxInterval - minInterval + 1));
   }
 
   private long getElapsedTimeMillis() {

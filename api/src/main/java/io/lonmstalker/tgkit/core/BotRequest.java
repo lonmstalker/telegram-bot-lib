@@ -13,19 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core;
 
-import io.lonmstalker.tgkit.core.dsl.BotDSL;
-import io.lonmstalker.tgkit.core.dsl.DeleteBuilder;
-import io.lonmstalker.tgkit.core.dsl.EditBuilder;
-import io.lonmstalker.tgkit.core.dsl.InlineResultBuilder;
-import io.lonmstalker.tgkit.core.dsl.MediaGroupBuilder;
-import io.lonmstalker.tgkit.core.dsl.MessageBuilder;
-import io.lonmstalker.tgkit.core.dsl.PhotoBuilder;
-import io.lonmstalker.tgkit.core.dsl.PollBuilder;
-import io.lonmstalker.tgkit.core.dsl.QuizBuilder;
-import io.lonmstalker.tgkit.core.exception.BotApiException;
-import io.lonmstalker.tgkit.core.user.BotUserInfo;
+package io.github.tgkit.core;
+
+import io.github.tgkit.core.dsl.BotDSL;
+import io.github.tgkit.core.dsl.DeleteBuilder;
+import io.github.tgkit.core.dsl.EditBuilder;
+import io.github.tgkit.core.dsl.InlineResultBuilder;
+import io.github.tgkit.core.dsl.MediaGroupBuilder;
+import io.github.tgkit.core.dsl.MessageBuilder;
+import io.github.tgkit.core.dsl.PhotoBuilder;
+import io.github.tgkit.core.dsl.PollBuilder;
+import io.github.tgkit.core.dsl.QuizBuilder;
+import io.github.tgkit.core.exception.BotApiException;
+import io.github.tgkit.core.user.BotUserInfo;
 import java.util.Locale;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -34,12 +35,12 @@ import org.telegram.telegrambots.meta.api.objects.InputFile;
 /**
  * Обёртка над обновлением Telegram, содержащая дополнительную информацию о боте и пользователе.
  *
- * @param updateId идентификатор обновления
- * @param data данные обновления
- * @param botInfo сведения о боте
- * @param user информация о пользователе
+ * @param updateId    идентификатор обновления
+ * @param data        данные обновления
+ * @param botInfo     сведения о боте
+ * @param user        информация о пользователе
  * @param requestType Тип запроса
- * @param <T> тип данных обновления
+ * @param <T>         тип данных обновления
  */
 public record BotRequest<T>(
     int updateId,
@@ -63,47 +64,65 @@ public record BotRequest<T>(
     }
   }
 
-  /** Сообщение. */
+  /**
+   * Сообщение.
+   */
   public @NonNull MessageBuilder msg(@NonNull String text) {
     return BotDSL.msg(BotDSL.ctx(botInfo(), user(), service()), text);
   }
 
-  /** Сообщение из i18n. */
+  /**
+   * Сообщение из i18n.
+   */
   public @NonNull MessageBuilder msgKey(@NonNull String key, @NonNull Object... args) {
     return BotDSL.msgKey(BotDSL.ctx(botInfo(), user(), service()), key, args);
   }
 
-  /** Фото. */
+  /**
+   * Фото.
+   */
   public @NonNull PhotoBuilder photo(@NonNull InputFile file) {
     return BotDSL.photo(BotDSL.ctx(botInfo(), user(), service()), file);
   }
 
-  /** Редактирование сообщения. */
+  /**
+   * Редактирование сообщения.
+   */
   public @NonNull EditBuilder edit(long msgId) {
     return BotDSL.edit(BotDSL.ctx(botInfo(), user(), service()), msgId);
   }
 
-  /** Удаление сообщения. */
+  /**
+   * Удаление сообщения.
+   */
   public @NonNull DeleteBuilder delete(long msgId) {
     return BotDSL.delete(BotDSL.ctx(botInfo(), user(), service()), msgId);
   }
 
-  /** Отправка медиа-группы. */
+  /**
+   * Отправка медиа-группы.
+   */
   public @NonNull MediaGroupBuilder mediaGroup() {
     return BotDSL.mediaGroup(BotDSL.ctx(botInfo(), user(), service()));
   }
 
-  /** Опрос. */
+  /**
+   * Опрос.
+   */
   public @NonNull PollBuilder poll(@NonNull String question) {
     return BotDSL.poll(BotDSL.ctx(botInfo(), user(), service()), question);
   }
 
-  /** Викторина. */
+  /**
+   * Викторина.
+   */
   public @NonNull QuizBuilder quiz(@NonNull String question, int correct) {
     return BotDSL.quiz(BotDSL.ctx(botInfo(), user(), service()), question, correct);
   }
 
-  /** Результаты инлайн-запроса. */
+  /**
+   * Результаты инлайн-запроса.
+   */
   public @NonNull InlineResultBuilder inline() {
     return BotDSL.inline(BotDSL.ctx(botInfo(), user(), service()));
   }

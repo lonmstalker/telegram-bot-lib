@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.loader;
+
+package io.github.tgkit.core.loader;
 
 import java.lang.annotation.Annotation;
 import java.util.Set;
@@ -22,11 +23,16 @@ import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
 import org.reflections.util.ConfigurationBuilder;
 
-/** Utility for scanning the classpath for annotated classes. */
+/**
+ * Utility for scanning the classpath for annotated classes.
+ */
 public final class ClasspathScanner {
-  private ClasspathScanner() {}
+  private ClasspathScanner() {
+  }
 
-  /** Finds all classes annotated with the given annotation under the package. */
+  /**
+   * Finds all classes annotated with the given annotation under the package.
+   */
   public static @NonNull Set<Class<?>> findAnnotated(
       @NonNull Class<? extends Annotation> annotation, @NonNull String basePackage) {
     ConfigurationBuilder cb =

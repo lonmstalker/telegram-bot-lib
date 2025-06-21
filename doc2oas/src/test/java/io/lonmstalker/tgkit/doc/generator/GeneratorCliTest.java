@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.doc.generator;
+
+package io.github.tgkit.doc.generator;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.lonmstalker.tgkit.doc.emitter.OpenApiEmitter;
-import io.lonmstalker.tgkit.doc.mapper.OperationInfo;
+import io.github.tgkit.doc.emitter.OpenApiEmitter;
+import io.github.tgkit.doc.mapper.OperationInfo;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;

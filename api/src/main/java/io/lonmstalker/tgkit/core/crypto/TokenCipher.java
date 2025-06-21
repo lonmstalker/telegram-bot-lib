@@ -13,12 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.crypto;
+
+package io.github.tgkit.core.crypto;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 public interface TokenCipher {
-  @NonNull String encrypt(@NonNull String token);
+  @NonNull
+  String encrypt(@NonNull String token);
 
-  @NonNull String decrypt(@NonNull String cipherText);
+  @NonNull
+  String decrypt(@NonNull String cipherText);
 }

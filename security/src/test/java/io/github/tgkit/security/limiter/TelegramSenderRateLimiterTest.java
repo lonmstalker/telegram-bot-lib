@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.github.tgkit.security.limiter;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -20,11 +21,11 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
-import io.lonmstalker.tgkit.core.interceptor.BotInterceptor;
+import io.github.tgkit.core.interceptor.BotInterceptor;
 import io.github.tgkit.security.*;
 import io.github.tgkit.security.init.BotSecurityInitializer;
 import io.github.tgkit.security.ratelimit.*;
-import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
+import io.github.tgkit.testkit.TestBotBootstrap;
 import java.lang.reflect.Method;
 import java.util.Optional;
 import org.junit.jupiter.api.*;
@@ -33,19 +34,20 @@ import org.mockito.Mockito;
 
 class TelegramSenderRateLimiterTest {
 
-  /* === dummy handler method with annotations ==================== */
-  @RateLimit(key = LimiterKey.USER, permits = 2, seconds = 60)
-  @RateLimit(key = LimiterKey.GLOBAL, permits = 5, seconds = 60)
-  void roll() {}
+  static {
+    TestBotBootstrap.initOnce();
+    BotSecurityInitializer.init();
+  }
 
   Method handler;
 
   RateLimiter backend;
   RateLimitBotCommandFactory factory;
 
-  static {
-    TestBotBootstrap.initOnce();
-    BotSecurityInitializer.init();
+  /* === dummy handler method with annotations ==================== */
+  @RateLimit(key = LimiterKey.USER, permits = 2, seconds = 60)
+  @RateLimit(key = LimiterKey.GLOBAL, permits = 5, seconds = 60)
+  void roll() {
   }
 
   @BeforeEach

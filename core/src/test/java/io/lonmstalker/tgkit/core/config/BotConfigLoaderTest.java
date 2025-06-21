@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.config;
+
+package io.github.tgkit.core.config;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
+import io.github.tgkit.testkit.TestBotBootstrap;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -26,11 +27,12 @@ import org.junit.jupiter.api.io.TempDir;
 
 class BotConfigLoaderTest {
 
-  @TempDir Path tmp;
-
   static {
     TestBotBootstrap.initOnce();
   }
+
+  @TempDir
+  Path tmp;
 
   @Test
   void loadYaml() throws Exception {

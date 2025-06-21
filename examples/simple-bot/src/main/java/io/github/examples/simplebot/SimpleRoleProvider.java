@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.github.examples.simplebot;
 
-import static io.lonmstalker.tgkit.core.update.UpdateUtils.resolveChatId;
-import static io.lonmstalker.tgkit.core.update.UpdateUtils.resolveUserId;
+import static io.github.tgkit.core.update.UpdateUtils.resolveChatId;
+import static io.github.tgkit.core.update.UpdateUtils.resolveUserId;
 
-import io.lonmstalker.tgkit.core.user.BotUserInfo;
-import io.lonmstalker.tgkit.core.user.BotUserProvider;
+import io.github.tgkit.core.user.BotUserInfo;
+import io.github.tgkit.core.user.BotUserProvider;
 import java.util.Set;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -39,5 +40,6 @@ public class SimpleRoleProvider implements BotUserProvider {
       @Nullable Long userId,
       @Nullable Long internalUserId,
       Set<String> roles)
-      implements BotUserInfo {}
+      implements BotUserInfo {
+  }
 }

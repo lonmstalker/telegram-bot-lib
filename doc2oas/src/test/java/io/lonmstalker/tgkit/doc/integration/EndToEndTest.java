@@ -13,15 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.doc.integration;
+
+package io.github.tgkit.doc.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
-import io.lonmstalker.tgkit.doc.cli.DocCli;
-import io.lonmstalker.tgkit.doc.generator.GeneratorCli;
+import io.github.tgkit.doc.cli.DocCli;
+import io.github.tgkit.doc.generator.GeneratorCli;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import org.junit.jupiter.api.AfterEach;
@@ -29,7 +30,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import picocli.CommandLine;
 
-/** Интеграционный тест полного конвейера. */
+/**
+ * Интеграционный тест полного конвейера.
+ */
 class EndToEndTest {
 
   private WireMockServer server;

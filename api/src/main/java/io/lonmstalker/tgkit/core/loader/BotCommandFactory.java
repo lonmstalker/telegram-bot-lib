@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.loader;
 
-import io.lonmstalker.tgkit.core.BotCommand;
+package io.github.tgkit.core.loader;
+
+import io.github.tgkit.core.BotCommand;
 import java.lang.annotation.Annotation;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -45,13 +46,16 @@ public interface BotCommandFactory<A extends Annotation> {
    * Доступна команда и сам метод.
    *
    * @param command команда {@link BotCommand}
-   * @param method метод-хендлер
-   * @param ann экземпляр аннотации
+   * @param method  метод-хендлер
+   * @param ann     экземпляр аннотации
    */
   void apply(@NonNull BotCommand<?> command, @NonNull Method method, @Nullable A ann);
 
-  /** BotCommandFactory применяется на все команды */
+  /**
+   * BotCommandFactory применяется на все команды
+   */
   @Target(ElementType.TYPE)
   @Retention(RetentionPolicy.RUNTIME)
-  @interface None {}
+  @interface None {
+  }
 }

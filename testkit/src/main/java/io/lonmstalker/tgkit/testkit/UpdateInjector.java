@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.testkit;
 
-import io.lonmstalker.tgkit.core.BotAdapter;
-import io.lonmstalker.tgkit.core.bot.TelegramSender;
+package io.github.tgkit.testkit;
+
+import io.github.tgkit.core.BotAdapter;
+import io.github.tgkit.core.bot.TelegramSender;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -26,7 +27,9 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 
-/** Утилита для инъекции тестовых {@link Update} в {@link BotAdapter}. */
+/**
+ * Утилита для инъекции тестовых {@link Update} в {@link BotAdapter}.
+ */
 public final class UpdateInjector {
 
   private final BotAdapter adapter;
@@ -38,7 +41,9 @@ public final class UpdateInjector {
     this.sender = sender;
   }
 
-  /** Создаёт Update с текстовым сообщением. */
+  /**
+   * Создаёт Update с текстовым сообщением.
+   */
   public Builder text(String text) {
     Message msg = new Message();
     msg.setText(text);
@@ -47,7 +52,9 @@ public final class UpdateInjector {
     return new Builder(update);
   }
 
-  /** Билдер для указания параметров Update. */
+  /**
+   * Билдер для указания параметров Update.
+   */
   public final class Builder {
     private final Update update;
 
@@ -55,7 +62,9 @@ public final class UpdateInjector {
       this.update = update;
     }
 
-    /** Устанавливает отправителя и чат. */
+    /**
+     * Устанавливает отправителя и чат.
+     */
     public Builder from(long id) {
       Chat chat = new Chat();
       chat.setId(id);
@@ -66,7 +75,9 @@ public final class UpdateInjector {
       return this;
     }
 
-    /** Отправляет Update в бота. */
+    /**
+     * Отправляет Update в бота.
+     */
     public void dispatch() {
       update.setUpdateId(nextId.incrementAndGet());
       BotApiMethod<?> method = adapter.handle(update);

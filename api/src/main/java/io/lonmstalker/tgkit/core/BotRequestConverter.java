@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core;
+
+package io.github.tgkit.core;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -32,8 +33,9 @@ public interface BotRequestConverter<T> {
    * Конвертирует обновление Telegram в нужный тип.
    *
    * @param update объект {@link Update}, полученный от Telegram
-   * @param type тип запроса, определённый библиотекой
+   * @param type   тип запроса, определённый библиотекой
    * @return сконвертированный объект
    */
-  @NonNull T convert(@NonNull Update update, @NonNull BotRequestType type);
+  @NonNull
+  T convert(@NonNull Update update, @NonNull BotRequestType type);
 }

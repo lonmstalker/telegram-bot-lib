@@ -13,17 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.plugin;
 
-import io.lonmstalker.tgkit.core.bot.BotRegistry;
-import io.lonmstalker.tgkit.core.bot.BotRegistryImpl;
-import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
-import io.lonmstalker.tgkit.core.dsl.feature_flags.FeatureFlags;
-import io.lonmstalker.tgkit.core.event.BotEventBus;
-import io.lonmstalker.tgkit.core.ttl.TtlScheduler;
-import io.lonmstalker.tgkit.security.audit.AuditBus;
+package io.github.tgkit.plugin;
+
+import io.github.tgkit.core.bot.BotRegistry;
+import io.github.tgkit.core.bot.BotRegistryImpl;
+import io.github.tgkit.core.config.BotGlobalConfig;
+import io.github.tgkit.core.dsl.feature_flags.FeatureFlags;
+import io.github.tgkit.core.event.BotEventBus;
+import io.github.tgkit.core.ttl.TtlScheduler;
+import io.github.tgkit.security.audit.AuditBus;
 import io.github.tgkit.security.config.BotSecurityGlobalConfig;
-import io.lonmstalker.tgkit.security.secret.SecretStore;
+import io.github.tgkit.security.secret.SecretStore;
 import java.net.http.HttpClient;
 import java.util.ServiceLoader;
 import java.util.concurrent.ExecutorService;

@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.observability.impl;
 
-import io.lonmstalker.tgkit.observability.Span;
-import io.lonmstalker.tgkit.observability.Tag;
-import io.lonmstalker.tgkit.observability.Tags;
-import io.lonmstalker.tgkit.observability.Tracer;
+package io.github.observability.impl;
+
+import io.github.tgkit.observability.Span;
+import io.github.tgkit.observability.Tag;
+import io.github.tgkit.observability.Tags;
+import io.github.tgkit.observability.Tracer;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
 import io.opentelemetry.sdk.trace.SdkTracerProvider;
 import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor;
@@ -26,7 +27,9 @@ import io.opentelemetry.sdk.trace.export.SpanExporter;
 import java.util.Objects;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-/** Реализация {@link Tracer} на базе OpenTelemetry. */
+/**
+ * Реализация {@link Tracer} на базе OpenTelemetry.
+ */
 public final class OTelTracer implements Tracer {
   private final OpenTelemetrySdk sdk;
   private final io.opentelemetry.api.trace.Tracer tracer;
@@ -45,24 +48,32 @@ public final class OTelTracer implements Tracer {
     return new OtelSpan(span.startSpan());
   }
 
-  /** Полная остановка SDK (shutdown). */
+  /**
+   * Полная остановка SDK (shutdown).
+   */
   public void shutdown() {
     sdk.getSdkTracerProvider().shutdown();
   }
 
-  /** Билдер для гибкой настройки OTelTracer. */
+  /**
+   * Билдер для гибкой настройки OTelTracer.
+   */
   @SuppressWarnings("initialization.field.uninitialized")
   public static class Builder {
     private SpanExporter exporter;
     private String serviceName = "unknown-service";
 
-    /** Установить кастомный SpanExporter (Console, OTLP и т.д.). */
+    /**
+     * Установить кастомный SpanExporter (Console, OTLP и т.д.).
+     */
     public Builder withExporter(SpanExporter exporter) {
       this.exporter = exporter;
       return this;
     }
 
-    /** Установить имя сервиса (resource). */
+    /**
+     * Установить имя сервиса (resource).
+     */
     public Builder serviceName(String serviceName) {
       this.serviceName = Objects.requireNonNull(serviceName);
       return this;
@@ -74,7 +85,7 @@ public final class OTelTracer implements Tracer {
               .addSpanProcessor(
                   SimpleSpanProcessor.create(
                       exporter != null ? exporter : SpanExporter.composite() // noop, если не задан
-                      ))
+                  ))
               .build();
 
       OpenTelemetrySdk sdk = OpenTelemetrySdk.builder().setTracerProvider(tracerProvider).build();
@@ -84,7 +95,9 @@ public final class OTelTracer implements Tracer {
     }
   }
 
-  /** Обёртка над span OpenTelemetry. */
+  /**
+   * Обёртка над span OpenTelemetry.
+   */
   private record OtelSpan(io.opentelemetry.api.trace.Span delegate) implements Span {
 
     @Override

@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.bot;
+
+package io.github.tgkit.core.bot;
 
 import javax.sql.DataSource;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -40,16 +41,16 @@ public class BotDataSourceConfig {
     this.dataSource = dataSource;
   }
 
+  public static Builder builder() {
+    return new Builder();
+  }
+
   public @Nullable BotConfig getBotConfig() {
     return botConfig;
   }
 
   public @NonNull DataSource getDataSource() {
     return dataSource;
-  }
-
-  public static Builder builder() {
-    return new Builder();
   }
 
   public static class Builder {

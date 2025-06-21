@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.github.tgkit.security.ratelimit;
 
-import io.lonmstalker.tgkit.core.BotRequest;
-import io.lonmstalker.tgkit.core.BotResponse;
-import io.lonmstalker.tgkit.core.interceptor.BotInterceptor;
-import io.lonmstalker.tgkit.core.update.UpdateUtils;
+import io.github.tgkit.core.BotRequest;
+import io.github.tgkit.core.BotResponse;
+import io.github.tgkit.core.interceptor.BotInterceptor;
+import io.github.tgkit.core.update.UpdateUtils;
 import java.util.List;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -30,16 +31,13 @@ import org.telegram.telegrambots.meta.api.objects.Update;
  */
 public final class RateLimitInterceptor implements BotInterceptor {
 
+  private final RateLimiter backend;
+  private final List<Meta> metas;
+
   RateLimitInterceptor(RateLimiter backend, List<Meta> metas) {
     this.backend = backend;
     this.metas = metas;
   }
-
-  /** immutable meta per annotation */
-  record Meta(LimiterKey key, int permits, int seconds, String prefix) {}
-
-  private final RateLimiter backend;
-  private final List<Meta> metas;
 
   @Override
   /** Проверяет превышение лимитов и бросает исключение при необходимости. */
@@ -72,6 +70,12 @@ public final class RateLimitInterceptor implements BotInterceptor {
       @Nullable BotResponse r,
       @Nullable Exception e) {
     /* noop */
+  }
+
+  /**
+   * immutable meta per annotation
+   */
+  record Meta(LimiterKey key, int permits, int seconds, String prefix) {
   }
 
   public static final class RateLimitExceededException extends RuntimeException {

@@ -13,21 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.github.tgkit.security.captcha;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
-import io.lonmstalker.tgkit.core.BotRequest;
-import io.lonmstalker.tgkit.core.BotService;
-import io.lonmstalker.tgkit.core.i18n.MessageLocalizer;
-import io.lonmstalker.tgkit.core.i18n.MessageLocalizerImpl;
-import io.lonmstalker.tgkit.core.user.BotUserInfo;
-import io.lonmstalker.tgkit.core.user.store.UserKVStore;
+import io.github.tgkit.core.BotRequest;
+import io.github.tgkit.core.BotService;
+import io.github.tgkit.core.i18n.MessageLocalizer;
+import io.github.tgkit.core.i18n.MessageLocalizerImpl;
+import io.github.tgkit.core.user.BotUserInfo;
+import io.github.tgkit.core.user.store.UserKVStore;
 import io.github.tgkit.security.TestUtils;
 import io.github.tgkit.security.captcha.provider.MathCaptchaProvider;
 import io.github.tgkit.security.init.BotSecurityInitializer;
-import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
+import io.github.tgkit.testkit.TestBotBootstrap;
 import java.time.Duration;
 import java.util.Locale;
 import java.util.Set;
@@ -47,16 +48,16 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
  *--------------------------------------------------------------------*/
 class MathCaptchaProviderServiceTest {
 
+  static {
+    TestBotBootstrap.initOnce();
+    BotSecurityInitializer.init();
+  }
+
   MathCaptchaProvider captcha;
   BotRequest<?> req;
   BotUserInfo user;
   UserKVStore kv;
   MathCaptchaProviderStore cacheSpy;
-
-  static {
-    TestBotBootstrap.initOnce();
-    BotSecurityInitializer.init();
-  }
 
   @BeforeEach
   void setUp() {

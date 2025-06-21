@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.observability;
+
+package io.github.tgkit.observability;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 

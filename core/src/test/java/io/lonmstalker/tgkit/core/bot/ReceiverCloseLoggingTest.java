@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.bot;
+
+package io.github.tgkit.core.bot;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -22,8 +23,8 @@ import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.read.ListAppender;
-import io.lonmstalker.tgkit.core.BotAdapter;
-import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
+import io.github.tgkit.core.BotAdapter;
+import io.github.tgkit.testkit.TestBotBootstrap;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,13 +35,13 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 class ReceiverCloseLoggingTest {
 
-  private final Logger lpLogger = (Logger) LoggerFactory.getLogger(LongPollingReceiver.class);
-  private final Logger whLogger = (Logger) LoggerFactory.getLogger(WebHookReceiver.class);
-  private final ListAppender<ILoggingEvent> appender = new ListAppender<>();
-
   static {
     TestBotBootstrap.initOnce();
   }
+
+  private final Logger lpLogger = (Logger) LoggerFactory.getLogger(LongPollingReceiver.class);
+  private final Logger whLogger = (Logger) LoggerFactory.getLogger(WebHookReceiver.class);
+  private final ListAppender<ILoggingEvent> appender = new ListAppender<>();
 
   @BeforeEach
   void setUp() {

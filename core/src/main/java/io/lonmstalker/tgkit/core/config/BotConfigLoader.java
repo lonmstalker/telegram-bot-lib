@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.config;
+
+package io.github.tgkit.core.config;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -27,13 +28,16 @@ import java.nio.file.Path;
 import java.util.List;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-/** Утилита для чтения конфигурации бота из YAML или JSON. */
+/**
+ * Утилита для чтения конфигурации бота из YAML или JSON.
+ */
 public final class BotConfigLoader {
 
   private static final ObjectMapper YAML_MAPPER = new ObjectMapper(new YAMLFactory());
   private static final ObjectMapper JSON_MAPPER = new ObjectMapper();
 
-  private BotConfigLoader() {}
+  private BotConfigLoader() {
+  }
 
   /**
    * Загружает настройки из файла YAML или JSON.

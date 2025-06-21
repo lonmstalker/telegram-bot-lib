@@ -13,19 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.github.tgkit.security.antispam;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
-import io.lonmstalker.tgkit.core.BotRequest;
-import io.lonmstalker.tgkit.core.BotService;
-import io.lonmstalker.tgkit.core.i18n.MessageLocalizerImpl;
+import io.github.tgkit.core.BotRequest;
+import io.github.tgkit.core.BotService;
+import io.github.tgkit.core.i18n.MessageLocalizerImpl;
 import io.github.tgkit.security.captcha.CaptchaProvider;
 import io.github.tgkit.security.init.BotSecurityInitializer;
 import io.github.tgkit.security.ratelimit.RateLimiter;
-import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
+import io.github.tgkit.testkit.TestBotBootstrap;
 import java.time.Duration;
 import java.util.Locale;
 import java.util.Set;
@@ -39,17 +40,39 @@ import org.telegram.telegrambots.meta.api.objects.*;
 @DisplayName("AntiSpam-interceptor – unit tests")
 class AntiSpamInterceptorTest implements WithAssertions {
 
-  DuplicateProvider dup;
-  RateLimiter limiter;
-  CaptchaProvider captcha;
-  BotService bot;
-
-  AntiSpamInterceptor isp;
-
   static {
     TestBotBootstrap.initOnce();
     BotSecurityInitializer.init();
   }
+
+  DuplicateProvider dup;
+  RateLimiter limiter;
+  CaptchaProvider captcha;
+  BotService bot;
+  AntiSpamInterceptor isp;
+
+  /**
+   * minimal Update with Message
+   */
+  private static Update upd(long chatId, long userId, String txt) {
+    Message m = new Message();
+    Chat chat = new Chat();
+    chat.setId(chatId);
+    m.setChat(chat);
+    m.setMessageId(123);
+    m.setText(txt);
+
+    User from = new User();
+    from.setId(userId);
+    m.setFrom(from);
+
+    Update u = new Update();
+    u.setMessage(m);
+
+    return u;
+  }
+
+  /* ─────────────────────────────────────────────────────────────── */
 
   @BeforeEach
   void init() {
@@ -63,8 +86,6 @@ class AntiSpamInterceptorTest implements WithAssertions {
     var localizer = new MessageLocalizerImpl("i18n/messages", Locale.forLanguageTag("ru"));
     when(bot.localizer()).thenReturn(localizer);
   }
-
-  /* ─────────────────────────────────────────────────────────────── */
 
   @Test
   @DisplayName("duplicate ⇒ CAPTCHA + DropUpdateException")
@@ -134,6 +155,8 @@ class AntiSpamInterceptorTest implements WithAssertions {
     verifyNoInteractions(captcha); // без капчи
   }
 
+  /* ===== helpers ===================================================== */
+
   @Test
   @DisplayName("good message ➜ no side-effects")
   void okMessagePasses() {
@@ -148,26 +171,5 @@ class AntiSpamInterceptorTest implements WithAssertions {
     verifyNoInteractions(captcha);
     verify(bot.sender(), never()).execute(any(SendMessage.class));
     verify(bot.sender(), never()).execute(any(DeleteMessage.class));
-  }
-
-  /* ===== helpers ===================================================== */
-
-  /** minimal Update with Message */
-  private static Update upd(long chatId, long userId, String txt) {
-    Message m = new Message();
-    Chat chat = new Chat();
-    chat.setId(chatId);
-    m.setChat(chat);
-    m.setMessageId(123);
-    m.setText(txt);
-
-    User from = new User();
-    from.setId(userId);
-    m.setFrom(from);
-
-    Update u = new Update();
-    u.setMessage(m);
-
-    return u;
   }
 }

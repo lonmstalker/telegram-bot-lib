@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.experimental;
+
+package io.github.tgkit.core.experimental;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -23,16 +24,14 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import org.junit.jupiter.api.Test;
 
-/** Тесты для аннотации {@link Incubating}. */
+/**
+ * Тесты для аннотации {@link Incubating}.
+ */
 public class IncubatingTest {
 
-  @Incubating
-  static class ExperimentalClass {
-    @Incubating
-    void method() {}
-  }
-
-  /** Проверяет настройки мета-аннотаций. */
+  /**
+   * Проверяет настройки мета-аннотаций.
+   */
   @Test
   void verifyMetaAnnotations() {
     Retention retention = Incubating.class.getAnnotation(Retention.class);
@@ -44,10 +43,19 @@ public class IncubatingTest {
     assertArrayEquals(new ElementType[] {ElementType.TYPE, ElementType.METHOD}, target.value());
   }
 
-  /** Убеждаемся, что аннотация не доступна во время выполнения. */
+  /**
+   * Убеждаемся, что аннотация не доступна во время выполнения.
+   */
   @Test
   void annotationNotVisibleAtRuntime() throws NoSuchMethodException {
     assertNull(ExperimentalClass.class.getAnnotation(Incubating.class));
     assertNull(ExperimentalClass.class.getDeclaredMethod("method").getAnnotation(Incubating.class));
+  }
+
+  @Incubating
+  static class ExperimentalClass {
+    @Incubating
+    void method() {
+    }
   }
 }

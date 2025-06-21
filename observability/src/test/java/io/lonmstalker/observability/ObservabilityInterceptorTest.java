@@ -13,14 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.observability;
+
+package io.github.observability;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import io.lonmstalker.tgkit.observability.Span;
-import io.lonmstalker.tgkit.observability.Tags;
-import io.lonmstalker.tgkit.observability.Tracer;
+import io.github.tgkit.observability.Span;
+import io.github.tgkit.observability.Tags;
+import io.github.tgkit.observability.Tracer;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Timer;

@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.state;
+
+package io.github.tgkit.core.state;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -44,7 +45,7 @@ public class JdbcStateStore implements StateStore {
   public JdbcStateStore(@NonNull DataSource dataSource) {
     this.dataSource = dataSource;
     try (Connection conn = dataSource.getConnection();
-        PreparedStatement ps = conn.prepareStatement(CREATE_TABLE)) {
+         PreparedStatement ps = conn.prepareStatement(CREATE_TABLE)) {
       ps.executeUpdate();
     } catch (SQLException e) {
       throw new RuntimeException(e);
@@ -54,7 +55,7 @@ public class JdbcStateStore implements StateStore {
   @Override
   public @Nullable String get(@NonNull String chatId) {
     try (Connection conn = dataSource.getConnection();
-        PreparedStatement ps = conn.prepareStatement(SELECT_QUERY)) {
+         PreparedStatement ps = conn.prepareStatement(SELECT_QUERY)) {
       ps.setString(1, chatId);
       try (ResultSet rs = ps.executeQuery()) {
         return rs.next() ? rs.getString(1) : null;
@@ -67,7 +68,7 @@ public class JdbcStateStore implements StateStore {
   @Override
   public void set(@NonNull String chatId, @NonNull String value) {
     try (Connection conn = dataSource.getConnection();
-        PreparedStatement upd = conn.prepareStatement(UPDATE_QUERY)) {
+         PreparedStatement upd = conn.prepareStatement(UPDATE_QUERY)) {
       upd.setString(1, value);
       upd.setString(2, chatId);
       int updated = upd.executeUpdate();

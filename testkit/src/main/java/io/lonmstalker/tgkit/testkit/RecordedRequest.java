@@ -13,11 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.testkit;
+
+package io.github.tgkit.testkit;
 
 import java.util.List;
 import java.util.Map;
 
-/** Информация о запросе, полученном {@link TelegramMockServer}. */
+/**
+ * Информация о запросе, полученном {@link TelegramMockServer}.
+ */
 public record RecordedRequest(
-    String method, String path, Map<String, List<String>> headers, String body) {}
+    String method, String path, Map<String, List<String>> headers, String body) {
+}

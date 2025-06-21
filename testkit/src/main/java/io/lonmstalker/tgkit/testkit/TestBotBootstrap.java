@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.testkit;
 
-import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
+package io.github.tgkit.testkit;
+
+import io.github.tgkit.core.init.BotCoreInitializer;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -26,7 +27,8 @@ public final class TestBotBootstrap {
 
   private static final AtomicBoolean INITIALIZED = new AtomicBoolean();
 
-  private TestBotBootstrap() {}
+  private TestBotBootstrap() {
+  }
 
   /**
    * Initializes tgkit core exactly once.

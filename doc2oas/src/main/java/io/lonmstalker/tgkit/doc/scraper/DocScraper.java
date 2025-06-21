@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.doc.scraper;
+
+package io.github.tgkit.doc.scraper;
 
 import java.io.InputStream;
 import java.util.List;
@@ -30,6 +31,9 @@ import org.checkerframework.checker.nullness.qual.NonNull;
  * }</pre>
  */
 public interface DocScraper {
-  /** Читает HTML и возвращает список методов. */
-  @NonNull List<MethodDoc> scrape(@NonNull InputStream stream);
+  /**
+   * Читает HTML и возвращает список методов.
+   */
+  @NonNull
+  List<MethodDoc> scrape(@NonNull InputStream stream);
 }

@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.doc.emitter;
 
-import io.lonmstalker.tgkit.doc.mapper.OperationInfo;
+package io.github.tgkit.doc.emitter;
+
+import io.github.tgkit.doc.mapper.OperationInfo;
 import io.swagger.v3.core.util.Yaml;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.Operation;
@@ -32,10 +33,14 @@ import java.nio.file.Path;
 import java.util.List;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-/** Построитель и писатель спецификации OpenAPI. */
+/**
+ * Построитель и писатель спецификации OpenAPI.
+ */
 public class OpenApiEmitter {
 
-  /** Формирует объект {@link OpenAPI} по списку операций. */
+  /**
+   * Формирует объект {@link OpenAPI} по списку операций.
+   */
   public @NonNull OpenAPI toOpenApi(@NonNull List<OperationInfo> operations) {
     OpenAPI openApi = new OpenAPI();
     openApi.setInfo(new Info().title("Telegram Bot API").version("1.0"));
@@ -56,7 +61,9 @@ public class OpenApiEmitter {
     return openApi;
   }
 
-  /** Сохраняет YAML-файл со схемой OpenAPI. */
+  /**
+   * Сохраняет YAML-файл со схемой OpenAPI.
+   */
   public void write(@NonNull OpenAPI openApi, @NonNull Path file) {
     try {
       Files.createDirectories(file.getParent());

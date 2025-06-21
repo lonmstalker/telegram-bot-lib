@@ -13,17 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.github.tgkit.security.rbac;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.when;
 
-import io.lonmstalker.tgkit.core.BotRequest;
-import io.lonmstalker.tgkit.core.interceptor.BotInterceptor;
-import io.lonmstalker.tgkit.core.loader.BotCommandFactory;
+import io.github.tgkit.core.BotRequest;
+import io.github.tgkit.core.interceptor.BotInterceptor;
+import io.github.tgkit.core.loader.BotCommandFactory;
 import io.github.tgkit.security.init.BotSecurityInitializer;
-import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
+import io.github.tgkit.testkit.TestBotBootstrap;
 import java.lang.reflect.Method;
 import java.util.ServiceLoader;
 import java.util.Set;
@@ -34,15 +35,16 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 public class RoleSecurityTest {
 
-  /* ======= dummy handler ======= */
-  @RequiresRole("ADMIN")
-  void secure(Update u) {}
-
-  Method handler;
-
   static {
     TestBotBootstrap.initOnce();
     BotSecurityInitializer.init();
+  }
+
+  Method handler;
+
+  /* ======= dummy handler ======= */
+  @RequiresRole("ADMIN")
+  void secure(Update u) {
   }
 
   @BeforeEach

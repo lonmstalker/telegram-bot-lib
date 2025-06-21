@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.github.tgkit.security.antispam;
 
-import io.lonmstalker.tgkit.core.BotRequest;
-import io.lonmstalker.tgkit.core.BotResponse;
-import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
-import io.lonmstalker.tgkit.core.interceptor.BotInterceptor;
+import io.github.tgkit.core.BotRequest;
+import io.github.tgkit.core.BotResponse;
+import io.github.tgkit.core.config.BotGlobalConfig;
+import io.github.tgkit.core.interceptor.BotInterceptor;
 import io.github.tgkit.security.captcha.CaptchaProvider;
 import io.github.tgkit.security.event.SecurityBotEvent;
 import io.github.tgkit.security.ratelimit.RateLimiter;
@@ -72,37 +73,8 @@ public final class AntiSpamInterceptor implements BotInterceptor {
     return new Builder();
   }
 
-  public static final class Builder {
-    private DuplicateProvider dup;
-    private RateLimiter flood;
-    private CaptchaProvider captcha;
-    private Set<String> badDomains;
-
-    private Builder() {}
-
-    public Builder dup(@NonNull DuplicateProvider dup) {
-      this.dup = dup;
-      return this;
-    }
-
-    public Builder flood(@NonNull RateLimiter flood) {
-      this.flood = flood;
-      return this;
-    }
-
-    public Builder captcha(@NonNull CaptchaProvider captcha) {
-      this.captcha = captcha;
-      return this;
-    }
-
-    public Builder badDomains(@NonNull Set<String> badDomains) {
-      this.badDomains = badDomains;
-      return this;
-    }
-
-    public AntiSpamInterceptor build() {
-      return new AntiSpamInterceptor(dup, flood, captcha, badDomains);
-    }
+  private static String host(String url) {
+    return Optional.ofNullable(url).map(java.net.URI::create).map(java.net.URI::getHost).orElse("");
   }
 
   /* === preHandle ======================================================= */
@@ -111,7 +83,9 @@ public final class AntiSpamInterceptor implements BotInterceptor {
   public void preHandle(@NonNull Update upd, @NonNull BotRequest<?> request) {
 
     Message msg = upd.getMessage();
-    if (msg == null || msg.getText() == null) return; // неинтересно
+    if (msg == null || msg.getText() == null) {
+      return; // неинтересно
+    }
 
     String txt = msg.getText();
     Integer msgId = request.msgId();
@@ -156,14 +130,16 @@ public final class AntiSpamInterceptor implements BotInterceptor {
   }
 
   @Override
-  public void postHandle(@NonNull Update u, @NonNull BotRequest<?> request) {}
+  public void postHandle(@NonNull Update u, @NonNull BotRequest<?> request) {
+  }
 
   @Override
   public void afterCompletion(
       @NonNull Update u,
       @Nullable BotRequest<?> req,
       @Nullable BotResponse r,
-      @Nullable Exception e) {}
+      @Nullable Exception e) {
+  }
 
   private boolean containsBadUrl(String text) {
     Matcher m = URL_RE.matcher(text);
@@ -176,7 +152,37 @@ public final class AntiSpamInterceptor implements BotInterceptor {
     return false;
   }
 
-  private static String host(String url) {
-    return Optional.ofNullable(url).map(java.net.URI::create).map(java.net.URI::getHost).orElse("");
+  public static final class Builder {
+    private DuplicateProvider dup;
+    private RateLimiter flood;
+    private CaptchaProvider captcha;
+    private Set<String> badDomains;
+
+    private Builder() {
+    }
+
+    public Builder dup(@NonNull DuplicateProvider dup) {
+      this.dup = dup;
+      return this;
+    }
+
+    public Builder flood(@NonNull RateLimiter flood) {
+      this.flood = flood;
+      return this;
+    }
+
+    public Builder captcha(@NonNull CaptchaProvider captcha) {
+      this.captcha = captcha;
+      return this;
+    }
+
+    public Builder badDomains(@NonNull Set<String> badDomains) {
+      this.badDomains = badDomains;
+      return this;
+    }
+
+    public AntiSpamInterceptor build() {
+      return new AntiSpamInterceptor(dup, flood, captcha, badDomains);
+    }
   }
 }

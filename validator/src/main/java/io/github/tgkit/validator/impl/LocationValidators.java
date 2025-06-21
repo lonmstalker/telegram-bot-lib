@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.github.tgkit.validator.impl;
 
-import io.lonmstalker.tgkit.core.i18n.MessageKey;
-import io.lonmstalker.tgkit.core.validator.Validator;
+import io.github.tgkit.core.i18n.MessageKey;
+import io.github.tgkit.core.validator.Validator;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.objects.Location;
 
@@ -27,10 +28,10 @@ import org.telegram.telegrambots.meta.api.objects.Location;
  */
 public final class LocationValidators {
 
-  private LocationValidators() {}
-
   private static final double LAT_MIN = -90.0, LAT_MAX = 90.0;
   private static final double LNG_MIN = -180.0, LNG_MAX = 180.0;
+  private LocationValidators() {
+  }
 
   /**
    * Проверяет, что координаты лежат в диапазоне [-90..90]×[-180..180].

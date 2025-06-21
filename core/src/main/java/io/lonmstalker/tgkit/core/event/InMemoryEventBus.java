@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.event;
 
-import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
+package io.github.tgkit.core.event;
+
+import io.github.tgkit.core.config.BotGlobalConfig;
 import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CompletableFuture;
@@ -33,24 +34,20 @@ import org.slf4j.LoggerFactory;
 public final class InMemoryEventBus implements BotEventBus {
   private static final Logger log = LoggerFactory.getLogger(InMemoryEventBus.class);
 
-  private final Thread workingThread;
-
-  /* — Single-writer, поэтому одна thread-safe очередь достаточно — */
-  private final BlockingQueue<BotEvent> ring;
-
-  /* — Мапа подписчиков по классу события — */
-  private final ConcurrentHashMap<Class<?>, CopyOnWriteArraySet<Sub>> subs =
-      new ConcurrentHashMap<>();
-
-  /* — Пул consumer-ов (virtual threads by default) — */
-  private final ExecutorService pool;
-
-  /* — control flags — */
-  private volatile boolean alive = true;
-
   static {
     BotGlobalConfig.INSTANCE.events().bus(new InMemoryEventBus());
   }
+
+  private final Thread workingThread;
+  /* — Single-writer, поэтому одна thread-safe очередь достаточно — */
+  private final BlockingQueue<BotEvent> ring;
+  /* — Мапа подписчиков по классу события — */
+  private final ConcurrentHashMap<Class<?>, CopyOnWriteArraySet<Sub>> subs =
+      new ConcurrentHashMap<>();
+  /* — Пул consumer-ов (virtual threads by default) — */
+  private final ExecutorService pool;
+  /* — control flags — */
+  private volatile boolean alive = true;
 
   public InMemoryEventBus(@NonNull ExecutorService pool, int queueSize) {
     this.pool = pool;
@@ -118,7 +115,9 @@ public final class InMemoryEventBus implements BotEventBus {
           while (alive || !ring.isEmpty()) {
             try {
               BotEvent ev = ring.poll(200, TimeUnit.MILLISECONDS);
-              if (ev == null) continue;
+              if (ev == null) {
+                continue;
+              }
               dispatch(ev);
             } catch (InterruptedException ignored) {
               Thread.currentThread().interrupt();
@@ -158,5 +157,6 @@ public final class InMemoryEventBus implements BotEventBus {
     }
   }
 
-  private record Sub(Class<?> type, Consumer<BotEvent> handler) implements BotEventSubscription {}
+  private record Sub(Class<?> type, Consumer<BotEvent> handler) implements BotEventSubscription {
+  }
 }

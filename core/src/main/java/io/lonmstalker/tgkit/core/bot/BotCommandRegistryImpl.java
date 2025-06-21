@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.bot;
 
-import io.lonmstalker.tgkit.core.BotCommand;
-import io.lonmstalker.tgkit.core.BotRequestType;
-import io.lonmstalker.tgkit.core.matching.CommandMatch;
+package io.github.tgkit.core.bot;
+
+import io.github.tgkit.core.BotCommand;
+import io.github.tgkit.core.BotRequestType;
+import io.github.tgkit.core.matching.CommandMatch;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -26,7 +27,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.interfaces.BotApiObject;
 
-/** Потокобезопасная реализация реестра команд бота. */
+/**
+ * Потокобезопасная реализация реестра команд бота.
+ */
 public final class BotCommandRegistryImpl implements BotCommandRegistry {
 
   private final CopyOnWriteArrayList<BotCommand<?>> commands = new CopyOnWriteArrayList<>();

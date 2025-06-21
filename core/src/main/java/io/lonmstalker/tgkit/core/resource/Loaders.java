@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.resource;
+
+package io.github.tgkit.core.resource;
 
 import java.io.FileNotFoundException;
 import java.io.FilterInputStream;
@@ -27,7 +28,8 @@ import java.util.jar.JarFile;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 public final class Loaders {
-  private Loaders() {}
+  private Loaders() {
+  }
 
   public static @NonNull ResourceLoader load(@NonNull String path) {
     if (path.startsWith("classpath:")) {
@@ -46,7 +48,9 @@ public final class Loaders {
     throw new IllegalArgumentException("Not a valid path: " + path);
   }
 
-  /** classpath:"/cfg.yml" ─ ищет ресурс в ClassLoader-е текущего класса. */
+  /**
+   * classpath:"/cfg.yml" ─ ищет ресурс в ClassLoader-е текущего класса.
+   */
   public static ResourceLoader classpath(@NonNull String path) {
     return new ResourceLoader() {
 
@@ -72,7 +76,9 @@ public final class Loaders {
     };
   }
 
-  /** file:"/etc/app.yml" */
+  /**
+   * file:"/etc/app.yml"
+   */
   public static ResourceLoader file(@NonNull Path p) {
     return new ResourceLoader() {
 
@@ -93,7 +99,9 @@ public final class Loaders {
     };
   }
 
-  /** url:"<a href="https://example.com/cfg.json">...</a>" */
+  /**
+   * url:"<a href="https://example.com/cfg.json">...</a>"
+   */
   public static ResourceLoader url(@NonNull URI uri) {
     return new ResourceLoader() {
 

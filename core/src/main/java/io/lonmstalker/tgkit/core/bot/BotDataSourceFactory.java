@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.bot;
 
-import io.lonmstalker.tgkit.core.crypto.TokenCipher;
-import io.lonmstalker.tgkit.core.exception.BotApiException;
+package io.github.tgkit.core.bot;
+
+import io.github.tgkit.core.crypto.TokenCipher;
+import io.github.tgkit.core.exception.BotApiException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -30,22 +31,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
 
-/** Extracts bot information from database. */
+/**
+ * Extracts bot information from database.
+ */
 public final class BotDataSourceFactory {
-  private static final Logger log = LoggerFactory.getLogger(BotDataSourceFactory.class);
-
-  private BotDataSourceFactory() {}
-
   public static final BotDataSourceFactory INSTANCE = new BotDataSourceFactory();
-
+  private static final Logger log = LoggerFactory.getLogger(BotDataSourceFactory.class);
   // language=SQL
   private static final String SELECT_QUERY =
       "SELECT token, proxy_host, proxy_port, proxy_type, max_threads, updates_timeout, updates_limit, bot_group "
           + "FROM bot_settings WHERE id = ?";
-
   private static final int DEFAULT_MAX_THREADS = 1;
   private static final int DEFAULT_UPDATES_TIMEOUT = 0;
   private static final int DEFAULT_UPDATES_LIMIT = 100;
+  private BotDataSourceFactory() {
+  }
 
   private static @Nullable String stringOrDefault(
       @NonNull ResultSet rs, @NonNull String column, @Nullable String def) throws SQLException {
@@ -73,15 +73,15 @@ public final class BotDataSourceFactory {
    * Читает параметры бота из DataSource.
    *
    * @param dataSource источник данных
-   * @param id идентификатор в БД
-   * @param cipher дешифратор токена
+   * @param id         идентификатор в БД
+   * @param cipher     дешифратор токена
    * @return параметры бота
    */
   @SuppressWarnings("argument")
   public @NonNull BotData load(
       @NonNull DataSource dataSource, long id, @NonNull TokenCipher cipher) {
     try (Connection connection = dataSource.getConnection();
-        PreparedStatement ps = connection.prepareStatement(SELECT_QUERY)) {
+         PreparedStatement ps = connection.prepareStatement(SELECT_QUERY)) {
       ps.setLong(1, id);
       try (ResultSet rs = ps.executeQuery()) {
         if (!rs.next()) {
@@ -120,5 +120,6 @@ public final class BotDataSourceFactory {
     }
   }
 
-  public record BotData(@NonNull String token, @NonNull BotConfig config) {}
+  public record BotData(@NonNull String token, @NonNull BotConfig config) {
+  }
 }

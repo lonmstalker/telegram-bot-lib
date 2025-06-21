@@ -13,16 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.args;
 
-import io.lonmstalker.tgkit.core.BotRequest;
-import io.lonmstalker.tgkit.core.exception.BotApiException;
+package io.github.tgkit.core.args;
+
+import io.github.tgkit.core.BotRequest;
+import io.github.tgkit.core.exception.BotApiException;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 public interface BotArgumentConverter<T, D> {
 
-  @NonNull D convert(@NonNull String raw, @NonNull Context<T> ctx) throws BotApiException;
+  @NonNull
+  D convert(@NonNull String raw, @NonNull Context<T> ctx) throws BotApiException;
 
   default boolean isUpdate() {
     return false;

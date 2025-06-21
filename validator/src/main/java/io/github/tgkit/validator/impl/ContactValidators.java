@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.github.tgkit.validator.impl;
 
-import io.lonmstalker.tgkit.core.i18n.MessageKey;
-import io.lonmstalker.tgkit.core.validator.Validator;
+import io.github.tgkit.core.i18n.MessageKey;
+import io.github.tgkit.core.validator.Validator;
 import java.util.regex.Pattern;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.objects.Contact;
@@ -28,10 +29,10 @@ import org.telegram.telegrambots.meta.api.objects.Contact;
  */
 public final class ContactValidators {
 
-  private ContactValidators() {}
-
   private static final Pattern E164 = Pattern.compile("^\\+\\d{1,15}$");
   private static final int MAX_NAME = 255;
+  private ContactValidators() {
+  }
 
   /**
    * Проверяет, что телефон соответствует формату E.164.

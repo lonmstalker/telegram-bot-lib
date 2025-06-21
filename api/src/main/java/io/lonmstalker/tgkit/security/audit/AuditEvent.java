@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.security.audit;
+
+package io.github.tgkit.security.audit;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import java.time.Instant;
@@ -36,6 +37,29 @@ public final class AuditEvent {
     this.data = builder.data;
   }
 
+  public static Builder builder() {
+    return new Builder();
+  }
+
+  /* Фабрики для самых частых сценариев — лаконичнее в коде. */
+  public static @NonNull AuditEvent userAction(long userId, @NonNull String action) {
+    return AuditEvent.builder()
+        .action(action)
+        .category("BOT_COMMAND")
+        .actor("user:" + userId)
+        .data(Map.of())
+        .build();
+  }
+
+  public static @NonNull AuditEvent securityAlert(@NonNull String actor, @NonNull String msg) {
+    return AuditEvent.builder()
+        .action(msg)
+        .category("SECURITY")
+        .actor(actor)
+        .data(Map.of())
+        .build();
+  }
+
   public String getCategory() {
     return category;
   }
@@ -54,10 +78,6 @@ public final class AuditEvent {
 
   public Map<String, Object> getData() {
     return data;
-  }
-
-  public static Builder builder() {
-    return new Builder();
   }
 
   public static final class Builder {
@@ -95,24 +115,5 @@ public final class AuditEvent {
     public AuditEvent build() {
       return new AuditEvent(this);
     }
-  }
-
-  /* Фабрики для самых частых сценариев — лаконичнее в коде. */
-  public static @NonNull AuditEvent userAction(long userId, @NonNull String action) {
-    return AuditEvent.builder()
-        .action(action)
-        .category("BOT_COMMAND")
-        .actor("user:" + userId)
-        .data(Map.of())
-        .build();
-  }
-
-  public static @NonNull AuditEvent securityAlert(@NonNull String actor, @NonNull String msg) {
-    return AuditEvent.builder()
-        .action(msg)
-        .category("SECURITY")
-        .actor(actor)
-        .data(Map.of())
-        .build();
   }
 }

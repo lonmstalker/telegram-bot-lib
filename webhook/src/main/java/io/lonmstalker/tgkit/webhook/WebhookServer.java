@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.webhook;
+
+package io.github.tgkit.webhook;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.lonmstalker.observability.MetricsCollector;
-import io.lonmstalker.tgkit.core.bot.WebHookReceiver;
-import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
-import io.lonmstalker.tgkit.observability.Tags;
+import io.github.observability.MetricsCollector;
+import io.github.tgkit.core.bot.WebHookReceiver;
+import io.github.tgkit.core.config.BotGlobalConfig;
+import io.github.tgkit.observability.Tags;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.Gauge;
 import io.netty.bootstrap.ServerBootstrap;
@@ -95,20 +96,12 @@ public final class WebhookServer implements AutoCloseable {
   private static final Logger log = LoggerFactory.getLogger(WebhookServer.class);
   private static final String SECRET_HEADER = "X-Telegram-Bot-Api-Secret-Token";
   private static final String HSTS_VALUE = "max-age=31536000; includeSubDomains";
-
-  /** Варианты реализации HTTP-сервера. */
-  public enum Engine {
-    JETTY,
-    NETTY
-  }
-
   private final ServerEngine engine;
   private final ObjectMapper mapper = BotGlobalConfig.INSTANCE.http().getMapper();
   private final String secret;
   private final MetricsCollector metrics = BotGlobalConfig.INSTANCE.observability().getCollector();
   private final Counter dropped = metrics.counter("updates_dropped_total", Tags.of());
   private final AtomicInteger queueGauge = new AtomicInteger();
-
   public WebhookServer(int port, @NonNull String secretToken, @NonNull Engine engine) {
     this.secret = secretToken;
     this.engine = engine == Engine.JETTY ? new JettyEngine(port) : new NettyEngine(port);
@@ -116,7 +109,9 @@ public final class WebhookServer implements AutoCloseable {
         .register(metrics.registry());
   }
 
-  /** Запуск сервера. */
+  /**
+   * Запуск сервера.
+   */
   public void start() throws Exception {
     engine.start();
     log.info("Webhook server started on port {}", port());
@@ -143,6 +138,22 @@ public final class WebhookServer implements AutoCloseable {
     engine.close();
   }
 
+  /**
+   * Варианты реализации HTTP-сервера.
+   */
+  public enum Engine {
+    JETTY,
+    NETTY
+  }
+
+  private interface ServerEngine extends AutoCloseable {
+    void start() throws Exception;
+
+    void register(@NonNull WebHookReceiver receiver);
+
+    int port();
+  }
+
   private static class HstsFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
@@ -152,14 +163,6 @@ public final class WebhookServer implements AutoCloseable {
       }
       chain.doFilter(request, response);
     }
-  }
-
-  private interface ServerEngine extends AutoCloseable {
-    void start() throws Exception;
-
-    void register(@NonNull WebHookReceiver receiver);
-
-    int port();
   }
 
   private final class JettyEngine implements ServerEngine {
@@ -244,8 +247,8 @@ public final class WebhookServer implements AutoCloseable {
     private final EventLoopGroup boss = new NioEventLoopGroup(1);
     private final EventLoopGroup worker = new NioEventLoopGroup();
     private final int port;
-    private Channel serverChannel;
     private final Map<String, WebHookReceiver> receivers = new ConcurrentHashMap<>();
+    private Channel serverChannel;
 
     NettyEngine(int port) {
       this.port = port;
@@ -290,8 +293,8 @@ public final class WebhookServer implements AutoCloseable {
     }
 
     private final class NettyHandler extends SimpleChannelInboundHandler<HttpObject> {
-      private HttpRequest request;
       private final ByteBuf body = Unpooled.buffer();
+      private HttpRequest request;
 
       @Override
       protected void channelRead0(ChannelHandlerContext ctx, HttpObject msg) throws Exception {

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 module io.github.tgkit.validator {
-  requires io.lonmstalker.tgkit.api;
+  requires io.github.tgkit.api;
   requires telegrambots;
   requires telegrambots.meta;
   requires static org.checkerframework.checker.qual;

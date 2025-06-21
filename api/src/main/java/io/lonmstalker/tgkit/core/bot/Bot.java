@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.bot;
 
-import io.lonmstalker.tgkit.core.exception.BotApiException;
+package io.github.tgkit.core.bot;
+
+import io.github.tgkit.core.exception.BotApiException;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
@@ -70,21 +71,24 @@ public interface Bot {
    * @return username бота
    * @throws BotApiException если бот ещё не запущен
    */
-  @NonNull String username() throws BotApiException;
+  @NonNull
+  String username() throws BotApiException;
 
   /**
    * Реестр команд, доступных для данного бота.
    *
    * @return объект реестра команд
    */
-  @NonNull BotCommandRegistry registry();
+  @NonNull
+  BotCommandRegistry registry();
 
   /**
    * Текущее состояние бота
    *
    * @return состояние бота
    */
-  @NonNull BotState state();
+  @NonNull
+  BotState state();
 
   /**
    * Добавляет действие, выполняемое после остановки бота.
@@ -98,19 +102,22 @@ public interface Bot {
    *
    * @return объект конфигурации
    */
-  @NonNull BotConfig config();
+  @NonNull
+  BotConfig config();
 
   /**
    * Токен Telegram, использующийся при работе с API.
    *
    * @return строка токена
    */
-  @NonNull String token();
+  @NonNull
+  String token();
 
   /**
    * Получить хранилище ботов
    *
    * @return хранилище ботов
    */
-  @NonNull BotRegistry botRegistry();
+  @NonNull
+  BotRegistry botRegistry();
 }

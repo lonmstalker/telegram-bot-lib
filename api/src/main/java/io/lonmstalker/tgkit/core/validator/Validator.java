@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.validator;
 
-import io.lonmstalker.tgkit.core.exception.ValidationException;
-import io.lonmstalker.tgkit.core.i18n.MessageKey;
+package io.github.tgkit.core.validator;
+
+import io.github.tgkit.core.exception.ValidationException;
+import io.github.tgkit.core.i18n.MessageKey;
 import java.util.Objects;
 import java.util.function.Predicate;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -31,18 +32,10 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 public interface Validator<T> {
 
   /**
-   * Проверяет значение на корректность.
-   *
-   * @param value входное значение
-   * @throws ValidationException если проверка не прошла
-   */
-  void validate(@Nullable T value) throws ValidationException;
-
-  /**
    * Создаёт {@code Validator<T>} из произвольного {@link Predicate} и ключа ошибки.
    *
    * @param predicate условие прохождения
-   * @param errorKey ключ для локализованного сообщения об ошибке
+   * @param errorKey  ключ для локализованного сообщения об ошибке
    */
   static <T> @NonNull Validator<T> of(
       @NonNull Predicate<T> predicate, @NonNull MessageKey errorKey) {
@@ -53,7 +46,17 @@ public interface Validator<T> {
     };
   }
 
-  /** Комбинирует два валидатора: сначала этот, потом другой. */
+  /**
+   * Проверяет значение на корректность.
+   *
+   * @param value входное значение
+   * @throws ValidationException если проверка не прошла
+   */
+  void validate(@Nullable T value) throws ValidationException;
+
+  /**
+   * Комбинирует два валидатора: сначала этот, потом другой.
+   */
   default @NonNull Validator<T> and(@NonNull Validator<? super T> other) {
     Objects.requireNonNull(other, "other");
     return v -> {
@@ -62,7 +65,9 @@ public interface Validator<T> {
     };
   }
 
-  /** «Или»: если первый не прошёл, пытаем второй. */
+  /**
+   * «Или»: если первый не прошёл, пытаем второй.
+   */
   default @NonNull Validator<T> or(@NonNull Validator<? super T> other) {
     Objects.requireNonNull(other, "other");
     return v -> {

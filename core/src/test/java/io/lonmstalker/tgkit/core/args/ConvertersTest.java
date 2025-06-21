@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.args;
+
+package io.github.tgkit.core.args;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import io.lonmstalker.tgkit.core.exception.BotApiException;
-import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
+import io.github.tgkit.core.exception.BotApiException;
+import io.github.tgkit.testkit.TestBotBootstrap;
 import java.math.BigDecimal;
 import org.junit.jupiter.api.Test;
 
@@ -26,18 +27,6 @@ public class ConvertersTest {
 
   static {
     TestBotBootstrap.initOnce();
-  }
-
-  enum Color {
-    RED,
-    BLUE
-  }
-
-  static class UpperConverter implements BotArgumentConverter<String> {
-    @Override
-    public String convert(String raw, Context ctx) {
-      return raw.toUpperCase();
-    }
   }
 
   @Test
@@ -67,5 +56,17 @@ public class ConvertersTest {
     assertSame(first, second);
     assertEquals(
         "ABC", ((BotArgumentConverter<String>) first).convert("abc", new Context(null, null)));
+  }
+
+  enum Color {
+    RED,
+    BLUE
+  }
+
+  static class UpperConverter implements BotArgumentConverter<String> {
+    @Override
+    public String convert(String raw, Context ctx) {
+      return raw.toUpperCase();
+    }
   }
 }

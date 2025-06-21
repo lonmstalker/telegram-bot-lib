@@ -13,17 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.observability;
+
+package io.github.tgkit.observability;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-/** Неизменяемый тег. */
+/**
+ * Неизменяемый тег.
+ */
 public record ImmutableTag(String key, String value) implements Tag {
 
   /**
    * Создаёт тег с ключом и значением.
    *
-   * @param key ключ
+   * @param key   ключ
    * @param value значение
    */
   public ImmutableTag(@NonNull String key, @NonNull String value) {

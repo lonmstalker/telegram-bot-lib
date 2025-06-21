@@ -13,16 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.security.audit;
+
+package io.github.tgkit.security.audit;
 
 import java.io.Closeable;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 public interface AuditSink extends Closeable {
 
-  /** асинхронно - вызывается в worker-треде AuditBus */
+  /**
+   * асинхронно - вызывается в worker-треде AuditBus
+   */
   void emit(@NonNull AuditEvent ev) throws Exception;
 
-  /** low-bps fallback */
-  default void close() {}
+  /**
+   * low-bps fallback
+   */
+  default void close() {
+  }
 }

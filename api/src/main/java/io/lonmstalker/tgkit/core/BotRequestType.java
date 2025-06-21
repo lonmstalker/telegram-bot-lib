@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core;
 
-import io.lonmstalker.tgkit.core.exception.BotApiException;
+package io.github.tgkit.core;
+
+import io.github.tgkit.core.exception.BotApiException;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.ChatJoinRequest;
@@ -78,13 +79,19 @@ public enum BotRequestType {
   CHAT_BOOST(ChatBoostUpdated.class, true, true),
   REMOVED_CHAT_BOOST(ChatBoostUpdated.class, true, true);
 
-  /** Класс Telegram API, соответствующий типу запроса. */
+  /**
+   * Класс Telegram API, соответствующий типу запроса.
+   */
   private final @NonNull Class<?> type;
 
-  /** Может ли объект содержать User-ID? */
+  /**
+   * Может ли объект содержать User-ID?
+   */
   private final boolean hasUserId;
 
-  /** Может ли объект содержать Chat-ID? */
+  /**
+   * Может ли объект содержать Chat-ID?
+   */
   private final boolean hasChatId;
 
   BotRequestType(@NonNull Class<?> type, boolean hasUserId, boolean hasChatId) {

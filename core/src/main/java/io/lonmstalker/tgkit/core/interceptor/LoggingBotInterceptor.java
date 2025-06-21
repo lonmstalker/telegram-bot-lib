@@ -13,17 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.interceptor;
 
-import io.lonmstalker.tgkit.core.BotRequest;
-import io.lonmstalker.tgkit.core.BotResponse;
+package io.github.tgkit.core.interceptor;
+
+import io.github.tgkit.core.BotRequest;
+import io.github.tgkit.core.BotResponse;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-/** Стандартный интерцептор, логирующий этапы обработки обновления. */
+/**
+ * Стандартный интерцептор, логирующий этапы обработки обновления.
+ */
 public class LoggingBotInterceptor implements BotInterceptor {
   private static final Logger log = LoggerFactory.getLogger(LoggingBotInterceptor.class);
 

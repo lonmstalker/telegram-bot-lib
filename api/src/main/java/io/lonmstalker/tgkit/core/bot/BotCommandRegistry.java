@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.bot;
 
-import io.lonmstalker.tgkit.core.BotCommand;
-import io.lonmstalker.tgkit.core.BotRequestType;
+package io.github.tgkit.core.bot;
+
+import io.github.tgkit.core.BotCommand;
+import io.github.tgkit.core.BotRequestType;
 import java.util.List;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -29,7 +30,8 @@ public interface BotCommandRegistry {
    *
    * @return список команд
    */
-  @NonNull List<BotCommand<?>> all();
+  @NonNull
+  List<BotCommand<?>> all();
 
   /**
    * Регистрирует новую команду и сортирует список по приоритету.
@@ -41,10 +43,10 @@ public interface BotCommandRegistry {
   /**
    * Ищет первую команду, подходящую под тип, группу и matcher.
    *
-   * @param type тип запроса
+   * @param type     тип запроса
    * @param botGroup группа команд (любая == пустая строка)
-   * @param data объект Telegram API
-   * @param <T> тип объекта
+   * @param data     объект Telegram API
+   * @param <T>      тип объекта
    * @return команда или {@code null}, если не найдена
    */
   <T extends BotApiObject> @Nullable BotCommand<T> find(

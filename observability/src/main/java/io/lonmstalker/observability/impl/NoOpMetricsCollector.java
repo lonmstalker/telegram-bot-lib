@@ -13,17 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.observability.impl;
 
-import io.lonmstalker.observability.MetricsCollector;
-import io.lonmstalker.tgkit.observability.Tags;
+package io.github.observability.impl;
+
+import io.github.observability.MetricsCollector;
+import io.github.tgkit.observability.Tags;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Timer;
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-/** Заглушка MetricsCollector, не сохраняющая метрики. */
+/**
+ * Заглушка MetricsCollector, не сохраняющая метрики.
+ */
 public class NoOpMetricsCollector implements MetricsCollector {
   private final MeterRegistry registry = new SimpleMeterRegistry();
 

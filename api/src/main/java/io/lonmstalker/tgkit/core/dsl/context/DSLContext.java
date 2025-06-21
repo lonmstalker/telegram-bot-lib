@@ -13,24 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.dsl.context;
 
-import io.lonmstalker.tgkit.core.BotInfo;
-import io.lonmstalker.tgkit.core.BotService;
-import io.lonmstalker.tgkit.core.exception.BotApiException;
-import io.lonmstalker.tgkit.core.user.BotUserInfo;
+package io.github.tgkit.core.dsl.context;
+
+import io.github.tgkit.core.BotInfo;
+import io.github.tgkit.core.BotService;
+import io.github.tgkit.core.exception.BotApiException;
+import io.github.tgkit.core.user.BotUserInfo;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-/** Контекст выполнения ответа. */
+/**
+ * Контекст выполнения ответа.
+ */
 public interface DSLContext {
 
-  @NonNull BotInfo botInfo();
+  @NonNull
+  BotInfo botInfo();
 
-  @NonNull BotUserInfo userInfo();
+  @NonNull
+  BotUserInfo userInfo();
 
-  @NonNull BotService service();
+  @NonNull
+  BotService service();
 
-  /** Проверяет роль администратора. */
+  /**
+   * Проверяет роль администратора.
+   */
   boolean isAdmin();
 
   record SimpleDSLContext(
@@ -45,7 +53,9 @@ public interface DSLContext {
       }
     }
 
-    /** Проверяет роль администратора. */
+    /**
+     * Проверяет роль администратора.
+     */
     public boolean isAdmin() {
       return userInfo.roles().contains("ADMIN");
     }

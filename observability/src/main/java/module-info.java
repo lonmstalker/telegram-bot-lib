@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-module io.lonmstalker.tgkit.observability {
-  requires io.lonmstalker.tgkit.core;
+module io.github.tgkit.observability {
+  requires io.github.tgkit.core;
   requires io.micrometer.core;
   requires io.opentelemetry.api;
   requires io.opentelemetry.sdk;
@@ -23,7 +23,7 @@ module io.lonmstalker.tgkit.observability {
   requires io.micrometer.registry.prometheus;
   requires io.prometheus.simpleclient_httpserver;
 
-  exports io.lonmstalker.observability;
-  exports io.lonmstalker.observability.impl to
-      io.lonmstalker.tgkit.plugin;
+  exports io.github.observability;
+  exports io.github.observability.impl to
+      io.github.tgkit.plugin;
 }

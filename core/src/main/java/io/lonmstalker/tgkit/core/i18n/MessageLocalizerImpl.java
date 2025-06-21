@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.i18n;
+
+package io.github.tgkit.core.i18n;
 
 import java.text.MessageFormat;
 import java.util.Locale;
@@ -23,7 +24,9 @@ import java.util.ResourceBundle;
 import java.util.concurrent.ConcurrentHashMap;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-/** Локализатор сообщений, аналогичный Spring MessageSource. */
+/**
+ * Локализатор сообщений, аналогичный Spring MessageSource.
+ */
 @SuppressWarnings("type.argument")
 public class MessageLocalizerImpl implements MessageLocalizer {
 
@@ -51,7 +54,7 @@ public class MessageLocalizerImpl implements MessageLocalizer {
   /**
    * Конструктор с явным указанием «дефолтной» локали.
    *
-   * @param baseName имя бандла
+   * @param baseName      имя бандла
    * @param defaultLocale локаль по умолчанию
    */
   @SuppressWarnings("method.invocation")

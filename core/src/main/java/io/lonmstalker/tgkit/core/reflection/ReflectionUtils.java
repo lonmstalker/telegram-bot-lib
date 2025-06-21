@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.reflection;
 
-import io.lonmstalker.tgkit.core.exception.BotApiException;
+package io.github.tgkit.core.reflection;
+
+import io.github.tgkit.core.exception.BotApiException;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
 import java.lang.reflect.InvocationTargetException;
@@ -24,9 +25,12 @@ import java.lang.reflect.Modifier;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 public final class ReflectionUtils {
-  private ReflectionUtils() {}
+  private ReflectionUtils() {
+  }
 
-  /** Создаёт экземпляр указанного класса, учитывая возможный метод getInstance(). */
+  /**
+   * Создаёт экземпляр указанного класса, учитывая возможный метод getInstance().
+   */
   @SuppressWarnings({"return", "unchecked", "argument"})
   public static <T> @NonNull T newInstance(@NonNull Class<T> clazz) {
     try {

@@ -13,11 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.bot;
 
-/** Служебные константы бот-фреймворка. */
+package io.github.tgkit.core.bot;
+
+/**
+ * Служебные константы бот-фреймворка.
+ */
 public class BotConstants {
-  private BotConstants() {}
-
   public static final String BOT_TOKEN_SECRET = "bot_token";
+
+  private BotConstants() {
+  }
 }

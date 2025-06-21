@@ -13,20 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.plugin;
 
-import static io.lonmstalker.tgkit.plugin.internal.BotPluginConstants.CURRENT_VERSION;
+package io.github.tgkit.plugin;
+
+import static io.github.tgkit.plugin.internal.BotPluginConstants.CURRENT_VERSION;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.github.zafarkhaja.semver.Version;
-import io.lonmstalker.tgkit.core.exception.BotApiException;
-import io.lonmstalker.tgkit.plugin.internal.BotPluginContainer;
-import io.lonmstalker.tgkit.plugin.internal.BotPluginContextDefault;
-import io.lonmstalker.tgkit.plugin.internal.BotPluginDescriptor;
-import io.lonmstalker.tgkit.plugin.internal.sort.TopoSorter;
-import io.lonmstalker.tgkit.security.audit.AuditBus;
-import io.lonmstalker.tgkit.security.audit.AuditEvent;
+import io.github.tgkit.core.exception.BotApiException;
+import io.github.tgkit.plugin.internal.BotPluginContainer;
+import io.github.tgkit.plugin.internal.BotPluginContextDefault;
+import io.github.tgkit.plugin.internal.BotPluginDescriptor;
+import io.github.tgkit.plugin.internal.sort.TopoSorter;
+import io.github.tgkit.security.audit.AuditBus;
+import io.github.tgkit.security.audit.AuditEvent;
 import io.github.tgkit.security.config.BotSecurityGlobalConfig;
 import java.io.Closeable;
 import java.io.IOException;
@@ -80,6 +81,32 @@ public final class BotPluginManager implements AutoCloseable {
       Executors.newSingleThreadExecutor(r -> new Thread(r, "plugin-manager"));
   private final AuditBus auditBus = BotSecurityGlobalConfig.INSTANCE.audit().bus();
   private final Map<String, BotPluginContainer> plugins = new ConcurrentHashMap<>();
+
+  private static String normalizeVersion(String version) {
+    if (version.chars().filter(ch -> ch == '.').count() == 1) {
+      return version + ".0";
+    }
+    if (!version.contains(".")) {
+      return version + ".0.0";
+    }
+    return version;
+  }
+
+  private static void closeQuiet(Closeable c) {
+    try {
+      c.close();
+    } catch (IOException ignored) {
+    }
+  }
+
+  private static String bytesToHex(byte[] bytes) {
+    StringBuilder sb = new StringBuilder(bytes.length * 2);
+    for (byte b : bytes) {
+      String hex = Integer.toHexString(b & 0xFF);
+      sb.append(hex.length() == 1 ? "0" : "").append(hex);
+    }
+    return sb.toString();
+  }
 
   /**
    * Сканирует папку, сортирует плагины по зависимостям и загружает их. Ошибки отдельных JAR
@@ -280,16 +307,6 @@ public final class BotPluginManager implements AutoCloseable {
     }
   }
 
-  private static String normalizeVersion(String version) {
-    if (version.chars().filter(ch -> ch == '.').count() == 1) {
-      return version + ".0";
-    }
-    if (!version.contains(".")) {
-      return version + ".0.0";
-    }
-    return version;
-  }
-
   private void verifyHash(Path jar, BotPluginDescriptor desc) throws IOException {
     if (StringUtils.isBlank(desc.sha256())) {
       log.debug("Skip hash check for plugin {}", desc.id());
@@ -300,21 +317,5 @@ public final class BotPluginManager implements AutoCloseable {
     if (!checksum.equalsIgnoreCase(desc.sha256())) {
       throw new PluginException("Checksum mismatch for " + jar.getFileName());
     }
-  }
-
-  private static void closeQuiet(Closeable c) {
-    try {
-      c.close();
-    } catch (IOException ignored) {
-    }
-  }
-
-  private static String bytesToHex(byte[] bytes) {
-    StringBuilder sb = new StringBuilder(bytes.length * 2);
-    for (byte b : bytes) {
-      String hex = Integer.toHexString(b & 0xFF);
-      sb.append(hex.length() == 1 ? "0" : "").append(hex);
-    }
-    return sb.toString();
   }
 }

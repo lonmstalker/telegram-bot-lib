@@ -13,15 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.doc.cli;
 
-import io.lonmstalker.tgkit.doc.DocumentationService;
+package io.github.tgkit.doc.cli;
+
+import io.github.tgkit.doc.DocumentationService;
 import java.nio.file.Path;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
-/** Консольная утилита для генерации OpenAPI из HTML-документации. */
+/**
+ * Консольная утилита для генерации OpenAPI из HTML-документации.
+ */
 @Command(name = "doc-to-openapi", mixinStandardHelpOptions = true, version = "1.0")
 public class DocCli implements Runnable {
 
@@ -37,7 +40,9 @@ public class DocCli implements Runnable {
       defaultValue = "${sys:user.dir}/build/openapi/telegram.yaml")
   private Path output;
 
-  /** Точка входа. */
+  /**
+   * Точка входа.
+   */
   public static void main(String[] args) {
     new CommandLine(new DocCli()).execute(args);
   }

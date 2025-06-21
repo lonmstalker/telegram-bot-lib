@@ -13,30 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.observability;
+
+package io.github.observability;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import io.lonmstalker.tgkit.core.BotCommand;
-import io.lonmstalker.tgkit.core.BotRequest;
-import io.lonmstalker.tgkit.core.BotRequestType;
-import io.lonmstalker.tgkit.core.BotResponse;
-import io.lonmstalker.tgkit.core.args.RouteContextHolder;
-import io.lonmstalker.tgkit.core.bot.Bot;
-import io.lonmstalker.tgkit.core.bot.BotAdapterImpl;
-import io.lonmstalker.tgkit.core.bot.BotCommandRegistry;
-import io.lonmstalker.tgkit.core.bot.BotCommandRegistryImpl;
-import io.lonmstalker.tgkit.core.bot.BotConfig;
-import io.lonmstalker.tgkit.core.bot.BotRegistryImpl;
-import io.lonmstalker.tgkit.core.bot.BotState;
-import io.lonmstalker.tgkit.core.bot.TelegramSender;
-import io.lonmstalker.tgkit.core.interceptor.BotInterceptor;
-import io.lonmstalker.tgkit.core.storage.BotRequestContextHolder;
-import io.lonmstalker.tgkit.observability.Span;
-import io.lonmstalker.tgkit.observability.Tags;
-import io.lonmstalker.tgkit.observability.Tracer;
-import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
+import io.github.tgkit.core.BotCommand;
+import io.github.tgkit.core.BotRequest;
+import io.github.tgkit.core.BotRequestType;
+import io.github.tgkit.core.BotResponse;
+import io.github.tgkit.core.args.RouteContextHolder;
+import io.github.tgkit.core.bot.Bot;
+import io.github.tgkit.core.bot.BotAdapterImpl;
+import io.github.tgkit.core.bot.BotCommandRegistry;
+import io.github.tgkit.core.bot.BotCommandRegistryImpl;
+import io.github.tgkit.core.bot.BotConfig;
+import io.github.tgkit.core.bot.BotRegistryImpl;
+import io.github.tgkit.core.bot.BotState;
+import io.github.tgkit.core.bot.TelegramSender;
+import io.github.tgkit.core.interceptor.BotInterceptor;
+import io.github.tgkit.core.storage.BotRequestContextHolder;
+import io.github.tgkit.observability.Span;
+import io.github.tgkit.observability.Tags;
+import io.github.tgkit.observability.Tracer;
+import io.github.tgkit.testkit.TestBotBootstrap;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Timer;
@@ -88,10 +89,12 @@ public class BotAdapterCleanupTest {
     BotInterceptor failing =
         new BotInterceptor() {
           @Override
-          public void preHandle(@NonNull Update u, @NonNull BotRequest<?> r) {}
+          public void preHandle(@NonNull Update u, @NonNull BotRequest<?> r) {
+          }
 
           @Override
-          public void postHandle(@NonNull Update u, @NonNull BotRequest<?> r) {}
+          public void postHandle(@NonNull Update u, @NonNull BotRequest<?> r) {
+          }
 
           @Override
           public void afterCompletion(

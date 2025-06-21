@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.testkit;
+
+package io.github.tgkit.testkit;
 
 import io.undertow.Undertow;
 import io.undertow.util.Headers;
@@ -26,7 +27,9 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
-/** Минимальный HTTP-сервер, имитирующий Telegram API для тестов. */
+/**
+ * Минимальный HTTP-сервер, имитирующий Telegram API для тестов.
+ */
 public final class TelegramMockServer implements AutoCloseable {
 
   private final Undertow server;
@@ -34,7 +37,9 @@ public final class TelegramMockServer implements AutoCloseable {
   private final BlockingQueue<RecordedRequest> requests = new LinkedBlockingQueue<>();
   private final Queue<String> responses = new LinkedBlockingQueue<>();
 
-  /** Создаёт и запускает сервер на свободном порту. */
+  /**
+   * Создаёт и запускает сервер на свободном порту.
+   */
   public TelegramMockServer() {
     this.port = findFreePort();
     this.server =
@@ -62,23 +67,6 @@ public final class TelegramMockServer implements AutoCloseable {
     this.server.start();
   }
 
-  /**
-   * Базовый URL для передачи в {@link io.lonmstalker.tgkit.core.bot.BotConfig#setBaseUrl(String)}.
-   */
-  public String baseUrl() {
-    return "http://localhost:" + port + "/bot";
-  }
-
-  /** Добавляет ответ, который будет отправлен при следующем запросе. */
-  public void enqueue(String json) {
-    responses.add(json);
-  }
-
-  /** Возвращает следующий записанный запрос или {@code null}, если таймаут истёк. */
-  public RecordedRequest takeRequest(long timeout, TimeUnit unit) throws InterruptedException {
-    return requests.poll(timeout, unit);
-  }
-
   private static int findFreePort() {
     try (ServerSocket socket = new ServerSocket()) {
       socket.bind(new InetSocketAddress(0));
@@ -86,6 +74,27 @@ public final class TelegramMockServer implements AutoCloseable {
     } catch (Exception e) {
       throw new IllegalStateException("Failed to allocate port", e);
     }
+  }
+
+  /**
+   * Базовый URL для передачи в {@link io.github.tgkit.core.bot.BotConfig#setBaseUrl(String)}.
+   */
+  public String baseUrl() {
+    return "http://localhost:" + port + "/bot";
+  }
+
+  /**
+   * Добавляет ответ, который будет отправлен при следующем запросе.
+   */
+  public void enqueue(String json) {
+    responses.add(json);
+  }
+
+  /**
+   * Возвращает следующий записанный запрос или {@code null}, если таймаут истёк.
+   */
+  public RecordedRequest takeRequest(long timeout, TimeUnit unit) throws InterruptedException {
+    return requests.poll(timeout, unit);
   }
 
   @Override

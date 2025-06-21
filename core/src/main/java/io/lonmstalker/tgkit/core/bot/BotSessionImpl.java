@@ -13,14 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.bot;
+
+package io.github.tgkit.core.bot;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.lonmstalker.observability.MetricsCollector;
-import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
-import io.lonmstalker.tgkit.core.exception.BotApiException;
-import io.lonmstalker.tgkit.observability.Tags;
+import io.github.observability.MetricsCollector;
+import io.github.tgkit.core.config.BotGlobalConfig;
+import io.github.tgkit.core.exception.BotApiException;
+import io.github.tgkit.observability.Tags;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.Gauge;
 import java.io.InputStream;
@@ -56,7 +57,7 @@ import org.telegram.telegrambots.meta.generics.LongPollingBot;
  *   <li>read loop отправляет запрос {@code getUpdates} и кладёт полученные обновления в очередь
  *   <li>handle loop берёт их из очереди и передаёт в бот
  * </ul>
- *
+ * <p>
  * Циклы работают на переданном или стандартном executor.
  *
  * <p>Жизненный цикл:

@@ -13,16 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.observability;
 
-import static io.lonmstalker.tgkit.observability.Tags.*;
+package io.github.observability;
+
+import static io.github.tgkit.observability.Tags.*;
 import static org.mockito.Mockito.*;
 
-import io.lonmstalker.observability.impl.CompositeTracer;
-import io.lonmstalker.tgkit.observability.Span;
-import io.lonmstalker.tgkit.observability.Tag;
-import io.lonmstalker.tgkit.observability.Tags;
-import io.lonmstalker.tgkit.observability.Tracer;
+import io.github.observability.impl.CompositeTracer;
+import io.github.tgkit.observability.Span;
+import io.github.tgkit.observability.Tag;
+import io.github.tgkit.observability.Tags;
+import io.github.tgkit.observability.Tracer;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;

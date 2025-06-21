@@ -13,9 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.exception;
 
-/** Базовый класс исключений, возникающих при обращении к API Telegram. */
+package io.github.tgkit.core.exception;
+
+/**
+ * Базовый класс исключений, возникающих при обращении к API Telegram.
+ */
 public class BotApiException extends RuntimeException {
 
   public BotApiException(String message) {

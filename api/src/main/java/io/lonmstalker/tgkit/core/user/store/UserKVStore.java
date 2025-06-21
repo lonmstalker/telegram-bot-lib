@@ -13,18 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.user.store;
+
+package io.github.tgkit.core.user.store;
 
 import java.util.Map;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-/** Контракт key-value-хранилища «данные пользователя» */
+/**
+ * Контракт key-value-хранилища «данные пользователя»
+ */
 public interface UserKVStore {
 
-  @Nullable String get(long userId, @NonNull String key);
+  @Nullable
+  String get(long userId, @NonNull String key);
 
-  @NonNull Map<String, String> getAll(long userId);
+  @NonNull
+  Map<String, String> getAll(long userId);
 
   void put(long userId, @NonNull String key, @NonNull String value);
 

@@ -13,21 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.boot;
 
-import io.lonmstalker.tgkit.core.bot.Bot;
-import io.lonmstalker.tgkit.core.bot.BotAdapter;
-import io.lonmstalker.tgkit.core.bot.BotAdapterImpl;
-import io.lonmstalker.tgkit.core.bot.BotConfig;
-import io.lonmstalker.tgkit.core.bot.BotFactory;
-import io.lonmstalker.tgkit.core.bot.TelegramSender;
-import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
+package io.github.tgkit.boot;
+
+import io.github.tgkit.core.bot.Bot;
+import io.github.tgkit.core.bot.BotAdapter;
+import io.github.tgkit.core.bot.BotAdapterImpl;
+import io.github.tgkit.core.bot.BotConfig;
+import io.github.tgkit.core.bot.BotFactory;
+import io.github.tgkit.core.bot.TelegramSender;
+import io.github.tgkit.core.init.BotCoreInitializer;
 import java.util.List;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 
-/** Компонент для запуска Telegram-бота при старте Spring Boot приложения. */
+/**
+ * Компонент для запуска Telegram-бота при старте Spring Boot приложения.
+ */
 public final class TelegramBotRunner implements ApplicationRunner {
 
   private final BotProperties props;
@@ -55,14 +58,18 @@ public final class TelegramBotRunner implements ApplicationRunner {
     bot.start();
   }
 
-  /** Останавливает запущенного бота. */
+  /**
+   * Останавливает запущенного бота.
+   */
   public void stop() {
     if (bot != null) {
       bot.stop();
     }
   }
 
-  /** Возвращает запущенный экземпляр бота или {@code null}. */
+  /**
+   * Возвращает запущенный экземпляр бота или {@code null}.
+   */
   public @Nullable Bot bot() {
     return bot;
   }
