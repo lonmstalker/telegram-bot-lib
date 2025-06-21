@@ -24,6 +24,7 @@ import io.github.tgkit.api.exception.BotApiException;
 import io.github.tgkit.plugin.internal.BotPluginContainer;
 import io.github.tgkit.plugin.internal.BotPluginContextDefault;
 import io.github.tgkit.plugin.internal.BotPluginDescriptor;
+import io.github.tgkit.plugin.internal.ChildFirstURLClassLoader;
 import io.github.tgkit.plugin.internal.sort.TopoSorter;
 import io.github.tgkit.security.audit.AuditBus;
 import io.github.tgkit.security.audit.AuditEvent;
