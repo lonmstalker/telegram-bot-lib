@@ -21,6 +21,9 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.PathItem;
 import io.swagger.v3.oas.models.Paths;
+import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.responses.ApiResponse;
+import io.swagger.v3.oas.models.responses.ApiResponses;
 import io.swagger.v3.parser.OpenAPIV3Parser;
 import io.swagger.v3.parser.core.models.SwaggerParseResult;
 import java.io.IOException;
@@ -33,11 +36,17 @@ public class OpenApiEmitter {
   /** Формирует объект {@link OpenAPI} по списку операций. */
   public OpenAPI toOpenApi(List<OperationInfo> operations) {
     OpenAPI openApi = new OpenAPI();
+    openApi.setInfo(new Info().title("Telegram Bot API").version("1.0"));
+
     Paths paths = new Paths();
+    ApiResponse ok = new ApiResponse().description("OK");
     for (OperationInfo op : operations) {
-      Operation operation = new Operation();
-      operation.setSummary(op.description());
-      operation.setOperationId(op.name());
+      Operation operation =
+          new Operation()
+              .summary(op.description())
+              .operationId(op.name())
+              .responses(new ApiResponses().addApiResponse("200", ok));
+
       PathItem path = new PathItem().post(operation);
       paths.addPathItem("/" + op.name(), path);
     }
