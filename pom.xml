@@ -15,6 +15,7 @@
         <module>plugin</module>
         <module>security</module>
         <module>examples</module>
+        <module>tgkit-api</module>
         <module>api</module>
         <module>testkit</module>
         <module>webhook</module>
