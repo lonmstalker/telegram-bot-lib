@@ -1,4 +1,4 @@
-package io.lonmstalker.tgkit.benchmarks;
+package io.lonmstalker.tgkit.benchmark;
 
 import io.lonmstalker.tgkit.core.bot.BotConfig;
 import io.lonmstalker.tgkit.core.bot.TelegramSender;
