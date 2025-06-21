@@ -59,14 +59,14 @@ public class BotAutoConfiguration {
     @Override
     public void afterPropertiesSet() {
       collector = BotObservability.micrometer(properties.getMetricsPort());
-      io.github.tgkit.core.config.BotGlobalConfig.INSTANCE.observability().collector(collector);
+      io.github.tgkit.internal.config.BotGlobalConfig.INSTANCE.observability().collector(collector);
     }
 
     @Override
     public void destroy() throws Exception {
       if (collector != null) {
         collector.close();
-        io.github.tgkit.core.config.BotGlobalConfig.INSTANCE
+        io.github.tgkit.internal.config.BotGlobalConfig.INSTANCE
             .observability()
             .collector(new NoOpMetricsCollector());
       }

@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
-import io.github.tgkit.core.interceptor.BotInterceptor;
+import io.github.tgkit.internal.interceptor.BotInterceptor;
 import io.github.tgkit.security.*;
 import io.github.tgkit.security.init.BotSecurityInitializer;
 import io.github.tgkit.security.ratelimit.*;

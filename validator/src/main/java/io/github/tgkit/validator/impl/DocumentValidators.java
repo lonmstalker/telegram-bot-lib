@@ -15,8 +15,8 @@
  */
 package io.github.tgkit.validator.impl;
 
-import io.github.tgkit.core.i18n.MessageKey;
-import io.github.tgkit.core.validator.Validator;
+import io.github.tgkit.internal.i18n.MessageKey;
+import io.github.tgkit.internal.validator.Validator;
 import io.github.tgkit.validator.moderation.ContentModerationService;
 import java.util.ServiceLoader;
 import java.util.Set;

@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.tgkit.core.update;
+package io.github.tgkit.internal.update;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import io.github.tgkit.core.BotRequestType;
-import io.github.tgkit.core.exception.BotApiException;
+import io.github.tgkit.internal.BotRequestType;
+import io.github.tgkit.internal.exception.BotApiException;
 import io.github.tgkit.testkit.TestBotBootstrap;
 import org.junit.jupiter.api.Test;
 import org.telegram.telegrambots.meta.api.objects.*;

@@ -18,7 +18,7 @@ package io.github.tgkit.validator.impl;
 import static io.github.tgkit.validator.impl.ContactValidators.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import io.github.tgkit.core.exception.ValidationException;
+import io.github.tgkit.internal.exception.ValidationException;
 import org.junit.jupiter.api.Test;
 import org.telegram.telegrambots.meta.api.objects.Contact;
 

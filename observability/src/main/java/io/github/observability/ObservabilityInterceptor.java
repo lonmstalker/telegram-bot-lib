@@ -15,10 +15,10 @@
  */
 package io.github.observability;
 
-import io.github.tgkit.core.BotRequest;
-import io.github.tgkit.core.BotResponse;
-import io.github.tgkit.core.interceptor.BotInterceptor;
-import io.github.tgkit.core.update.UpdateUtils;
+import io.github.tgkit.internal.BotRequest;
+import io.github.tgkit.internal.BotResponse;
+import io.github.tgkit.internal.interceptor.BotInterceptor;
+import io.github.tgkit.internal.update.UpdateUtils;
 import io.github.tgkit.observability.Span;
 import io.github.tgkit.observability.Tag;
 import io.github.tgkit.observability.Tags;

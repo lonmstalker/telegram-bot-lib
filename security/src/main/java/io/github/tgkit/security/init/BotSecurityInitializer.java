@@ -15,7 +15,7 @@
  */
 package io.github.tgkit.security.init;
 
-import io.github.tgkit.core.config.BotGlobalConfig;
+import io.github.tgkit.internal.config.BotGlobalConfig;
 import io.github.tgkit.security.antispam.InMemoryDuplicateProvider;
 import io.github.tgkit.security.audit.AsyncAuditBus;
 import io.github.tgkit.security.captcha.MathCaptchaOperations;
@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Базовая инициализация security-модуля.<br>
- * Аналогично {@link io.github.tgkit.core.init.BotCoreInitializer}.
+ * Аналогично {@link io.github.tgkit.internal.init.BotCoreInitializer}.
  */
 public final class BotSecurityInitializer {
 

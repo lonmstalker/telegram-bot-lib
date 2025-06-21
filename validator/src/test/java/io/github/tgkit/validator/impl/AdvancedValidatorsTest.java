@@ -18,7 +18,7 @@ package io.github.tgkit.validator.impl;
 import static io.github.tgkit.validator.impl.AdvancedValidators.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import io.github.tgkit.core.exception.ValidationException;
+import io.github.tgkit.internal.exception.ValidationException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneOffset;

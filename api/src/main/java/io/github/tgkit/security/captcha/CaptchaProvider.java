@@ -15,7 +15,7 @@
  */
 package io.github.tgkit.security.captcha;
 
-import io.github.tgkit.core.BotRequest;
+import io.github.tgkit.internal.BotRequest;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 

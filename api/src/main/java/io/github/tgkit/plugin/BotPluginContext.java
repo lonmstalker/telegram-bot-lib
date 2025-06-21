@@ -15,11 +15,11 @@
  */
 package io.github.tgkit.plugin;
 
-import io.github.tgkit.core.bot.BotRegistry;
-import io.github.tgkit.core.config.BotGlobalConfig;
-import io.github.tgkit.core.dsl.feature_flags.FeatureFlags;
-import io.github.tgkit.core.event.BotEventBus;
-import io.github.tgkit.core.ttl.TtlScheduler;
+import io.github.tgkit.internal.bot.BotRegistry;
+import io.github.tgkit.internal.config.BotGlobalConfig;
+import io.github.tgkit.internal.dsl.feature_flags.FeatureFlags;
+import io.github.tgkit.internal.event.BotEventBus;
+import io.github.tgkit.internal.ttl.TtlScheduler;
 import io.github.tgkit.security.audit.AuditBus;
 import io.github.tgkit.security.secret.SecretStore;
 import java.net.http.HttpClient;

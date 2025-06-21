@@ -20,16 +20,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.observability.BotObservability;
 import io.github.observability.MetricsCollector;
-import io.github.tgkit.core.BotCommand;
-import io.github.tgkit.core.BotRequest;
-import io.github.tgkit.core.BotRequestType;
-import io.github.tgkit.core.BotResponse;
-import io.github.tgkit.core.bot.Bot;
-import io.github.tgkit.core.bot.BotAdapterImpl;
-import io.github.tgkit.core.bot.BotConfig;
-import io.github.tgkit.core.bot.BotFactory;
-import io.github.tgkit.core.config.BotGlobalConfig;
-import io.github.tgkit.core.matching.CommandMatch;
+import io.github.tgkit.internal.BotCommand;
+import io.github.tgkit.internal.BotRequest;
+import io.github.tgkit.internal.BotRequestType;
+import io.github.tgkit.internal.BotResponse;
+import io.github.tgkit.internal.bot.Bot;
+import io.github.tgkit.internal.bot.BotAdapterImpl;
+import io.github.tgkit.internal.bot.BotConfig;
+import io.github.tgkit.internal.bot.BotFactory;
+import io.github.tgkit.internal.config.BotGlobalConfig;
+import io.github.tgkit.internal.matching.CommandMatch;
 import io.github.tgkit.testkit.RecordedRequest;
 import io.github.tgkit.testkit.TelegramMockServer;
 import io.github.tgkit.testkit.TestBotBootstrap;
@@ -63,7 +63,7 @@ class WebhookServerTest {
       BotAdapterImpl adapter =
           BotAdapterImpl.builder()
               .internalId(1L)
-              .sender(new io.github.tgkit.core.bot.TelegramSender(config, "TOKEN"))
+              .sender(new io.github.tgkit.internal.bot.TelegramSender(config, "TOKEN"))
               .config(config)
               .build();
       adapter.registry().add(new PingCommand());
@@ -122,7 +122,7 @@ class WebhookServerTest {
       BotAdapterImpl adapter =
           BotAdapterImpl.builder()
               .internalId(1L)
-              .sender(new io.github.tgkit.core.bot.TelegramSender(config, "TOKEN"))
+              .sender(new io.github.tgkit.internal.bot.TelegramSender(config, "TOKEN"))
               .config(config)
               .build();
       adapter.registry().add(new PingCommand());
@@ -181,7 +181,7 @@ class WebhookServerTest {
       BotAdapterImpl adapter =
           BotAdapterImpl.builder()
               .internalId(1L)
-              .sender(new io.github.tgkit.core.bot.TelegramSender(config, "TOKEN"))
+              .sender(new io.github.tgkit.internal.bot.TelegramSender(config, "TOKEN"))
               .config(config)
               .build();
       var hook = new org.telegram.telegrambots.meta.api.methods.updates.SetWebhook();
@@ -221,7 +221,7 @@ class WebhookServerTest {
       BotAdapterImpl adapter =
           BotAdapterImpl.builder()
               .internalId(1L)
-              .sender(new io.github.tgkit.core.bot.TelegramSender(config, "TOKEN"))
+              .sender(new io.github.tgkit.internal.bot.TelegramSender(config, "TOKEN"))
               .config(config)
               .build();
       var hook = new org.telegram.telegrambots.meta.api.methods.updates.SetWebhook();

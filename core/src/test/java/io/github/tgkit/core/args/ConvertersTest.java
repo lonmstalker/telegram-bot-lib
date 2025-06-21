@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.tgkit.core.args;
+package io.github.tgkit.internal.args;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import io.github.tgkit.core.exception.BotApiException;
+import io.github.tgkit.internal.exception.BotApiException;
 import io.github.tgkit.testkit.TestBotBootstrap;
 import java.math.BigDecimal;
 import org.junit.jupiter.api.Test;
