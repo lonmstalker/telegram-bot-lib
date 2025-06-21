@@ -15,8 +15,8 @@
  */
 package io.github.tgkit.security.ratelimit;
 
-import io.github.tgkit.internal.BotCommand;
-import io.github.tgkit.internal.loader.BotCommandFactory;
+import io.github.tgkit.api.BotCommand;
+import io.github.tgkit.api.loader.BotCommandFactory;
 import io.github.tgkit.security.config.BotSecurityGlobalConfig;
 import java.lang.reflect.Method;
 import java.util.ArrayList;

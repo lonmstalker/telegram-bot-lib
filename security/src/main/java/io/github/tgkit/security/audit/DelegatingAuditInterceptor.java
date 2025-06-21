@@ -15,9 +15,9 @@
  */
 package io.github.tgkit.security.audit;
 
-import io.github.tgkit.internal.BotRequest;
+import io.github.tgkit.api.BotRequest;
 import io.github.tgkit.internal.BotResponse;
-import io.github.tgkit.internal.interceptor.BotInterceptor;
+import io.github.tgkit.api.interceptor.BotInterceptor;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.telegram.telegrambots.meta.api.objects.Update;

@@ -15,7 +15,7 @@
  */
 package io.github.tgkit.security.rbac;
 
-import io.github.tgkit.internal.user.BotUserInfo;
+import io.github.tgkit.api.user.BotUserInfo;
 import java.util.Set;
 import org.checkerframework.checker.nullness.qual.Nullable;
 

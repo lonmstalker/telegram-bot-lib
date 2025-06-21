@@ -15,10 +15,10 @@
  */
 package io.github.tgkit.security.rbac;
 
-import io.github.tgkit.internal.BotRequest;
+import io.github.tgkit.api.BotRequest;
 import io.github.tgkit.internal.BotResponse;
-import io.github.tgkit.internal.interceptor.BotInterceptor;
-import io.github.tgkit.internal.user.BotUserInfo;
+import io.github.tgkit.api.interceptor.BotInterceptor;
+import io.github.tgkit.api.user.BotUserInfo;
 import java.util.Set;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;

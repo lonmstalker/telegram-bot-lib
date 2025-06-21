@@ -15,9 +15,9 @@
  */
 package io.github.tgkit.security.audit;
 
-import io.github.tgkit.internal.BotCommand;
-import io.github.tgkit.internal.interceptor.BotInterceptor;
-import io.github.tgkit.internal.loader.BotCommandFactory;
+import io.github.tgkit.api.BotCommand;
+import io.github.tgkit.api.interceptor.BotInterceptor;
+import io.github.tgkit.api.loader.BotCommandFactory;
 import io.github.tgkit.internal.reflection.ReflectionUtils;
 import io.github.tgkit.security.config.BotSecurityGlobalConfig;
 import java.lang.reflect.Method;

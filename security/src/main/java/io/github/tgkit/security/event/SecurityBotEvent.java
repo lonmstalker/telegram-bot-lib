@@ -15,10 +15,10 @@
  */
 package io.github.tgkit.security.event;
 
-import io.github.tgkit.internal.BotRequest;
+import io.github.tgkit.api.BotRequest;
 import io.github.tgkit.internal.bot.BotRegistryImpl;
 import io.github.tgkit.internal.event.TelegramBotEvent;
-import io.github.tgkit.internal.exception.BotApiException;
+import io.github.tgkit.api.exception.BotApiException;
 import java.time.Instant;
 import org.checkerframework.checker.nullness.qual.NonNull;
 

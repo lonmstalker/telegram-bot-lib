@@ -15,7 +15,7 @@
  */
 package io.github.tgkit.security.captcha.provider;
 
-import io.github.tgkit.internal.BotRequest;
+import io.github.tgkit.api.BotRequest;
 import io.github.tgkit.security.captcha.CaptchaProvider;
 import io.github.tgkit.security.captcha.InMemoryMathCaptchaProviderStore;
 import io.github.tgkit.security.captcha.MathCaptchaOperations;
