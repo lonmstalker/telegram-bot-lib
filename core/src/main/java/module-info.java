@@ -28,10 +28,16 @@ module io.github.tgkit.core {
   requires jedis;
   requires io.netty.transport;
 
-  exports io.github.tgkit.internal.loader to io.github.tgkit.plugin;
-  exports io.github.tgkit.internal.bot to io.github.tgkit.plugin;
-  exports io.github.tgkit.internal.config to io.github.tgkit.plugin;
-  exports io.github.tgkit.internal.dsl.feature_flags to io.github.tgkit.plugin;
-  exports io.github.tgkit.internal.event to io.github.tgkit.plugin;
-  exports io.github.tgkit.internal.ttl to io.github.tgkit.plugin;
+  exports io.github.tgkit.internal.loader to
+      io.github.tgkit.plugin;
+  exports io.github.tgkit.internal.bot to
+      io.github.tgkit.plugin;
+  exports io.github.tgkit.internal.config to
+      io.github.tgkit.plugin;
+  exports io.github.tgkit.internal.dsl.feature_flags to
+      io.github.tgkit.plugin;
+  exports io.github.tgkit.internal.event to
+      io.github.tgkit.plugin;
+  exports io.github.tgkit.internal.ttl to
+      io.github.tgkit.plugin;
 }
