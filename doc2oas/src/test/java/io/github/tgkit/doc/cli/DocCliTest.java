@@ -20,8 +20,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
+import io.github.tgkit.doc.emitter.OpenApiEmitter;
+import io.github.tgkit.doc.mapper.OperationInfo;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import picocli.CommandLine;
 
@@ -78,5 +81,38 @@ class DocCliTest {
       System.clearProperty("tg.doc.baseUri");
       server.stop();
     }
+  }
+
+  @Test
+  void validatesDifferences() throws Exception {
+    OpenApiEmitter emitter = new OpenApiEmitter();
+    Path prev = Files.createTempFile("old", ".yaml");
+    emitter.write(emitter.toOpenApi(List.of(new OperationInfo("getMe", "desc"))), prev);
+
+    Path html = Files.createTempFile("doc", ".html");
+    Files.writeString(html, "<div class='method'><h3>getChat</h3><p>desc</p></div>");
+    Path out = Files.createTempDirectory("out").resolve("telegram.yaml");
+
+    var err = new java.io.ByteArrayOutputStream();
+    var original = System.err;
+    System.setErr(new java.io.PrintStream(err));
+    try {
+      int code =
+          new CommandLine(new DocCli())
+              .execute(
+                  "--input",
+                  html.toString(),
+                  "--output",
+                  out.toString(),
+                  "--validate",
+                  prev.toString());
+      assertThat(code).isZero();
+    } finally {
+      System.setErr(original);
+    }
+
+    String warnings = err.toString();
+    assertThat(warnings).contains("getChat");
+    assertThat(warnings).contains("getMe");
   }
 }

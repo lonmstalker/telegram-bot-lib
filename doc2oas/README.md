@@ -41,4 +41,10 @@ java -cp doc2oas/target/doc2oas-<version>.jar io.github.tgkit.doc.generator.Gene
   --spec build/openapi/telegram.yaml \
   --target build/sdk \
   --language java
+
+# сравнение со старой схемой
+java -jar doc2oas/target/doc2oas-<version>-shaded.jar \
+  --api --output build/openapi/telegram.yaml \
+  --validate path/to/previous.yaml
+# увидите WARN, если появились новые методы или модели
 ```

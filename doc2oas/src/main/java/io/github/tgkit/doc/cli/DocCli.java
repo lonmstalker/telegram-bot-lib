@@ -37,6 +37,9 @@ public class DocCli implements Runnable {
       defaultValue = "${sys:user.dir}/build/openapi/telegram.yaml")
   private Path output;
 
+  @Option(names = "--validate", description = "Путь к предыдущей спецификации")
+  private Path previousSpec;
+
   /** Точка входа. */
   public static void main(String[] args) {
     new CommandLine(new DocCli()).execute(args);
@@ -52,6 +55,9 @@ public class DocCli implements Runnable {
     } else {
       throw new CommandLine.ParameterException(
           new CommandLine(this), "Не указан входной файл и не задан флаг --api");
+    }
+    if (previousSpec != null) {
+      service.validate(previousSpec, output);
     }
   }
 }

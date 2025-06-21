@@ -17,8 +17,23 @@ package io.github.tgkit.doc;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import io.github.tgkit.doc.emitter.OpenApiEmitter;
+import io.github.tgkit.doc.mapper.OperationInfo;
+import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.Operation;
+import io.swagger.v3.oas.models.PathItem;
+import io.swagger.v3.oas.models.Paths;
+import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.media.Content;
+import io.swagger.v3.oas.models.media.MediaType;
+import io.swagger.v3.oas.models.media.ObjectSchema;
+import io.swagger.v3.oas.models.media.Schema;
+import io.swagger.v3.oas.models.responses.ApiResponse;
+import io.swagger.v3.oas.models.responses.ApiResponses;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 
 class DocumentationServiceTest {
@@ -30,5 +45,70 @@ class DocumentationServiceTest {
     new DocumentationService().generate(html, out);
     assertThat(out.toFile()).exists();
     assertThat(Files.readString(out)).contains("getMe");
+  }
+
+  @Test
+  void warnsOnChanges() throws Exception {
+    OpenApiEmitter emitter = new OpenApiEmitter();
+    Path previous = Files.createTempFile("prev", ".yaml");
+    emitter.write(emitter.toOpenApi(List.of(new OperationInfo("getMe", "desc"))), previous);
+    Path current = Files.createTempFile("new", ".yaml");
+    emitter.write(emitter.toOpenApi(List.of(new OperationInfo("getChat", "desc"))), current);
+
+    var err = new java.io.ByteArrayOutputStream();
+    var original = System.err;
+    System.setErr(new java.io.PrintStream(err));
+    try {
+      new DocumentationService().validate(previous, current);
+    } finally {
+      System.setErr(original);
+    }
+
+    String warnings = err.toString();
+    assertThat(warnings).contains("getChat");
+    assertThat(warnings).contains("getMe");
+  }
+
+  @Test
+  void warnsOnModelChanges() throws Exception {
+    Path previous = Files.createTempFile("prev", ".yaml");
+    OpenApiEmitter emitter = new OpenApiEmitter();
+    emitter.write(buildApi("getMe", "User"), previous);
+
+    Path current = Files.createTempFile("new", ".yaml");
+    emitter.write(buildApi("getMe", "Chat"), current);
+
+    var err = new java.io.ByteArrayOutputStream();
+    var original = System.err;
+    System.setErr(new java.io.PrintStream(err));
+    try {
+      new DocumentationService().validate(previous, current);
+    } finally {
+      System.setErr(original);
+    }
+
+    String warnings = err.toString();
+    assertThat(warnings).contains("User");
+    assertThat(warnings).contains("Chat");
+    assertThat(warnings).contains("getMe");
+  }
+
+  private static OpenAPI buildApi(String operationId, String schemaName) {
+    Schema<?> schemaRef = new Schema<>().$ref("#/components/schemas/" + schemaName);
+    ApiResponse ok =
+        new ApiResponse()
+            .description("OK")
+            .content(
+                new Content().addMediaType("application/json", new MediaType().schema(schemaRef)));
+    Operation op =
+        new Operation()
+            .operationId(operationId)
+            .responses(new ApiResponses().addApiResponse("200", ok));
+    OpenAPI api =
+        new OpenAPI()
+            .info(new Info().title("t").version("1"))
+            .components(new Components().addSchemas(schemaName, new ObjectSchema()))
+            .paths(new Paths().addPathItem("/" + operationId, new PathItem().post(op)));
+    return api;
   }
 }
