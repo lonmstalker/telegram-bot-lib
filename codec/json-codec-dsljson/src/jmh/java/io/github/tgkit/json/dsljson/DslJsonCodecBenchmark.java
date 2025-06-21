@@ -1,6 +1,6 @@
 package io.github.tgkit.json.dsljson;
 
-import io.github.tgkit.core.bot.BotConfig;
+import io.github.tgkit.internal.bot.BotConfig;
 import io.github.tgkit.json.JsonCodec;
 import java.util.Locale;
 import org.openjdk.jmh.annotations.Benchmark;
