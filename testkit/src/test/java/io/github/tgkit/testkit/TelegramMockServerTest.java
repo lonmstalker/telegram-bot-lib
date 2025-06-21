@@ -61,4 +61,26 @@ class TelegramMockServerTest {
       assertThat(recorded.body()).isEmpty();
     }
   }
+
+  @Test
+  void defaultResponseWhenQueueEmpty() throws Exception {
+    try (TelegramMockServer server = new TelegramMockServer()) {
+      var client = java.net.http.HttpClient.newHttpClient();
+      var request =
+          java.net.http.HttpRequest.newBuilder()
+              .uri(java.net.URI.create(server.baseUrl() + "TEST/getMe"))
+              .GET()
+              .build();
+      var response = client.send(request, java.net.http.HttpResponse.BodyHandlers.ofString());
+      assertThat(response.body()).contains("\"ok\":true");
+    }
+  }
+
+  @Test
+  void takeRequestReturnsNullOnTimeout() throws Exception {
+    try (TelegramMockServer server = new TelegramMockServer()) {
+      RecordedRequest req = server.takeRequest(100, java.util.concurrent.TimeUnit.MILLISECONDS);
+      assertThat(req).isNull();
+    }
+  }
 }
