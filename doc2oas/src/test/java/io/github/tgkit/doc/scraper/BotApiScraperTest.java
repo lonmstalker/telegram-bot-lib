@@ -23,13 +23,27 @@ import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.Authenticator;
+import java.net.CookieHandler;
 import java.net.InetSocketAddress;
+import java.net.ProxySelector;
 import java.net.URI;
 import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.http.HttpResponse.BodyHandler;
+import java.net.http.HttpResponse.PushPromiseHandler;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.security.NoSuchAlgorithmException;
+import java.time.Duration;
 import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicInteger;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLParameters;
 import org.junit.jupiter.api.Test;
 
 class BotApiScraperTest {
@@ -134,6 +148,39 @@ class BotApiScraperTest {
   }
 
   @Test
+  void usesTwoArgConstructor() throws Exception {
+    HttpServer server = HttpServer.create(new InetSocketAddress(0), 0);
+    server.createContext("/bots/api", new TestHandler());
+    server.start();
+
+    String originalHome = System.getProperty("user.home");
+    Path home = Files.createTempDirectory("home");
+    System.setProperty("user.home", home.toString());
+    try {
+      URI uri = URI.create("http://localhost:" + server.getAddress().getPort() + "/bots/api");
+      BotApiScraper scraper = new BotApiScraper(HttpClient.newHttpClient(), uri);
+      List<MethodDoc> methods = scraper.fetch();
+      assertThat(methods).hasSize(1);
+    } finally {
+      System.setProperty("user.home", originalHome);
+      server.stop(0);
+    }
+  }
+
+  @Test
+  void failsOnBadCachePath() throws Exception {
+    Path file = Files.createTempFile("cache", "file");
+    BotApiScraper scraper =
+        new BotApiScraper(HttpClient.newHttpClient(), URI.create("http://localhost"), file);
+    try {
+      scraper.fetch();
+      fail("expected exception");
+    } catch (IllegalStateException e) {
+      assertThat(e).hasMessageContaining("кеш");
+    }
+  }
+
+  @Test
   void readsBaseUriFromProperty() throws Exception {
     HttpServer server1 = HttpServer.create(new InetSocketAddress(0), 0);
     server1.createContext("/bots/api", new TestHandler());
@@ -168,6 +215,98 @@ class BotApiScraperTest {
       System.clearProperty("tg.doc.baseUri");
       server1.stop(0);
       server2.stop(0);
+    }
+  }
+
+  @Test
+  void setsInterruptFlagOnInterrupted() throws Exception {
+    Path cache = Files.createTempDirectory("cache");
+    BotApiScraper scraper =
+        new BotApiScraper(new InterruptingClient(), URI.create("http://localhost"), cache);
+
+    Thread.interrupted(); // clear
+    try {
+      scraper.fetch();
+      fail("expected exception");
+    } catch (IllegalStateException e) {
+      assertThat(Thread.currentThread().isInterrupted()).isTrue();
+    } finally {
+      Thread.interrupted(); // clear for other tests
+    }
+  }
+
+  private static final class InterruptingClient extends HttpClient {
+    @Override
+    public Optional<CookieHandler> cookieHandler() {
+      return Optional.empty();
+    }
+
+    @Override
+    public Optional<Duration> connectTimeout() {
+      return Optional.empty();
+    }
+
+    @Override
+    public Redirect followRedirects() {
+      return Redirect.NEVER;
+    }
+
+    @Override
+    public Optional<ProxySelector> proxy() {
+      return Optional.empty();
+    }
+
+    @Override
+    public SSLContext sslContext() {
+      return defaultSslContext();
+    }
+
+    @Override
+    public SSLParameters sslParameters() {
+      return sslContext().getDefaultSSLParameters();
+    }
+
+    @Override
+    public Optional<Authenticator> authenticator() {
+      return Optional.empty();
+    }
+
+    @Override
+    public Version version() {
+      return Version.HTTP_1_1;
+    }
+
+    @Override
+    public Optional<Executor> executor() {
+      return Optional.empty();
+    }
+
+    @Override
+    public <T> HttpResponse<T> send(HttpRequest request, BodyHandler<T> handler)
+        throws IOException, InterruptedException {
+      throw new InterruptedException("boom");
+    }
+
+    @Override
+    public <T> CompletableFuture<HttpResponse<T>> sendAsync(
+        HttpRequest request, BodyHandler<T> handler) {
+      CompletableFuture<HttpResponse<T>> future = new CompletableFuture<>();
+      future.completeExceptionally(new IOException("not implemented"));
+      return future;
+    }
+
+    @Override
+    public <T> CompletableFuture<HttpResponse<T>> sendAsync(
+        HttpRequest request, BodyHandler<T> handler, PushPromiseHandler<T> pushPromiseHandler) {
+      return sendAsync(request, handler);
+    }
+
+    private static SSLContext defaultSslContext() {
+      try {
+        return SSLContext.getDefault();
+      } catch (NoSuchAlgorithmException e) {
+        throw new RuntimeException(e);
+      }
     }
   }
 
