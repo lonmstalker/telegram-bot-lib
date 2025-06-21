@@ -81,16 +81,46 @@ implementation("io.github.tgkit:tgkit-api:0.0.1-SNAPSHOT")
 <summary>TestKit</summary>
 
 ```xml
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>io.github.tgkit</groupId>
+            <artifactId>tgkit-bom</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+
 <dependency>
     <groupId>io.github.tgkit</groupId>
-    <artifactId>testkit</artifactId>
+    <artifactId>tgkit-testkit-core</artifactId>
+    <scope>test</scope>
+</dependency>
+```
+
+```kotlin
+implementation(platform("io.github.tgkit:tgkit-bom:0.0.1-SNAPSHOT"))
+testImplementation("io.github.tgkit:tgkit-testkit-core")
+```
+
+</details>
+
+<details>
+<summary>Flag Test</summary>
+
+```xml
+<dependency>
+    <groupId>io.github.tgkit</groupId>
+    <artifactId>tgkit-flag-test</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <scope>test</scope>
 </dependency>
 ```
 
 ```kotlin
-testImplementation("io.github.tgkit:testkit:0.0.1-SNAPSHOT")
+testImplementation("io.github.tgkit:tgkit-flag-test:0.0.1-SNAPSHOT")
 ```
 
 </details>
@@ -188,6 +218,20 @@ class PingCommandTest {
     void pingPong(UpdateInjector inject, Expectation expect) {
         inject.text("/ping").from(42L);
         expect.api("sendMessage").jsonPath("$.text", "pong");
+    }
+}
+```
+
+```java
+// A/B‑тест: включение флага прямо в тесте
+@ExtendWith(FlagOverrideExtension.class)
+class AbFlowTest {
+
+    @Test
+    void variant(UpdateInjector inject, Expectation expect, Flags flags) {
+        flags.enable("NEW_FLOW");
+        inject.text("/start").from(1L);
+        expect.api("sendMessage").jsonPath("$.text", "new");
     }
 }
 ```
