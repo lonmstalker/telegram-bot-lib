@@ -15,16 +15,38 @@
  */
 package io.lonmstalker.tgkit.observability;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
+/** Интерфейс тега метрики. */
 public interface Tag extends Comparable<Tag> {
+
+  /** Возвращает ключ тега. */
+  @NonNull
   String key();
 
+  /** Возвращает значение тега. */
+  @NonNull
   String value();
 
-  static Tag of(String key, String value) {
+  /**
+   * Создаёт неизменяемый тег.
+   *
+   * @param key ключ
+   * @param value значение
+   * @return новый тег
+   */
+  static Tag of(@NonNull String key, @NonNull String value) {
     return new ImmutableTag(key, value);
   }
 
-  default int compareTo(Tag o) {
+  /**
+   * Сравнивает теги по ключу.
+   *
+   * @param o другой тег
+   * @return результат сравнения
+   */
+  @Override
+  default int compareTo(@NonNull Tag o) {
     return this.key().compareTo(o.key());
   }
 }

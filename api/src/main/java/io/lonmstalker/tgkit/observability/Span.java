@@ -35,5 +35,11 @@ public interface Span extends AutoCloseable {
    */
   void setTag(@NonNull String tag, @NonNull String value);
 
+  /**
+   * Завершает span без ошибки.
+   *
+   * @see AutoCloseable#close()
+   */
+  @Override
   void close();
 }
