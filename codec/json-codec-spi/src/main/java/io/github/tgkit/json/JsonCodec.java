@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.json;
+package io.github.tgkit.json;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;

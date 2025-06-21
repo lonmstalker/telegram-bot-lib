@@ -1,7 +1,7 @@
-package io.lonmstalker.tgkit.json.dsljson;
+package io.github.tgkit.json.dsljson;
 
 import io.lonmstalker.tgkit.core.bot.BotConfig;
-import io.lonmstalker.tgkit.json.JsonCodec;
+import io.github.tgkit.json.JsonCodec;
 import java.util.Locale;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.Scope;

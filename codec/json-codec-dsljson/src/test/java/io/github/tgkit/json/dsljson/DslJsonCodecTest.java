@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.json.dsljson;
+package io.github.tgkit.json.dsljson;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.lonmstalker.tgkit.core.bot.BotConfig;
-import io.lonmstalker.tgkit.json.JsonCodec;
+import io.github.tgkit.json.JsonCodec;
 import java.util.Locale;
 import java.util.ServiceLoader;
 import org.junit.jupiter.api.Test;
