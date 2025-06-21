@@ -41,6 +41,14 @@ public class GeneratorCli implements Runnable {
   }
 
   @Override
+  /**
+   * Генерирует исходный код SDK из спецификации OpenAPI.
+   *
+   * <p>Параметры командной строки задают путь к YAML-файлу спецификации ({@code --spec}), каталог
+   * для исходников ({@code --target}) и язык генерации ({@code --language}).
+   *
+   * @throws IllegalStateException при ошибке генерации
+   */
   public void run() {
     CodegenConfigurator cfg =
         new CodegenConfigurator()

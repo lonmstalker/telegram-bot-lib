@@ -43,6 +43,16 @@ public class DocCli implements Runnable {
   }
 
   @Override
+  /**
+   * Запускает конвертацию документации в спецификацию OpenAPI.
+   *
+   * <p>Если указан {@code --api}, документ загружается с официального сайта. Иначе используется
+   * локальный файл из опции {@code --input}. Результат сохраняется в путь из опции {@code
+   * --output}.
+   *
+   * @throws CommandLine.ParameterException если не задан входной файл и не передан флаг {@code
+   *     --api}
+   */
   public void run() {
     DocumentationService service = new DocumentationService();
     if (fromApi) {
