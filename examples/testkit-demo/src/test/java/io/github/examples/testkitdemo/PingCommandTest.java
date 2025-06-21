@@ -1,4 +1,4 @@
-package io.lonmstalker.examples.testkitdemo;
+package io.github.examples.testkitdemo;
 
 import io.lonmstalker.tgkit.testkit.TelegramBotTest;
 import io.lonmstalker.tgkit.testkit.UpdateInjector;
