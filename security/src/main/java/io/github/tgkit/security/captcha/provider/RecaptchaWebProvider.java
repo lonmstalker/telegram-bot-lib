@@ -16,6 +16,7 @@
 package io.github.tgkit.security.captcha.provider;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Objects;
 import io.github.tgkit.api.BotRequest;
 import io.github.tgkit.api.config.BotGlobalConfig;
 import io.github.tgkit.api.dsl.Button;
@@ -125,6 +126,12 @@ public final class RecaptchaWebProvider implements CaptchaProvider {
     private ObjectMapper mapper;
     private HttpClient httpClient;
 
+    /**
+     * Задаёт домен, на котором размещена страница с reCAPTCHA.
+     *
+     * <p>Обязательный параметр: если не указан, {@link #build()} бросит
+     * {@link NullPointerException}.
+     */
     public Builder domain(@NonNull String domain) {
       this.domain = domain;
       return this;
@@ -155,7 +162,14 @@ public final class RecaptchaWebProvider implements CaptchaProvider {
       return this;
     }
 
+    /**
+     * Создаёт {@link RecaptchaWebProvider}.
+     *
+     * @return новый экземпляр
+     * @throws NullPointerException если не указан домен
+     */
     public RecaptchaWebProvider build() {
+      Objects.requireNonNull(domain, "domain required");
       return new RecaptchaWebProvider(
           domain, secretKey, secretStore, verifyUrl, mapper, httpClient);
     }
