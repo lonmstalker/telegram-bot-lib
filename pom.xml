@@ -26,7 +26,7 @@
     </modules>
 
     <properties>
-        <tgkit.groupId>io.lonmstalker.tgkit</tgkit.groupId>
+        <tgkit.groupId>io.github.tgkit</tgkit.groupId>
         <revision>0.0.1-SNAPSHOT</revision>
         <previousRevision>0.0.0</previousRevision>
         <maven.compiler.release>21</maven.compiler.release>
