@@ -20,7 +20,7 @@ import io.github.tgkit.api.config.BotGlobalConfig;
 import io.github.tgkit.api.dsl.feature_flags.FeatureFlags;
 import io.github.tgkit.api.event.BotEventBus;
 import io.github.tgkit.api.ttl.TtlScheduler;
-import io.github.tgkit.internal.bot.BotRegistryImpl;
+import io.github.tgkit.api.bot.BotRegistryImpl;
 import io.github.tgkit.security.audit.AuditBus;
 import io.github.tgkit.security.config.BotSecurityGlobalConfig;
 import io.github.tgkit.security.secret.SecretStore;
