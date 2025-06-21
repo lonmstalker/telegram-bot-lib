@@ -19,7 +19,7 @@
         </dependency>
         <dependency>
             <groupId>io.github.tgkit</groupId>
-            <artifactId>testkit</artifactId>
+            <artifactId>tgkit-testkit-core</artifactId>
             <version>${project.version}</version>
         </dependency>
         <!-- JMH -->

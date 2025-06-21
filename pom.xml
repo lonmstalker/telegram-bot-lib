@@ -58,6 +58,7 @@
         <picocli.version>4.7.5</picocli.version>
         <openapi-parser.version>2.2.2</openapi-parser.version>
         <openapi-generator.version>7.13.0</openapi-generator.version>
+        <reactor.version>3.6.6</reactor.version>
 
         <!-- PLUGINS -->
         <checkerframework.version>3.49.4</checkerframework.version>
@@ -244,6 +245,17 @@
                 <groupId>info.picocli</groupId>
                 <artifactId>picocli</artifactId>
                 <version>${picocli.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.projectreactor</groupId>
+                <artifactId>reactor-core</artifactId>
+                <version>${reactor.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.tgkit</groupId>
+                <artifactId>tgkit-testkit-core</artifactId>
+                <version>${project.version}</version>
+                <scope>test</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>

@@ -46,7 +46,7 @@
         <!-- TEST -->
         <dependency>
             <groupId>io.github.tgkit</groupId>
-            <artifactId>testkit</artifactId>
+            <artifactId>tgkit-testkit-core</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
