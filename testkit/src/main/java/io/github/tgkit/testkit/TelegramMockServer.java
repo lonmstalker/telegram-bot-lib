@@ -17,9 +17,9 @@ package io.github.tgkit.testkit;
 
 import io.undertow.Undertow;
 import io.undertow.util.Headers;
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 import java.util.Queue;
