@@ -23,7 +23,7 @@ module io.github.tgkit.observability {
   requires io.micrometer.registry.prometheus;
   requires io.prometheus.simpleclient_httpserver;
 
-  exports io.github.observability;
-  exports io.github.observability.impl to
+  exports io.github.tgkit.observability;
+  exports io.github.tgkit.observability.impl to
       io.github.tgkit.plugin;
 }

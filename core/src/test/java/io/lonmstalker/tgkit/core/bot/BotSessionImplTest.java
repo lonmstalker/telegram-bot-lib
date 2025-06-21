@@ -18,8 +18,8 @@ package io.github.tgkit.core.bot;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import io.github.observability.BotObservability;
-import io.github.observability.MetricsCollector;
+import io.github.tgkit.observability.BotObservability;
+import io.github.tgkit.observability.MetricsCollector;
 import io.github.tgkit.core.config.BotGlobalConfig;
 import io.github.tgkit.testkit.TestBotBootstrap;
 import java.io.IOException;

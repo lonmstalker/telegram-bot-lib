@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package io.github.observability.impl;
+package io.github.tgkit.observability.impl;
 
-import io.github.observability.MetricsCollector;
+import io.github.tgkit.observability.MetricsCollector;
 import io.github.tgkit.observability.Tags;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;

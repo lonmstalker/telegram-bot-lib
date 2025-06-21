@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.github.observability;
+package io.github.tgkit.observability;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;

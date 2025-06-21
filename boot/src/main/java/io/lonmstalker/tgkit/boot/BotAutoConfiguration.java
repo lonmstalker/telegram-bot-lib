@@ -16,9 +16,9 @@
 
 package io.github.tgkit.boot;
 
-import io.github.observability.BotObservability;
-import io.github.observability.MetricsCollector;
-import io.github.observability.impl.NoOpMetricsCollector;
+import io.github.tgkit.observability.BotObservability;
+import io.github.tgkit.observability.MetricsCollector;
+import io.github.tgkit.observability.impl.NoOpMetricsCollector;
 import io.github.tgkit.security.init.BotSecurityInitializer;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;

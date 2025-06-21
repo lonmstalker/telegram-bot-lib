@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.github.observability;
+package io.github.tgkit.observability;
 
 import io.github.tgkit.core.BotRequest;
 import io.github.tgkit.core.BotResponse;

@@ -1,8 +1,8 @@
 /**
  * Инструменты наблюдаемости: метрики и трассировки.
  *
- * <p>Содержит {@link io.github.observability.ObservabilityInterceptor} и утилиты из {@link
- * io.github.observability.BotObservability}.
+ * <p>Содержит {@link io.github.tgkit.observability.ObservabilityInterceptor} и утилиты из {@link
+ * io.github.tgkit.observability.BotObservability}.
  *
  * <p>Пример подключения:
  *
@@ -15,4 +15,4 @@
  * }</pre>
  */
 
-package io.github.observability;
+package io.github.tgkit.observability;

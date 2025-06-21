@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.github.observability;
+package io.github.tgkit.observability;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.slf4j.MDC;

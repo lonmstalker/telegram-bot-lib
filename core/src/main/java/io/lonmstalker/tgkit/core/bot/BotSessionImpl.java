@@ -18,7 +18,7 @@ package io.github.tgkit.core.bot;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.observability.MetricsCollector;
+import io.github.tgkit.observability.MetricsCollector;
 import io.github.tgkit.core.config.BotGlobalConfig;
 import io.github.tgkit.core.exception.BotApiException;
 import io.github.tgkit.observability.Tags;

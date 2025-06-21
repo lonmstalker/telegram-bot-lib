@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package io.github.observability;
+package io.github.tgkit.observability;
 
-import io.github.observability.impl.CompositeTracer;
-import io.github.observability.impl.MicrometerCollector;
-import io.github.observability.impl.NoOpTracer;
-import io.github.observability.impl.OTelTracer;
+import io.github.tgkit.observability.impl.CompositeTracer;
+import io.github.tgkit.observability.impl.MicrometerCollector;
+import io.github.tgkit.observability.impl.NoOpTracer;
+import io.github.tgkit.observability.impl.OTelTracer;
 import io.github.tgkit.observability.Tracer;
 import io.micrometer.prometheusmetrics.PrometheusConfig;
 import java.util.Arrays;

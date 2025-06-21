@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package io.github.observability;
+package io.github.tgkit.observability;
 
-import io.github.observability.impl.PrometheusMetricsServer;
+import io.github.tgkit.observability.impl.PrometheusMetricsServer;
 import java.net.ServerSocket;
 import org.junit.jupiter.api.*;
 

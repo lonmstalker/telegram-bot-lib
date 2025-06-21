@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.github.observability.impl;
+package io.github.tgkit.observability.impl;
 
 import io.github.tgkit.observability.Span;
 import io.github.tgkit.observability.Tag;

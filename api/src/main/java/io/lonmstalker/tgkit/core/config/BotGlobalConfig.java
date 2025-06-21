@@ -17,8 +17,8 @@
 package io.github.tgkit.core.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.observability.MetricsCollector;
-import io.github.observability.impl.NoOpMetricsCollector;
+import io.github.tgkit.observability.MetricsCollector;
+import io.github.tgkit.observability.impl.NoOpMetricsCollector;
 import io.github.tgkit.core.dsl.MissingIdStrategy;
 import io.github.tgkit.core.dsl.feature_flags.FeatureFlags;
 import io.github.tgkit.core.event.BotEventBus;

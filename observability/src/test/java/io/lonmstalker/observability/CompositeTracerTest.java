@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package io.github.observability;
+package io.github.tgkit.observability;
 
 import static io.github.tgkit.observability.Tags.*;
 import static org.mockito.Mockito.*;
 
-import io.github.observability.impl.CompositeTracer;
+import io.github.tgkit.observability.impl.CompositeTracer;
 import io.github.tgkit.observability.Span;
 import io.github.tgkit.observability.Tag;
 import io.github.tgkit.observability.Tags;

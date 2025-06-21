@@ -16,8 +16,8 @@
 
 package io.github.examples.observability;
 
-import io.github.observability.BotObservability;
-import io.github.observability.ObservabilityInterceptor;
+import io.github.tgkit.observability.BotObservability;
+import io.github.tgkit.observability.ObservabilityInterceptor;
 import io.github.tgkit.core.BotAdapter;
 import io.github.tgkit.core.bot.Bot;
 import io.github.tgkit.core.bot.BotAdapterImpl;

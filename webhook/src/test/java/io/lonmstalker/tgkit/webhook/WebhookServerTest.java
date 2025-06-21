@@ -19,8 +19,8 @@ package io.github.tgkit.webhook;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.observability.BotObservability;
-import io.github.observability.MetricsCollector;
+import io.github.tgkit.observability.BotObservability;
+import io.github.tgkit.observability.MetricsCollector;
 import io.github.tgkit.core.BotCommand;
 import io.github.tgkit.core.BotRequest;
 import io.github.tgkit.core.BotRequestType;
