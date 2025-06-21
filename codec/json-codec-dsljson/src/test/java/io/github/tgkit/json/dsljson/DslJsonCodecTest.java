@@ -17,7 +17,7 @@ package io.github.tgkit.json.dsljson;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.github.tgkit.core.bot.BotConfig;
+import io.github.tgkit.internal.bot.BotConfig;
 import io.github.tgkit.json.JsonCodec;
 import java.util.Locale;
 import java.util.ServiceLoader;
