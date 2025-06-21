@@ -3,4 +3,4 @@ base-url: "https://api.telegram.org/bot"
 bot-group: "sample"
 requests-per-second: 30
 packages:
-  - io.lonmstalker.examples.simplebot
+  - io.github.examples.simplebot

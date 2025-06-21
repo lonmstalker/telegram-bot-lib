@@ -28,7 +28,7 @@ mvn -pl doc2oas package
 ## Запуск
 
 ```bash
-java -cp doc2oas/target/doc2oas-<version>.jar io.lonmstalker.tgkit.doc.cli.DocCli --help
+java -cp doc2oas/target/doc2oas-<version>.jar io.github.tgkit.doc.cli.DocCli --help
 # либо
 java -jar doc2oas/target/doc2oas-<version>-shaded.jar --help
 ```
@@ -36,8 +36,8 @@ java -jar doc2oas/target/doc2oas-<version>-shaded.jar --help
 ## Пошаговый пример
 
 ```bash
-java -cp doc2oas/target/doc2oas-<version>.jar io.lonmstalker.tgkit.doc.cli.DocCli --api --output build/openapi/telegram.yaml
-java -cp doc2oas/target/doc2oas-<version>.jar io.lonmstalker.tgkit.doc.generator.GeneratorCli \
+java -cp doc2oas/target/doc2oas-<version>.jar io.github.tgkit.doc.cli.DocCli --api --output build/openapi/telegram.yaml
+java -cp doc2oas/target/doc2oas-<version>.jar io.github.tgkit.doc.generator.GeneratorCli \
   --spec build/openapi/telegram.yaml \
   --target build/sdk \
   --language java

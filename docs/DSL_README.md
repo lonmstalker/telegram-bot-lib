@@ -11,7 +11,7 @@ BotDSL.msg(ctx, "Привет, мир!").disableNotif().send();
 ## 📦 Установка
 ```xml
 <dependency>
-  <groupId>io.lonmstalker</groupId>
+<groupId>io.github.tgkit</groupId>
   <artifactId>tgkit-dsl</artifactId>
   <version>0.0.1-SNAPSHOT</version>
 </dependency>

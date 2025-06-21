@@ -23,7 +23,7 @@ BotAdapter adapter = BotAdapterImpl.builder()
         .build();
 
 Bot bot = BotFactory.INSTANCE.from("TOKEN", cfg, adapter,
-        "io.lonmstalker.examples.simplebot");
+        "io.github.examples.simplebot");
         bot.start();
 );
 ```
