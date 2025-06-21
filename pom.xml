@@ -25,6 +25,7 @@
         <module>benchmarks</module>
         <module>doc2oas</module>
         <module>experiment</module>
+        <module>flag</module>
     </modules>
 
     <properties>
