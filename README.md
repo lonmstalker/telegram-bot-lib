@@ -61,7 +61,7 @@
 ...
 <annotationProcessors>
     <annotationProcessor>
-        io.github.tgkit.core.processor.BotHandlerProcessor
+        io.github.tgkit.internal.processor.BotHandlerProcessor
     </annotationProcessor>
 ...
 </plugin>
@@ -72,7 +72,7 @@
 <summary>Gradle Kotlin DSL</summary>
 
 ```kotlin 
-implementation("io.github.tgkit:core:0.0.1-SNAPSHOT")
+implementation("io.github.tgkit:api:0.0.1-SNAPSHOT")
 ```
 
 </details>
