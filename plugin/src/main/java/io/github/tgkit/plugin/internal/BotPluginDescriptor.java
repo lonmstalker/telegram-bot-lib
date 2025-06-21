@@ -19,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 
 /** Описатель плагина, маппится из plugin.yml и обратно. */
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
@@ -199,6 +200,21 @@ public final class BotPluginDescriptor {
     }
 
     public BotPluginDescriptor build() {
+      if (StringUtils.isBlank(id)) {
+        throw new IllegalStateException("id must not be null or empty");
+      }
+      if (StringUtils.isBlank(version)) {
+        throw new IllegalStateException("version must not be null or empty");
+      }
+      if (StringUtils.isBlank(api)) {
+        throw new IllegalStateException("api must not be null or empty");
+      }
+      if (StringUtils.isBlank(mainClass)) {
+        throw new IllegalStateException("mainClass must not be null or empty");
+      }
+      if (StringUtils.isBlank(minCoreVersion)) {
+        throw new IllegalStateException("minCoreVersion must not be null or empty");
+      }
       return new BotPluginDescriptor(
           id,
           name,
