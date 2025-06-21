@@ -216,7 +216,7 @@ class PingCommandTest {
 
     @Test
     void pingPong(UpdateInjector inject, Expectation expect) {
-        inject.text("/ping").from(42L);
+        inject.text("/ping").from(42L).dispatch();
         expect.api("sendMessage").jsonPath("$.text", "pong");
     }
 }
@@ -230,7 +230,7 @@ class AbFlowTest {
     @Test
     void variant(UpdateInjector inject, Expectation expect, Flags flags) {
         flags.enable("NEW_FLOW");
-        inject.text("/start").from(1L);
+        inject.text("/start").from(1L).dispatch();
         expect.api("sendMessage").jsonPath("$.text", "new");
     }
 }

@@ -20,7 +20,7 @@ class PingCommandTest {
   @Test
   void pingPong(UpdateInjector inject, Expectation expect, Flags flags) {
     flags.enable("PING_CMD");
-    inject.text("/ping").from(42L);
+    inject.text("/ping").from(42L).dispatch();
     expect.api("sendMessage").jsonPath("$.text", "pong");
   }
 }
