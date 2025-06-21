@@ -20,7 +20,7 @@ import static io.github.tgkit.plugin.internal.BotPluginConstants.CURRENT_VERSION
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.github.zafarkhaja.semver.Version;
-import io.github.tgkit.internal.exception.BotApiException;
+import io.github.tgkit.api.exception.BotApiException;
 import io.github.tgkit.plugin.internal.BotPluginContainer;
 import io.github.tgkit.plugin.internal.BotPluginContextDefault;
 import io.github.tgkit.plugin.internal.BotPluginDescriptor;
