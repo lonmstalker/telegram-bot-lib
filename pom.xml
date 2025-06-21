@@ -23,6 +23,7 @@
         <module>codec</module>
         <module>benchmarks</module>
         <module>doc2oas</module>
+        <module>experiment</module>
     </modules>
 
     <properties>
