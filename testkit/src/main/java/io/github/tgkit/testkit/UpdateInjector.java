@@ -15,8 +15,8 @@
  */
 package io.github.tgkit.testkit;
 
-import io.github.tgkit.internal.BotAdapter;
-import io.github.tgkit.internal.bot.TelegramSender;
+import io.github.tgkit.api.BotAdapter;
+import io.github.tgkit.api.bot.TelegramSender;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.checkerframework.checker.nullness.qual.NonNull;

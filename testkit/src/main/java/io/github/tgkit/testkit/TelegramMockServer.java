@@ -71,7 +71,7 @@ public final class TelegramMockServer implements AutoCloseable {
     }
   }
 
-  /** Базовый URL для передачи в {@link io.github.tgkit.internal.bot.BotConfig#setBaseUrl(String)}. */
+  /** Базовый URL для передачи в {@link io.github.tgkit.api.bot.BotConfig#setBaseUrl(String)}. */
   public String baseUrl() {
     return "http://localhost:" + port + "/bot";
   }

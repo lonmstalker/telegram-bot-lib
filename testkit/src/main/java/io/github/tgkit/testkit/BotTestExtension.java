@@ -15,10 +15,10 @@
  */
 package io.github.tgkit.testkit;
 
-import io.github.tgkit.internal.bot.BotAdapterImpl;
-import io.github.tgkit.internal.bot.BotConfig;
-import io.github.tgkit.internal.bot.TelegramSender;
-import io.github.tgkit.internal.init.BotCoreInitializer;
+import io.github.tgkit.api.bot.BotAdapterImpl;
+import io.github.tgkit.api.bot.BotConfig;
+import io.github.tgkit.api.bot.TelegramSender;
+import io.github.tgkit.api.init.BotCoreInitializer;
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
