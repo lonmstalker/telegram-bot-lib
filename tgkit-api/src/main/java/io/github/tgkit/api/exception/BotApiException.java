@@ -13,18 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-module io.github.tgkit.observability {
-  requires io.github.tgkit.core;
-  requires io.github.tgkit.api;
-  requires io.micrometer.core;
-  requires io.opentelemetry.api;
-  requires io.opentelemetry.sdk;
-  requires io.opentelemetry.exporter.logging;
-  requires ch.qos.logback.classic;
-  requires io.micrometer.registry.prometheus;
-  requires io.prometheus.simpleclient_httpserver;
+package io.github.tgkit.api.exception;
 
-  exports io.github.observability;
-  exports io.github.observability.impl to
-      io.github.tgkit.plugin;
+/** Базовый класс исключений, возникающих при обращении к API Telegram. */
+public class BotApiException extends RuntimeException {
+
+  public BotApiException(String message) {
+    super(message);
+  }
+
+  public BotApiException(String message, Throwable cause) {
+    super(message, cause);
+  }
+
+  public BotApiException(Throwable cause) {
+    super(cause);
+  }
 }
