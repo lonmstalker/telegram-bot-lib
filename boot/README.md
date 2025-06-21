@@ -7,7 +7,7 @@
 
 ```xml
 <dependency>
-    <groupId>io.lonmstalker.tgkit</groupId>
+    <groupId>io.github.tgkit</groupId>
     <artifactId>boot</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 </dependency>

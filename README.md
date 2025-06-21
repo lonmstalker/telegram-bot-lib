@@ -39,7 +39,7 @@
 
 ```xml
 <dependency>
-    <groupId>io.lonmstalker.tgkit</groupId>
+    <groupId>io.github.tgkit</groupId>
     <artifactId>core</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 </dependency>
@@ -53,14 +53,14 @@
 <annotationProcessorPaths>
 ...
     <path>
-        <groupId>io.lonmstalker.tgkit</groupId>
+        <groupId>io.github.tgkit</groupId>
         <artifactId>core</artifactId>
         <version>${project.version}</version>
     </path>
 ...
 <annotationProcessors>
     <annotationProcessor>
-        io.lonmstalker.tgkit.core.processor.BotHandlerProcessor
+        io.github.tgkit.core.processor.BotHandlerProcessor
     </annotationProcessor>
 ...
 </plugin>
@@ -71,7 +71,7 @@
 <summary>Gradle Kotlin DSL</summary>
 
 ```kotlin 
-implementation("io.lonmstalker.tgkit:core:0.0.1-SNAPSHOT")
+implementation("io.github.tgkit:core:0.0.1-SNAPSHOT")
 ```
 
 </details>
@@ -81,7 +81,7 @@ implementation("io.lonmstalker.tgkit:core:0.0.1-SNAPSHOT")
 
 ```xml
 <dependency>
-    <groupId>io.lonmstalker.tgkit</groupId>
+    <groupId>io.github.tgkit</groupId>
     <artifactId>testkit</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <scope>test</scope>
@@ -89,7 +89,7 @@ implementation("io.lonmstalker.tgkit:core:0.0.1-SNAPSHOT")
 ```
 
 ```kotlin
-testImplementation("io.lonmstalker.tgkit:testkit:0.0.1-SNAPSHOT")
+testImplementation("io.github.tgkit:testkit:0.0.1-SNAPSHOT")
 ```
 
 </details>
@@ -99,7 +99,7 @@ testImplementation("io.lonmstalker.tgkit:testkit:0.0.1-SNAPSHOT")
 
 ```xml
 <dependency>
-    <groupId>io.lonmstalker.tgkit</groupId>
+    <groupId>io.github.tgkit</groupId>
     <artifactId>boot</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 </dependency>
