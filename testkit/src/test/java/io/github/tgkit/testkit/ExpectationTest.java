@@ -15,37 +15,32 @@
  */
 package io.github.tgkit.testkit;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import io.github.tgkit.api.BotCommand;
 import io.github.tgkit.api.BotRequest;
 import io.github.tgkit.api.BotRequestType;
 import io.github.tgkit.api.BotResponse;
 import io.github.tgkit.api.matching.CommandMatch;
 import io.github.tgkit.internal.bot.BotAdapterImpl;
-import java.util.concurrent.TimeUnit;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.junit.jupiter.api.Test;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 @TelegramBotTest
-class WelcomeFlowTest {
+class ExpectationTest {
 
   @Test
-  void startCommandSendsWelcome(
-      UpdateInjector injector, TelegramMockServer server, BotAdapterImpl adapter) throws Exception {
-    adapter.registry().add(new StartCommand());
-    injector.text("/start").from(42L).dispatch();
-    RecordedRequest req = server.takeRequest(1, TimeUnit.SECONDS);
-    assertThat(req).isNotNull();
-    assertThat(req.path()).endsWith("/sendMessage");
-    assertThat(req.body()).contains("Welcome");
+  void pingCommandVerified(UpdateInjector inject, BotAdapterImpl adapter, Expectation expect) {
+    adapter.registry().add(new PingCommand());
+    inject.text("/ping").from(1L).dispatch();
+    expect.api("sendMessage").jsonPath("$.text", "pong");
   }
 
-  private static class StartCommand implements BotCommand<Message> {
+  private static class PingCommand implements BotCommand<Message> {
     @Override
     public BotResponse handle(@NonNull BotRequest<Message> request) {
-      return BotResponse.builder().method(request.msg("Welcome").build()).build();
+      SendMessage msg = new SendMessage(request.msg().getChatId().toString(), "pong");
+      return BotResponse.builder().method(msg).build();
     }
 
     @Override
@@ -55,7 +50,7 @@ class WelcomeFlowTest {
 
     @Override
     public @NonNull CommandMatch<Message> matcher() {
-      return msg -> "/start".equals(msg.getText());
+      return m -> "/ping".equals(m.getText());
     }
   }
 }
