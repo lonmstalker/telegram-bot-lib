@@ -356,7 +356,8 @@ Apache License 2.0 © 2025 TgKit Team
 Для автоматического форматирования и проверки стиля перед коммитом подключите локальный хук:
 
 ```bash
-ln -s ../../githooks/pre-commit .git/hooks/pre-commit
+# Выполняйте команду из корня проекта
+ln -s ../githooks/pre-commit .git/hooks/pre-commit
 ```
 
 Коммит будет прерван, если `mvn -q checkstyle:check` обнаружит нарушения.
