@@ -18,3 +18,24 @@ mvn test
 ```
 
 Перед отправкой изменений убедитесь, что тесты выполняются без ошибок.
+
+## Настройка Maven и прокси
+
+Для сборки требуется установленный Maven. В среде Codex перед запуском
+не забудьте задать переменные окружения для работы через прокси:
+
+```bash
+export http_proxy=http://proxy:8080
+export https_proxy=http://proxy:8080
+export MAVEN_OPTS="-Dhttps.proxyHost=proxy -Dhttps.proxyPort=8080 \
+-Dhttp.proxyHost=proxy -Dhttp.proxyPort=8080 \
+-Djava.net.preferIPv4Stack=true -Dfile.encoding=UTF-8"
+```
+
+После изменений обязательно выполните:
+
+```bash
+mvn verify
+```
+
+и только затем отправляйте коммит.
