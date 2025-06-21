@@ -294,9 +294,6 @@ public class TelegramSender extends DefaultAbsSender implements AutoCloseable {
         } else {
           throw ex;
         }
-      } catch (InterruptedException ie) {
-        Thread.currentThread().interrupt();
-        throw new BotApiException(ie);
       }
     }
   }
