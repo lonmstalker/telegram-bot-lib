@@ -30,11 +30,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /** Построитель и писатель спецификации OpenAPI. */
 public class OpenApiEmitter {
+
   /** Формирует объект {@link OpenAPI} по списку операций. */
-  public OpenAPI toOpenApi(List<OperationInfo> operations) {
+  public @NonNull OpenAPI toOpenApi(@NonNull List<OperationInfo> operations) {
     OpenAPI openApi = new OpenAPI();
     openApi.setInfo(new Info().title("Telegram Bot API").version("1.0"));
 
@@ -55,7 +57,7 @@ public class OpenApiEmitter {
   }
 
   /** Сохраняет YAML-файл со схемой OpenAPI. */
-  public void write(OpenAPI openApi, Path file) {
+  public void write(@NonNull OpenAPI openApi, @NonNull Path file) {
     try {
       Files.createDirectories(file.getParent());
       String yaml = Yaml.mapper().writeValueAsString(openApi);

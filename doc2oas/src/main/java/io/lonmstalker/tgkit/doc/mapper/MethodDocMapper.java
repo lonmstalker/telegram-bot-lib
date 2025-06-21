@@ -16,6 +16,7 @@
 package io.lonmstalker.tgkit.doc.mapper;
 
 import io.lonmstalker.tgkit.doc.scraper.MethodDoc;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -24,5 +25,5 @@ import org.mapstruct.factory.Mappers;
 public interface MethodDocMapper {
   MethodDocMapper INSTANCE = Mappers.getMapper(MethodDocMapper.class);
 
-  OperationInfo toOperation(MethodDoc methodDoc);
+  @NonNull OperationInfo toOperation(@NonNull MethodDoc methodDoc);
 }

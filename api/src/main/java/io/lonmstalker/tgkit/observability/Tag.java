@@ -21,12 +21,10 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 public interface Tag extends Comparable<Tag> {
 
   /** Возвращает ключ тега. */
-  @NonNull
-  String key();
+  @NonNull String key();
 
   /** Возвращает значение тега. */
-  @NonNull
-  String value();
+  @NonNull String value();
 
   /**
    * Создаёт неизменяемый тег.

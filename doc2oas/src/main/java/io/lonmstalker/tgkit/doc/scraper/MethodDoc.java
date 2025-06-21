@@ -15,10 +15,12 @@
  */
 package io.lonmstalker.tgkit.doc.scraper;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 /**
  * Описание метода Telegram API.
  *
  * @param name имя метода
  * @param description краткое описание
  */
-public record MethodDoc(String name, String description) {}
+public record MethodDoc(@NonNull String name, @NonNull String description) {}

@@ -25,6 +25,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /** Скачивает официальную документацию Telegram Bot API и парсит её как HTML. */
 public class BotApiScraper extends JsoupDocScraper {
@@ -44,18 +45,27 @@ public class BotApiScraper extends JsoupDocScraper {
     this(HttpClient.newHttpClient(), defaultUri(), defaultCache());
   }
 
-  BotApiScraper(HttpClient client, URI uri) {
+  BotApiScraper(@NonNull HttpClient client, @NonNull URI uri) {
     this(client, uri, defaultCache());
   }
 
-  BotApiScraper(HttpClient client, URI uri, Path cacheDir) {
+  BotApiScraper(@NonNull HttpClient client, @NonNull URI uri, @NonNull Path cacheDir) {
     this.client = client;
     this.uri = uri;
     this.cacheDir = cacheDir;
   }
 
+  private static Path defaultCache() {
+    return Path.of(System.getProperty("user.home"), ".cache", "tgdoc");
+  }
+
+  /** Возвращает базовый URI, учитывая системное свойство {@code tg.doc.baseUri}. */
+  private static URI defaultUri() {
+    return URI.create(System.getProperty("tg.doc.baseUri", DEFAULT_URL));
+  }
+
   /** Загружает страницу API и возвращает список методов. */
-  public List<MethodDoc> fetch() {
+  public @NonNull List<MethodDoc> fetch() {
     try {
       Files.createDirectories(cacheDir);
     } catch (IOException e) {
@@ -108,14 +118,5 @@ public class BotApiScraper extends JsoupDocScraper {
     } catch (IOException | InterruptedException e) {
       throw new IllegalStateException("Не удалось загрузить API", e);
     }
-  }
-
-  private static Path defaultCache() {
-    return Path.of(System.getProperty("user.home"), ".cache", "tgdoc");
-  }
-
-  /** Возвращает базовый URI, учитывая системное свойство {@code tg.doc.baseUri}. */
-  private static URI defaultUri() {
-    return URI.create(System.getProperty("tg.doc.baseUri", DEFAULT_URL));
   }
 }

@@ -17,6 +17,7 @@ package io.lonmstalker.tgkit.doc.scraper;
 
 import java.io.InputStream;
 import java.util.List;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -24,8 +25,9 @@ import org.jsoup.select.Elements;
 
 /** Реализация {@link DocScraper} на базе Jsoup. */
 public class JsoupDocScraper implements DocScraper {
+
   @Override
-  public List<MethodDoc> scrape(InputStream stream) {
+  public @NonNull List<MethodDoc> scrape(@NonNull InputStream stream) {
     Document doc;
     try {
       doc = Jsoup.parse(stream, null, "");

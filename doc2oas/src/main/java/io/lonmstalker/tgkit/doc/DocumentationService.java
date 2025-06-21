@@ -28,6 +28,7 @@ import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Сервис преобразования документации Telegram API в спецификацию OpenAPI.
@@ -52,7 +53,7 @@ public final class DocumentationService {
    * @param input путь к исходному HTML
    * @param output путь для сохранения YAML
    */
-  public void generate(Path input, Path output) {
+  public void generate(@NonNull Path input, @NonNull Path output) {
     try (InputStream in = Files.newInputStream(input)) {
       List<MethodDoc> docs = htmlScraper.scrape(in);
       write(docs, output);
@@ -62,12 +63,12 @@ public final class DocumentationService {
   }
 
   /** Скачивает официальную документацию и сохраняет YAML. */
-  public void generateFromApi(Path output) {
+  public void generateFromApi(@NonNull Path output) {
     List<MethodDoc> docs = apiScraper.fetch();
     write(docs, output);
   }
 
-  private void write(List<MethodDoc> docs, Path output) {
+  private void write(@NonNull List<MethodDoc> docs, @NonNull Path output) {
     OpenAPI api = emitter.toOpenApi(docs.stream().map(mapper::toOperation).toList());
     emitter.write(api, output);
   }

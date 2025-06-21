@@ -17,6 +17,7 @@ package io.lonmstalker.tgkit.doc.scraper;
 
 import java.io.InputStream;
 import java.util.List;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Интерфейс парсера HTML-документации Telegram API.
@@ -30,5 +31,5 @@ import java.util.List;
  */
 public interface DocScraper {
   /** Читает HTML и возвращает список методов. */
-  List<MethodDoc> scrape(InputStream stream);
+  @NonNull List<MethodDoc> scrape(@NonNull InputStream stream);
 }
