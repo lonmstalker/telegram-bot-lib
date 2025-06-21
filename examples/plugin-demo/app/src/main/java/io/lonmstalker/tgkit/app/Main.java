@@ -17,7 +17,7 @@ package io.lonmstalker.tgkit.app;
 
 import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
 import io.lonmstalker.tgkit.plugin.BotPluginManager;
-import io.lonmstalker.tgkit.security.init.BotSecurityInitializer;
+import io.github.tgkit.security.init.BotSecurityInitializer;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 

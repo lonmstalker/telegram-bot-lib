@@ -13,15 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-module io.lonmstalker.tgkit.plugin {
-  requires io.lonmstalker.tgkit.core;
-  requires io.lonmstalker.tgkit.observability;
-  requires io.github.tgkit.security;
-  requires org.slf4j;
-  requires com.fasterxml.jackson.dataformat.yaml;
+package io.github.tgkit.security.rbac;
 
-  exports io.lonmstalker.tgkit.plugin;
-  exports io.lonmstalker.tgkit.plugin.annotation;
-  exports io.lonmstalker.tgkit.plugin.internal to
-      io.lonmstalker.tgkit.core;
+import io.lonmstalker.tgkit.core.user.BotUserInfo;
+import java.util.Set;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
+/* helper: минимальная имплементация BotUserInfo */
+record SimpleUser(Set<String> roles) implements BotUserInfo {
+
+  public Long chatId() {
+    return 1L;
+  }
+
+  public Long userId() {
+    return 1L;
+  }
+
+  @Override
+  public @Nullable Long internalUserId() {
+    return 0L;
+  }
 }

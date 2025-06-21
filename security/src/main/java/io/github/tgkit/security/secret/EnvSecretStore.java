@@ -13,15 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-module io.lonmstalker.tgkit.plugin {
-  requires io.lonmstalker.tgkit.core;
-  requires io.lonmstalker.tgkit.observability;
-  requires io.github.tgkit.security;
-  requires org.slf4j;
-  requires com.fasterxml.jackson.dataformat.yaml;
+package io.github.tgkit.security.secret;
 
-  exports io.lonmstalker.tgkit.plugin;
-  exports io.lonmstalker.tgkit.plugin.annotation;
-  exports io.lonmstalker.tgkit.plugin.internal to
-      io.lonmstalker.tgkit.core;
+import java.util.Optional;
+import org.checkerframework.checker.nullness.qual.NonNull;
+
+public final class EnvSecretStore implements SecretStore {
+
+  @Override
+  public Optional<String> get(@NonNull String key) {
+    return Optional.ofNullable(System.getenv(key));
+  }
 }

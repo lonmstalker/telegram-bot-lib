@@ -17,7 +17,7 @@ package io.lonmstalker.tgkit.boot;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.lonmstalker.tgkit.security.init.BotSecurityInitializer;
+import io.github.tgkit.security.init.BotSecurityInitializer;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
