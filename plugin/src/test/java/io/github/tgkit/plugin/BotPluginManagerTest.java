@@ -95,8 +95,8 @@ public class BotPluginManagerTest {
     createPluginJar(
         jar,
         "test-id",
-        String.valueOf(CURRENT_VERSION),
-        String.valueOf(CURRENT_VERSION),
+        CURRENT_VERSION,
+        CURRENT_VERSION,
         TestPlugin.class.getName(),
         null);
 
@@ -145,7 +145,7 @@ public class BotPluginManagerTest {
     // плагин требует более новую версию API
     Path jar = tempDir.resolve("ver.jar");
     createPluginJar(
-        jar, "id", String.valueOf(CURRENT_VERSION), "1.0.0", TestPlugin.class.getName(), null);
+        jar, "id", CURRENT_VERSION, "1.0.0", TestPlugin.class.getName(), null);
 
     manager.loadAll(tempDir);
 
@@ -164,8 +164,8 @@ public class BotPluginManagerTest {
     createPluginJar(
         jar,
         "id2",
-        String.valueOf(CURRENT_VERSION),
-        String.valueOf(CURRENT_VERSION),
+        CURRENT_VERSION,
+        CURRENT_VERSION,
         TestPlugin.class.getName(),
         "deadbeef");
 
@@ -183,7 +183,7 @@ public class BotPluginManagerTest {
   void testApiInvalidFormat() throws Exception {
     Path jar = tempDir.resolve("badapi.jar");
     createPluginJar(
-        jar, "bad", String.valueOf(CURRENT_VERSION), "one.two", TestPlugin.class.getName(), null);
+        jar, "bad", CURRENT_VERSION, "one.two", TestPlugin.class.getName(), null);
 
     manager.loadAll(tempDir);
 
@@ -201,8 +201,8 @@ public class BotPluginManagerTest {
     createPluginJar(
         jar,
         "thread",
-        String.valueOf(CURRENT_VERSION),
-        String.valueOf(CURRENT_VERSION),
+        CURRENT_VERSION,
+        CURRENT_VERSION,
         ThreadNamePlugin.class.getName(),
         null);
 
@@ -220,7 +220,7 @@ public class BotPluginManagerTest {
         jar,
         "reload",
         "1.0",
-        String.valueOf(CURRENT_VERSION),
+        CURRENT_VERSION,
         ReloadPluginV1.class.getName(),
         null);
 
@@ -232,7 +232,7 @@ public class BotPluginManagerTest {
         jar,
         "reload",
         "2.0",
-        String.valueOf(CURRENT_VERSION),
+        CURRENT_VERSION,
         ReloadPluginV2.class.getName(),
         null);
 
@@ -247,7 +247,7 @@ public class BotPluginManagerTest {
   void testHotReloadDescriptorFailure() throws Exception {
     Path jar = tempDir.resolve("fail.jar");
     createPluginJar(
-        jar, "fail", "1.0", String.valueOf(CURRENT_VERSION), ReloadPluginV1.class.getName(), null);
+        jar, "fail", "1.0", CURRENT_VERSION, ReloadPluginV1.class.getName(), null);
 
     manager.loadAll(tempDir);
     assertEquals("v1", System.getProperty("reload.phase"));
@@ -275,8 +275,8 @@ public class BotPluginManagerTest {
     createPluginJar(
         jar,
         "slow",
-        String.valueOf(CURRENT_VERSION),
-        String.valueOf(CURRENT_VERSION),
+        CURRENT_VERSION,
+        CURRENT_VERSION,
         SlowPlugin.class.getName(),
         null);
 

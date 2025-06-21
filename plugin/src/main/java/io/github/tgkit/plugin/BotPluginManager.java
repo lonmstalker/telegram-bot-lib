@@ -65,7 +65,7 @@ public final class BotPluginManager implements AutoCloseable {
   private static final MessageDigest MESSAGE_DIGEST;
   private static final long SHUTDOWN_TIMEOUT_MS = 500;
   private static final Version SUPPORTED_API_VERSION =
-      Version.valueOf(String.format("%.1f.0", CURRENT_VERSION));
+      Version.valueOf(normalizeVersion(CURRENT_VERSION));
 
   static {
     try {
