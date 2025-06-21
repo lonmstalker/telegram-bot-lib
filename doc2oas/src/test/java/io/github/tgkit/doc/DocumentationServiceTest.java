@@ -16,6 +16,7 @@
 package io.github.tgkit.doc;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import io.github.tgkit.doc.emitter.OpenApiEmitter;
 import io.github.tgkit.doc.mapper.OperationInfo;
@@ -25,6 +26,7 @@ import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.PathItem;
 import io.swagger.v3.oas.models.Paths;
 import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.media.ComposedSchema;
 import io.swagger.v3.oas.models.media.Content;
 import io.swagger.v3.oas.models.media.MediaType;
 import io.swagger.v3.oas.models.media.ObjectSchema;
@@ -33,7 +35,10 @@ import io.swagger.v3.oas.models.responses.ApiResponse;
 import io.swagger.v3.oas.models.responses.ApiResponses;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 class DocumentationServiceTest {
@@ -91,6 +96,33 @@ class DocumentationServiceTest {
     assertThat(warnings).contains("User");
     assertThat(warnings).contains("Chat");
     assertThat(warnings).contains("getMe");
+  }
+
+  @Test
+  void failsOnInvalidSpec() throws Exception {
+    Path prev = Files.createTempFile("prev", ".yaml");
+    Path curr = Files.createTempFile("curr", ".yaml");
+    Files.writeString(prev, "???");
+    Files.writeString(curr, "???");
+
+    DocumentationService service = new DocumentationService();
+    assertThatThrownBy(() -> service.validate(prev, curr))
+        .isInstanceOf(IllegalStateException.class);
+  }
+
+  @Test
+  void collectsComposedSchemaRefs() throws Exception {
+    var method =
+        DocumentationService.class.getDeclaredMethod("collectSchemaRefs", Schema.class, Set.class);
+    method.setAccessible(true);
+    ComposedSchema composed = new ComposedSchema();
+    composed.setAllOf(List.of(new Schema<>().$ref("#/components/schemas/User")));
+    Schema<?> base = new Schema<>().properties(Map.of("c", composed));
+    Set<String> models = new HashSet<>();
+
+    method.invoke(null, base, models);
+
+    assertThat(models).contains("User");
   }
 
   private static OpenAPI buildApi(String operationId, String schemaName) {

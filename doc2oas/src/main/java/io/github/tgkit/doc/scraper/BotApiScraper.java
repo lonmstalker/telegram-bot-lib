@@ -116,6 +116,9 @@ public class BotApiScraper extends JsoupDocScraper {
         return scrape(stream);
       }
     } catch (IOException | InterruptedException e) {
+      if (e instanceof InterruptedException) {
+        Thread.currentThread().interrupt();
+      }
       throw new IllegalStateException("Не удалось загрузить API", e);
     }
   }
