@@ -22,7 +22,7 @@ import io.lonmstalker.tgkit.core.dsl.feature_flags.FeatureFlags;
 import io.lonmstalker.tgkit.core.event.BotEventBus;
 import io.lonmstalker.tgkit.core.ttl.TtlScheduler;
 import io.lonmstalker.tgkit.security.audit.AuditBus;
-import io.lonmstalker.tgkit.security.config.BotSecurityGlobalConfig;
+import io.github.tgkit.security.config.BotSecurityGlobalConfig;
 import io.lonmstalker.tgkit.security.secret.SecretStore;
 import java.net.http.HttpClient;
 import java.util.ServiceLoader;

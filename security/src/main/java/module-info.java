@@ -13,24 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-module io.lonmstalker.tgkit.security {
+module io.github.tgkit.security {
   requires io.lonmstalker.tgkit.core;
   requires org.slf4j;
   requires com.github.benmanes.caffeine;
   requires io.github.jopenlibs.vault.java.driver;
   requires jedis;
 
-  exports io.lonmstalker.tgkit.security;
-  exports io.lonmstalker.tgkit.security.antispam;
-  exports io.lonmstalker.tgkit.security.audit;
-  exports io.lonmstalker.tgkit.security.captcha;
-  exports io.lonmstalker.tgkit.security.captcha.provider;
-  exports io.lonmstalker.tgkit.security.event;
-  exports io.lonmstalker.tgkit.security.init;
-  exports io.lonmstalker.tgkit.security.ratelimit;
-  exports io.lonmstalker.tgkit.security.ratelimit.impl to
+  exports io.github.tgkit.security;
+  exports io.github.tgkit.security.antispam;
+  exports io.github.tgkit.security.audit;
+  exports io.github.tgkit.security.captcha;
+  exports io.github.tgkit.security.captcha.provider;
+  exports io.github.tgkit.security.event;
+  exports io.github.tgkit.security.init;
+  exports io.github.tgkit.security.ratelimit;
+  exports io.github.tgkit.security.ratelimit.impl to
       io.lonmstalker.tgkit.plugin;
-  exports io.lonmstalker.tgkit.security.rbac;
-  exports io.lonmstalker.tgkit.security.secret;
-  exports io.lonmstalker.tgkit.security.config;
+  exports io.github.tgkit.security.rbac;
+  exports io.github.tgkit.security.secret;
+  exports io.github.tgkit.security.config;
 }

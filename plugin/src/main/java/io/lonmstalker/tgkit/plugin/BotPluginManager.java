@@ -27,7 +27,7 @@ import io.lonmstalker.tgkit.plugin.internal.BotPluginDescriptor;
 import io.lonmstalker.tgkit.plugin.internal.sort.TopoSorter;
 import io.lonmstalker.tgkit.security.audit.AuditBus;
 import io.lonmstalker.tgkit.security.audit.AuditEvent;
-import io.lonmstalker.tgkit.security.config.BotSecurityGlobalConfig;
+import io.github.tgkit.security.config.BotSecurityGlobalConfig;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;

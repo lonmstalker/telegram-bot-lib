@@ -18,7 +18,7 @@ package io.lonmstalker.tgkit.boot;
 import io.lonmstalker.observability.BotObservability;
 import io.lonmstalker.observability.MetricsCollector;
 import io.lonmstalker.observability.impl.NoOpMetricsCollector;
-import io.lonmstalker.tgkit.security.init.BotSecurityInitializer;
+import io.github.tgkit.security.init.BotSecurityInitializer;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
