@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.interceptor;
+package io.github.tgkit.core.interceptor;
 
 import static org.junit.jupiter.api.Assertions.*;
 

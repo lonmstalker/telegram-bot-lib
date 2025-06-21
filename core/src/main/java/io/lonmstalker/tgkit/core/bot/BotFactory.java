@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.bot;
+package io.github.tgkit.core.bot;
 
-import io.lonmstalker.tgkit.core.BotAdapter;
-import io.lonmstalker.tgkit.core.bot.BotDataSourceFactory.BotData;
-import io.lonmstalker.tgkit.core.bot.loader.AnnotatedCommandLoader;
-import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
-import io.lonmstalker.tgkit.core.crypto.TokenCipher;
+import io.github.tgkit.core.BotAdapter;
+import io.github.tgkit.core.bot.BotDataSourceFactory.BotData;
+import io.github.tgkit.core.bot.loader.AnnotatedCommandLoader;
+import io.github.tgkit.core.config.BotGlobalConfig;
+import io.github.tgkit.core.crypto.TokenCipher;
 import java.util.concurrent.atomic.AtomicLong;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;

@@ -19,9 +19,9 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
-import io.lonmstalker.tgkit.core.BotRequest;
-import io.lonmstalker.tgkit.core.BotService;
-import io.lonmstalker.tgkit.core.i18n.MessageLocalizerImpl;
+import io.github.tgkit.core.BotRequest;
+import io.github.tgkit.core.BotService;
+import io.github.tgkit.core.i18n.MessageLocalizerImpl;
 import io.lonmstalker.tgkit.security.captcha.CaptchaProvider;
 import io.lonmstalker.tgkit.security.init.BotSecurityInitializer;
 import io.lonmstalker.tgkit.security.ratelimit.RateLimiter;

@@ -18,12 +18,12 @@ package io.lonmstalker.tgkit.security.captcha;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
-import io.lonmstalker.tgkit.core.BotRequest;
-import io.lonmstalker.tgkit.core.BotService;
-import io.lonmstalker.tgkit.core.i18n.MessageLocalizer;
-import io.lonmstalker.tgkit.core.i18n.MessageLocalizerImpl;
-import io.lonmstalker.tgkit.core.user.BotUserInfo;
-import io.lonmstalker.tgkit.core.user.store.UserKVStore;
+import io.github.tgkit.core.BotRequest;
+import io.github.tgkit.core.BotService;
+import io.github.tgkit.core.i18n.MessageLocalizer;
+import io.github.tgkit.core.i18n.MessageLocalizerImpl;
+import io.github.tgkit.core.user.BotUserInfo;
+import io.github.tgkit.core.user.store.UserKVStore;
 import io.lonmstalker.tgkit.security.TestUtils;
 import io.lonmstalker.tgkit.security.captcha.provider.MathCaptchaProvider;
 import io.lonmstalker.tgkit.security.init.BotSecurityInitializer;

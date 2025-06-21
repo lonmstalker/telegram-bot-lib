@@ -15,8 +15,8 @@
  */
 package io.lonmstalker.tgkit.security.rbac;
 
-import io.lonmstalker.tgkit.core.BotCommand;
-import io.lonmstalker.tgkit.core.loader.BotCommandFactory;
+import io.github.tgkit.core.BotCommand;
+import io.github.tgkit.core.loader.BotCommandFactory;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.stream.Collectors;

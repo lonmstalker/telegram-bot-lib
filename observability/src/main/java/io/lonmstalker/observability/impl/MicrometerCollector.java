@@ -16,7 +16,7 @@
 package io.lonmstalker.observability.impl;
 
 import io.lonmstalker.observability.MetricsCollector;
-import io.lonmstalker.tgkit.core.exception.BotApiException;
+import io.github.tgkit.core.exception.BotApiException;
 import io.lonmstalker.tgkit.observability.Tags;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.Gauge;

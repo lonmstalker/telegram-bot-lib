@@ -13,16 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.dsl;
+package io.github.tgkit.core.dsl;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import io.lonmstalker.tgkit.core.BotInfo;
-import io.lonmstalker.tgkit.core.BotService;
-import io.lonmstalker.tgkit.core.dsl.context.DSLContext;
-import io.lonmstalker.tgkit.core.exception.BotApiException;
-import io.lonmstalker.tgkit.core.user.BotUserInfo;
+import io.github.tgkit.core.BotInfo;
+import io.github.tgkit.core.BotService;
+import io.github.tgkit.core.dsl.context.DSLContext;
+import io.github.tgkit.core.exception.BotApiException;
+import io.github.tgkit.core.user.BotUserInfo;
 import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
 import org.junit.jupiter.api.Test;
 

@@ -15,7 +15,7 @@
  */
 package io.lonmstalker.tgkit.testkit;
 
-import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
+import io.github.tgkit.core.init.BotCoreInitializer;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**

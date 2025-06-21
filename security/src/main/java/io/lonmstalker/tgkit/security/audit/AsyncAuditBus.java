@@ -15,8 +15,8 @@
  */
 package io.lonmstalker.tgkit.security.audit;
 
-import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
-import io.lonmstalker.tgkit.core.exception.BotApiException;
+import io.github.tgkit.core.config.BotGlobalConfig;
+import io.github.tgkit.core.exception.BotApiException;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CopyOnWriteArrayList;

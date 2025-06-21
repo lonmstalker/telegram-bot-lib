@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.bot;
+package io.github.tgkit.core.bot;
 
-import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
-import io.lonmstalker.tgkit.core.event.impl.StartStatusBotEvent;
-import io.lonmstalker.tgkit.core.event.impl.StopStatusBotEvent;
-import io.lonmstalker.tgkit.core.exception.BotApiException;
+import io.github.tgkit.core.config.BotGlobalConfig;
+import io.github.tgkit.core.event.impl.StartStatusBotEvent;
+import io.github.tgkit.core.event.impl.StopStatusBotEvent;
+import io.github.tgkit.core.exception.BotApiException;
 import java.time.Instant;
 import java.util.List;
 import java.util.Objects;

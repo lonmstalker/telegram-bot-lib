@@ -13,21 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.bot.loader;
+package io.github.tgkit.core.bot.loader;
 
-import io.lonmstalker.tgkit.core.BotCommand;
-import io.lonmstalker.tgkit.core.BotHandlerConverter;
-import io.lonmstalker.tgkit.core.BotRequest;
-import io.lonmstalker.tgkit.core.BotRequestType;
-import io.lonmstalker.tgkit.core.BotResponse;
-import io.lonmstalker.tgkit.core.annotation.Arg;
-import io.lonmstalker.tgkit.core.args.Context;
-import io.lonmstalker.tgkit.core.args.ParamInfo;
-import io.lonmstalker.tgkit.core.args.RouteContextHolder;
-import io.lonmstalker.tgkit.core.exception.BotApiException;
-import io.lonmstalker.tgkit.core.interceptor.BotInterceptor;
-import io.lonmstalker.tgkit.core.matching.CommandMatch;
-import io.lonmstalker.tgkit.core.storage.BotRequestContextHolder;
+import io.github.tgkit.core.BotCommand;
+import io.github.tgkit.core.BotHandlerConverter;
+import io.github.tgkit.core.BotRequest;
+import io.github.tgkit.core.BotRequestType;
+import io.github.tgkit.core.BotResponse;
+import io.github.tgkit.core.annotation.Arg;
+import io.github.tgkit.core.args.Context;
+import io.github.tgkit.core.args.ParamInfo;
+import io.github.tgkit.core.args.RouteContextHolder;
+import io.github.tgkit.core.exception.BotApiException;
+import io.github.tgkit.core.interceptor.BotInterceptor;
+import io.github.tgkit.core.matching.CommandMatch;
+import io.github.tgkit.core.storage.BotRequestContextHolder;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Objects;

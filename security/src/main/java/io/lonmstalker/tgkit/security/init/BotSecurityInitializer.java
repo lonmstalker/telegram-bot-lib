@@ -15,7 +15,7 @@
  */
 package io.lonmstalker.tgkit.security.init;
 
-import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
+import io.github.tgkit.core.config.BotGlobalConfig;
 import io.lonmstalker.tgkit.security.antispam.InMemoryDuplicateProvider;
 import io.lonmstalker.tgkit.security.audit.AsyncAuditBus;
 import io.lonmstalker.tgkit.security.captcha.MathCaptchaOperations;
@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Базовая инициализация security-модуля.<br>
- * Аналогично {@link io.lonmstalker.tgkit.core.init.BotCoreInitializer}.
+ * Аналогично {@link io.github.tgkit.core.init.BotCoreInitializer}.
  */
 public final class BotSecurityInitializer {
 

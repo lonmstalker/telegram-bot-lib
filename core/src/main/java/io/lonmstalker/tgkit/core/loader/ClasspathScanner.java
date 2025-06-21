@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.loader;
+package io.github.tgkit.core.loader;
 
 import java.lang.annotation.Annotation;
 import java.util.Set;

@@ -13,19 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core;
+package io.github.tgkit.core;
 
-import io.lonmstalker.tgkit.core.dsl.BotDSL;
-import io.lonmstalker.tgkit.core.dsl.DeleteBuilder;
-import io.lonmstalker.tgkit.core.dsl.EditBuilder;
-import io.lonmstalker.tgkit.core.dsl.InlineResultBuilder;
-import io.lonmstalker.tgkit.core.dsl.MediaGroupBuilder;
-import io.lonmstalker.tgkit.core.dsl.MessageBuilder;
-import io.lonmstalker.tgkit.core.dsl.PhotoBuilder;
-import io.lonmstalker.tgkit.core.dsl.PollBuilder;
-import io.lonmstalker.tgkit.core.dsl.QuizBuilder;
-import io.lonmstalker.tgkit.core.exception.BotApiException;
-import io.lonmstalker.tgkit.core.user.BotUserInfo;
+import io.github.tgkit.core.dsl.BotDSL;
+import io.github.tgkit.core.dsl.DeleteBuilder;
+import io.github.tgkit.core.dsl.EditBuilder;
+import io.github.tgkit.core.dsl.InlineResultBuilder;
+import io.github.tgkit.core.dsl.MediaGroupBuilder;
+import io.github.tgkit.core.dsl.MessageBuilder;
+import io.github.tgkit.core.dsl.PhotoBuilder;
+import io.github.tgkit.core.dsl.PollBuilder;
+import io.github.tgkit.core.dsl.QuizBuilder;
+import io.github.tgkit.core.exception.BotApiException;
+import io.github.tgkit.core.user.BotUserInfo;
 import java.util.Locale;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;

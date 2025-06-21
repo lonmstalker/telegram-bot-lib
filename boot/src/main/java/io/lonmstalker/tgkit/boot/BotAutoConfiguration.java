@@ -59,7 +59,7 @@ public class BotAutoConfiguration {
     @Override
     public void afterPropertiesSet() {
       collector = BotObservability.micrometer(properties.getMetricsPort());
-      io.lonmstalker.tgkit.core.config.BotGlobalConfig.INSTANCE
+      io.github.tgkit.core.config.BotGlobalConfig.INSTANCE
           .observability()
           .collector(collector);
     }
@@ -68,7 +68,7 @@ public class BotAutoConfiguration {
     public void destroy() throws Exception {
       if (collector != null) {
         collector.close();
-        io.lonmstalker.tgkit.core.config.BotGlobalConfig.INSTANCE
+        io.github.tgkit.core.config.BotGlobalConfig.INSTANCE
             .observability()
             .collector(new NoOpMetricsCollector());
       }

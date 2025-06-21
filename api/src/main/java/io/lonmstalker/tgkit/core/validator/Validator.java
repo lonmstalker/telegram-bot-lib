@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.validator;
+package io.github.tgkit.core.validator;
 
-import io.lonmstalker.tgkit.core.exception.ValidationException;
-import io.lonmstalker.tgkit.core.i18n.MessageKey;
+import io.github.tgkit.core.exception.ValidationException;
+import io.github.tgkit.core.i18n.MessageKey;
 import java.util.Objects;
 import java.util.function.Predicate;
 import org.checkerframework.checker.nullness.qual.NonNull;

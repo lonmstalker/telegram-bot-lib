@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.bot;
+package io.github.tgkit.core.bot;
 
-import io.lonmstalker.tgkit.core.exception.BotExceptionHandler;
-import io.lonmstalker.tgkit.core.interceptor.BotInterceptor;
-import io.lonmstalker.tgkit.core.state.StateStore;
+import io.github.tgkit.core.exception.BotExceptionHandler;
+import io.github.tgkit.core.interceptor.BotInterceptor;
+import io.github.tgkit.core.state.StateStore;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;

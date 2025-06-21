@@ -13,15 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.init;
+package io.github.tgkit.core.init;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.lonmstalker.observability.impl.NoOpMetricsCollector;
-import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
-import io.lonmstalker.tgkit.core.dsl.MissingIdStrategy;
-import io.lonmstalker.tgkit.core.dsl.feature_flags.InMemoryFeatureFlags;
-import io.lonmstalker.tgkit.core.dsl.ttl.TtlSchedulerDefault;
-import io.lonmstalker.tgkit.core.event.InMemoryEventBus;
+import io.github.tgkit.core.config.BotGlobalConfig;
+import io.github.tgkit.core.dsl.MissingIdStrategy;
+import io.github.tgkit.core.dsl.feature_flags.InMemoryFeatureFlags;
+import io.github.tgkit.core.dsl.ttl.TtlSchedulerDefault;
+import io.github.tgkit.core.event.InMemoryEventBus;
 import java.net.http.HttpClient;
 import java.time.Duration;
 import java.util.concurrent.Executors;

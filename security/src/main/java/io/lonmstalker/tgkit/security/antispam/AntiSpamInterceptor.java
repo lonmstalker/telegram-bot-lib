@@ -15,10 +15,10 @@
  */
 package io.lonmstalker.tgkit.security.antispam;
 
-import io.lonmstalker.tgkit.core.BotRequest;
-import io.lonmstalker.tgkit.core.BotResponse;
-import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
-import io.lonmstalker.tgkit.core.interceptor.BotInterceptor;
+import io.github.tgkit.core.BotRequest;
+import io.github.tgkit.core.BotResponse;
+import io.github.tgkit.core.config.BotGlobalConfig;
+import io.github.tgkit.core.interceptor.BotInterceptor;
 import io.lonmstalker.tgkit.security.captcha.CaptchaProvider;
 import io.lonmstalker.tgkit.security.event.SecurityBotEvent;
 import io.lonmstalker.tgkit.security.ratelimit.RateLimiter;

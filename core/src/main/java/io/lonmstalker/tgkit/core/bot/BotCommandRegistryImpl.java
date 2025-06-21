@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.bot;
+package io.github.tgkit.core.bot;
 
-import io.lonmstalker.tgkit.core.BotCommand;
-import io.lonmstalker.tgkit.core.BotRequestType;
-import io.lonmstalker.tgkit.core.matching.CommandMatch;
+import io.github.tgkit.core.BotCommand;
+import io.github.tgkit.core.BotRequestType;
+import io.github.tgkit.core.matching.CommandMatch;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;

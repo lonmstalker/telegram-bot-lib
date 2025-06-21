@@ -15,11 +15,11 @@
  */
 package io.lonmstalker.examples.simplebot;
 
-import static io.lonmstalker.tgkit.core.update.UpdateUtils.resolveChatId;
-import static io.lonmstalker.tgkit.core.update.UpdateUtils.resolveUserId;
+import static io.github.tgkit.core.update.UpdateUtils.resolveChatId;
+import static io.github.tgkit.core.update.UpdateUtils.resolveUserId;
 
-import io.lonmstalker.tgkit.core.user.BotUserInfo;
-import io.lonmstalker.tgkit.core.user.BotUserProvider;
+import io.github.tgkit.core.user.BotUserInfo;
+import io.github.tgkit.core.user.BotUserProvider;
 import java.util.Set;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;

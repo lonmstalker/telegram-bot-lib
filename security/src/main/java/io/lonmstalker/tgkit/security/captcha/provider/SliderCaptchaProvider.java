@@ -17,9 +17,9 @@ package io.lonmstalker.tgkit.security.captcha.provider;
 
 import static java.util.Collections.synchronizedMap;
 
-import io.lonmstalker.tgkit.core.BotRequest;
-import io.lonmstalker.tgkit.core.dsl.Button;
-import io.lonmstalker.tgkit.core.exception.BotApiException;
+import io.github.tgkit.core.BotRequest;
+import io.github.tgkit.core.dsl.Button;
+import io.github.tgkit.core.exception.BotApiException;
 import io.lonmstalker.tgkit.security.captcha.CaptchaProvider;
 import java.awt.AlphaComposite;
 import java.awt.Graphics2D;

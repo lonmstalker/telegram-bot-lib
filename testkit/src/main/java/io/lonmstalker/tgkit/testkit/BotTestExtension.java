@@ -15,10 +15,10 @@
  */
 package io.lonmstalker.tgkit.testkit;
 
-import io.lonmstalker.tgkit.core.bot.BotAdapterImpl;
-import io.lonmstalker.tgkit.core.bot.BotConfig;
-import io.lonmstalker.tgkit.core.bot.TelegramSender;
-import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
+import io.github.tgkit.core.bot.BotAdapterImpl;
+import io.github.tgkit.core.bot.BotConfig;
+import io.github.tgkit.core.bot.TelegramSender;
+import io.github.tgkit.core.init.BotCoreInitializer;
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;

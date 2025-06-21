@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.config;
+package io.github.tgkit.core.config;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.lonmstalker.tgkit.core.TelegramBot;
-import io.lonmstalker.tgkit.core.bot.Bot;
+import io.github.tgkit.core.TelegramBot;
+import io.github.tgkit.core.bot.Bot;
 import io.lonmstalker.tgkit.testkit.TelegramMockServer;
 import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
 import java.nio.file.Files;

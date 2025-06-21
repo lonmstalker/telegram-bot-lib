@@ -18,7 +18,7 @@ package io.lonmstalker.tgkit.validator.impl;
 import static io.lonmstalker.tgkit.validator.impl.UrlValidators.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import io.lonmstalker.tgkit.core.exception.ValidationException;
+import io.github.tgkit.core.exception.ValidationException;
 import org.junit.jupiter.api.Test;
 
 class UrlValidatorsTest {

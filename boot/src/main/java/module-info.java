@@ -1,5 +1,5 @@
 module io.lonmstalker.tgkit.boot {
-  requires io.lonmstalker.tgkit.core;
+  requires io.github.tgkit.core;
   requires spring.boot;
   requires spring.boot.autoconfigure;
   requires spring.context;

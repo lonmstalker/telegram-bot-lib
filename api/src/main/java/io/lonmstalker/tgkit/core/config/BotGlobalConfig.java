@@ -13,16 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.config;
+package io.github.tgkit.core.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.github.tgkit.core.dsl.MissingIdStrategy;
+import io.github.tgkit.core.dsl.feature_flags.FeatureFlags;
+import io.github.tgkit.core.event.BotEventBus;
+import io.github.tgkit.core.parse_mode.ParseMode;
+import io.github.tgkit.core.ttl.TtlScheduler;
 import io.lonmstalker.observability.MetricsCollector;
 import io.lonmstalker.observability.impl.NoOpMetricsCollector;
-import io.lonmstalker.tgkit.core.dsl.MissingIdStrategy;
-import io.lonmstalker.tgkit.core.dsl.feature_flags.FeatureFlags;
-import io.lonmstalker.tgkit.core.event.BotEventBus;
-import io.lonmstalker.tgkit.core.parse_mode.ParseMode;
-import io.lonmstalker.tgkit.core.ttl.TtlScheduler;
 import io.lonmstalker.tgkit.webhook.WebhookServer;
 import java.net.InetSocketAddress;
 import java.net.ProxySelector;

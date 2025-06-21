@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.dsl;
+package io.github.tgkit.core.dsl;
 
-import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
-import io.lonmstalker.tgkit.core.dsl.context.DSLContext;
-import io.lonmstalker.tgkit.core.ttl.DeleteTask;
-import io.lonmstalker.tgkit.core.ttl.TtlPolicy;
+import io.github.tgkit.core.config.BotGlobalConfig;
+import io.github.tgkit.core.dsl.context.DSLContext;
+import io.github.tgkit.core.ttl.DeleteTask;
+import io.github.tgkit.core.ttl.TtlPolicy;
 import java.time.Duration;
 import java.util.Objects;
 import java.util.function.Consumer;

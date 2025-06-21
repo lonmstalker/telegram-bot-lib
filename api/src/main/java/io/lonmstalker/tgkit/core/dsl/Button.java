@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.dsl;
+package io.github.tgkit.core.dsl;
 
-import io.lonmstalker.tgkit.core.i18n.MessageLocalizer;
+import io.github.tgkit.core.i18n.MessageLocalizer;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.webapp.WebAppInfo;

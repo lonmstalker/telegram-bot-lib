@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.wizard;
+package io.github.tgkit.core.wizard;
 
-import io.lonmstalker.tgkit.core.BotCommand;
-import io.lonmstalker.tgkit.core.BotRequest;
-import io.lonmstalker.tgkit.core.annotation.BotHandler;
-import io.lonmstalker.tgkit.core.bot.BotCommandRegistry;
-import io.lonmstalker.tgkit.core.loader.BotCommandFactory;
-import io.lonmstalker.tgkit.core.state.StateStore;
+import io.github.tgkit.core.BotCommand;
+import io.github.tgkit.core.BotRequest;
+import io.github.tgkit.core.annotation.BotHandler;
+import io.github.tgkit.core.bot.BotCommandRegistry;
+import io.github.tgkit.core.loader.BotCommandFactory;
+import io.github.tgkit.core.state.StateStore;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.time.Instant;

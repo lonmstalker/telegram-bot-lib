@@ -15,11 +15,11 @@
  */
 package io.lonmstalker.tgkit.plugin;
 
-import io.lonmstalker.tgkit.core.bot.BotRegistry;
-import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
-import io.lonmstalker.tgkit.core.dsl.feature_flags.FeatureFlags;
-import io.lonmstalker.tgkit.core.event.BotEventBus;
-import io.lonmstalker.tgkit.core.ttl.TtlScheduler;
+import io.github.tgkit.core.bot.BotRegistry;
+import io.github.tgkit.core.config.BotGlobalConfig;
+import io.github.tgkit.core.dsl.feature_flags.FeatureFlags;
+import io.github.tgkit.core.event.BotEventBus;
+import io.github.tgkit.core.ttl.TtlScheduler;
 import io.lonmstalker.tgkit.security.audit.AuditBus;
 import io.lonmstalker.tgkit.security.secret.SecretStore;
 import java.net.http.HttpClient;

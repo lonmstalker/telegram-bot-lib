@@ -15,8 +15,8 @@
  */
 package io.lonmstalker.tgkit.validator.impl;
 
-import io.lonmstalker.tgkit.core.i18n.MessageKey;
-import io.lonmstalker.tgkit.core.validator.Validator;
+import io.github.tgkit.core.i18n.MessageKey;
+import io.github.tgkit.core.validator.Validator;
 import io.lonmstalker.tgkit.validator.moderation.ContentModerationService;
 import java.util.ServiceLoader;
 import java.util.regex.Pattern;

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 module io.lonmstalker.tgkit.security {
-  requires io.lonmstalker.tgkit.core;
+  requires io.github.tgkit.core;
   requires org.slf4j;
   requires com.github.benmanes.caffeine;
   requires io.github.jopenlibs.vault.java.driver;

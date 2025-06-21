@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.config;
+package io.github.tgkit.core.config;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import io.lonmstalker.tgkit.core.resource.Loaders;
-import io.lonmstalker.tgkit.core.resource.ResourceLoader;
+import io.github.tgkit.core.resource.Loaders;
+import io.github.tgkit.core.resource.ResourceLoader;
 import java.io.IOException;
 import java.io.InputStream;
 import org.checkerframework.checker.nullness.qual.NonNull;

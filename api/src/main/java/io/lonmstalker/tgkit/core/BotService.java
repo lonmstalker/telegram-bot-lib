@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core;
+package io.github.tgkit.core;
 
-import io.lonmstalker.tgkit.core.bot.TelegramSender;
-import io.lonmstalker.tgkit.core.i18n.MessageLocalizer;
-import io.lonmstalker.tgkit.core.state.StateStore;
-import io.lonmstalker.tgkit.core.user.store.UserKVStore;
+import io.github.tgkit.core.bot.TelegramSender;
+import io.github.tgkit.core.i18n.MessageLocalizer;
+import io.github.tgkit.core.state.StateStore;
+import io.github.tgkit.core.user.store.UserKVStore;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**

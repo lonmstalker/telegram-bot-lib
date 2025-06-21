@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.wizard;
+package io.github.tgkit.core.wizard;
 
-import io.lonmstalker.tgkit.core.BotRequest;
-import io.lonmstalker.tgkit.core.annotation.wizard.WizardMeta;
+import io.github.tgkit.core.BotRequest;
+import io.github.tgkit.core.annotation.wizard.WizardMeta;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

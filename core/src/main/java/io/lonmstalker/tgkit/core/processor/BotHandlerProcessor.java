@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.processor;
+package io.github.tgkit.core.processor;
 
-import io.lonmstalker.tgkit.core.BotRequest;
-import io.lonmstalker.tgkit.core.BotResponse;
-import io.lonmstalker.tgkit.core.annotation.Arg;
-import io.lonmstalker.tgkit.core.annotation.BotHandler;
+import io.github.tgkit.core.BotRequest;
+import io.github.tgkit.core.BotResponse;
+import io.github.tgkit.core.annotation.Arg;
+import io.github.tgkit.core.annotation.BotHandler;
 import java.util.Set;
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.RoundEnvironment;
@@ -49,7 +49,7 @@ import javax.tools.Diagnostic;
  * }</pre>
  */
 @SupportedSourceVersion(SourceVersion.RELEASE_21)
-@SupportedAnnotationTypes("io.lonmstalker.tgkit.core.annotation.BotHandler")
+@SupportedAnnotationTypes("io.github.tgkit.core.annotation.BotHandler")
 public class BotHandlerProcessor extends AbstractProcessor {
 
   @Override

@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.dsl;
+package io.github.tgkit.core.dsl;
 
-import io.lonmstalker.tgkit.core.BotResponse;
-import io.lonmstalker.tgkit.core.dsl.context.DSLContext;
-import io.lonmstalker.tgkit.core.dsl.validator.MediaGroupSizeValidator;
+import io.github.tgkit.core.BotResponse;
+import io.github.tgkit.core.dsl.context.DSLContext;
+import io.github.tgkit.core.dsl.validator.MediaGroupSizeValidator;
 import java.util.ArrayList;
 import java.util.List;
 import org.checkerframework.checker.nullness.qual.NonNull;

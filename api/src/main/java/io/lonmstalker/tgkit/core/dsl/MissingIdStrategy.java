@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.dsl;
+package io.github.tgkit.core.dsl;
 
-import io.lonmstalker.tgkit.core.dsl.context.DSLContext;
-import io.lonmstalker.tgkit.core.exception.BotApiException;
-import io.lonmstalker.tgkit.core.storage.BotRequestContextHolder;
+import io.github.tgkit.core.dsl.context.DSLContext;
+import io.github.tgkit.core.exception.BotApiException;
+import io.github.tgkit.core.storage.BotRequestContextHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

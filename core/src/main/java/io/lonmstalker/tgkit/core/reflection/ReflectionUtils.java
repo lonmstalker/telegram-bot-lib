@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.reflection;
+package io.github.tgkit.core.reflection;
 
-import io.lonmstalker.tgkit.core.exception.BotApiException;
+import io.github.tgkit.core.exception.BotApiException;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
 import java.lang.reflect.InvocationTargetException;

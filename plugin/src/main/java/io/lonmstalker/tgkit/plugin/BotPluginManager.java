@@ -20,7 +20,7 @@ import static io.lonmstalker.tgkit.plugin.internal.BotPluginConstants.CURRENT_VE
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.github.zafarkhaja.semver.Version;
-import io.lonmstalker.tgkit.core.exception.BotApiException;
+import io.github.tgkit.core.exception.BotApiException;
 import io.lonmstalker.tgkit.plugin.internal.BotPluginContainer;
 import io.lonmstalker.tgkit.plugin.internal.BotPluginContextDefault;
 import io.lonmstalker.tgkit.plugin.internal.BotPluginDescriptor;

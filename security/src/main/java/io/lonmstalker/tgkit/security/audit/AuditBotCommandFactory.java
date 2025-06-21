@@ -15,10 +15,10 @@
  */
 package io.lonmstalker.tgkit.security.audit;
 
-import io.lonmstalker.tgkit.core.BotCommand;
-import io.lonmstalker.tgkit.core.interceptor.BotInterceptor;
-import io.lonmstalker.tgkit.core.loader.BotCommandFactory;
-import io.lonmstalker.tgkit.core.reflection.ReflectionUtils;
+import io.github.tgkit.core.BotCommand;
+import io.github.tgkit.core.interceptor.BotInterceptor;
+import io.github.tgkit.core.loader.BotCommandFactory;
+import io.github.tgkit.core.reflection.ReflectionUtils;
 import io.lonmstalker.tgkit.security.config.BotSecurityGlobalConfig;
 import java.lang.reflect.Method;
 import java.util.Objects;

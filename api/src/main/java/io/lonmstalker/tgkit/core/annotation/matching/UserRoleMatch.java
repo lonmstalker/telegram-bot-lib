@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.annotation.matching;
+package io.github.tgkit.core.annotation.matching;
 
-import io.lonmstalker.tgkit.core.user.BotUserProvider;
+import io.github.tgkit.core.user.BotUserProvider;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

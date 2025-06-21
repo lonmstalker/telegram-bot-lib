@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.exception;
+package io.github.tgkit.core.exception;
 
 /** Общий тип исключений, связанных с работой бота. */
 public class BotException extends RuntimeException {

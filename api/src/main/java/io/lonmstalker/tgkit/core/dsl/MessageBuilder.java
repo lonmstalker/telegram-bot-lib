@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.dsl;
+package io.github.tgkit.core.dsl;
 
-import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
-import io.lonmstalker.tgkit.core.dsl.context.DSLContext;
-import io.lonmstalker.tgkit.core.dsl.validator.TextLengthValidator;
-import io.lonmstalker.tgkit.core.parse_mode.ParseMode;
-import io.lonmstalker.tgkit.core.parse_mode.Sanitizer;
+import io.github.tgkit.core.config.BotGlobalConfig;
+import io.github.tgkit.core.dsl.context.DSLContext;
+import io.github.tgkit.core.dsl.validator.TextLengthValidator;
+import io.github.tgkit.core.parse_mode.ParseMode;
+import io.github.tgkit.core.parse_mode.Sanitizer;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 

@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.bot;
+package io.github.tgkit.core.bot;
 
-import io.lonmstalker.tgkit.core.BotAdapter;
-import io.lonmstalker.tgkit.core.annotation.BotCommand;
-import io.lonmstalker.tgkit.core.annotation.CheckReturnValue;
-import io.lonmstalker.tgkit.core.loader.ClasspathScanner;
+import io.github.tgkit.core.BotAdapter;
+import io.github.tgkit.core.annotation.BotCommand;
+import io.github.tgkit.core.annotation.CheckReturnValue;
+import io.github.tgkit.core.loader.ClasspathScanner;
 import io.lonmstalker.tgkit.plugin.BotPlugin;
 import io.lonmstalker.tgkit.plugin.BotPluginContext;
 import io.lonmstalker.tgkit.plugin.internal.BotPluginContextDefault;
@@ -105,7 +105,7 @@ public final class BotBuilder {
         for (Class<?> cls : cmdClasses) {
           try {
             Object instance = cls.getDeclaredConstructor().newInstance();
-            registry.add((io.lonmstalker.tgkit.core.BotCommand<?>) instance);
+            registry.add((io.github.tgkit.core.BotCommand<?>) instance);
           } catch (Exception e) {
             throw new IllegalStateException("Cannot init command " + cls, e);
           }

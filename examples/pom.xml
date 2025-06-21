@@ -35,7 +35,7 @@
                     </annotationProcessorPaths>
                     <annotationProcessors>
                         <annotationProcessor>
-                            io.lonmstalker.tgkit.core.processor.BotHandlerProcessor
+                            io.github.tgkit.core.processor.BotHandlerProcessor
                         </annotationProcessor>
                     </annotationProcessors>
                 </configuration>

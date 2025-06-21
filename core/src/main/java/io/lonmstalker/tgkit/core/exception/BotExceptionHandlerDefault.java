@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.exception;
+package io.github.tgkit.core.exception;
 
-import io.lonmstalker.tgkit.core.update.UpdateUtils;
+import io.github.tgkit.core.update.UpdateUtils;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.slf4j.Logger;

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 module io.lonmstalker.tgkit.plugin {
-  requires io.lonmstalker.tgkit.core;
+  requires io.github.tgkit.core;
   requires io.lonmstalker.tgkit.observability;
   requires io.lonmstalker.tgkit.security;
   requires org.slf4j;
@@ -23,5 +23,5 @@ module io.lonmstalker.tgkit.plugin {
   exports io.lonmstalker.tgkit.plugin;
   exports io.lonmstalker.tgkit.plugin.annotation;
   exports io.lonmstalker.tgkit.plugin.internal to
-      io.lonmstalker.tgkit.core;
+      io.github.tgkit.core;
 }

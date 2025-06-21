@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.bot;
+package io.github.tgkit.core.bot;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import io.lonmstalker.tgkit.core.BotCommand;
-import io.lonmstalker.tgkit.core.BotRequest;
-import io.lonmstalker.tgkit.core.BotRequestType;
-import io.lonmstalker.tgkit.core.BotResponse;
+import io.github.tgkit.core.BotCommand;
+import io.github.tgkit.core.BotRequest;
+import io.github.tgkit.core.BotRequestType;
+import io.github.tgkit.core.BotResponse;
 import io.lonmstalker.tgkit.plugin.BotPlugin;
 import io.lonmstalker.tgkit.plugin.BotPluginContext;
 import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
@@ -34,7 +34,7 @@ public class BotBuilderTest {
     TestBotBootstrap.initOnce();
   }
 
-  @io.lonmstalker.tgkit.core.annotation.BotCommand
+  @io.github.tgkit.core.annotation.BotCommand
   public static class TestCommand implements BotCommand<BotApiObject> {
     @Override
     public BotResponse handle(BotRequest<BotApiObject> request) {
@@ -47,7 +47,7 @@ public class BotBuilderTest {
     }
 
     @Override
-    public io.lonmstalker.tgkit.core.matching.CommandMatch<BotApiObject> matcher() {
+    public io.github.tgkit.core.matching.CommandMatch<BotApiObject> matcher() {
       return u -> true;
     }
   }

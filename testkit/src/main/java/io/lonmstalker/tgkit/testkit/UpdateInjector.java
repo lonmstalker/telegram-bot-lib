@@ -15,8 +15,8 @@
  */
 package io.lonmstalker.tgkit.testkit;
 
-import io.lonmstalker.tgkit.core.BotAdapter;
-import io.lonmstalker.tgkit.core.bot.TelegramSender;
+import io.github.tgkit.core.BotAdapter;
+import io.github.tgkit.core.bot.TelegramSender;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.checkerframework.checker.nullness.qual.NonNull;

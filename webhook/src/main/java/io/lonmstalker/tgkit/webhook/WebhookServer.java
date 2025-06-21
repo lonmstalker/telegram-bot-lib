@@ -17,8 +17,8 @@ package io.lonmstalker.tgkit.webhook;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.lonmstalker.observability.MetricsCollector;
-import io.lonmstalker.tgkit.core.bot.WebHookReceiver;
-import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
+import io.github.tgkit.core.bot.WebHookReceiver;
+import io.github.tgkit.core.config.BotGlobalConfig;
 import io.lonmstalker.tgkit.observability.Tags;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.Gauge;

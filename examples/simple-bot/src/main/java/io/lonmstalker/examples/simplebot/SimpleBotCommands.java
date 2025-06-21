@@ -15,15 +15,15 @@
  */
 package io.lonmstalker.examples.simplebot;
 
-import io.lonmstalker.tgkit.core.BotRequest;
-import io.lonmstalker.tgkit.core.BotRequestType;
-import io.lonmstalker.tgkit.core.BotResponse;
-import io.lonmstalker.tgkit.core.annotation.BotHandler;
-import io.lonmstalker.tgkit.core.annotation.matching.AlwaysMatch;
-import io.lonmstalker.tgkit.core.annotation.matching.MessageContainsMatch;
-import io.lonmstalker.tgkit.core.annotation.matching.MessageRegexMatch;
-import io.lonmstalker.tgkit.core.annotation.matching.MessageTextMatch;
-import io.lonmstalker.tgkit.core.annotation.matching.UserRoleMatch;
+import io.github.tgkit.core.BotRequest;
+import io.github.tgkit.core.BotRequestType;
+import io.github.tgkit.core.BotResponse;
+import io.github.tgkit.core.annotation.BotHandler;
+import io.github.tgkit.core.annotation.matching.AlwaysMatch;
+import io.github.tgkit.core.annotation.matching.MessageContainsMatch;
+import io.github.tgkit.core.annotation.matching.MessageRegexMatch;
+import io.github.tgkit.core.annotation.matching.MessageTextMatch;
+import io.github.tgkit.core.annotation.matching.UserRoleMatch;
 import java.util.Collections;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.AnswerInlineQuery;

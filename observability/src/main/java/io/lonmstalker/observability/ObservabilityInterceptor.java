@@ -15,10 +15,10 @@
  */
 package io.lonmstalker.observability;
 
-import io.lonmstalker.tgkit.core.BotRequest;
-import io.lonmstalker.tgkit.core.BotResponse;
-import io.lonmstalker.tgkit.core.interceptor.BotInterceptor;
-import io.lonmstalker.tgkit.core.update.UpdateUtils;
+import io.github.tgkit.core.BotRequest;
+import io.github.tgkit.core.BotResponse;
+import io.github.tgkit.core.interceptor.BotInterceptor;
+import io.github.tgkit.core.update.UpdateUtils;
 import io.lonmstalker.tgkit.observability.Span;
 import io.lonmstalker.tgkit.observability.Tag;
 import io.lonmstalker.tgkit.observability.Tags;

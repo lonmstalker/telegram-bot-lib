@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.update;
+package io.github.tgkit.core.update;
 
-import io.lonmstalker.tgkit.core.BotRequestType;
-import io.lonmstalker.tgkit.core.exception.BotApiException;
+import io.github.tgkit.core.BotRequestType;
+import io.github.tgkit.core.exception.BotApiException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;

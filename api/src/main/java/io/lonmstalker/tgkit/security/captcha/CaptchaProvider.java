@@ -15,7 +15,7 @@
  */
 package io.lonmstalker.tgkit.security.captcha;
 
-import io.lonmstalker.tgkit.core.BotRequest;
+import io.github.tgkit.core.BotRequest;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 

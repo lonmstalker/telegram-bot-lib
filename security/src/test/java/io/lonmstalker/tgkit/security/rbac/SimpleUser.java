@@ -15,7 +15,7 @@
  */
 package io.lonmstalker.tgkit.security.rbac;
 
-import io.lonmstalker.tgkit.core.user.BotUserInfo;
+import io.github.tgkit.core.user.BotUserInfo;
 import java.util.Set;
 import org.checkerframework.checker.nullness.qual.Nullable;
 

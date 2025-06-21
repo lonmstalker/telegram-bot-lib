@@ -15,7 +15,7 @@
  */
 package io.lonmstalker.tgkit.security.audit;
 
-import io.lonmstalker.tgkit.core.update.UpdateUtils;
+import io.github.tgkit.core.update.UpdateUtils;
 import java.time.Instant;
 import java.util.Map;
 import org.checkerframework.checker.nullness.qual.NonNull;

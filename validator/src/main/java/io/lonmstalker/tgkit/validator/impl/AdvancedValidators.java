@@ -15,9 +15,9 @@
  */
 package io.lonmstalker.tgkit.validator.impl;
 
-import io.lonmstalker.tgkit.core.BotRequest;
-import io.lonmstalker.tgkit.core.i18n.MessageKey;
-import io.lonmstalker.tgkit.core.validator.Validator;
+import io.github.tgkit.core.BotRequest;
+import io.github.tgkit.core.i18n.MessageKey;
+import io.github.tgkit.core.validator.Validator;
 import io.lonmstalker.tgkit.validator.language.LanguageDetectionService;
 import java.net.URI;
 import java.time.Instant;

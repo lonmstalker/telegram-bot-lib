@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.storage;
+package io.github.tgkit.core.storage;
 
-import io.lonmstalker.tgkit.core.bot.Bot;
-import io.lonmstalker.tgkit.core.bot.TelegramSender;
-import io.lonmstalker.tgkit.core.exception.BotApiException;
+import io.github.tgkit.core.bot.Bot;
+import io.github.tgkit.core.bot.TelegramSender;
+import io.github.tgkit.core.exception.BotApiException;
 import java.util.Optional;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;

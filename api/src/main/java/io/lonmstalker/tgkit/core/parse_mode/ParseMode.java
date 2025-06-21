@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.parse_mode;
+package io.github.tgkit.core.parse_mode;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 

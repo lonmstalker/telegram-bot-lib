@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.dsl;
+package io.github.tgkit.core.dsl;
 
 import static org.assertj.core.api.Assertions.*;
 
-import io.lonmstalker.tgkit.core.dsl.feature_flags.InMemoryFeatureFlags;
+import io.github.tgkit.core.dsl.feature_flags.InMemoryFeatureFlags;
 import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
 import org.junit.jupiter.api.Test;
 

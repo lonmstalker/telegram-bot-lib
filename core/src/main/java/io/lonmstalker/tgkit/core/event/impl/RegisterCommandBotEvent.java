@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.event.impl;
+package io.github.tgkit.core.event.impl;
 
-import io.lonmstalker.tgkit.core.BotCommand;
-import io.lonmstalker.tgkit.core.event.BotEvent;
+import io.github.tgkit.core.BotCommand;
+import io.github.tgkit.core.event.BotEvent;
 import java.lang.reflect.Method;
 import java.time.Instant;
 import org.checkerframework.checker.nullness.qual.NonNull;

@@ -13,31 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.bot.loader;
+package io.github.tgkit.core.bot.loader;
 
-import static io.lonmstalker.tgkit.core.reflection.ReflectionUtils.newInstance;
+import static io.github.tgkit.core.reflection.ReflectionUtils.newInstance;
 
-import io.lonmstalker.tgkit.core.BotCommand;
-import io.lonmstalker.tgkit.core.BotHandlerConverter;
-import io.lonmstalker.tgkit.core.BotRequest;
-import io.lonmstalker.tgkit.core.annotation.Arg;
-import io.lonmstalker.tgkit.core.annotation.BotHandler;
-import io.lonmstalker.tgkit.core.annotation.matching.CustomMatcher;
-import io.lonmstalker.tgkit.core.annotation.matching.MessageContainsMatch;
-import io.lonmstalker.tgkit.core.annotation.matching.MessageRegexMatch;
-import io.lonmstalker.tgkit.core.annotation.matching.MessageTextMatch;
-import io.lonmstalker.tgkit.core.annotation.matching.UserRoleMatch;
-import io.lonmstalker.tgkit.core.args.BotArgumentConverter;
-import io.lonmstalker.tgkit.core.args.Converters;
-import io.lonmstalker.tgkit.core.args.ParamInfo;
-import io.lonmstalker.tgkit.core.bot.BotCommandRegistry;
-import io.lonmstalker.tgkit.core.config.BotGlobalConfig;
-import io.lonmstalker.tgkit.core.event.impl.RegisterCommandBotEvent;
-import io.lonmstalker.tgkit.core.exception.BotApiException;
-import io.lonmstalker.tgkit.core.loader.BotCommandFactory;
-import io.lonmstalker.tgkit.core.matching.AlwaysMatch;
-import io.lonmstalker.tgkit.core.matching.CommandMatch;
-import io.lonmstalker.tgkit.core.user.BotUserProvider;
+import io.github.tgkit.core.BotCommand;
+import io.github.tgkit.core.BotHandlerConverter;
+import io.github.tgkit.core.BotRequest;
+import io.github.tgkit.core.annotation.Arg;
+import io.github.tgkit.core.annotation.BotHandler;
+import io.github.tgkit.core.annotation.matching.CustomMatcher;
+import io.github.tgkit.core.annotation.matching.MessageContainsMatch;
+import io.github.tgkit.core.annotation.matching.MessageRegexMatch;
+import io.github.tgkit.core.annotation.matching.MessageTextMatch;
+import io.github.tgkit.core.annotation.matching.UserRoleMatch;
+import io.github.tgkit.core.args.BotArgumentConverter;
+import io.github.tgkit.core.args.Converters;
+import io.github.tgkit.core.args.ParamInfo;
+import io.github.tgkit.core.bot.BotCommandRegistry;
+import io.github.tgkit.core.config.BotGlobalConfig;
+import io.github.tgkit.core.event.impl.RegisterCommandBotEvent;
+import io.github.tgkit.core.exception.BotApiException;
+import io.github.tgkit.core.loader.BotCommandFactory;
+import io.github.tgkit.core.matching.AlwaysMatch;
+import io.github.tgkit.core.matching.CommandMatch;
+import io.github.tgkit.core.user.BotUserProvider;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -135,20 +135,20 @@ public final class AnnotatedCommandLoader {
       @NonNull Method method) {
     if (method.isAnnotationPresent(MessageContainsMatch.class)) {
       MessageContainsMatch mc = method.getAnnotation(MessageContainsMatch.class);
-      return new io.lonmstalker.tgkit.core.matching.MessageContainsMatch(
+      return new io.github.tgkit.core.matching.MessageContainsMatch(
           Objects.requireNonNull(mc).value(), mc.ignoreCase());
     } else if (method.isAnnotationPresent(MessageRegexMatch.class)) {
       MessageRegexMatch mr = method.getAnnotation(MessageRegexMatch.class);
-      return new io.lonmstalker.tgkit.core.matching.MessageRegexMatch(
+      return new io.github.tgkit.core.matching.MessageRegexMatch(
           Objects.requireNonNull(mr).value());
     } else if (method.isAnnotationPresent(MessageTextMatch.class)) {
       MessageTextMatch mt = method.getAnnotation(MessageTextMatch.class);
-      return new io.lonmstalker.tgkit.core.matching.MessageTextMatch(
+      return new io.github.tgkit.core.matching.MessageTextMatch(
           Objects.requireNonNull(mt).value(), mt.ignoreCase());
     } else if (method.isAnnotationPresent(UserRoleMatch.class)) {
       UserRoleMatch ur = method.getAnnotation(UserRoleMatch.class);
       var provider = (BotUserProvider) newInstance(Objects.requireNonNull(ur).provider());
-      return new io.lonmstalker.tgkit.core.matching.UserRoleMatch<>(provider, Set.of(ur.roles()));
+      return new io.github.tgkit.core.matching.UserRoleMatch<>(provider, Set.of(ur.roles()));
     } else {
       CustomMatcher custom = method.getAnnotation(CustomMatcher.class);
       if (custom != null) {

@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.dsl.validator;
+package io.github.tgkit.core.dsl.validator;
 
-import io.lonmstalker.tgkit.core.exception.BotApiException;
-import io.lonmstalker.tgkit.core.validator.Validator;
+import io.github.tgkit.core.exception.BotApiException;
+import io.github.tgkit.core.validator.Validator;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 

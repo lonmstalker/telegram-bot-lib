@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.bot;
+package io.github.tgkit.core.bot;
 
-import static io.lonmstalker.tgkit.core.bot.BotConstants.BOT_TOKEN_SECRET;
+import static io.github.tgkit.core.bot.BotConstants.BOT_TOKEN_SECRET;
 
-import io.lonmstalker.tgkit.core.BotAdapter;
-import io.lonmstalker.tgkit.core.exception.BotExceptionHandler;
-import io.lonmstalker.tgkit.core.exception.BotExceptionHandlerDefault;
+import io.github.tgkit.core.BotAdapter;
+import io.github.tgkit.core.exception.BotExceptionHandler;
+import io.github.tgkit.core.exception.BotExceptionHandlerDefault;
 import io.lonmstalker.tgkit.security.secret.SecretStore;
 import org.apache.commons.lang3.StringUtils;
 import org.checkerframework.checker.nullness.qual.NonNull;

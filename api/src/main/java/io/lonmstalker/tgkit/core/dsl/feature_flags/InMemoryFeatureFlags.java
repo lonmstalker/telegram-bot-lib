@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.dsl.feature_flags;
+package io.github.tgkit.core.dsl.feature_flags;
 
 import java.util.HashSet;
 import java.util.Map;

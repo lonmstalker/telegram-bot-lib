@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.processor;
+package io.github.tgkit.core.processor;
 
 import static com.google.testing.compile.CompilationSubject.assertThat;
 
@@ -32,8 +32,8 @@ class BotHandlerProcessorTest {
         JavaFileObjects.forSourceLines(
             "test.Bad",
             "package test;",
-            "import io.lonmstalker.tgkit.core.BotResponse;",
-            "import io.lonmstalker.tgkit.core.annotation.BotHandler;",
+            "import io.github.tgkit.core.BotResponse;",
+            "import io.github.tgkit.core.annotation.BotHandler;",
             "public class Bad {",
             "  @BotHandler",
             "  public BotResponse bad(String value) { return null; }",

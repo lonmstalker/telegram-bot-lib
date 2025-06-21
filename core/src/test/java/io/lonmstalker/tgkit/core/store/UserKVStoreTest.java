@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core.store;
+package io.github.tgkit.core.store;
 
-import io.lonmstalker.tgkit.core.user.store.InMemoryUserKVStore;
-import io.lonmstalker.tgkit.core.user.store.JdbcUserKVStore;
-import io.lonmstalker.tgkit.core.user.store.ReadOnlyUserKVStore;
+import io.github.tgkit.core.user.store.InMemoryUserKVStore;
+import io.github.tgkit.core.user.store.JdbcUserKVStore;
+import io.github.tgkit.core.user.store.ReadOnlyUserKVStore;
 import io.lonmstalker.tgkit.testkit.TestBotBootstrap;
 import java.util.Map;
 import javax.sql.DataSource;

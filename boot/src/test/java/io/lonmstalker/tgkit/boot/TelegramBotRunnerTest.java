@@ -17,8 +17,8 @@ package io.lonmstalker.tgkit.boot;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.lonmstalker.tgkit.core.bot.Bot;
-import io.lonmstalker.tgkit.core.init.BotCoreInitializer;
+import io.github.tgkit.core.bot.Bot;
+import io.github.tgkit.core.init.BotCoreInitializer;
 import io.lonmstalker.tgkit.testkit.TelegramMockServer;
 import java.util.List;
 import java.util.concurrent.TimeUnit;

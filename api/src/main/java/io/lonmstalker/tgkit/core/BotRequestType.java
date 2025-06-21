@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.core;
+package io.github.tgkit.core;
 
-import io.lonmstalker.tgkit.core.exception.BotApiException;
+import io.github.tgkit.core.exception.BotApiException;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.ChatJoinRequest;
