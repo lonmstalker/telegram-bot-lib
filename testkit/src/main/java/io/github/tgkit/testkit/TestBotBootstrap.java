@@ -19,8 +19,8 @@ import io.github.tgkit.internal.init.BotCoreInitializer;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * Utility class for test bootstrapping. Ensures {@link BotCoreInitializer} is initialized only once
- * per JVM.
+ * Утилита для подготовки тестов. Гарантирует инициализацию {@link BotCoreInitializer} только один
+ * раз за JVM.
  */
 public final class TestBotBootstrap {
 
@@ -29,7 +29,7 @@ public final class TestBotBootstrap {
   private TestBotBootstrap() {}
 
   /**
-   * Initializes tgkit core exactly once.
+   * Инициализирует ядро TgKit один раз.
    *
    * <pre>{@code
    * TestBotBootstrap.initOnce();
