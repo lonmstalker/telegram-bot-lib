@@ -311,6 +311,20 @@ public class BotPluginManagerTest {
     verify(auditBus).publish(argThat(evt -> evt.getAction().contains("plugin.yml missing")));
   }
 
+  @Test
+  void testDescriptorBuilderMissingRequiredField() {
+    assertThrows(
+        IllegalStateException.class,
+        () ->
+            BotPluginDescriptor.builder()
+                .id("test")
+                .version("1.0")
+                // api not set
+                .mainClass("main")
+                .minCoreVersion("1.0")
+                .build());
+  }
+
   public static class TestPlugin implements BotPlugin {
     @Override
     public void onLoad(@NonNull BotPluginContext context) {}
