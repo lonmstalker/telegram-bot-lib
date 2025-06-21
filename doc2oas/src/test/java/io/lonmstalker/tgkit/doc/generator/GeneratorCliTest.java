@@ -38,4 +38,14 @@ class GeneratorCliTest {
     assertThat(code).isZero();
     assertThat(Files.exists(target.resolve("pom.xml"))).isTrue();
   }
+
+  @Test
+  void mainMethodRuns() throws Exception {
+    OpenApiEmitter emitter = new OpenApiEmitter();
+    Path spec = Files.createTempFile("spec", ".yaml");
+    Path target = Files.createTempDirectory("sdk");
+    emitter.write(emitter.toOpenApi(List.of(new OperationInfo("getMe", "desc"))), spec);
+    GeneratorCli.main(new String[] {"--spec", spec.toString(), "--target", target.toString()});
+    assertThat(Files.exists(target.resolve("pom.xml"))).isTrue();
+  }
 }

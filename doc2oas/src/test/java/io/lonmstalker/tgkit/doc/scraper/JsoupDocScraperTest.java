@@ -16,7 +16,9 @@
 package io.lonmstalker.tgkit.doc.scraper;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -30,5 +32,18 @@ class JsoupDocScraperTest {
     assertThat(methods).hasSize(2);
     assertThat(methods.get(0).name()).isEqualTo("getMe");
     assertThat(methods.get(1).name()).isEqualTo("sendMessage");
+  }
+
+  @Test
+  void failsOnBadHtml() {
+    DocScraper scraper = new JsoupDocScraper();
+    InputStream in =
+        new InputStream() {
+          @Override
+          public int read() throws IOException {
+            throw new IOException("boom");
+          }
+        };
+    assertThatThrownBy(() -> scraper.scrape(in)).isInstanceOf(IllegalArgumentException.class);
   }
 }
