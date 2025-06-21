@@ -27,6 +27,7 @@
 | ✅  | **Шифрование токена**                              | `TokenCipher` (AES-GCM, ключ 16/32 байта)                                     |
 | ✅  | **Локализация**                                    | ICU4J plural-rules, `localizer().get("key")`                                  |
 | ✅  | **Поддержка БД**                                   | H2, PostgreSQL, MySQL, Oracle (драйвер — внешне)                              |
+| 🟡 | Экспериментальные API                              | Модуль `experiment` с нестабильными функциями                                   |
 
 🟡 — функция доступна в отдельном модуле; статус следите в Issues/Projects.
 
@@ -103,6 +104,22 @@ testImplementation("io.github.tgkit:testkit:0.0.1-SNAPSHOT")
     <artifactId>boot</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 </dependency>
+```
+
+</details>
+<details>
+<summary>Experiment</summary>
+
+```xml
+<dependency>
+    <groupId>io.github.tgkit</groupId>
+    <artifactId>experiment</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+</dependency>
+```
+
+```kotlin
+implementation("io.github.tgkit:experiment:0.0.1-SNAPSHOT")
 ```
 
 </details>

@@ -13,8 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package io.github.tgkit.core.experimental;
+package io.github.tgkit.experiment;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -32,14 +31,13 @@ import java.lang.annotation.Target;
  *
  * <pre>{@code
  * @Incubating
- * public class ExperimentalApi { }
+ * public class ExperimentalApi {}
  *
  * @Incubating
- * public void experimentalMethod() { }
+ * public void experimentalMethod() {}
  * }</pre>
  */
 @Documented
 @Retention(RetentionPolicy.CLASS)
 @Target({ElementType.TYPE, ElementType.METHOD})
-public @interface Incubating {
-}
+public @interface Incubating {}
