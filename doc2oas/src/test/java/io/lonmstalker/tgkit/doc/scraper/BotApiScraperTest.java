@@ -16,6 +16,7 @@
 package io.lonmstalker.tgkit.doc.scraper;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -93,6 +94,80 @@ class BotApiScraperTest {
       assertThat(e).hasMessageContaining("HTTP");
     } finally {
       server.stop(0);
+    }
+  }
+
+  @Test
+  void failsOnNotModifiedWithoutCache() throws Exception {
+    HttpServer server = HttpServer.create(new InetSocketAddress(0), 0);
+    server.createContext(
+        "/bots/api",
+        exchange -> {
+          exchange.sendResponseHeaders(304, -1);
+        });
+    server.start();
+    URI uri = URI.create("http://localhost:" + server.getAddress().getPort() + "/bots/api");
+    BotApiScraper scraper =
+        new BotApiScraper(HttpClient.newHttpClient(), uri, Files.createTempDirectory("cache"));
+    try {
+      scraper.fetch();
+      fail("expected exception");
+    } catch (IllegalStateException e) {
+      assertThat(e).hasMessageContaining("HTTP");
+    } finally {
+      server.stop(0);
+    }
+  }
+
+  @Test
+  void handlesEmptyEtagFile() throws Exception {
+    HttpServer server = HttpServer.create(new InetSocketAddress(0), 0);
+    server.createContext("/bots/api", new TestHandler());
+    server.start();
+    URI uri = URI.create("http://localhost:" + server.getAddress().getPort() + "/bots/api");
+    Path cache = Files.createTempDirectory("cache");
+    Files.createFile(cache.resolve("etag"));
+    BotApiScraper scraper = new BotApiScraper(HttpClient.newHttpClient(), uri, cache);
+    List<MethodDoc> methods = scraper.fetch();
+    server.stop(0);
+    assertThat(methods).hasSize(1);
+  }
+
+  @Test
+  void readsBaseUriFromProperty() throws Exception {
+    HttpServer server1 = HttpServer.create(new InetSocketAddress(0), 0);
+    server1.createContext("/bots/api", new TestHandler());
+    server1.start();
+    HttpServer server2 = HttpServer.create(new InetSocketAddress(0), 0);
+    server2.createContext(
+        "/bots/api",
+        exchange -> {
+          String html = "<div class='method'><h3>sendMessage</h3><p>desc</p></div>";
+          exchange.sendResponseHeaders(200, html.getBytes().length);
+          try (OutputStream os = exchange.getResponseBody()) {
+            os.write(html.getBytes());
+          }
+        });
+    server2.start();
+
+    String originalHome = System.getProperty("user.home");
+    Path tmpHome = Files.createTempDirectory("home");
+    System.setProperty("user.home", tmpHome.toString());
+    try {
+      System.setProperty(
+          "tg.doc.baseUri", "http://localhost:" + server1.getAddress().getPort() + "/bots/api");
+      List<MethodDoc> first = new BotApiScraper().fetch();
+      System.setProperty(
+          "tg.doc.baseUri", "http://localhost:" + server2.getAddress().getPort() + "/bots/api");
+      List<MethodDoc> second = new BotApiScraper().fetch();
+
+      assertThat(first.get(0).name()).isEqualTo("getMe");
+      assertThat(second.get(0).name()).isEqualTo("sendMessage");
+    } finally {
+      System.setProperty("user.home", originalHome);
+      System.clearProperty("tg.doc.baseUri");
+      server1.stop(0);
+      server2.stop(0);
     }
   }
 

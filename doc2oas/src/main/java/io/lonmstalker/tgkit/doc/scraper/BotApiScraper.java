@@ -28,15 +28,20 @@ import java.util.List;
 
 /** Скачивает официальную документацию Telegram Bot API и парсит её как HTML. */
 public class BotApiScraper extends JsoupDocScraper {
-  private static final URI DEFAULT_URI =
-      URI.create(System.getProperty("tg.doc.baseUri", "https://core.telegram.org/bots/api"));
+  /** URL официальной документации Telegram Bot API по умолчанию. */
+  private static final String DEFAULT_URL = "https://core.telegram.org/bots/api";
 
   private final HttpClient client;
   private final URI uri;
   private final Path cacheDir;
 
+  /**
+   * Создаёт скрапер с HTTP-клиентом и каталогом кеша по умолчанию.
+   *
+   * <p>Базовый URI можно переопределить через системное свойство {@code tg.doc.baseUri}.
+   */
   public BotApiScraper() {
-    this(HttpClient.newHttpClient(), DEFAULT_URI, defaultCache());
+    this(HttpClient.newHttpClient(), defaultUri(), defaultCache());
   }
 
   BotApiScraper(HttpClient client, URI uri) {
@@ -107,5 +112,10 @@ public class BotApiScraper extends JsoupDocScraper {
 
   private static Path defaultCache() {
     return Path.of(System.getProperty("user.home"), ".cache", "tgdoc");
+  }
+
+  /** Возвращает базовый URI, учитывая системное свойство {@code tg.doc.baseUri}. */
+  private static URI defaultUri() {
+    return URI.create(System.getProperty("tg.doc.baseUri", DEFAULT_URL));
   }
 }
