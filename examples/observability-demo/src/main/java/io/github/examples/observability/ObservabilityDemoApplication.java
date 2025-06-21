@@ -17,12 +17,12 @@ package io.github.examples.observability;
 
 import io.github.observability.BotObservability;
 import io.github.observability.ObservabilityInterceptor;
-import io.github.tgkit.internal.BotAdapter;
-import io.github.tgkit.internal.bot.Bot;
-import io.github.tgkit.internal.bot.BotAdapterImpl;
-import io.github.tgkit.internal.bot.BotConfig;
-import io.github.tgkit.internal.bot.BotFactory;
-import io.github.tgkit.internal.init.BotCoreInitializer;
+import io.github.tgkit.api.BotAdapter;
+import io.github.tgkit.api.bot.Bot;
+import io.github.tgkit.api.bot.BotAdapterImpl;
+import io.github.tgkit.api.bot.BotConfig;
+import io.github.tgkit.api.bot.BotFactory;
+import io.github.tgkit.api.init.BotCoreInitializer;
 
 public class ObservabilityDemoApplication {
 

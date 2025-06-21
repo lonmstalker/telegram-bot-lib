@@ -15,15 +15,15 @@
  */
 package io.github.examples.simplebot;
 
-import io.github.tgkit.internal.BotRequest;
-import io.github.tgkit.internal.BotRequestType;
-import io.github.tgkit.internal.BotResponse;
-import io.github.tgkit.internal.annotation.BotHandler;
-import io.github.tgkit.internal.annotation.matching.AlwaysMatch;
-import io.github.tgkit.internal.annotation.matching.MessageContainsMatch;
-import io.github.tgkit.internal.annotation.matching.MessageRegexMatch;
-import io.github.tgkit.internal.annotation.matching.MessageTextMatch;
-import io.github.tgkit.internal.annotation.matching.UserRoleMatch;
+import io.github.tgkit.api.BotRequest;
+import io.github.tgkit.api.BotRequestType;
+import io.github.tgkit.api.BotResponse;
+import io.github.tgkit.api.annotation.BotHandler;
+import io.github.tgkit.api.annotation.matching.AlwaysMatch;
+import io.github.tgkit.api.annotation.matching.MessageContainsMatch;
+import io.github.tgkit.api.annotation.matching.MessageRegexMatch;
+import io.github.tgkit.api.annotation.matching.MessageTextMatch;
+import io.github.tgkit.api.annotation.matching.UserRoleMatch;
 import java.util.Collections;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.AnswerInlineQuery;

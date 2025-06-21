@@ -15,7 +15,7 @@
  */
 package io.github.tgkit.app;
 
-import io.github.tgkit.internal.init.BotCoreInitializer;
+import io.github.tgkit.api.init.BotCoreInitializer;
 import io.github.tgkit.plugin.BotPluginManager;
 import io.github.tgkit.security.init.BotSecurityInitializer;
 import java.nio.file.Path;
