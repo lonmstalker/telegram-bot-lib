@@ -75,6 +75,27 @@ class BotApiScraperTest {
     assertThat(counter.get()).isEqualTo(2);
   }
 
+  @Test
+  void failsOnBadStatus() throws Exception {
+    HttpServer server = HttpServer.create(new InetSocketAddress(0), 0);
+    server.createContext(
+        "/bots/api",
+        exchange -> {
+          exchange.sendResponseHeaders(500, -1);
+        });
+    server.start();
+    URI uri = URI.create("http://localhost:" + server.getAddress().getPort() + "/bots/api");
+    BotApiScraper scraper =
+        new BotApiScraper(HttpClient.newHttpClient(), uri, Files.createTempDirectory("cache"));
+    try {
+      scraper.fetch();
+    } catch (IllegalStateException e) {
+      assertThat(e).hasMessageContaining("HTTP");
+    } finally {
+      server.stop(0);
+    }
+  }
+
   private static class TestHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
@@ -86,22 +107,3 @@ class BotApiScraperTest {
     }
   }
 }
-  @Test
-  void failsOnBadStatus() throws Exception {
-    HttpServer server = HttpServer.create(new InetSocketAddress(0), 0);
-    server.createContext(
-        "/bots/api",
-        exchange -> {
-          exchange.sendResponseHeaders(500, -1);
-        });
-    server.start();
-    URI uri = URI.create("http://localhost:" + server.getAddress().getPort() + "/bots/api");
-    BotApiScraper scraper = new BotApiScraper(HttpClient.newHttpClient(), uri, Files.createTempDirectory("cache"));
-    try {
-      scraper.fetch();
-    } catch (IllegalStateException e) {
-      assertThat(e).hasMessageContaining("HTTP");
-    } finally {
-      server.stop(0);
-    }
-  }

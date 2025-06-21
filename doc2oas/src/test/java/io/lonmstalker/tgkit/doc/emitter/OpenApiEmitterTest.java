@@ -35,7 +35,7 @@ class OpenApiEmitterTest {
     String yaml = Files.readString(tmp);
     assertThat(yaml).contains("/getMe");
   }
-}
+
   @Test
   void failsOnInvalidSpec() throws Exception {
     OpenAPI api = new OpenAPI();
@@ -46,3 +46,4 @@ class OpenApiEmitterTest {
       assertThat(e).hasMessageContaining("OpenAPI errors");
     }
   }
+}
