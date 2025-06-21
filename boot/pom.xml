@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>io.lonmstalker.tgkit</groupId>
+        <groupId>${tgkit.groupId}</groupId>
         <artifactId>parent</artifactId>
         <version>0.0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
@@ -13,18 +13,18 @@
 
     <dependencies>
         <dependency>
-            <groupId>io.lonmstalker.tgkit</groupId>
+            <groupId>${tgkit.groupId}</groupId>
             <artifactId>core</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>io.lonmstalker.tgkit</groupId>
+            <groupId>${tgkit.groupId}</groupId>
             <artifactId>security</artifactId>
             <version>${project.version}</version>
             <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>io.lonmstalker.tgkit</groupId>
+            <groupId>${tgkit.groupId}</groupId>
             <artifactId>observability</artifactId>
             <version>${project.version}</version>
             <optional>true</optional>
