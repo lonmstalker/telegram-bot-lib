@@ -16,7 +16,7 @@
 package io.github.tgkit.security.audit;
 
 import io.github.tgkit.internal.config.BotGlobalConfig;
-import io.github.tgkit.internal.exception.BotApiException;
+import io.github.tgkit.api.exception.BotApiException;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CopyOnWriteArrayList;

@@ -17,9 +17,9 @@ package io.github.tgkit.security.captcha.provider;
 
 import static java.util.Collections.synchronizedMap;
 
-import io.github.tgkit.internal.BotRequest;
-import io.github.tgkit.internal.dsl.Button;
-import io.github.tgkit.internal.exception.BotApiException;
+import io.github.tgkit.api.BotRequest;
+import io.github.tgkit.api.dsl.Button;
+import io.github.tgkit.api.exception.BotApiException;
 import io.github.tgkit.security.captcha.CaptchaProvider;
 import java.awt.AlphaComposite;
 import java.awt.Graphics2D;

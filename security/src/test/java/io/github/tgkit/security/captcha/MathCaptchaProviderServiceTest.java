@@ -18,12 +18,12 @@ package io.github.tgkit.security.captcha;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
-import io.github.tgkit.internal.BotRequest;
-import io.github.tgkit.internal.BotService;
+import io.github.tgkit.api.BotRequest;
+import io.github.tgkit.api.BotService;
 import io.github.tgkit.internal.i18n.MessageLocalizer;
 import io.github.tgkit.internal.i18n.MessageLocalizerImpl;
-import io.github.tgkit.internal.user.BotUserInfo;
-import io.github.tgkit.internal.user.store.UserKVStore;
+import io.github.tgkit.api.user.BotUserInfo;
+import io.github.tgkit.api.user.store.UserKVStore;
 import io.github.tgkit.security.TestUtils;
 import io.github.tgkit.security.captcha.provider.MathCaptchaProvider;
 import io.github.tgkit.security.init.BotSecurityInitializer;

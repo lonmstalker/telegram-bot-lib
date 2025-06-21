@@ -19,9 +19,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.when;
 
-import io.github.tgkit.internal.BotRequest;
-import io.github.tgkit.internal.interceptor.BotInterceptor;
-import io.github.tgkit.internal.loader.BotCommandFactory;
+import io.github.tgkit.api.BotRequest;
+import io.github.tgkit.api.interceptor.BotInterceptor;
+import io.github.tgkit.api.loader.BotCommandFactory;
 import io.github.tgkit.security.init.BotSecurityInitializer;
 import io.github.tgkit.testkit.TestBotBootstrap;
 import java.lang.reflect.Method;

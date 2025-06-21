@@ -19,8 +19,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
-import io.github.tgkit.internal.BotRequest;
-import io.github.tgkit.internal.BotService;
+import io.github.tgkit.api.BotRequest;
+import io.github.tgkit.api.BotService;
 import io.github.tgkit.internal.i18n.MessageLocalizerImpl;
 import io.github.tgkit.security.captcha.CaptchaProvider;
 import io.github.tgkit.security.init.BotSecurityInitializer;
