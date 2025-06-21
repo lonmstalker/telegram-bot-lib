@@ -19,6 +19,7 @@ import io.undertow.Undertow;
 import io.undertow.util.Headers;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 import java.util.Queue;
@@ -66,7 +67,7 @@ public final class TelegramMockServer implements AutoCloseable {
     try (ServerSocket socket = new ServerSocket()) {
       socket.bind(new InetSocketAddress(0));
       return socket.getLocalPort();
-    } catch (Exception e) {
+    } catch (IOException e) {
       throw new IllegalStateException("Failed to allocate port", e);
     }
   }
