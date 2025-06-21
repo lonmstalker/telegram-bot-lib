@@ -15,9 +15,9 @@
  */
 package io.github.tgkit.validator.impl;
 
-import io.github.tgkit.internal.BotRequest;
-import io.github.tgkit.internal.i18n.MessageKey;
-import io.github.tgkit.internal.validator.Validator;
+import io.github.tgkit.api.BotRequest;
+import io.github.tgkit.api.i18n.MessageKey;
+import io.github.tgkit.api.validator.Validator;
 import io.github.tgkit.validator.language.LanguageDetectionService;
 import java.net.URI;
 import java.time.Instant;

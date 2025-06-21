@@ -15,8 +15,8 @@
  */
 package io.github.tgkit.validator.impl;
 
-import io.github.tgkit.internal.i18n.MessageKey;
-import io.github.tgkit.internal.validator.Validator;
+import io.github.tgkit.api.i18n.MessageKey;
+import io.github.tgkit.api.validator.Validator;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.telegram.telegrambots.meta.api.objects.Location;
 
