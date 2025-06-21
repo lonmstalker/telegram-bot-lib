@@ -15,7 +15,7 @@
  */
 package io.github.tgkit.security.rbac;
 
-import io.github.tgkit.core.exception.BotApiException;
+import io.github.tgkit.internal.exception.BotApiException;
 
 /** Отсутствуют необходимые права для выполнения команды. */
 public final class ForbiddenException extends BotApiException {

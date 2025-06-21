@@ -17,12 +17,12 @@ package io.github.tgkit.testkit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.github.tgkit.core.BotCommand;
-import io.github.tgkit.core.BotRequest;
-import io.github.tgkit.core.BotRequestType;
-import io.github.tgkit.core.BotResponse;
-import io.github.tgkit.core.bot.BotAdapterImpl;
-import io.github.tgkit.core.matching.CommandMatch;
+import io.github.tgkit.internal.BotCommand;
+import io.github.tgkit.internal.BotRequest;
+import io.github.tgkit.internal.BotRequestType;
+import io.github.tgkit.internal.BotResponse;
+import io.github.tgkit.internal.bot.BotAdapterImpl;
+import io.github.tgkit.internal.matching.CommandMatch;
 import java.util.concurrent.TimeUnit;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.junit.jupiter.api.Test;

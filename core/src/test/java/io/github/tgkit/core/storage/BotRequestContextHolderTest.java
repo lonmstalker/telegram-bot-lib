@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.tgkit.core.storage;
+package io.github.tgkit.internal.storage;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import io.github.tgkit.core.bot.BotConfig;
-import io.github.tgkit.core.bot.TelegramSender;
+import io.github.tgkit.internal.bot.BotConfig;
+import io.github.tgkit.internal.bot.TelegramSender;
 import io.github.tgkit.testkit.TestBotBootstrap;
 import org.junit.jupiter.api.Test;
 import org.telegram.telegrambots.meta.api.objects.Update;

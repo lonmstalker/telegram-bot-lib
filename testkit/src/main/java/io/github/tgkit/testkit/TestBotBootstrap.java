@@ -15,7 +15,7 @@
  */
 package io.github.tgkit.testkit;
 
-import io.github.tgkit.core.init.BotCoreInitializer;
+import io.github.tgkit.internal.init.BotCoreInitializer;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**

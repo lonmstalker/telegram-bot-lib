@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.tgkit.core.dsl;
+package io.github.tgkit.internal.dsl;
 
 import static org.assertj.core.api.Assertions.*;
 
-import io.github.tgkit.core.dsl.feature_flags.InMemoryFeatureFlags;
+import io.github.tgkit.internal.dsl.feature_flags.InMemoryFeatureFlags;
 import io.github.tgkit.testkit.TestBotBootstrap;
 import org.junit.jupiter.api.Test;
 

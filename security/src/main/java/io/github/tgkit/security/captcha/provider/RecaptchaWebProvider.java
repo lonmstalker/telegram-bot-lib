@@ -16,10 +16,10 @@
 package io.github.tgkit.security.captcha.provider;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.tgkit.core.BotRequest;
-import io.github.tgkit.core.config.BotGlobalConfig;
-import io.github.tgkit.core.dsl.Button;
-import io.github.tgkit.core.exception.BotApiException;
+import io.github.tgkit.internal.BotRequest;
+import io.github.tgkit.internal.config.BotGlobalConfig;
+import io.github.tgkit.internal.dsl.Button;
+import io.github.tgkit.internal.exception.BotApiException;
 import io.github.tgkit.security.captcha.CaptchaProvider;
 import io.github.tgkit.security.secret.SecretStore;
 import java.net.URI;

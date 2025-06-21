@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.tgkit.core.dsl.common;
+package io.github.tgkit.internal.dsl.common;
 
-import io.github.tgkit.core.bot.BotConfig;
-import io.github.tgkit.core.bot.TelegramSender;
+import io.github.tgkit.internal.bot.BotConfig;
+import io.github.tgkit.internal.bot.TelegramSender;
 import java.io.Serializable;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 

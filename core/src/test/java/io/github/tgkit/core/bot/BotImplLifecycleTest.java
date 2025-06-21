@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.tgkit.core.bot;
+package io.github.tgkit.internal.bot;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import io.github.tgkit.core.BotAdapter;
-import io.github.tgkit.core.exception.BotApiException;
+import io.github.tgkit.internal.BotAdapter;
+import io.github.tgkit.internal.exception.BotApiException;
 import io.github.tgkit.testkit.TestBotBootstrap;
 import java.io.Serializable;
 import org.junit.jupiter.api.BeforeEach;

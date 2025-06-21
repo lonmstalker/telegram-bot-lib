@@ -15,11 +15,11 @@
  */
 package io.github.examples.simplebot;
 
-import static io.github.tgkit.core.update.UpdateUtils.resolveChatId;
-import static io.github.tgkit.core.update.UpdateUtils.resolveUserId;
+import static io.github.tgkit.internal.update.UpdateUtils.resolveChatId;
+import static io.github.tgkit.internal.update.UpdateUtils.resolveUserId;
 
-import io.github.tgkit.core.user.BotUserInfo;
-import io.github.tgkit.core.user.BotUserProvider;
+import io.github.tgkit.internal.user.BotUserInfo;
+import io.github.tgkit.internal.user.BotUserProvider;
 import java.util.Set;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;

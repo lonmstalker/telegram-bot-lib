@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.tgkit.core.event;
+package io.github.tgkit.internal.event;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import io.github.tgkit.core.event.impl.StartStatusBotEvent;
+import io.github.tgkit.internal.event.impl.StartStatusBotEvent;
 import io.github.tgkit.testkit.TestBotBootstrap;
 import java.time.Instant;
 import java.util.ArrayList;

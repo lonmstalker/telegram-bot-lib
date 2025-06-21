@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.tgkit.core.ttl;
+package io.github.tgkit.internal.ttl;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.github.tgkit.core.config.BotGlobalConfig;
+import io.github.tgkit.internal.config.BotGlobalConfig;
 import io.github.tgkit.testkit.TestBotBootstrap;
 import java.time.Duration;
 import java.util.concurrent.*;
