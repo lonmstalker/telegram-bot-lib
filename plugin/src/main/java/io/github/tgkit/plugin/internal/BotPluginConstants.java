@@ -21,14 +21,15 @@ package io.github.tgkit.plugin;
  * <p>Пример использования:
  *
  * <pre>{@code
- * if (descriptor.api() > BotPluginConstants.CURRENT_VERSION) {
+ * if (descriptor.api().compareTo(BotPluginConstants.CURRENT_VERSION) > 0) {
  *     throw new UnsupportedOperationException();
  * }
- * }</pre>
+ * }
+ * </pre>
  */
 public class BotPluginConstants {
   /** Текущая поддерживаемая версия API плагинов. */
-  public static final Double CURRENT_VERSION = 0.1;
+  public static final String CURRENT_VERSION = "0.1";
 
   private BotPluginConstants() {}
 }
