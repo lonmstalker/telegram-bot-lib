@@ -32,6 +32,11 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.github.tgkit</groupId>
+            <artifactId>webhook</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
         <!-- CHECKS -->
         <dependency>
