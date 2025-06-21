@@ -10,10 +10,21 @@
 <summary>Maven</summary>
 
 ```xml
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>io.github.tgkit</groupId>
+            <artifactId>tgkit-bom</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+
 <dependency>
     <groupId>io.github.tgkit</groupId>
-    <artifactId>testkit</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <artifactId>tgkit-testkit-core</artifactId>
     <scope>test</scope>
 </dependency>
 ```
@@ -22,7 +33,8 @@
 <summary>Gradle Kotlin DSL</summary>
 
 ```kotlin
-testImplementation("io.github.tgkit:testkit:0.0.1-SNAPSHOT")
+implementation(platform("io.github.tgkit:tgkit-bom:0.0.1-SNAPSHOT"))
+testImplementation("io.github.tgkit:tgkit-testkit-core")
 ```
 </details>
 
@@ -47,4 +59,22 @@ Bot bot = BotBuilder.builder()
         .token("TOKEN")
         .addHandler(new EchoCommands())
         .build();
+```
+
+## Фич-флаги в тестах
+
+Модуль `tgkit-flag-test` содержит расширение `FlagOverrideExtension`.
+Оно позволяет включать или выключать флаги прямо в тестовом методе.
+
+```java
+@ExtendWith(FlagOverrideExtension.class)
+class AbTest {
+
+    @Test
+    void variant(UpdateInjector inject, Expectation expect, Flags flags) {
+        flags.enable("NEW_FLOW");
+        inject.text("/start").from(1L);
+        expect.api("sendMessage").jsonPath("$.text", "new");
+    }
+}
 ```

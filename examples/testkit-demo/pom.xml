@@ -11,16 +11,26 @@
 
     <artifactId>testkit-demo</artifactId>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>io.github.tgkit</groupId>
+                <artifactId>tgkit-bom</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
         <dependency>
             <groupId>io.github.tgkit</groupId>
             <artifactId>core</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>io.github.tgkit</groupId>
-            <artifactId>testkit</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <artifactId>tgkit-testkit-core</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
