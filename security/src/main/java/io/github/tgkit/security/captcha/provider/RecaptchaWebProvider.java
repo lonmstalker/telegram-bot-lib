@@ -17,7 +17,7 @@ package io.github.tgkit.security.captcha.provider;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.tgkit.api.BotRequest;
-import io.github.tgkit.internal.config.BotGlobalConfig;
+import io.github.tgkit.api.config.BotGlobalConfig;
 import io.github.tgkit.api.dsl.Button;
 import io.github.tgkit.api.exception.BotApiException;
 import io.github.tgkit.security.captcha.CaptchaProvider;

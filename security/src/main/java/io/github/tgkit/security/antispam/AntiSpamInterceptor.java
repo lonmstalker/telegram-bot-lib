@@ -16,8 +16,8 @@
 package io.github.tgkit.security.antispam;
 
 import io.github.tgkit.api.BotRequest;
-import io.github.tgkit.internal.BotResponse;
-import io.github.tgkit.internal.config.BotGlobalConfig;
+import io.github.tgkit.api.BotResponse;
+import io.github.tgkit.api.config.BotGlobalConfig;
 import io.github.tgkit.api.interceptor.BotInterceptor;
 import io.github.tgkit.security.captcha.CaptchaProvider;
 import io.github.tgkit.security.event.SecurityBotEvent;

@@ -16,7 +16,7 @@
 package io.github.tgkit.security.rbac;
 
 import io.github.tgkit.api.BotRequest;
-import io.github.tgkit.internal.BotResponse;
+import io.github.tgkit.api.BotResponse;
 import io.github.tgkit.api.interceptor.BotInterceptor;
 import io.github.tgkit.api.user.BotUserInfo;
 import java.util.Set;

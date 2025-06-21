@@ -15,7 +15,7 @@
  */
 package io.github.tgkit.security.init;
 
-import io.github.tgkit.internal.config.BotGlobalConfig;
+import io.github.tgkit.api.config.BotGlobalConfig;
 import io.github.tgkit.security.antispam.InMemoryDuplicateProvider;
 import io.github.tgkit.security.audit.AsyncAuditBus;
 import io.github.tgkit.security.captcha.MathCaptchaOperations;

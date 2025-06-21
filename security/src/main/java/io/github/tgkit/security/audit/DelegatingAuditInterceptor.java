@@ -16,7 +16,7 @@
 package io.github.tgkit.security.audit;
 
 import io.github.tgkit.api.BotRequest;
-import io.github.tgkit.internal.BotResponse;
+import io.github.tgkit.api.BotResponse;
 import io.github.tgkit.api.interceptor.BotInterceptor;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
