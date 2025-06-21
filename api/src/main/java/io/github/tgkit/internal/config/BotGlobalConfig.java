@@ -327,12 +327,15 @@ public class BotGlobalConfig {
     }
   }
 
+  /** Глобальные параметры webhook-сервера. */
   public static class WebhookGlobalConfig {
     private final AtomicReference<WebhookServer> server = new AtomicReference<>();
     private final AtomicReference<WebhookServer.Engine> engine =
         new AtomicReference<>(WebhookServer.Engine.JETTY);
     private final AtomicReference<String> secret = new AtomicReference<>();
     private final AtomicReference<Integer> port = new AtomicReference<>(0);
+    /** Хост, на котором запускается HTTP-сервер. По умолчанию {@code "localhost"}. */
+    private final AtomicReference<String> host = new AtomicReference<>("localhost");
 
     public @NonNull WebhookGlobalConfig engine(@NonNull WebhookServer.Engine engine) {
       this.engine.set(engine);
@@ -349,8 +352,19 @@ public class BotGlobalConfig {
       return this;
     }
 
+    /** Задаёт хост для webhook-сервера. */
+    public @NonNull WebhookGlobalConfig host(@NonNull String host) {
+      this.host.set(host);
+      return this;
+    }
+
     public int port() {
       return this.port.get();
+    }
+
+    /** @return адрес, на котором будет запущен сервер. */
+    public @NonNull String host() {
+      return this.host.get();
     }
 
     public String secret() {
@@ -358,7 +372,8 @@ public class BotGlobalConfig {
     }
 
     public void start() {
-      WebhookServer srv = new WebhookServer(port.get(), secret.get(), engine.get());
+      WebhookServer srv =
+          new WebhookServer(host.get(), port.get(), secret.get(), engine.get());
       try {
         srv.start();
       } catch (Exception e) {

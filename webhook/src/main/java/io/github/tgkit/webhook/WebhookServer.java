@@ -84,6 +84,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
  *
  * <pre>{@code
  * BotGlobalConfig.INSTANCE.webhook()
+ *     .host("0.0.0.0")
  *     .port(8080)
  *     .secret("SECRET")
  *     .engine(WebhookServer.Engine.JETTY);
@@ -96,15 +97,18 @@ public final class WebhookServer implements AutoCloseable {
   private static final String SECRET_HEADER = "X-Telegram-Bot-Api-Secret-Token";
   private static final String HSTS_VALUE = "max-age=31536000; includeSubDomains";
   private final ServerEngine engine;
+  private final String host;
   private final ObjectMapper mapper = BotGlobalConfig.INSTANCE.http().getMapper();
   private final String secret;
   private final MetricsCollector metrics = BotGlobalConfig.INSTANCE.observability().getCollector();
   private final Counter dropped = metrics.counter("updates_dropped_total", Tags.of());
   private final AtomicInteger queueGauge = new AtomicInteger();
 
-  public WebhookServer(int port, @NonNull String secretToken, @NonNull Engine engine) {
+  public WebhookServer(
+      @NonNull String host, int port, @NonNull String secretToken, @NonNull Engine engine) {
     this.secret = secretToken;
-    this.engine = engine == Engine.JETTY ? new JettyEngine(port) : new NettyEngine(port);
+    this.host = host;
+    this.engine = engine == Engine.JETTY ? new JettyEngine(host, port) : new NettyEngine(host, port);
     Gauge.builder("updates_queue_size", queueGauge, AtomicInteger::get)
         .register(metrics.registry());
   }
@@ -112,7 +116,7 @@ public final class WebhookServer implements AutoCloseable {
   /** Запуск сервера. */
   public void start() throws Exception {
     engine.start();
-    log.info("Webhook server started on port {}", port());
+    log.info("Webhook server started on {}:{}", host, port());
   }
 
   /**
@@ -129,6 +133,11 @@ public final class WebhookServer implements AutoCloseable {
    */
   public int port() {
     return engine.port();
+  }
+
+  /** @return хост, на котором запущен сервер. */
+  public @NonNull String host() {
+    return host;
   }
 
   @Override
@@ -165,8 +174,8 @@ public final class WebhookServer implements AutoCloseable {
     private final Server server;
     private final Map<String, WebHookReceiver> receivers = new ConcurrentHashMap<>();
 
-    JettyEngine(int port) {
-      this.server = new Server(new InetSocketAddress("localhost", port));
+    JettyEngine(@NonNull String host, int port) {
+      this.server = new Server(new InetSocketAddress(host, port));
       ServletContextHandler context = new ServletContextHandler();
       context.addServlet(new ServletHolder(new UpdateServlet()), "/*");
       context.addFilter(
@@ -242,11 +251,13 @@ public final class WebhookServer implements AutoCloseable {
   private final class NettyEngine implements ServerEngine {
     private final EventLoopGroup boss = new NioEventLoopGroup(1);
     private final EventLoopGroup worker = new NioEventLoopGroup();
+    private final String host;
     private final int port;
     private final Map<String, WebHookReceiver> receivers = new ConcurrentHashMap<>();
     private Channel serverChannel;
 
-    NettyEngine(int port) {
+    NettyEngine(@NonNull String host, int port) {
+      this.host = host;
       this.port = port;
     }
 
@@ -265,7 +276,7 @@ public final class WebhookServer implements AutoCloseable {
                     }
                   })
               .childOption(ChannelOption.SO_KEEPALIVE, true);
-      ChannelFuture f = b.bind(new InetSocketAddress("localhost", port)).sync();
+      ChannelFuture f = b.bind(new InetSocketAddress(host, port)).sync();
       serverChannel = f.channel();
     }
 

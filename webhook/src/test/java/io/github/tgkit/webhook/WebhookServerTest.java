@@ -69,7 +69,7 @@ class WebhookServerTest {
       adapter.registry().add(new PingCommand());
       var hook = new org.telegram.telegrambots.meta.api.methods.updates.SetWebhook();
       Bot bot = BotFactory.INSTANCE.from("TOKEN", config, adapter, hook);
-      hook.setUrl("http://localhost:" + server.port() + "/TOKEN");
+      hook.setUrl("http://" + server.host() + ":" + server.port() + "/TOKEN");
       hook.setSecretToken("SECRET");
       bot.start();
       tgServer.takeRequest(1, TimeUnit.SECONDS); // getMe
@@ -90,7 +90,7 @@ class WebhookServerTest {
       HttpClient client = HttpClient.newHttpClient();
       HttpRequest req =
           HttpRequest.newBuilder()
-              .uri(URI.create("http://localhost:" + server.port() + "/TOKEN"))
+              .uri(URI.create("http://" + server.host() + ":" + server.port() + "/TOKEN"))
               .header("Content-Type", "application/json")
               .header("X-Telegram-Bot-Api-Secret-Token", "SECRET")
               .POST(HttpRequest.BodyPublishers.ofString(body))
@@ -128,7 +128,7 @@ class WebhookServerTest {
       adapter.registry().add(new PingCommand());
       var hook = new org.telegram.telegrambots.meta.api.methods.updates.SetWebhook();
       Bot bot = BotFactory.INSTANCE.from("TOKEN", config, adapter, hook);
-      hook.setUrl("http://localhost:" + server.port() + "/TOKEN");
+      hook.setUrl("http://" + server.host() + ":" + server.port() + "/TOKEN");
       hook.setSecretToken("SECRET");
       bot.start();
       tgServer.takeRequest(1, TimeUnit.SECONDS); // getMe
@@ -149,7 +149,7 @@ class WebhookServerTest {
       HttpClient client = HttpClient.newHttpClient();
       HttpRequest req =
           HttpRequest.newBuilder()
-              .uri(URI.create("http://localhost:" + server.port() + "/TOKEN"))
+              .uri(URI.create("http://" + server.host() + ":" + server.port() + "/TOKEN"))
               .header("Content-Type", "application/json")
               .header("X-Telegram-Bot-Api-Secret-Token", "SECRET")
               .POST(HttpRequest.BodyPublishers.ofString(body))
@@ -186,7 +186,7 @@ class WebhookServerTest {
               .build();
       var hook = new org.telegram.telegrambots.meta.api.methods.updates.SetWebhook();
       Bot bot = BotFactory.INSTANCE.from("TOKEN", config, adapter, hook);
-      hook.setUrl("http://localhost:" + server.port() + "/TOKEN");
+      hook.setUrl("http://" + server.host() + ":" + server.port() + "/TOKEN");
       hook.setSecretToken("SECRET");
       bot.start();
       tgServer.takeRequest(1, TimeUnit.SECONDS); // getMe
@@ -194,7 +194,7 @@ class WebhookServerTest {
       HttpClient client = HttpClient.newHttpClient();
       HttpRequest req =
           HttpRequest.newBuilder()
-              .uri(URI.create("http://localhost:" + server.port() + "/TOKEN"))
+              .uri(URI.create("http://" + server.host() + ":" + server.port() + "/TOKEN"))
               .header("X-Telegram-Bot-Api-Secret-Token", "WRONG")
               .POST(HttpRequest.BodyPublishers.ofString("{}"))
               .build();
@@ -226,7 +226,7 @@ class WebhookServerTest {
               .build();
       var hook = new org.telegram.telegrambots.meta.api.methods.updates.SetWebhook();
       Bot bot = BotFactory.INSTANCE.from("TOKEN", config, adapter, hook);
-      hook.setUrl("http://localhost:" + server.port() + "/TOKEN");
+      hook.setUrl("http://" + server.host() + ":" + server.port() + "/TOKEN");
       hook.setSecretToken("SECRET");
       bot.start();
       tgServer.takeRequest(1, TimeUnit.SECONDS); // getMe
@@ -234,7 +234,7 @@ class WebhookServerTest {
       HttpClient client = HttpClient.newHttpClient();
       HttpRequest req =
           HttpRequest.newBuilder()
-              .uri(URI.create("http://localhost:" + server.port() + "/TOKEN"))
+              .uri(URI.create("http://" + server.host() + ":" + server.port() + "/TOKEN"))
               .header("X-Telegram-Bot-Api-Secret-Token", "WRONG")
               .POST(HttpRequest.BodyPublishers.ofString("{}"))
               .build();
