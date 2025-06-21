@@ -1,6 +1,6 @@
 # Модуль doc2oas
 
-Утилита преобразует документацию Telegram Bot API в спецификацию OpenAPI и генерирует SDK.
+Утилита конвертирует документацию Telegram Bot API в спецификацию OpenAPI и генерирует SDK.
 
 ## Зачем
 Док позволяет синхронизировать типы и методы Telegram с вашим кодом всего одной командой.
@@ -10,9 +10,23 @@
 2. `OpenApiEmitter` строит `openapi.yaml`, проверяя его парсером.
 3. `GeneratorCli` запускает [OpenAPI Generator](https://github.com/OpenAPITools/openapi-generator).
 
+## Сборка
+```bash
+mvn -pl doc2oas package
+```
+
+## Запуск
+```bash
+java -cp doc2oas/target/doc2oas-<version>.jar io.lonmstalker.tgkit.doc.cli.DocCli --help
+# либо
+java -jar doc2oas/target/doc2oas-<version>-shaded.jar --help
+```
+
 ## Пошаговый пример
 ```bash
-java -jar doc2oas.jar --api --output build/openapi/telegram.yaml
-java -cp doc2oas.jar io.lonmstalker.tgkit.doc.generator.GeneratorCli \
-  --spec build/openapi/telegram.yaml --target build/sdk
+java -cp doc2oas/target/doc2oas-<version>.jar io.lonmstalker.tgkit.doc.cli.DocCli --api --output build/openapi/telegram.yaml
+java -cp doc2oas/target/doc2oas-<version>.jar io.lonmstalker.tgkit.doc.generator.GeneratorCli \
+  --spec build/openapi/telegram.yaml \
+  --target build/sdk \
+  --language java
 ```
