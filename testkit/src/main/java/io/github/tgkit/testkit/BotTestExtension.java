@@ -33,6 +33,7 @@ public final class BotTestExtension
   private TelegramSender sender;
   private UpdateInjector injector;
   private BotAdapterImpl adapter;
+  private Expectation expectation;
 
   @Override
   public void beforeEach(ExtensionContext context) {
@@ -42,6 +43,7 @@ public final class BotTestExtension
     sender = new TelegramSender(config, "TEST_TOKEN");
     adapter = BotAdapterImpl.builder().internalId(1L).sender(sender).config(config).build();
     injector = new UpdateInjector(adapter, sender);
+    expectation = new Expectation(server);
     // ответ для getMe
     server.enqueue("{\"ok\":true,\"result\":{\"id\":1,\"is_bot\":true,\"username\":\"bot\"}}");
   }
@@ -65,7 +67,8 @@ public final class BotTestExtension
     Class<?> type = parameterContext.getParameter().getType();
     return type == TelegramMockServer.class
         || type == UpdateInjector.class
-        || type == BotAdapterImpl.class;
+        || type == BotAdapterImpl.class
+        || type == Expectation.class;
   }
 
   @Override
@@ -76,6 +79,8 @@ public final class BotTestExtension
       return server;
     } else if (type == UpdateInjector.class) {
       return injector;
+    } else if (type == Expectation.class) {
+      return expectation;
     } else {
       return adapter;
     }

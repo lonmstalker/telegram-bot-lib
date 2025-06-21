@@ -46,7 +46,7 @@ class EchoBotTest {
 
     @Test
     void echo(UpdateInjector inject, Expectation expect) {
-        inject.text("/echo hello").from(1L);
+        inject.text("/echo hello").from(1L).dispatch();
         expect.api("sendMessage").jsonPath("$.text", "hello");
     }
 }
@@ -73,7 +73,7 @@ class AbTest {
     @Test
     void variant(UpdateInjector inject, Expectation expect, Flags flags) {
         flags.enable("NEW_FLOW");
-        inject.text("/start").from(1L);
+        inject.text("/start").from(1L).dispatch();
         expect.api("sendMessage").jsonPath("$.text", "new");
     }
 }
