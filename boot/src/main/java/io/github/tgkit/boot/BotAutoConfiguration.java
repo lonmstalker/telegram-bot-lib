@@ -19,6 +19,7 @@ import io.github.observability.BotObservability;
 import io.github.observability.MetricsCollector;
 import io.github.observability.impl.NoOpMetricsCollector;
 import io.github.tgkit.security.init.BotSecurityInitializer;
+import io.github.tgkit.api.config.BotGlobalConfig;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -59,16 +60,14 @@ public class BotAutoConfiguration {
     @Override
     public void afterPropertiesSet() {
       collector = BotObservability.micrometer(properties.getMetricsPort());
-      io.github.tgkit.internal.config.BotGlobalConfig.INSTANCE.observability().collector(collector);
+      BotGlobalConfig.INSTANCE.observability().collector(collector);
     }
 
     @Override
     public void destroy() throws Exception {
       if (collector != null) {
         collector.close();
-        io.github.tgkit.internal.config.BotGlobalConfig.INSTANCE
-            .observability()
-            .collector(new NoOpMetricsCollector());
+        BotGlobalConfig.INSTANCE.observability().collector(new NoOpMetricsCollector());
       }
     }
   }
