@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>io.lonmstalker.tgkit</groupId>
+        <groupId>${tgkit.groupId}</groupId>
         <artifactId>parent</artifactId>
         <version>0.0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
@@ -28,7 +28,7 @@
                     <fork>true</fork>
                     <annotationProcessorPaths>
                         <path>
-                            <groupId>io.lonmstalker.tgkit</groupId>
+                            <groupId>${tgkit.groupId}</groupId>
                             <artifactId>core</artifactId>
                             <version>${project.version}</version>
                         </path>
