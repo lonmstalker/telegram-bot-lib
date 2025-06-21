@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.examples.simplebot;
+package io.github.examples.simplebot;
 
 import static io.lonmstalker.tgkit.core.update.UpdateUtils.resolveChatId;
 import static io.lonmstalker.tgkit.core.update.UpdateUtils.resolveUserId;

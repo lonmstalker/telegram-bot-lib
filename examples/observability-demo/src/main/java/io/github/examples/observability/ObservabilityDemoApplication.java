@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.lonmstalker.tgkit.examples.observability;
+package io.github.examples.observability;
 
 import io.lonmstalker.observability.BotObservability;
 import io.lonmstalker.observability.ObservabilityInterceptor;
@@ -38,8 +38,7 @@ public class ObservabilityDemoApplication {
             .build();
 
     BotAdapter adapter = BotAdapterImpl.builder().config(config).build();
-    Bot bot =
-        BotFactory.INSTANCE.from("TOKEN", config, adapter, "io.lonmstalker.examples.simplebot");
+    Bot bot = BotFactory.INSTANCE.from("TOKEN", config, adapter, "io.github.examples.simplebot");
 
     bot.start();
   }
