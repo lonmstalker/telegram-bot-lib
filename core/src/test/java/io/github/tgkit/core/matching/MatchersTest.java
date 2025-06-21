@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.tgkit.core.matching;
+package io.github.tgkit.internal.matching;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import io.github.tgkit.core.storage.BotRequestContextHolder;
-import io.github.tgkit.core.user.BotUserInfo;
-import io.github.tgkit.core.user.BotUserProvider;
+import io.github.tgkit.internal.storage.BotRequestContextHolder;
+import io.github.tgkit.internal.user.BotUserInfo;
+import io.github.tgkit.internal.user.BotUserProvider;
 import io.github.tgkit.testkit.TestBotBootstrap;
 import java.util.Set;
 import org.checkerframework.checker.nullness.qual.NonNull;

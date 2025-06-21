@@ -15,7 +15,7 @@
  */
 package io.github.tgkit.plugin;
 
-import io.github.tgkit.core.exception.BotApiException;
+import io.github.tgkit.internal.exception.BotApiException;
 
 /** Исключение, возникающее при ошибке загрузки или выполнения плагина. */
 public class PluginException extends BotApiException {

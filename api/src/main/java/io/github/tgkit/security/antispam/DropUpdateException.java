@@ -15,7 +15,7 @@
  */
 package io.github.tgkit.security.antispam;
 
-import io.github.tgkit.core.exception.BotApiException;
+import io.github.tgkit.internal.exception.BotApiException;
 
 /** Сигнал “тихо отбросить update и не вызывать другие хендлеры”. */
 public final class DropUpdateException extends BotApiException {

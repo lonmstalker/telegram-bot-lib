@@ -15,10 +15,10 @@
  */
 package io.github.tgkit.security.antispam;
 
-import io.github.tgkit.core.BotRequest;
-import io.github.tgkit.core.BotResponse;
-import io.github.tgkit.core.config.BotGlobalConfig;
-import io.github.tgkit.core.interceptor.BotInterceptor;
+import io.github.tgkit.internal.BotRequest;
+import io.github.tgkit.internal.BotResponse;
+import io.github.tgkit.internal.config.BotGlobalConfig;
+import io.github.tgkit.internal.interceptor.BotInterceptor;
 import io.github.tgkit.security.captcha.CaptchaProvider;
 import io.github.tgkit.security.event.SecurityBotEvent;
 import io.github.tgkit.security.ratelimit.RateLimiter;

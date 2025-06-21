@@ -13,25 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.tgkit.core.args;
+package io.github.tgkit.internal.args;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import io.github.tgkit.core.*;
-import io.github.tgkit.core.BotRequest;
-import io.github.tgkit.core.BotRequestType;
-import io.github.tgkit.core.BotResponse;
-import io.github.tgkit.core.annotation.Arg;
-import io.github.tgkit.core.annotation.BotHandler;
-import io.github.tgkit.core.annotation.matching.MessageRegexMatch;
-import io.github.tgkit.core.bot.BotCommandRegistryImpl;
-import io.github.tgkit.core.bot.BotConfig;
-import io.github.tgkit.core.bot.TelegramSender;
-import io.github.tgkit.core.bot.loader.AnnotatedCommandLoader;
-import io.github.tgkit.core.i18n.MessageLocalizerImpl;
-import io.github.tgkit.core.state.InMemoryStateStore;
-import io.github.tgkit.core.user.BotUserInfo;
-import io.github.tgkit.core.user.store.InMemoryUserKVStore;
+import io.github.tgkit.internal.*;
+import io.github.tgkit.internal.BotRequest;
+import io.github.tgkit.internal.BotRequestType;
+import io.github.tgkit.internal.BotResponse;
+import io.github.tgkit.internal.annotation.Arg;
+import io.github.tgkit.internal.annotation.BotHandler;
+import io.github.tgkit.internal.annotation.matching.MessageRegexMatch;
+import io.github.tgkit.internal.bot.BotCommandRegistryImpl;
+import io.github.tgkit.internal.bot.BotConfig;
+import io.github.tgkit.internal.bot.TelegramSender;
+import io.github.tgkit.internal.bot.loader.AnnotatedCommandLoader;
+import io.github.tgkit.internal.i18n.MessageLocalizerImpl;
+import io.github.tgkit.internal.state.InMemoryStateStore;
+import io.github.tgkit.internal.user.BotUserInfo;
+import io.github.tgkit.internal.user.store.InMemoryUserKVStore;
 import io.github.tgkit.testkit.TestBotBootstrap;
 import java.util.Locale;
 import java.util.Set;

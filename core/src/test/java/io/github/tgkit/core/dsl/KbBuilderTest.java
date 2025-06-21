@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.tgkit.core.dsl;
+package io.github.tgkit.internal.dsl;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import io.github.tgkit.core.i18n.MessageLocalizer;
+import io.github.tgkit.internal.i18n.MessageLocalizer;
 import io.github.tgkit.testkit.TestBotBootstrap;
 import org.junit.jupiter.api.Test;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;

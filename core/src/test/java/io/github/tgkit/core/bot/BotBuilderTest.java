@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.tgkit.core.bot;
+package io.github.tgkit.internal.bot;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import io.github.tgkit.core.BotCommand;
-import io.github.tgkit.core.BotRequest;
-import io.github.tgkit.core.BotRequestType;
-import io.github.tgkit.core.BotResponse;
+import io.github.tgkit.internal.BotCommand;
+import io.github.tgkit.internal.BotRequest;
+import io.github.tgkit.internal.BotRequestType;
+import io.github.tgkit.internal.BotResponse;
 import io.github.tgkit.plugin.BotPlugin;
 import io.github.tgkit.plugin.BotPluginContext;
 import io.github.tgkit.testkit.TestBotBootstrap;
@@ -52,7 +52,7 @@ public class BotBuilderTest {
     assertThrows(IllegalStateException.class, builder::start);
   }
 
-  @io.github.tgkit.core.annotation.BotCommand
+  @io.github.tgkit.internal.annotation.BotCommand
   public static class TestCommand implements BotCommand<BotApiObject> {
     @Override
     public BotResponse handle(BotRequest<BotApiObject> request) {
@@ -65,7 +65,7 @@ public class BotBuilderTest {
     }
 
     @Override
-    public io.github.tgkit.core.matching.CommandMatch<BotApiObject> matcher() {
+    public io.github.tgkit.internal.matching.CommandMatch<BotApiObject> matcher() {
       return u -> true;
     }
   }

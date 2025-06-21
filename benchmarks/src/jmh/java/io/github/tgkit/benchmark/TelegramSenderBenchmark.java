@@ -1,7 +1,7 @@
 package io.github.tgkit.benchmark;
 
-import io.github.tgkit.core.bot.BotConfig;
-import io.github.tgkit.core.bot.TelegramSender;
+import io.github.tgkit.internal.bot.BotConfig;
+import io.github.tgkit.internal.bot.TelegramSender;
 import io.github.tgkit.testkit.TelegramMockServer;
 import io.github.tgkit.testkit.TestBotBootstrap;
 import java.util.Locale;

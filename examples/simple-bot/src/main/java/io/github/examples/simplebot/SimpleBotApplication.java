@@ -15,8 +15,8 @@
  */
 package io.github.examples.simplebot;
 
-import io.github.tgkit.core.TelegramBot;
-import io.github.tgkit.core.init.BotCoreInitializer;
+import io.github.tgkit.internal.TelegramBot;
+import io.github.tgkit.internal.init.BotCoreInitializer;
 import java.nio.file.Path;
 
 public class SimpleBotApplication {

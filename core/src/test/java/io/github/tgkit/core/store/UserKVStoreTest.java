@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.tgkit.core.store;
+package io.github.tgkit.internal.store;
 
-import io.github.tgkit.core.user.store.InMemoryUserKVStore;
-import io.github.tgkit.core.user.store.JdbcUserKVStore;
-import io.github.tgkit.core.user.store.ReadOnlyUserKVStore;
+import io.github.tgkit.internal.user.store.InMemoryUserKVStore;
+import io.github.tgkit.internal.user.store.JdbcUserKVStore;
+import io.github.tgkit.internal.user.store.ReadOnlyUserKVStore;
 import io.github.tgkit.testkit.TestBotBootstrap;
 import java.util.Map;
 import javax.sql.DataSource;

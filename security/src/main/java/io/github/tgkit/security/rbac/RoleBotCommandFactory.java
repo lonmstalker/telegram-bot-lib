@@ -15,8 +15,8 @@
  */
 package io.github.tgkit.security.rbac;
 
-import io.github.tgkit.core.BotCommand;
-import io.github.tgkit.core.loader.BotCommandFactory;
+import io.github.tgkit.internal.BotCommand;
+import io.github.tgkit.internal.loader.BotCommandFactory;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.stream.Collectors;

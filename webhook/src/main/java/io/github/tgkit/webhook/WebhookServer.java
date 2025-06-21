@@ -17,8 +17,8 @@ package io.github.tgkit.webhook;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.observability.MetricsCollector;
-import io.github.tgkit.core.bot.WebHookReceiver;
-import io.github.tgkit.core.config.BotGlobalConfig;
+import io.github.tgkit.internal.bot.WebHookReceiver;
+import io.github.tgkit.internal.config.BotGlobalConfig;
 import io.github.tgkit.observability.Tags;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.Gauge;

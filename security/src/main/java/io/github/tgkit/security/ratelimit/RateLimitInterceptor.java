@@ -15,10 +15,10 @@
  */
 package io.github.tgkit.security.ratelimit;
 
-import io.github.tgkit.core.BotRequest;
-import io.github.tgkit.core.BotResponse;
-import io.github.tgkit.core.interceptor.BotInterceptor;
-import io.github.tgkit.core.update.UpdateUtils;
+import io.github.tgkit.internal.BotRequest;
+import io.github.tgkit.internal.BotResponse;
+import io.github.tgkit.internal.interceptor.BotInterceptor;
+import io.github.tgkit.internal.update.UpdateUtils;
 import java.util.List;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;

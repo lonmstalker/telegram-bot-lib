@@ -15,10 +15,10 @@
  */
 package io.github.tgkit.security.audit;
 
-import io.github.tgkit.core.BotCommand;
-import io.github.tgkit.core.interceptor.BotInterceptor;
-import io.github.tgkit.core.loader.BotCommandFactory;
-import io.github.tgkit.core.reflection.ReflectionUtils;
+import io.github.tgkit.internal.BotCommand;
+import io.github.tgkit.internal.interceptor.BotInterceptor;
+import io.github.tgkit.internal.loader.BotCommandFactory;
+import io.github.tgkit.internal.reflection.ReflectionUtils;
 import io.github.tgkit.security.config.BotSecurityGlobalConfig;
 import java.lang.reflect.Method;
 import java.util.Objects;
